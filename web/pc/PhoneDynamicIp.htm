@@ -1,5 +1,151 @@
+<script type="text/javascript">
+	function init()
+	{
+		loadPage("PhoneSelectNetworkType.htm", "selectNetTypeCon");
+		// 手动选择上网方式
+		$(".chooseOther a").click(function(e) {
+			showCover();
+			$(".selectNetType").show();
+		});
 
+		if (gModeSwitchSupport) {
+			var data = {};
 
+			data[uciCustomNetwork.fileName] = {};
+			data[uciCustomNetwork.fileName][KEY_NAME] = [uciCustomNetwork.dynData.bridgestatus];
+
+			$.query(data, function(dataObj){
+				var bridgeStatus = parseInt(dataObj.custom_network.bridge_status.enable);
+
+				if(1 == bridgeStatus){
+					document.getElementById("pWizardBridgeWanIpWarn" ).innerHTML="设备处于桥模式，已恢复自动获取IP，且不允许更改连接方式。";
+					$(".chooseOther").hide();
+				}
+			});
+		}
+
+		id("sub").onclick = function(){
+			saveNetworkCfg(uciProto.optValue.proto.dynIp, function(){
+				loadPage("WizardWirelessCfg.htm", "phCon");
+			});
+		};
+
+		showNetworkCfg(uciProto.optValue.proto.dynIp);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			$("#phWanPortSelDiv").removeClass("disNone");
+			wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+
+		if(bWzdWanTypeDetected) {
+			$(".notDetected").hide();
+			$(".detected").show();
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	div.phoneCon{
+		padding-bottom: 114px;
+	}
+	.warn {
+		margin-top: 10px;
+		line-height: 15px;
+		width: 280px;
+		font-size:12px;
+		text-align:left;
+		color:#FFFFFF;
+	}
+	#phWanLoadingCover{
+		position:absolute;
+		top:-9999px;
+		visibility:hidden;
+		width:100%;
+		z-index:1011;
+	}
+	div.phLoadingCon{
+		background:#ffffff;
+		margin:0 auto;
+		text-align:center;
+		width:300px;
+	}
+	img.loading{
+		height:85px;
+		width:85px;
+		margin:25px auto;
+	}
+	div.phLoadingCon p{
+		color: #3c4e43;
+		font-size: 16px;
+		padding-bottom: 50px;
+		line-height: 16px;
+		height: 16px;
+	}
+	li.phInputLi label.wanPortSel{
+		width: 91px;
+	}
+	li.phInputLi span.phSelect span.wanPortSel{
+		width: 118px;
+	}
+	li.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+	}
+	li.wanPortSelTips label{
+		text-align:right;
+		display:inline-block;
+		vertical-align:middle;
+		height:20px;
+		line-height:20px;
+		width: 105px;
+	}
+	li.wanPortSelTips span.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+		width: 118px;
+		color:#FFF;
+		font-size:14px;
+	}
+	ul.wanPortSel{
+		margin-bottom:10px;
+	}
+	ul.wanPortSelTips{
+		margin-bottom:16px;
+	}
+	p.chooseOther{
+		position:absolute;
+		bottom:72px;
+		width:100%;
+		text-align:center;
+	}
+	p a{
+		color:#FEEB1A;
+		font-size:14px;
+	}
+	p.detectTip{
+		color:#ffffff;
+		font-size:15px;
+		text-align:center;
+		margin-bottom:20px;
+	}
+	div.textCenter{
+		text-align:center;
+	}
+	img.detected{
+		margin:20px auto 20px;
+	}
+	li.phErrTip i.error{
+		background:url(../web-static/images/error@2x.png) no-repeat;
+		width:16px;
+		height:16px;
+		top:0;
+		background-size:cover;
+	}
+	li.phErrTip span.errDes {
+		line-height:16px;
+	}
+</style>
 <h1 class="phoneTitle">{%label.netSet%}</h1>
 <div class="textCenter">
 	<img class="detected disNone" src="../web-static/images/connect_success.png" />
@@ -45,6 +191,4 @@
 	</div>
 </div>
 <p class="chooseOther"><a href="javascript:void(0)">{%label.selectNetType%}</a></p>
-<div id="selectNetTypeCon"></div><script type="text/javascript">function init(){loadPage("PhoneSelectNetworkType.htm","selectNetTypeCon");$(".chooseOther a").click(function(a){showCover();$(".selectNetType").show()});if(gModeSwitchSupport){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,function(a){1==parseInt(a.custom_network.bridge_status.enable)&&(document.getElementById("pWizardBridgeWanIpWarn").innerHTML="设备处于桥模式，已恢复自动获取IP，且不允许更改连接方式。",$(".chooseOther").hide())})}id("sub").onclick=
-function(){saveNetworkCfg(uciProto.optValue.proto.dynIp,function(){loadPage("WizardWirelessCfg.htm","phCon")})};showNetworkCfg(uciProto.optValue.proto.dynIp);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#phWanPortSelDiv").removeClass("disNone"),wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));bWzdWanTypeDetected&&($(".notDetected").hide(),$(".detected").show())}init();
-</script><style type="text/css">div.phoneCon{padding-bottom:114px}.warn{margin-top:10px;line-height:15px;width:280px;font-size:12px;text-align:left;color:#fff}#phWanLoadingCover{position:absolute;top:-9999px;visibility:hidden;width:100%;z-index:1011}div.phLoadingCon{background:#fff;margin:0 auto;text-align:center;width:300px}img.loading{height:85px;width:85px;margin:25px auto}div.phLoadingCon p{color:#3c4e43;font-size:16px;padding-bottom:50px;line-height:16px;height:16px}li.phInputLi label.wanPortSel{width:91px}li.phInputLi span.phSelect span.wanPortSel{width:118px}li.wanPortSelTips{height:20px;line-height:20px}li.wanPortSelTips label{text-align:right;display:inline-block;vertical-align:middle;height:20px;line-height:20px;width:105px}li.wanPortSelTips span.wanPortSelTips{height:20px;line-height:20px;width:118px;color:#FFF;font-size:14px}ul.wanPortSel{margin-bottom:10px}ul.wanPortSelTips{margin-bottom:16px}p.chooseOther{position:absolute;bottom:72px;width:100%;text-align:center}p a{color:#feeb1a;font-size:14px}p.detectTip{color:#fff;font-size:15px;text-align:center;margin-bottom:20px}div.textCenter{text-align:center}img.detected{margin:20px auto 20px}li.phErrTip i.error{background:url(../web-static/images/error@2x.png) no-repeat;width:16px;height:16px;top:0;background-size:cover}li.phErrTip span.errDes{line-height:16px}</style>
+<div id="selectNetTypeCon"></div>

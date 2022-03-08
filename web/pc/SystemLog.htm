@@ -1,5 +1,204 @@
+<style type="text/css">
+	p.sysLogEnMailP{
+		height:24px;
+		line-height:24px;
+		color:#737373;
+		padding-left:15px;
+		margin-top:15px;
+		text-align:left;
+	}
+	input.sysLogRadio{
+		margin-left:40px;
+		margin-right:5px;
+		vertical-align:middle;
+	}
+	label.sysLogDesLbl{
+		width:157px;
+		font-size:12px;
+		color:#737373;
+		margin-right:3px;
+		display:inline-block;
+		vertical-align:middle;
+	}
+	div.sysLogSubTitle{
+		margin-top:24px;
+		text-indent:8px;
+		font-size:0.1px;
+		border-bottom:1px solid #EBEBEB;
+		padding-bottom:3px;
+		position:relative;
+		*zoom:1;
+	}
+	div.sysLogSubTitle label.sysLogSubTitle{
+		color: #737373;
+		font-size:15px;
+		line-height:26px;
+		vertical-align:middle;
+		text-align:left;
+	}
+	table.dataGrid td.sysLogTd{
+		text-align:left;
+		padding:3px 0px 3px 20px;
+		word-break:break-all;
+		word-wrap:break-word;
+		white-space:normal !important;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var sysLog = [];
 
+		function refreshSysGrid(data)
+		{
+			sysLog = data;
+			dataGridLs.setDataSource(sysLog);
+			dataGridLs.refresh(dataGridLs.getPageNum());
+		}
 
+		//发送删除日志请求
+		function deleteLogs()
+		{
+			var reqData = {system:{delete_logs:null}};
+
+			$.action(reqData, refreshData);
+		}
+
+		//发送导出日志请求
+		function logSave()
+		{
+			var reqData = {};
+			reqData[uciSystem.fileName] = {};
+			reqData[uciSystem.fileName][uciSystem.actionName.downloadLogs] = null;
+
+			$.action(reqData, function(data){
+				location.href=$.orgURL(data["url"]);
+			}, true);
+		}
+
+		//转换日志格式，并刷新表格
+		function formatSyslogInfo(data, pageInfo, totalNum)
+		{
+			var priotys=["ALL","DEBUG","INFO","NOTICE","WARNING","ERR","EMERG","MAX"];
+			var onelogregs=/<(\d+)>(.+)/;
+			var results;
+			var count=1;
+			var suGetLog = [];
+			var logOrder =0;
+			var allPageNum=0;
+			var tailNum=0;
+
+			//只刷新当前页日志数据
+			if (pageInfo > 0)
+			{
+				//总页数
+				allPageNum = Math.ceil(totalNum/dataGridLs.getNumPerPage());
+
+				//最后一页日志数
+				tailNum = totalNum % dataGridLs.getNumPerPage();
+				if (pageInfo != allPageNum) //当前页不是最后一页
+				{
+					//计算刷新日志从全部日志的第几条开始
+					if (tailNum > 0)
+					{
+						//最后一页日志数不等于每页日志数时
+						count = dataGridLs.getNumPerPage() * ( allPageNum - 1 - pageInfo ) + tailNum + 1;
+					}
+					else
+					{
+						//最后一页日志数与每页日志数相等时
+						count = dataGridLs.getNumPerPage() * ( allPageNum  - pageInfo ) + 1;
+					}
+				}
+				else   //当前页为最后一页
+				{
+					count = 1;
+				}
+			}
+			else  //刷新全部日志数据
+			{
+				count = 1;
+			}
+
+			for(var i = 0; i < data.length; i++)
+			{
+				var sys_log = data[i];
+				var key_name = "syslog_" + parseInt(count); //日志信息在日志结构中的关键字
+
+				//正则表达提取优先级、时间、模块名、信息
+				results = onelogregs.exec(sys_log[key_name]);
+				if(results)
+				{
+					var onelogsj={};
+					onelogsj.num=count;                                           //日志在表格中的索引值
+					onelogsj.level=priotys[parseInt(results[1])];			//字符串表示优先级
+					onelogsj.msg=results[2];		//时间、模块名、信息组成日志显示信息
+					suGetLog[logOrder]=onelogsj;					//加入待刷新数组
+					count++;
+					logOrder ++;
+				}
+			}
+
+			if (pageInfo > 0)
+			{
+				dataGridLs.refreshPage(suGetLog, totalNum, pageInfo);
+			}
+			else
+			{
+				refreshSysGrid(suGetLog);
+			}
+		}
+
+		function refreshData(pageNum)
+		{
+			if (null == pageNum || checkNum(pageNum) == false)
+			{
+				var LogPageNum = dataGridLs.getPageNum();
+			}
+			else
+			{
+				var LogPageNum = pageNum;
+			}
+
+			var LogNumPerPage = dataGridLs.getNumPerPage();
+			var LogDataLen = dataGridLs.getDataLen();
+
+			var reqData = {
+				system : {
+					read_logs: {
+						"page":	LogPageNum,
+						"num_per_page": LogNumPerPage
+					}
+				}
+			};
+
+			$.action(reqData, function(result) {
+				formatSyslogInfo(result.syslog, result.page, result.total);
+			});
+		}
+
+		dataGridLs = new DataGrid();
+		dataGridLs.init({
+			id:"logTbl",
+			data:sysLog,
+			hasSelBox:false,
+			edit:false,
+			head:[{field:label.logIndex, width:7},
+				  {field:label.logType, width:20},
+				  {field:label.logCont, width:73}],
+			list:[{edit:false, name:"num", type:"number"},
+				  {edit:false, name:"level", type:"str"},
+				  {edit:false, name:"msg", type:"str", maxSize:200, className:"sysLogTd", igHTMLEscape:true}],
+			paging:{num:20, page:1},
+			max:160,
+			pageTurnFunc:refreshData,
+			toolBar:{id:"logUl", refresh:refreshData, saveAll:logSave, delAll:deleteLogs}
+		});
+
+		refreshData();
+	}
+	init();
+</script>
 <div id="hcCo" class="hcCo">
 	<div class="hsHelp"></div>
 	<div class="title">
@@ -13,7 +212,4 @@
 		</ul>
 		<table id="logTbl" class="dataGrid"></table>
 	</div>
-</div><script type="text/javascript">function init(){function c(a){a=null==a||!1==checkNum(a)?dataGridLs.getPageNum():a;var c=dataGridLs.getNumPerPage();dataGridLs.getDataLen();$.action({system:{read_logs:{page:a,num_per_page:c}}},function(a){var c=a.syslog,e=a.page;a=a.total;var m="ALL DEBUG INFO NOTICE WARNING ERR EMERG MAX".split(" "),n=/<(\d+)>(.+)/,g,b=1,h=[],l=0,d=b=0;0<e?(b=Math.ceil(a/dataGridLs.getNumPerPage()),d=a%dataGridLs.getNumPerPage(),b=e!=b?0<d?dataGridLs.getNumPerPage()*(b-1-e)+d+1:dataGridLs.getNumPerPage()*(b-e)+
-1:1):b=1;for(d=0;d<c.length;d++){g=c[d];var f="syslog_"+parseInt(b);if(g=n.exec(g[f]))f={},f.num=b,f.level=m[parseInt(g[1])],f.msg=g[2],h[l]=f,b++,l++}0<e?dataGridLs.refreshPage(h,a,e):(k=h,dataGridLs.setDataSource(k),dataGridLs.refresh(dataGridLs.getPageNum()))})}var k=[];dataGridLs=new DataGrid;dataGridLs.init({id:"logTbl",data:k,hasSelBox:!1,edit:!1,head:[{field:label.logIndex,width:7},{field:label.logType,width:20},{field:label.logCont,width:73}],list:[{edit:!1,name:"num",type:"number"},{edit:!1,
-name:"level",type:"str"},{edit:!1,name:"msg",type:"str",maxSize:200,className:"sysLogTd",igHTMLEscape:!0}],paging:{num:20,page:1},max:160,pageTurnFunc:c,toolBar:{id:"logUl",refresh:c,saveAll:function(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.actionName.downloadLogs]=null;$.action(a,function(a){location.href=$.orgURL(a.url)},!0)},delAll:function(){$.action({system:{delete_logs:null}},c)}}});c()}init();
-</script><style type="text/css">p.sysLogEnMailP{height:24px;line-height:24px;color:#737373;padding-left:15px;margin-top:15px;text-align:left}input.sysLogRadio{margin-left:40px;margin-right:5px;vertical-align:middle}label.sysLogDesLbl{width:157px;font-size:12px;color:#737373;margin-right:3px;display:inline-block;vertical-align:middle}div.sysLogSubTitle{margin-top:24px;text-indent:8px;font-size:.1px;border-bottom:1px solid #ebebeb;padding-bottom:3px;position:relative;*zoom:1}div.sysLogSubTitle label.sysLogSubTitle{color:#737373;font-size:15px;line-height:26px;vertical-align:middle;text-align:left}table.dataGrid td.sysLogTd{text-align:left;padding:3px 0 3px 20px;word-break:break-all;word-wrap:break-word;white-space:normal!important}</style>
+</div>

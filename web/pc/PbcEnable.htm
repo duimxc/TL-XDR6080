@@ -1,5 +1,82 @@
+<script type="text/javascript">
+    function init() {
+        var firstLoad = true;
+        var SWITCH_ON = 1, SWITCH_OFF = 0;
+        var opend = statusStr.opened, closed = statusStr.closed;
+        var ON = uciMesh.optValue.enable.on;
+        var OFF = uciMesh.optValue.enable.off;
+        var pbcEnableSwitch;
+        var pbcEnableState = id("pbcEnableState");
 
+        function switchChgHd(state)
+        {
+            if (firstLoad)
+            {
+                firstLoad = false;
+                pbcEnableState.innerHTML = (state == SWITCH_ON) ? opend : closed;
+                return;
+            }
 
+            var data = {}, args = {};
+            data[uciMesh.fileName] = {};
+            data[uciMesh.fileName][uciMesh.secName.config] = args;
+            args[uciMesh.optName.pbcEnable] = (state == SWITCH_ON) ? ON : OFF;
+
+            $.modify(data, function (result) {
+                if (ENONE != result[ERR_CODE]) {
+                    showAlert(errorStr.saveFail);
+                } else {
+                    pbcEnableState.innerHTML = (state == SWITCH_ON) ? opend : closed;
+                }
+            })
+        }
+
+        (function(){
+            var data = {};
+            data[uciMesh.fileName] = {};
+            data[uciMesh.fileName][KEY_NAME] = uciMesh.secName.config;
+
+            $.query(data,function (result) {
+                if (ENONE == result[ERR_CODE]) {
+                    var status = result[uciMesh.fileName][uciMesh.secName.config][uciMesh.optName.pbcEnable];
+                    var state = (status == ON) ? SWITCH_ON : SWITCH_OFF;
+                    pbcEnableSwitch = new Switch("switchCon", state, switchChgHd);
+                }
+            })
+        })();
+    }
+    init();
+</script>
+<style type="text/css">
+    div.pbcEnableStatusBlk {
+        text-align: left;
+    }
+    div.pbcEnableStatusBlk label{
+        font-size: 14px;
+        color: #FFFFFF;
+        letter-spacing: -0.43px;
+        vertical-align: middle;
+    }
+    div.pbcEnableStatusBlk span {
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: -0.37px;
+        vertical-align: middle;
+    }
+    div.pbcEnableStatusBlk p {
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: 0;
+        line-height: 12px;
+        margin-top: 10px;
+    }
+    div.pbcEnableStatusBlk p.mt30 {
+        margin-top: 30px;
+    }
+    div.pbcEnableStatusBlk p.mt22 {
+        margin-top: 22px;
+    }
+</style>
 <div id="hcCo" class="hcCo">
     <div class="title">
         <label class="title">{%menuStr.pbcEnable%}</label>
@@ -17,6 +94,4 @@
         <p>1、 如果您在公共场所使用本设备，为保证信息安全，请不要开启易展按键；</p>
         <p>2、易展按键未开启时，您可以通过APP或Web管理页手动与其他路由器互联。</p>
     </div>
-</div><script type="text/javascript">function init(){function l(b){if(d)d=!1,e.innerHTML=b==c?f:g;else{var a={},h={};a[uciMesh.fileName]={};a[uciMesh.fileName][uciMesh.secName.config]=h;h[uciMesh.optName.pbcEnable]=b==c?k:m;$.modify(a,function(a){ENONE!=a[ERR_CODE]?showAlert(errorStr.saveFail):e.innerHTML=b==c?f:g})}}var d=!0,c=1,f=statusStr.opened,g=statusStr.closed,k=uciMesh.optValue.enable.on,m=uciMesh.optValue.enable.off,e=id("pbcEnableState");(function(){var b={};b[uciMesh.fileName]={};b[uciMesh.fileName][KEY_NAME]=uciMesh.secName.config;
-$.query(b,function(a){ENONE==a[ERR_CODE]&&new Switch("switchCon",a[uciMesh.fileName][uciMesh.secName.config][uciMesh.optName.pbcEnable]==k?c:0,l)})})()}init();
-</script><style type="text/css">div.pbcEnableStatusBlk{text-align:left}div.pbcEnableStatusBlk label{font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle}div.pbcEnableStatusBlk span{font-size:12px;color:#fff;letter-spacing:-0.37px;vertical-align:middle}div.pbcEnableStatusBlk p{font-size:12px;color:#fff;letter-spacing:0;line-height:12px;margin-top:10px}div.pbcEnableStatusBlk p.mt30{margin-top:30px}div.pbcEnableStatusBlk p.mt22{margin-top:22px}</style>
+</div>

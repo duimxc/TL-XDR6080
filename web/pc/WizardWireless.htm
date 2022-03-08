@@ -1,5 +1,323 @@
+<script type="text/javascript">
+	function init()
+	{
+		var uciFile = uciWireless.fileName;
+		var uciSecWifi2G = uciWireless.dynData.host_2g;
+		var optSsid = uciWireless.dynOptName.ssid;
+		var optEncrypt = uciWireless.dynOptName.encryption;
+		var optKey = uciWireless.dynOptName.key;
 
+		var wzdWirelessName2G = id("wzdWirelessName2G");
+		var wzdWirelessPwd2G = id("wzdWirelessPwd2G");
+		var INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+		var oriWifiCfg = {};
 
+		gIsWifiDevice = false;	/* 是无线设备连接管理页面 */
+
+		function wzdWirelessPwdConfirm()
+		{
+			var tipStr = label.confirmNoWirelessPwd;
+			var onYesCbk = function(){wzdWirelessPwd2G.focus();};
+			var onNoCbk = saveCfgHandle;
+
+			showWzdConfirm(tipStr, onYesCbk, onNoCbk, btn.toPwd, btn.unPwd);
+		}
+
+		function wzdWirelessSsidConfirm()
+		{
+			var tipStr = label.confirmSsidHasCnStr;
+			var onYesCbk = function(){wzdWirelessName2G.select();};
+			var onNoCbk = checkWlanPwdHandle;
+
+			showWzdConfirm(tipStr, onYesCbk, onNoCbk);
+		}
+
+		function checkSsidInput2G()
+		{
+			var ssid = wzdWirelessName2G.value;
+
+			closeNote("wzdAntNote2G");
+
+			/* 检查合法性 */
+			if (0 == ssid.length)
+			{
+				showNote("wzdAntNote2G", errStr.wlanSsidErr);
+				return false;
+			}
+
+			if (/^ +$/gi.test(ssid) == true)
+			{
+				showNote("wzdAntNote2G", errStr.wlanSsidBlank);
+				return false;
+			}
+
+			/* 检查合法性 */
+			if(!checkWifiName(ssid, 32, 1))
+		    {
+				showNote("wzdAntNote2G", errStr.wlanSsidLenErr);
+				return false;
+		    }
+
+			return true;
+		}
+
+		function pwdCheckMixChars(str)
+		{
+			var hasNum = false;
+			var hasLetter = false;
+			var hasSymbol = false;
+
+			hasNum = /\d/g.test(str);
+			hasLetter = /[a-zA-Z]/g.test(str);
+			hasSymbol = /[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(str);
+
+			return (hasNum && hasSymbol && hasLetter);
+		}
+
+		function checkWlanPwdInput2G()
+		{
+			closeNote("wzdPwdNote2G");
+			closeNote("pwdDepNote2G");
+
+			var errorNo = checkWlanPwd(wzdWirelessPwd2G.value);
+			if (EINVWLANPWD == errorNo)
+			{
+				showNote("wzdPwdNote2G", errStr.wlanPwdInvalid);
+				return false;
+			}
+			else if (EINVPSKLEN == errorNo)
+			{
+				showNote("wzdPwdNote2G", errStr.wlanWzdPwdLenValid);
+				return false;
+			}
+
+			closeNote("wzdPwdNote2G");
+			return true;
+		}
+
+		function checkWlanPwdDep2G()
+		{
+			var width = 24, tip = "";
+			var lgPwdlessTip = "none";
+			var pwdValue = wzdWirelessPwd2G.value;
+			var len = pwdValue.length;
+			var lgPwdNoteVi = "visible";
+			var iClass = "warn";
+			var errorNo = checkWlanPwd(wzdWirelessPwd2G.value);
+
+			if (EINVWLANPWD == errorNo)
+			{
+				closeNote("pwdDepNote2G");
+				showNote("wzdPwdNote2G", errStr.wlanPwdInvalid);
+				return false;
+			}
+
+			if (len >= 0 && len < 8)
+			{
+				lgPwdNoteVi = "hidden";
+				lgPwdlessTip = INLINE_BLOCK;
+			}
+			else if (/^\d+$/.test(pwdValue) ||
+					/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(pwdValue) ||
+					/^[a-zA-Z]+$/.test(pwdValue))
+			{
+				if (len <= 12)
+				{
+					tip = label.weak;
+					width = width;
+				}
+				else
+				{
+					tip = label.media;
+					width = width*2;
+				}
+			}
+			else if (true == pwdCheckMixChars(pwdValue))
+			{
+				tip = label.strong;
+				iClass = "correct";
+				width = width*3;
+			}
+			else
+			{
+				if (len <= 12)
+				{
+					tip = label.media;
+					width = width*2;
+				}
+				else
+				{
+					tip = label.strong;
+					iClass = "correct";
+					width = width*3;
+				}
+			}
+
+			id("pwdDepNote2G").style.visibility = lgPwdNoteVi;
+			id("wzdPwdNote2G").style.display = lgPwdlessTip;
+			id("pwdDep2G").innerHTML = tip;
+			id("chgPwdDep2G").style.width = width + "px";
+			id("pwdDepI").className = iClass;
+		}
+
+		function checkStrHasCN(str)
+		{
+			var len = str.length;
+			for (var i = 0; i < len; i++)
+			{
+				if (str.charCodeAt(i) > 127)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function initWifiCfg()
+		{
+			var nameVal2G = wzdWirelessName2G.value;
+			var pswVal2G  = wzdWirelessPwd2G.value;
+
+			/* 全局变量：标志无线配置是否更改 */
+			gIsWifiCfgChged = ((nameVal2G != oriWifiCfg[optSsid]) || (pswVal2G != oriWifiCfg[optKey]));;
+
+			if (gIsWifiCfgChged)
+			{
+				/* 全局变量：临时保存无线配置 */
+				gWifiCfgToSave = {};
+				gWifiCfgToSave[uciFile] = {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G] = {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G][optSsid] = nameVal2G;
+
+				if (pswVal2G.length > 0)
+				{
+					gWifiCfgToSave[uciFile][uciSecWifi2G][optEncrypt] = uciWireless.dynOptValue.encryption.on;
+					gWifiCfgToSave[uciFile][uciSecWifi2G][optKey] = pswVal2G;
+				}
+				else
+				{
+					gWifiCfgToSave[uciFile][uciSecWifi2G][optEncrypt] = uciWireless.dynOptValue.encryption.off;
+				}
+			}
+		}
+
+		function saveCfgHandle()
+		{
+			/* 初始化需要保存的无线配置信息 */
+			initWifiCfg();
+
+			loadPage('WizardEnd.htm', "wizardCon");
+		}
+
+		function checkWlanPwdHandle()
+		{
+			if (0 == wzdWirelessPwd2G.value.length)
+			{
+				showCover(wzdWirelessPwdConfirm);
+				return;
+			}
+
+			var errNo = checkWlanPwd(wzdWirelessPwd2G.value);
+			switch(errNo)
+			{
+			case EINVWLANPWD:
+				showNote("wzdPwdNote2G", errStr.wlanWzdPwdValid);
+				return;
+			case EINVPSKLEN:
+				showNote("wzdPwdNote2G", errStr.wlanWzdPwdLenValid);
+				return;
+			case EWLANPWDBLANK:
+			default:
+				break;
+			}
+
+			saveCfgHandle();
+		}
+
+		function onSave()
+		{
+			if(!checkSsidInput2G())
+			{
+				return;
+			}
+
+			/* 检查SSID中是否包含非ASCII字符*/
+			if (checkStrHasCN(wzdWirelessName2G.value))
+			{
+				showCover(wzdWirelessSsidConfirm);
+				return;
+			}
+
+			checkWlanPwdHandle();
+		}
+
+		function getCfgCbk(ALL_DATA)
+		{
+			var hostObj;
+			var oriWifiCfg = ALL_DATA[uciFile][uciSecWifi2G];
+
+			g_cur_host_mac = ALL_DATA[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];
+			wzdWirelessName2G.value = oriWifiCfg[optSsid];
+			wzdWirelessPwd2G.value = oriWifiCfg[optKey];
+
+			/* 初始化当前登录的是否是无线设备 */
+			var hostsInfo = formatTableData(ALL_DATA[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);
+			for (var i = 0; i < hostsInfo.length; i++)
+			{
+				hostObj = hostsInfo[i];
+				if (hostObj[uciHostsInfo.optName.mac].toUpperCase() == g_cur_host_mac.toUpperCase())
+				{
+					type = hostObj[uciHostsInfo.optName.type];
+					if (type == uciHostsInfo.optValue.linkType.hostWireless ||
+						type == uciHostsInfo.optValue.linkType.guestWireless)
+					{
+						gIsWifiDevice = true;
+					}
+
+					break;
+				}
+			}
+		}
+
+		function getCfg()
+		{
+			var data = {};
+			data[uciFile] = {};
+			data[uciFile][KEY_NAME] = [uciSecWifi2G];
+
+			data[uciHostsInfo.fileName] = {};
+			data[uciHostsInfo.fileName][KEY_TABLE] = [uciHostsInfo.dynData.online_host];
+			data[uciNetwork.fileName] = {};
+			data[uciNetwork.fileName][KEY_NAME] = uciNetwork.dynData.ifaceMac;
+
+			$.query(data, getCfgCbk);
+		}
+
+		/* 设置导航栏颜色 */
+		wzdNavSet(2);
+		wzdConSet({"height":"480px"});
+		wzdWirelessName2G.focus();
+		id("pre").onclick = function(){wzdNetWorkModeChange(gNetworkCfg[uciProto.optName.type]);};
+		id("sub").onclick = onSave;
+
+		wzdWirelessName2G.onblur = checkSsidInput2G;
+		wzdWirelessName2G.onkeyup = checkSsidInput2G;
+		wzdWirelessPwd2G.onblur = checkWlanPwdInput2G;
+		wzdWirelessPwd2G.onkeyup = checkWlanPwdDep2G;
+
+		getCfg();
+	}
+	init();
+</script>
+<style type="text/css">
+	li.wzdSubLi input{
+		width:85px;
+	}
+	ul.inputUlF{
+		overflow:hidden;
+	}
+</style>
 <ul class="wzdConTitleUl">
 	<p class="wzdConTitle">{%label.wifiSet%}</p>
 	<p class="wzdConTitleDes">{%label.wifiSetTip%}</p>
@@ -41,11 +359,4 @@
 		<input id="pre" type="button" class="btnL" value="{%btn.preStep%}" />
 		<input id="sub" type="button" value="{%btn.ok%}" />
 	</li>
-</ul><script type="text/javascript">function init(){function s(){showWzdConfirm(label.confirmNoWirelessPwd,function(){d.focus()},n,btn.toPwd,btn.unPwd)}function t(){showWzdConfirm(label.confirmSsidHasCnStr,function(){c.select()},p)}function h(){var a=c.value;closeNote("wzdAntNote2G");return 0==a.length?(showNote("wzdAntNote2G",errStr.wlanSsidErr),!1):!0==/^ +$/gi.test(a)?(showNote("wzdAntNote2G",errStr.wlanSsidBlank),!1):checkWifiName(a,32,1)?!0:(showNote("wzdAntNote2G",errStr.wlanSsidLenErr),!1)}function n(){var a=c.value,b=d.value;
-if(gIsWifiCfgChged=a!=q[g]||b!=q[k])gWifiCfgToSave={},gWifiCfgToSave[e]={},gWifiCfgToSave[e][f]={},gWifiCfgToSave[e][f][g]=a,0<b.length?(gWifiCfgToSave[e][f][r]=uciWireless.dynOptValue.encryption.on,gWifiCfgToSave[e][f][k]=b):gWifiCfgToSave[e][f][r]=uciWireless.dynOptValue.encryption.off;loadPage("WizardEnd.htm","wizardCon")}function p(){if(0==d.value.length)showCover(s);else{switch(checkWlanPwd(d.value)){case EINVWLANPWD:showNote("wzdPwdNote2G",errStr.wlanWzdPwdValid);return;case EINVPSKLEN:showNote("wzdPwdNote2G",
-errStr.wlanWzdPwdLenValid);return}n()}}function u(a){var b=a[e][f];g_cur_host_mac=a[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];c.value=b[g];d.value=b[k];for(var b=formatTableData(a[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]),m=0;m<b.length;m++)if(a=b[m],a[uciHostsInfo.optName.mac].toUpperCase()==g_cur_host_mac.toUpperCase()){type=a[uciHostsInfo.optName.type];if(type==uciHostsInfo.optValue.linkType.hostWireless||type==uciHostsInfo.optValue.linkType.guestWireless)gIsWifiDevice=
-!0;break}}var e=uciWireless.fileName,f=uciWireless.dynData.host_2g,g=uciWireless.dynOptName.ssid,r=uciWireless.dynOptName.encryption,k=uciWireless.dynOptName.key,c=id("wzdWirelessName2G"),d=id("wzdWirelessPwd2G"),v=isIESix||isIESeven?"inline":"inline-block",q={};gIsWifiDevice=!1;wzdNavSet(2);wzdConSet({height:"480px"});c.focus();id("pre").onclick=function(){wzdNetWorkModeChange(gNetworkCfg[uciProto.optName.type])};id("sub").onclick=function(){if(h()){var a;a:{a=c.value;for(var b=a.length,d=0;d<b;d++)if(127<
-a.charCodeAt(d)){a=!0;break a}a=!1}a?showCover(t):p()}};c.onblur=h;c.onkeyup=h;d.onblur=function(){closeNote("wzdPwdNote2G");closeNote("pwdDepNote2G");var a=checkWlanPwd(d.value);if(EINVWLANPWD==a)return showNote("wzdPwdNote2G",errStr.wlanPwdInvalid),!1;if(EINVPSKLEN==a)return showNote("wzdPwdNote2G",errStr.wlanWzdPwdLenValid),!1;closeNote("wzdPwdNote2G");return!0};d.onkeyup=function(){var a=24,b="",e="none",c=d.value,f=c.length,h="visible",g="warn",l=checkWlanPwd(d.value);if(EINVWLANPWD==l)return closeNote("pwdDepNote2G"),
-showNote("wzdPwdNote2G",errStr.wlanPwdInvalid),!1;if(0<=f&&8>f)h="hidden",e=v;else if(/^\d+$/.test(c)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(c)||/^[a-zA-Z]+$/.test(c))12>=f?b=label.weak:(b=label.media,a*=2);else{var k=l=b=!1,b=/\d/g.test(c),l=/[a-zA-Z]/g.test(c),k=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(c);!0==(b&&k&&l)?(b=label.strong,g="correct",a*=3):12>=f?(b=label.media,a*=2):(b=label.strong,g="correct",a*=3)}id("pwdDepNote2G").style.visibility=h;id("wzdPwdNote2G").style.display=
-e;id("pwdDep2G").innerHTML=b;id("chgPwdDep2G").style.width=a+"px";id("pwdDepI").className=g};(function(){var a={};a[e]={};a[e][KEY_NAME]=[f];a[uciHostsInfo.fileName]={};a[uciHostsInfo.fileName][KEY_TABLE]=[uciHostsInfo.dynData.online_host];a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=uciNetwork.dynData.ifaceMac;$.query(a,u)})()}init();
-</script><style type="text/css">li.wzdSubLi input{width:85px}ul.inputUlF{overflow:hidden}</style>
+</ul>

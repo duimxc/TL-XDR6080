@@ -1,5 +1,301 @@
+<style type="text/css">
+	input.resendBtn{
+		background:#5e85c0;
+		border-radius:5px;
+		border:1px solid #184283;
+		color:#184283;
+		cursor:default;
+		height:25px;
+		font-size:12px;;
+		margin-left:5px;
+		vertical-align:middle;
+		width:92px;
+	}
+	#CAPTCHASendTip a{
+		color:#FFFFFF;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var account = id("account");
+		var CAPTCHAGet = id("CAPTCHAGet");
+		var resend = id("resend");
+		var CAPTCHASendTip = id("CAPTCHASendTip");
+		var WAITING_CLOUD_RESPONSE_CAPTCHA = 2000;
+		var CAPTCHA_TIME = 1000;
+		var CAPTCHA_MAX_TIME = 120;
+		var accountType = 0;
+		var data = {};
+		var bGettingCAPTCHA = false;
 
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+			var cloudErrRel;
 
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				return true;
+			case EINVERICODEEMPTY:
+				objOrId = "CAPTCHA";
+				showStr = errStr.invVericodeNULL;
+				break;
+			case EINVACCOUNTRESETPWDCAPTCHAERR:
+			case EINVVERICODEFORMAT:
+				objOrId = "CAPTCHA";
+				showStr = appendErrCode(errStr.CAPTCHAErrorTip, errNo);
+				break;
+			case EINVACCOUNTNOTEXIST:
+				objOrId = "account";
+				showStr = appendErrCode(errStr.invCloudAccountNotExist, errNo);
+				break;
+			case EINVACCOUNTTYPEERR:
+				objOrId = "account";
+				showStr = appendErrCode(errStr.invCloudAccountType, errNo);
+				break;
+			case EINVCLOUDUSRCOUNTFORMAT:
+			case EINVACCOUNTEMAILFMT:
+			case EINVACCOUNTPHONENUMFMT:
+				objOrId = "account";
+				showStr = appendErrCode(errStr.invCloudAccountFmtErr, errNo);
+				break;
+			case EINVDEVICELOCKED:
+				showStr = appendErrCode(errStr.invCloudDeviceLocked, errNo);
+				break;
+			case EINVCLOUDERRORCAPTCHAINVAL:
+				showStr = appendErrCode(errStr.invCloudCAPTCHAInval, errNo);
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(errNo)
+				if (cloudErrRel.result == false)
+				{
+					showStr = cloudErrRel.tip;
+				}
+				else
+				{
+					showStr = appendErrCode(errStr.invRequestFail, errNo);
+				}
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return false;
+		}
+
+		/* 检查账号是格式否正确 */
+		function checkSub(accountVal)
+		{
+			if (0 == accountVal.length)
+			{
+				showNoteB("accountNote", label.cloudAccountNull);
+				return false;
+			}
+
+			if (true == checkNum(accountVal))
+			{
+				if (false == checkPhoneNum(accountVal))
+				{
+					showNoteB("accountNote", errStr.invCloudAccountFmtErr, "twoLine");
+					return false;
+				}
+				else
+				{
+					accountType = uciCloudConfig.optValue.accountTypePhoneNum;
+					closeNote("accountNote");
+					return true;
+				}
+			}
+			else
+			{
+				if (false == checkEmail(accountVal))
+				{
+					showNoteB("accountNote", errStr.invCloudAccountFmtErr, "twoLine");
+					return false;
+				}
+				else
+				{
+					accountType = uciCloudConfig.optValue.accountTypeEmail;
+					closeNote("accountNote");
+					return true;
+				}
+			}
+		}
+
+		/* 获取验证码 */
+		function getCAPTCHA()
+		{
+			var captchaHd;
+			var accountVal = account.value;
+			var emailAddr = null;
+
+			if (true == bGettingCAPTCHA)
+			{
+				return;
+			}
+
+			if (true == checkSub(accountVal))
+			{
+				bGettingCAPTCHA = true;
+				captchaHd = $.setTimeout(function(){
+					showLoading(label.cloudServerWaitingResp, function(){
+						bGettingCAPTCHA = false;
+						cloudAccountQueryStop();
+					}, undefined, false);
+				}, WAITING_CLOUD_RESPONSE_CAPTCHA);
+
+				cloudAccountRstPwdAC(accountVal, accountType, function(code){
+					bGettingCAPTCHA = false;
+					clearTimeout(captchaHd);
+					closeLoading();
+
+					if (true == errHandle(code))
+					{
+						showCAPTCHABtn(CAPTCHA_MAX_TIME);
+						CAPTCHASendTip.style.display = "block";
+						if (uciCloudConfig.optValue.accountTypeEmail == accountType)
+						{
+							if (null != (emailAddr = emailLinkCheck(accountVal)))
+							{
+								CAPTCHASendTip.innerHTML = label.CAPTCHASentEmainTip +
+									"<a href='" + emailAddr + "' target='blank'>" + label.CAPTCHASentEmainTipS + "</a>";
+							}
+							else
+							{
+								CAPTCHASendTip.innerHTML = label.CAPTCHASentEmainTip + label.CAPTCHASentEmainTipS;
+							}
+						}
+						else
+						{
+							CAPTCHASendTip.innerHTML = label.CAPTCHASentPhTip;
+						}
+					}
+				}, function(){
+					clearTimeout(captchaHd);
+					bGettingCAPTCHA = false;
+					closeLoading();
+				});
+			}
+			else
+			{
+				bGettingCAPTCHA = false;
+			}
+		}
+
+		/* 设置验证码剩余的时间 */
+		function showCAPTCHABtn(time)
+		{
+			time = parseInt(time);
+
+			if (time <= 0)
+			{
+				CAPTCHAGet.style.display = "inline";
+				resend.style.display = "none";
+				resend.time = -1;
+			}
+			else
+			{
+				CAPTCHAGet.style.display = "none";
+				resend.value = btn.resend + "(" + time + ")";
+				resend.time = --time;
+				resend.style.display = "inline";
+			}
+		}
+
+		/* 验证码剩余的时间的守护函数 */
+		function CAPTCHATime()
+		{
+			if (resend.style.display != "none")
+			{
+				showCAPTCHABtn(resend.time);
+			}
+
+			$.setTimeout(arguments.callee, CAPTCHA_TIME);
+		}
+
+		$("ul.cloudNav li").each(function(index){
+			if (0 == index)
+			{
+				this.className = "select";
+			}
+			else
+			{
+				this.className = "";
+			}
+		});
+
+		id("nextStep").onclick = function(){
+			var CAPTCHAVal = id("CAPTCHA").value;
+			var accountVal = account.value;
+
+			if (false == checkSub(accountVal))
+			{
+				return;
+			}
+
+			/* 验证码不能为空 */
+			if (0 == CAPTCHAVal.length)
+			{
+				errHandle(EINVERICODEEMPTY);
+				return;
+			}
+
+			/* 提交账号和验证码 */
+			cloudAccountRstPwdCheckCAPTCHA(accountVal, CAPTCHAVal, function(code){
+				closeLoading();
+
+				if (true == errHandle(code))
+				{
+					/* 跳转前需要保存账号等相关参数 */
+					gCloudAccount["account"] = accountVal;
+					gCloudAccount["CAPTCHAR"] = CAPTCHAVal;
+					gCloudAccount["accountType"] = accountType;
+
+					loadPage("CloudForgPwdSecond.htm", "cloudForgDetial", undefined, {bClearPageTickArray:false});
+				}
+			});
+
+			showLoading(label.cloudAccountCAPTCHAChecking, cloudAccountQueryStop, undefined, false);
+		};
+
+		account.onkeyup = function(){
+			var account = this.value;
+			if (0 == account.length)
+			{
+				closeNote("accountNote");
+			}
+			else if (true == checkNum(account) && true == checkPhoneNum(account))
+			{
+				closeNote("accountNote");
+			}
+			else if (true == checkEmail(account))
+			{
+				closeNote("accountNote");
+			}
+		};
+
+		account.onblur = function(){
+			checkSub(this.value);
+		};
+
+		CAPTCHAGet.onclick = getCAPTCHA;
+		resend.style.display = "none";
+		CAPTCHATime();
+		data[cloudClientStatus.fileName] = {};
+		data[cloudClientStatus.fileName][KEY_NAME] = cloudClientStatus.secName.resetVeriCodeTimer;
+
+		$.query(data, function(result){
+			if (errHandle(result[ERR_CODE]))
+			{
+				var regTimerObj = result[cloudClientStatus.fileName][cloudClientStatus.secName.resetVeriCodeTimer];
+
+				showCAPTCHABtn(parseInt(regTimerObj[cloudClientStatus.optName.resetVeriCodeTimer]));
+			}
+		});
+	}
+	init();
+</script>
 <h1 class="cloudForgH1">{%label.cloudAccountCheck%}</h1>
 <ul class="gridLine gridLineD mpPhoneRgt50">
 	<label class="desLblB" for="account">{%label.tpLinkID%}</label>
@@ -17,11 +313,4 @@
 	<input id="CAPTCHAGet" type="button" value="{%btn.CAPTCHAGet%}" class="subBtn btnA btnA1" />
 </ul>
 <p id="CAPTCHASendTip" class="inputTip disNone">{%label.CAPTCHASentEmainTip%}</p>
-<input id="nextStep" type="button" value="{%btn.nextStep%}" class="subBtn cloudSub" /><script type="text/javascript">function init(){function g(a,c){var b="";switch(parseInt(a)){case ENONE:return!0;case EINVERICODEEMPTY:c="CAPTCHA";b=errStr.invVericodeNULL;break;case EINVACCOUNTRESETPWDCAPTCHAERR:case EINVVERICODEFORMAT:c="CAPTCHA";b=appendErrCode(errStr.CAPTCHAErrorTip,a);break;case EINVACCOUNTNOTEXIST:c="account";b=appendErrCode(errStr.invCloudAccountNotExist,a);break;case EINVACCOUNTTYPEERR:c="account";b=appendErrCode(errStr.invCloudAccountType,a);break;case EINVCLOUDUSRCOUNTFORMAT:case EINVACCOUNTEMAILFMT:case EINVACCOUNTPHONENUMFMT:c=
-"account";b=appendErrCode(errStr.invCloudAccountFmtErr,a);break;case EINVDEVICELOCKED:b=appendErrCode(errStr.invCloudDeviceLocked,a);break;case EINVCLOUDERRORCAPTCHAINVAL:b=appendErrCode(errStr.invCloudCAPTCHAInval,a);break;default:b=cloudErrHandle(a),b=!1==b.result?b.tip:appendErrCode(errStr.invRequestFail,a)}showAlert(b,c);return!1}function l(a){if(0==a.length)return showNoteB("accountNote",label.cloudAccountNull),!1;if(!0==checkNum(a)){if(!1==checkPhoneNum(a))return showNoteB("accountNote",errStr.invCloudAccountFmtErr,
-"twoLine"),!1;f=uciCloudConfig.optValue.accountTypePhoneNum;closeNote("accountNote");return!0}if(!1==checkEmail(a))return showNoteB("accountNote",errStr.invCloudAccountFmtErr,"twoLine"),!1;f=uciCloudConfig.optValue.accountTypeEmail;closeNote("accountNote");return!0}function m(a){a=parseInt(a);0>=a?(n.style.display="inline",d.style.display="none",d.time=-1):(n.style.display="none",d.value=btn.resend+"("+a+")",d.time=--a,d.style.display="inline")}var h=id("account"),n=id("CAPTCHAGet"),d=id("resend"),
-k=id("CAPTCHASendTip"),f=0,p={},e=!1;$("ul.cloudNav li").each(function(a){this.className=0==a?"select":""});id("nextStep").onclick=function(){var a=id("CAPTCHA").value,c=h.value;!1!=l(c)&&(0==a.length?g(EINVERICODEEMPTY):(cloudAccountRstPwdCheckCAPTCHA(c,a,function(b){closeLoading();!0==g(b)&&(gCloudAccount.account=c,gCloudAccount.CAPTCHAR=a,gCloudAccount.accountType=f,loadPage("CloudForgPwdSecond.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1}))}),showLoading(label.cloudAccountCAPTCHAChecking,
-cloudAccountQueryStop,void 0,!1)))};h.onkeyup=function(){var a=this.value;0==a.length?closeNote("accountNote"):!0==checkNum(a)&&!0==checkPhoneNum(a)?closeNote("accountNote"):!0==checkEmail(a)&&closeNote("accountNote")};h.onblur=function(){l(this.value)};n.onclick=function(){var a,c=h.value,b=null;!0!=e&&(!0==l(c)?(e=!0,a=$.setTimeout(function(){showLoading(label.cloudServerWaitingResp,function(){e=!1;cloudAccountQueryStop()},void 0,!1)},2E3),cloudAccountRstPwdAC(c,f,function(d){e=!1;clearTimeout(a);
-closeLoading();!0==g(d)&&(m(120),k.style.display="block",uciCloudConfig.optValue.accountTypeEmail==f?null!=(b=emailLinkCheck(c))?k.innerHTML=label.CAPTCHASentEmainTip+"<a href='"+b+"' target='blank'>"+label.CAPTCHASentEmainTipS+"</a>":k.innerHTML=label.CAPTCHASentEmainTip+label.CAPTCHASentEmainTipS:k.innerHTML=label.CAPTCHASentPhTip)},function(){clearTimeout(a);e=!1;closeLoading()})):e=!1)};d.style.display="none";(function(){"none"!=d.style.display&&m(d.time);$.setTimeout(arguments.callee,1E3)})();
-p[cloudClientStatus.fileName]={};p[cloudClientStatus.fileName][KEY_NAME]=cloudClientStatus.secName.resetVeriCodeTimer;$.query(p,function(a){g(a[ERR_CODE])&&m(parseInt(a[cloudClientStatus.fileName][cloudClientStatus.secName.resetVeriCodeTimer][cloudClientStatus.optName.resetVeriCodeTimer]))})}init();
-</script><style type="text/css">input.resendBtn{background:#5e85c0;border-radius:5px;border:1px solid #184283;color:#184283;cursor:default;height:25px;font-size:12px;margin-left:5px;vertical-align:middle;width:92px}#CAPTCHASendTip a{color:#fff}</style>
+<input id="nextStep" type="button" value="{%btn.nextStep%}" class="subBtn cloudSub" />

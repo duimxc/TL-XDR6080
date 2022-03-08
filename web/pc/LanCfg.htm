@@ -1,5 +1,356 @@
+<script type="text/javascript">
+	function init()
+	{
+		var uciFile = uciNetwork.fileName;
+		var uciLan = uciNetwork.secName.lan;
+		var uciIpaddr = uciNetwork.optName.ip;
+		var uciNetmask = uciNetwork.optName.netmask;
+		var uciIpMode = uciNetwork.optName.ipMode;
+		var uciMacaddr = uciNetwork.optName.mac;
+		var AUTO = uciNetwork.optValue.ipMode.dynamic, MANUAL = uciNetwork.optValue.ipMode.manual;
 
+		var LAN_DETECT_WAIT_TIME = 120000;
+		var LAN_DETECT_TIME_DELAY = 4000;
+		var lanDetectTimeHd, lanLoadingTimeHd;
+		var lanDetectSuccess = false;
 
+		var isDomain = false, localPort = 80;
+		var lanInfo = {uciIpaddr:"0.0.0.0", uciNetmask:"255.255.255.0", uciIpMode:MANUAL};
+		var lanOptions = [{str:label.lanIpAuto, value:AUTO}, {str:label.lanIpManual, value:MANUAL}];
+
+		var curSysMode = uciSystem.optValue.sysMode.routerMode;
+
+		function lanSelectChange(type)
+		{
+			id("lanManualIp").style.display = (type == AUTO ? "none" : "block");
+			id("lanAutoIp").style.display = (type == AUTO ? "block" : "none");
+		}
+
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+
+			switch (errNo)
+			{
+			case ENONE:
+				return false;
+			case EINVNET:
+				showStr = errStr.ipAddrNetErr;
+				break;
+			case EINVIP:
+				showStr = errStr.ipAddrErr;
+				break;
+			case EINVIPFMT:
+				showStr = errStr.ipAddrFmtErr;
+				break;
+			case EINVGROUPIP:
+				showStr = errStr.ipAddrGroupErr;
+				break;
+			case EINVLOOPIP:
+				showStr = errStr.ipAddrLoopErr;
+				break;
+			case EINVMASK:
+				showStr = errStr.maskErr;
+				break;
+			case EINVNETID:
+				showStr = errStr.ipAddrNetIdErr;
+				break;
+			case EINVHOSTID:
+				showStr = errStr.ipAddrHostIdErr;
+				break;
+			case EINVIPMASKPAIR:
+				showStr = errStr.ipAddrMaskNotMatch;
+				break;
+			case ECOMFLICTNET:
+				showStr = errStr.ipAddrLanWanConflict;
+				break;
+			case ECONFLICTGATEWAY:
+				showStr = errStr.ipAddrLanGatewayConflict;
+				break;
+			case ECONFLICTFDNS:
+				showStr = errStr.ipAddrLanFDNSConflict;
+				break;
+			case ECONFLICTSDNS:
+				showStr = errStr.ipAddrLanSDNSConflict;
+				break;
+			case EMANUALLANMODE:
+				showStr = gSysModeSupport ? label.lanWDSTip1 : label.lanWDSTip;
+				break;
+			case EMANUALAPMODE:
+				showStr = label.lanAPTip;
+				break;
+			case EINVLANMASK:
+				showStr = errStr.massiveStaErr;
+				break;
+			default:
+				showStr = errStr.invRequestFail;
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return true;
+		}
+
+		function lanCloseLoading()
+		{
+			clearTimeout(lanDetectTimeHd);
+			clearTimeout(lanLoadingTimeHd);
+			lanDetectTimeHd = null;
+			lanLoadingTimeHd = null;
+		}
+
+		function lanCfgChgReload()
+		{
+			/* IP地址登录的，要转到新的地址，域名登录或远程登录则直接刷新 */
+			if (false == isDomain)
+			{
+				window.location.href = "http://" + lanInfo[uciIpaddr] + ":" + localPort;
+			}
+			else
+			{
+				window.location.reload();
+			}
+		}
+
+		//检查LAN口配置是否改变，决定是否要跳转到新的页面
+		function getNewLanCfgCbk(ALL_DATA)
+		{
+			var newLanInfo = ALL_DATA[uciFile][uciLan];
+
+			//LAN口配置未改变
+			if (lanInfo[uciIpaddr] == newLanInfo[uciIpaddr] &&
+				lanInfo[uciNetmask] == newLanInfo[uciNetmask])
+			{
+				lanInfo[uciIpMode] = newLanInfo[uciIpMode];
+
+				id("lanIpLbl").innerHTML = newLanInfo[uciIpaddr];
+				id("lanMaskLbl").innerHTML = newLanInfo[uciNetmask];
+				id("lanIpAddr").value = newLanInfo[uciIpaddr];
+				id("maskAddrInput").value = newLanInfo[uciNetmask];
+
+				disableBtn("save", false);
+				return;
+			}
+
+			/* 更新LAN口配置 */
+			lanInfo[uciIpaddr] = newLanInfo[uciIpaddr];
+			lanInfo[uciNetmask] = newLanInfo[uciNetmask];
+			lanInfo[uciIpMode] = newLanInfo[uciIpMode];
+
+			//LAN口配置改变，1、使配置生效
+			var data = {"network":{"apply_lan_config":null}};
+
+			$.action(data, null, true);
+
+			//LAN口配置改变，2、跳转到新的页面
+			if (getRole() == ROLE_LOCAL)
+			{
+				/* 远程登录不需要刷新页面 */
+				$.changeDomain(newLanInfo[uciIpaddr]);
+				showLoading(label.lanCfgChgTip, lanCloseLoading);
+				lanLoadingTimeHd = $.setTimeout(lanCfgChgReload, LAN_DETECT_WAIT_TIME);
+				$.setTimeout(function(){
+					lanDetecting(function(){
+						lanCloseLoading();
+						$.setTimeout(lanCfgChgReload, LAN_DETECT_TIME);
+					})
+				}, LAN_DETECT_TIME_DELAY);
+			}
+		}
+
+		function getNewLanCfg(result)
+		{
+			hsLoading(false);
+
+			if (false == errHandle(result[ERR_CODE]))
+			{
+				//获取新的LAN口配置
+				var data = {};
+				data[uciFile] = {};
+				data[uciFile][KEY_NAME] = [uciLan];
+
+				$.query(data, getNewLanCfgCbk);
+			}
+		}
+
+		function onSave()
+		{
+			var lanIpAddrVal, lanMaskVal, lanIpModeVal = id("lanSel").value;
+			var cfg = {}, cfgNetwork = {}, cfgLan = {};
+
+			cfg[uciFile] = cfgNetwork;
+			cfgNetwork[uciLan] = cfgLan;
+
+			if (AUTO == lanIpModeVal)
+			{
+				cfgLan[uciIpMode] = AUTO;
+			}
+			else
+			{
+				lanIpAddrVal = id("lanIpAddr").value;
+				lanMaskVal = id("maskAddrInput").value;
+
+				/* 检查LAN Ip和用户填写的掩码的合法性 */
+				if (errHandle(checkIp(lanIpAddrVal), "lanIpAddr") ||
+					errHandle(checkMask(lanMaskVal), "maskAddrInput") ||
+					errHandle(checkIpMask(lanIpAddrVal, lanMaskVal), "maskAddrInput"))
+				{
+					return;
+				}
+
+				/* 去掉前导0 */
+				lanIpAddrVal = hideLeadingZeros(lanIpAddrVal);
+				id("lanIpAddr").value = lanIpAddrVal;
+				lanMaskVal = hideLeadingZeros(lanMaskVal);
+				id("maskAddrInput").value = lanMaskVal;
+
+				cfgLan[uciIpMode] = MANUAL;
+				cfgLan[uciIpaddr] = lanIpAddrVal;
+				cfgLan[uciNetmask] = lanMaskVal;
+			}
+
+			/* 是否有做修改 */
+			if ((MANUAL == lanIpModeVal &&
+				 lanInfo[uciIpaddr] == lanIpAddrVal &&
+				 lanInfo[uciNetmask] == lanMaskVal) &&
+				 lanInfo[uciIpMode] == lanIpModeVal)
+			{
+				return;
+			}
+			else
+			{
+				showConfirm(label.lanConfChgConfirm,
+					function(choose)
+					{
+						if (true == choose)
+						{
+							setLoadingId("save");
+							hsLoading(true);
+
+							$.modify(cfg, getNewLanCfg);
+						}
+					}
+				);
+			}
+		}
+
+		function setLanInfo(ALL_DATA)
+		{
+			var lan = ALL_DATA[uciNetwork.fileName][uciNetwork.secName.lan];
+
+			if (gModeSwitchSupport) {
+				var data = {};
+
+				data[uciCustomNetwork.fileName] = {};
+				data[uciCustomNetwork.fileName][KEY_NAME] = [uciCustomNetwork.dynData.bridgestatus];
+
+				$.query(data, function(dataObj){
+					if(1 == parseInt(dataObj.custom_network.bridge_status.enable)){
+						document.getElementById("bridgeLanIpWarn").style.width = "177px";
+						document.getElementById("bridgeLanIpWarn" ).style.lineHeight = "15px";
+						document.getElementById("bridgeLanIpWarn").style.marginLeft="10px";
+						document.getElementById("bridgeLanIpWarn" ).innerHTML="设备处于桥模式，LAN口IP设置已恢复成自动，且不允许更改。";
+						document.getElementById("lanSel").children[0].innerHTML="自动（推荐）";
+						document.getElementById("save").style.display = "none";
+					}else{
+						selectInit("lanSel", lanOptions, lan[uciIpMode], lanSelectChange);
+					}
+				});
+			} else {
+			selectInit("lanSel", lanOptions, lan[uciIpMode], lanSelectChange);
+			}
+			lanSelectChange(lan[uciIpMode]);
+
+			id("lanIpAddr").value = lan[uciIpaddr];
+			id("maskAddrInput").value = lan[uciNetmask];
+			id("mac").innerHTML = lan[uciMacaddr].toUpperCase();
+			id("lanIpLbl").innerHTML = lan[uciIpaddr];
+			id("lanMaskLbl").innerHTML = lan[uciNetmask];
+
+			lanInfo[uciIpaddr] = lan[uciIpaddr];
+			lanInfo[uciNetmask] = lan[uciNetmask];
+			lanInfo[uciIpMode] = lan[uciIpMode];
+
+			isDomain = ((location.href.toString()).indexOf(lan[uciIpaddr]) == -1);
+			localPort = window.location.port || 80;
+
+			if (gSysModeSupport) {
+				curSysMode = ALL_DATA.system.sys_mode.mode;
+			}
+
+			if (curSysMode != uciSystem.optValue.sysMode.routerMode) {
+				$("#relayTip").css("display","inline-block");
+				id("lanSel").disable(true);
+				disableBtn("save", true);
+				disableInput("lanIpAddr", true);
+				disableInput("maskAddrInput", true);
+
+				if (uciSystem.optValue.sysMode.apMode == curSysMode) {
+					$("#relayTipText").text("上网方式为AP（有线中继）时，LAN口IP设置不可修改");
+				} else {
+					$("#relayTipText").text("上网方式为桥接（无线中继）时，LAN口IP设置不可修改");
+				}
+			}
+		}
+
+		function getLanInfo()
+		{
+			var data = {};
+
+			data[uciFile] = {};
+			data[uciFile][KEY_NAME] = uciLan;
+			if (gSysModeSupport) {
+				data.system = {"name":"sys_mode"};
+			}
+
+			$.query(data, setLanInfo);
+		}
+
+		getLanInfo();
+		id("save").onclick = onSave;
+	}
+	init();
+</script>
+<style type="text/css">
+	#lanManualIp{
+		display:none;
+	}
+	#lanAutoIp{
+		display:none;
+	}
+	.hcCoT {
+		width:680px;
+	}
+	.titleT {
+		width:637.8px;
+	}
+	ul.gridLineTips{
+		margin-top:8px !important;
+		height:auto;
+		display:none;
+		line-height: unset;
+	}
+	ul.gridLineTips span{
+		width:225px;
+		color:#FFF;
+		line-height:18px;
+		font-size:12px;
+		display: inline-block;
+		width: 210px;
+	}
+	div.warnCon {
+		width: 16px;
+		height: 16px;
+		overflow: hidden;
+		display: inline-block;
+		vertical-align: top;
+		margin-left: 62px;
+	}
+	div.warnCon img {
+		margin-top: -187px;
+		margin-left: -467px;
+	}
+</style>
 <div id="hcCo" class="hcCo hcCoT">
 	<i class="coverLoading" style="display: none"></i>
 	<div class="hsHelp"></div>
@@ -52,13 +403,4 @@
 			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
 		</div>
 	</div>
-</div><script type="text/javascript">function init(){function h(a){id("lanManualIp").style.display=a==m?"none":"block";id("lanAutoIp").style.display=a==m?"block":"none"}function p(a,c){var b="";switch(a){case ENONE:return!1;case EINVNET:b=errStr.ipAddrNetErr;break;case EINVIP:b=errStr.ipAddrErr;break;case EINVIPFMT:b=errStr.ipAddrFmtErr;break;case EINVGROUPIP:b=errStr.ipAddrGroupErr;break;case EINVLOOPIP:b=errStr.ipAddrLoopErr;break;case EINVMASK:b=errStr.maskErr;break;case EINVNETID:b=errStr.ipAddrNetIdErr;break;case EINVHOSTID:b=errStr.ipAddrHostIdErr;
-break;case EINVIPMASKPAIR:b=errStr.ipAddrMaskNotMatch;break;case ECOMFLICTNET:b=errStr.ipAddrLanWanConflict;break;case ECONFLICTGATEWAY:b=errStr.ipAddrLanGatewayConflict;break;case ECONFLICTFDNS:b=errStr.ipAddrLanFDNSConflict;break;case ECONFLICTSDNS:b=errStr.ipAddrLanSDNSConflict;break;case EMANUALLANMODE:b=gSysModeSupport?label.lanWDSTip1:label.lanWDSTip;break;case EMANUALAPMODE:b=label.lanAPTip;break;case EINVLANMASK:b=errStr.massiveStaErr;break;default:b=errStr.invRequestFail}showAlert(b,c);return!0}
-function t(){clearTimeout(u);clearTimeout(k);k=u=null}function v(){!1==w?window.location.href="http://"+e[d]+":"+x:window.location.reload()}function z(a){a=a[l][q];e[d]==a[d]&&e[f]==a[f]?(e[g]=a[g],id("lanIpLbl").innerHTML=a[d],id("lanMaskLbl").innerHTML=a[f],id("lanIpAddr").value=a[d],id("maskAddrInput").value=a[f],disableBtn("save",!1)):(e[d]=a[d],e[f]=a[f],e[g]=a[g],$.action({network:{apply_lan_config:null}},null,!0),getRole()==ROLE_LOCAL&&($.changeDomain(a[d]),showLoading(label.lanCfgChgTip,t),
-k=$.setTimeout(v,A),$.setTimeout(function(){lanDetecting(function(){t();$.setTimeout(v,LAN_DETECT_TIME)})},B)))}function C(a){hsLoading(!1);!1==p(a[ERR_CODE])&&(a={},a[l]={},a[l][KEY_NAME]=[q],$.query(a,z))}function D(a){var c=a[uciNetwork.fileName][uciNetwork.secName.lan];if(gModeSwitchSupport){var b={};b[uciCustomNetwork.fileName]={};b[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(b,function(a){1==parseInt(a.custom_network.bridge_status.enable)?(document.getElementById("bridgeLanIpWarn").style.width=
-"177px",document.getElementById("bridgeLanIpWarn").style.lineHeight="15px",document.getElementById("bridgeLanIpWarn").style.marginLeft="10px",document.getElementById("bridgeLanIpWarn").innerHTML="设备处于桥模式，LAN口IP设置已恢复成自动，且不允许更改。",document.getElementById("lanSel").children[0].innerHTML="自动（推荐）",document.getElementById("save").style.display="none"):selectInit("lanSel",y,c[g],h)})}else selectInit("lanSel",y,c[g],h);h(c[g]);id("lanIpAddr").value=c[d];id("maskAddrInput").value=c[f];id("mac").innerHTML=c[E].toUpperCase();
-id("lanIpLbl").innerHTML=c[d];id("lanMaskLbl").innerHTML=c[f];e[d]=c[d];e[f]=c[f];e[g]=c[g];w=-1==location.href.toString().indexOf(c[d]);x=window.location.port||80;gSysModeSupport&&(s=a.system.sys_mode.mode);s!=uciSystem.optValue.sysMode.routerMode&&($("#relayTip").css("display","inline-block"),id("lanSel").disable(!0),disableBtn("save",!0),disableInput("lanIpAddr",!0),disableInput("maskAddrInput",!0),uciSystem.optValue.sysMode.apMode==s?$("#relayTipText").text("上网方式为AP（有线中继）时，LAN口IP设置不可修改"):$("#relayTipText").text("上网方式为桥接（无线中继）时，LAN口IP设置不可修改"))}
-var l=uciNetwork.fileName,q=uciNetwork.secName.lan,d=uciNetwork.optName.ip,f=uciNetwork.optName.netmask,g=uciNetwork.optName.ipMode,E=uciNetwork.optName.mac,m=uciNetwork.optValue.ipMode.dynamic,r=uciNetwork.optValue.ipMode.manual,A=12E4,B=4E3,u,k,w=!1,x=80,e={uciIpaddr:"0.0.0.0",uciNetmask:"255.255.255.0",uciIpMode:r},y=[{str:label.lanIpAuto,value:m},{str:label.lanIpManual,value:r}],s=uciSystem.optValue.sysMode.routerMode;(function(){var a={};a[l]={};a[l][KEY_NAME]=q;gSysModeSupport&&(a.system={name:"sys_mode"});
-$.query(a,D)})();id("save").onclick=function(){var a,c,b=id("lanSel").value,h={},k={},n={};h[l]=k;k[q]=n;if(m==b)n[g]=m;else{a=id("lanIpAddr").value;c=id("maskAddrInput").value;if(p(checkIp(a),"lanIpAddr")||p(checkMask(c),"maskAddrInput")||p(checkIpMask(a,c),"maskAddrInput"))return;a=hideLeadingZeros(a);id("lanIpAddr").value=a;c=hideLeadingZeros(c);id("maskAddrInput").value=c;n[g]=r;n[d]=a;n[f]=c}r==b&&e[d]==a&&e[f]==c&&e[g]==b||showConfirm(label.lanConfChgConfirm,function(a){!0==a&&(setLoadingId("save"),
-hsLoading(!0),$.modify(h,C))})}}init();
-</script><style type="text/css">#lanManualIp{display:none}#lanAutoIp{display:none}.hcCoT{width:680px}.titleT{width:637.8px}ul.gridLineTips{margin-top:8px!important;height:auto;display:none;line-height:unset}ul.gridLineTips span{width:225px;color:#FFF;line-height:18px;font-size:12px;display:inline-block;width:210px}div.warnCon{width:16px;height:16px;overflow:hidden;display:inline-block;vertical-align:top;margin-left:62px}div.warnCon img{margin-top:-187px;margin-left:-467px}</style>
+</div>

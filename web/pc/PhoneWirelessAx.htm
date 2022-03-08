@@ -1,5 +1,111 @@
-﻿
+﻿<script type="text/javascript">
+	function init()
+	{
+		var uciFile = uciWireless.fileName;
+		var uciSecWifi2G = uciWireless.dynData.host_2g;
+		var uciSecWifi5G = uciWireless.dynData.host_5g;
+		var optMode = uciWireless.dynOptName.mode;
 
+		var axCheck = id("axCheckbox");
+
+		function onSave()
+		{
+			if (!axCheck.checked)
+			{
+				gIsWifiCfgChged = true;
+
+				gWifiCfgToSave[uciFile] = gWifiCfgToSave[uciFile] || {};
+
+				if (g11AxSupport["wlan2g"]) {
+					gWifiCfgToSave[uciFile][uciSecWifi2G] = gWifiCfgToSave[uciFile][uciSecWifi2G] || {};
+					gWifiCfgToSave[uciFile][uciSecWifi2G][optMode] = uciWireless.dynOptValue.mode.m_11bgn;
+				}
+
+				if (g11AxSupport["wlan5g"]) {
+					gWifiCfgToSave[uciFile][uciSecWifi5G] = gWifiCfgToSave[uciFile][uciSecWifi5G] || {};
+					gWifiCfgToSave[uciFile][uciSecWifi5G][optMode] = uciWireless.dynOptValue.mode.m_11ac;
+				}
+			}
+
+			loadPage("PhoneEnd2Band.htm", "phCon");
+		}
+		
+		axCheck.checked = true;
+		id("pre").onclick = function(){loadPage("WizardWirelessCfg.htm", "phCon");};
+		id("sub").onclick = onSave;
+	}
+	init();
+</script>
+<style type="text/css">
+	h1.phoneTitleAx{
+		margin-bottom: 0px;
+		line-height: 33px;
+		height: 33px;
+	}
+	span.phoneTitleTips{
+		width:180px;
+		font-size:12px;
+		line-height:17px;
+		height:17px;
+		text-align:center;
+		color:#FFFFFF;
+		display:block;
+		margin: 0px auto;
+	}
+	span.phoneTitleTips.last{
+		margin-bottom: 40px;
+	}
+	div.axCheckboxCon{
+		margin-bottom:6px;
+	}
+	input.axCheck{
+		height:20px !important;
+		margin:0;
+		vertical-align:middle !important;
+		width:20px !important;
+	}
+	label.axCheckboxLbl{
+		color:#FFFFFF !important;
+		display:inline !important;
+		font-size:14px;
+		line-height:20px;
+		height:20px;
+		vertical-align: middle !important;
+		margin-left: 8px;
+		font-weight:bold;
+	}
+	div.axTipsCon{
+		margin-left:28px;
+	}
+	span.axTipsSpan{
+		color:#FFF;
+		font-size:12px;
+		line-height:17px;
+		height:17px;
+		display: block;
+	}
+	span.section{
+		margin-bottom:8px;
+	}
+	span.manufacturerTitle{
+		font-size:14px;
+		line-height:21px;
+		height:21px;
+		color:#FFF;
+		display:block;
+	}
+	a.manufacturerLink{
+		color:#FEEB1A;
+		font-size:14px;
+		line-height:21px;
+		font-weight:bold;
+		word-break: break-word;
+		display: inline-block;
+	}
+	div.phAxBtn{
+		margin-top:34px;
+	}
+</style>
 <h1 class="phoneTitle phoneTitleAx">{%label.wifi802Ax%}</h1>
 <span class="phoneTitleTips">802.11ax技术能给你带来更</span>
 <span class="phoneTitleTips last">高的上网速度和更愉快的上网体验</span>
@@ -28,6 +134,3 @@
 	<label id="pre" class="phTwoBtn phTwoBtnL">{%btn.preStep%}</label>
 	<label id="sub" class="phTwoBtn">{%btn.ok%}</label>
 </div>
-<script type="text/javascript">function init(){var a=uciWireless.fileName,b=uciWireless.dynData.host_2g,c=uciWireless.dynData.host_5g,d=uciWireless.dynOptName.mode,e=id("axCheckbox");e.checked=!0;id("pre").onclick=function(){loadPage("WizardWirelessCfg.htm","phCon")};id("sub").onclick=function(){e.checked||(gIsWifiCfgChged=!0,gWifiCfgToSave[a]=gWifiCfgToSave[a]||{},g11AxSupport.wlan2g&&(gWifiCfgToSave[a][b]=gWifiCfgToSave[a][b]||{},gWifiCfgToSave[a][b][d]=uciWireless.dynOptValue.mode.m_11bgn),g11AxSupport.wlan5g&&(gWifiCfgToSave[a][c]=
-gWifiCfgToSave[a][c]||{},gWifiCfgToSave[a][c][d]=uciWireless.dynOptValue.mode.m_11ac));loadPage("PhoneEnd2Band.htm","phCon")}}init();
-</script><style type="text/css">h1.phoneTitleAx{margin-bottom:0;line-height:33px;height:33px}span.phoneTitleTips{width:180px;font-size:12px;line-height:17px;height:17px;text-align:center;color:#fff;display:block;margin:0 auto}span.phoneTitleTips.last{margin-bottom:40px}div.axCheckboxCon{margin-bottom:6px}input.axCheck{height:20px!important;margin:0;vertical-align:middle!important;width:20px!important}label.axCheckboxLbl{color:#fff!important;display:inline!important;font-size:14px;line-height:20px;height:20px;vertical-align:middle!important;margin-left:8px;font-weight:bold}div.axTipsCon{margin-left:28px}span.axTipsSpan{color:#FFF;font-size:12px;line-height:17px;height:17px;display:block}span.section{margin-bottom:8px}span.manufacturerTitle{font-size:14px;line-height:21px;height:21px;color:#FFF;display:block}a.manufacturerLink{color:#feeb1a;font-size:14px;line-height:21px;font-weight:bold;word-break:break-word;display:inline-block}div.phAxBtn{margin-top:34px}</style>

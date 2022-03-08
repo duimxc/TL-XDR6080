@@ -1,5 +1,4239 @@
+<style type="text/css">
+	div.bConfLBC{
+		background:#29C4B2;
+	}
+	div.bConfRBC{
+		background:#00B8A2;
+	}
+	h1.bMdelTitle{
+		text-shadow:2px 2px #27baa8;
+	}
+	div.menuCon{
+		height:34.2em;
+		overflow:hidden;
+		margin:20px 5px 0 0;
+		padding-right:7px;
+		position:relative;
+	}
+	div.allSwitchCon5GState{
+		margin-left: 19px;
+	}
+	ul.netStateMenuItem{
+		color:#FFFFFF;
+		padding:7px 20px 10px 29px;
+		list-style:none;
+		position:relative;
+		*zoom:1;
+	}
+	ul.netStateMenuItemWifiAll{
+		padding-left:30px;
+	}
+	ul.netStateMenuItem i.wifiLogo{
+		background: url("../web-static/images/routerBg.png") no-repeat scroll -456px -34px rgba(0, 0, 0, 0);
+		height:20px;
+		left:0;
+		position:absolute;
+		top:2px;
+		width:28px;
+	}
+	ul.netStateMenuItem li{
+		font-size: 0;
+		margin-bottom:10px;
+	}
+	ul.netStateMenuItem li.bottom{
+		border-bottom:1px solid #1FA793;
+		padding-bottom:10px;
+		margin-bottom:0px !important;
+	}
+	@media screen and (-webkit-min-device-pixel-ratio:0)
+	{
+		ul.netStateMenuItem li input{
+			line-height:0px !important;
+		}
+	}
+	ul.netStateMenuItem li label{
+		font-size: 12px;
+		vertical-align: middle;
+	}
+	ul.netStateMenuItem li span{
+		font-size: 12px;
+		vertical-align: middle;
+	}
+	ul.netStateMenuItem li span.wifiModelName{
+		font-size: 14px;
+		vertical-align: middle;
+	}
+	ul.netStateMenuItem li span.switchDes{
+		font-size: 12px;
+		margin-left: 3px;
+	}
+	ul.netStateMenuItem li input{
+		background:#1FA793;
+		border:none;
+		border-radius:3px;
+		color:#FFFFFF;
+		height:20px;
+		font-size:12px;
+		line-height:15px;
+		padding:1px 5px;
+		margin-left:7px;
+		width:120px;
+		vertical-align: middle;
+	}
+	ul.netStateMenuItem input.bottomSaveBtn{
+		background:#FBEB1A;
+		border-radius:3px;
+		margin-left:110px;
+		width:50px;
+		height:22px;
+		color:#000000;
+		padding:0px;
+	}
+	span.wifiModelName{
+		display: inline-block;
+		width: 88px;
+		font-size: 14px;
+		font-weight:bold;
+	}
+	div.topoCon{
+		width: 100%;
+		height:100%;
+	}
+	div.bNetStateTopoCon{
+		height:100%;
+		width: 745px;
+		position:relative;
+		zoom:1;
+	}
+	#canvasCloud, #canvasRouter{
+		moz-user-select: -moz-none;
+		-moz-user-select: none;
+		-o-user-select:none;
+		-khtml-user-select:none;
+		-webkit-user-select:none;
+		-ms-user-select:none;
+		user-select:none;
+	}
+	canvas.coverCanvas{
+		position:absolute;
+		top:110px;
+		left:0px;
+	}
+	h1.canvasNotSupportTip{
+		padding-top:150px;
+		font-size:14px;
+		color:#FFFFFF;
+		text-align:center;
+	}
+	input.subBtnDis{
+		color:#FFFFFF !important;
+		border:1px solid #FFFFFF !important;
+	}
+	.textfield {
+		position: absolute;
+		background-color: #22A794;
+		border-radius: 4px;
+		border: none;
+		color: #ffffff;
+		font-family: PingFangSC-Regula;
+		font-size: 12px;
+		resize: none;
+		display:none;
+		overflow: hidden;
+		text-indent: 2px;
+		z-index: 9999;
+	}
+	.nodeTextTips {
+		position: absolute;
+		background-color: #F6F0C0;
+		border-color: #695233;
+		color: #3B231B;
+		font-family: PingFangSC-Regula;
+		font-size: 12px;
+		display: none;
+		z-index: 9999;
+		padding: 6px 10px;
+		max-width: 100px;
+		overflow-wrap: break-word;
+	}
+	table.dataGrid2{
+		width:100%;
+		margin:15px 0px 0px 0px;
+		border-collapse:collapse;
+		border:1px solid #01B8A2;
+		text-align:center;
+	}
+	table.dataGrid2 tr{
+		background: transparent;
+		border-bottom: 1px solid #01B8A2;
+	}
+	table.dataGrid2 td{
+		height:30px;
+		color:#343434;
+		border:1px solid #01B8A2;
+		vertical-align:middle;
+		white-space:pre;
+	}
+	@media screen and (-webkit-min-device-pixel-ratio:0)
+	{
+		table.dataGrid input.text, table.dataGrid2 input.text{
+			line-height:0px !important;
+		}
+	}
+	table.dataGrid2 input.text{
+		color:#FFFFFF;
+		height:21px;
+		line-height:21px;
+		border:none;
+		border-radius:3px;
+		padding:0px 2px;
+		font-size:12px;
+		background:transparent;
+	}
+	div.pageListPo span.ListSpan {
+		color: #01B8A2;
+	}
+	.cldRtDiv {
+		position: absolute;
+		display: none;
+		width: 88px;
+		height: 104px;
+		background: #FFFFFF;
+		border-radius: 4px;
+		color: #333333;
+		box-shadow: 0 0 5px #888888;
+		z-index: 999;
+	}
+	.cldRtDiv Ul {
+		width: 100%;
+		list-style: none;
+	}
+	.cldRtDiv Ul Li{
+		border-bottom: solid 1px #F2F2F2;
+		height: 25px;
+		cursor: pointer;
+		text-align: left;
+		line-height: 25px;
+		padding-left: 8px;
+	}
+	.cldRtDiv Ul .cldRtLiLast {
+		border-bottom: 0;
+	}
+	#addNewDevBtn {
+		position: absolute;
+		top: 0px;
+		right: 10px;
+		background: url("../web-static/images/add_router_normal.png");
+		width: 101px;
+		height: 30px;
+		border: none;
+		display: block;
+		cursor: pointer;
+	}
+	#addNewDevBtn.disabled {
+		background: url("../web-static/images/add_router_disable.png");
+		cursor: auto;
+	}
+	#addNewDevBtn:focus {
+		outline: none;
+	}
+	div.unfoldCon {
+		color: #ffffff;
+		cursor: pointer;
+	}
+	div.unfoldBtn {
+		background: #FEEB1A;
+		border-radius: 4px;
+		width: 22px;
+		text-align: center;
+		margin-bottom: 2px;
+	}
+	div.unfoldBtn label {
+		font-size: 12px;
+		color: #333333;
+		letter-spacing: 0;
+		line-height: 12px;
+		vertical-align: super;
+	}
+	#leftUnfoldBtn {
+		position: absolute;
+		top: 243px;
+		left: 142px;
+		z-index: 1200;
+		display: none;
+	}
+	#rightUnfoldBtn {
+		position: absolute;
+		top: 243px;
+		left: 581px;
+		z-index: 1200;
+		display: none;
+	}
+	#leftCldUnfoldBtn {
+		position: absolute;
+		top: 420px;
+		left: 92px;
+		z-index: 1200;
+		display: none;
+	}
+	#rightCldUnfoldBtn {
+		position: absolute;
+		top: 420px;
+		left: 527px;
+		z-index: 1200;
+		display: none;
+	}
+	div.editNameDiv {
+		position: absolute;
+		z-index: 1011;
+		width: 100%;
+		min-width: 980px;
+		top: 219px;
+	}
+	div.editNameDiv div.editNameCon{
+		background: #FFFFFF;
+		width:420px;
+		min-height:97px;
+		padding: 42px 0;
+		margin: 0 auto;
+	}
+	div.editNameDiv div.editNameCon label{
+		font-size: 14px;
+		color: #000000;
+		letter-spacing: -0.43px;
+		margin-right: 14px;
+		margin-left: 29px;
+	}
+	div.editNameDiv div.editNameCon input{
+		border: 1px solid #01B8A2;
+		border-radius: 4px;
+		width: 221px;
+		height: 31px;
+		text-indent: 11px;
+	}
+	div.editNameDiv div.editNameCon div.errorDiv {
+		margin-top: 8px;
+		text-align: left;
+		padding: 0 98px;
+		display: none;
+	}
+	div.editNameDiv div.editNameCon div.errorDiv span {
+		background: url(../web-static/images/routerBg.png) -467px -189px no-repeat transparent;
+		padding-left: 18px;
+	}
+	div.editNameDiv div.editNameCon div{
+		margin-top: 34px;
+		text-align: center;
+	}
+	div.editNameDiv div.editNameCon div button{
+		background: #FEEB1A;
+		border-radius: 3px;
+		border: none;
+		width: 80px;
+		height: 28px;
+		cursor: pointer;
+	}
+	div.editNameDiv div.editNameCon div button.cancel{
+		background: #D9D9D9;
+		margin-left: 24px;
+	}
+	div.resultDiv {
+		position: absolute;
+		z-index: 1011;
+		width: 100%;
+		min-width: 980px;
+		top: 190px;
+	}
+	div.resultDiv div.resultCon {
+		background: #FFFFFF;
+		width: 666px;
+		height: 290px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	div.resultDiv div.resultCon i.alertImg{
+		background: url(../web-static/images/routerBg.png) -318px -41px no-repeat;
+		display: inline-block;
+		height: 70px;
+		margin-top: 51px;
+		width: 70px;
+		transform: scale(1.4);
+	}
+	div.resultDiv div.resultCon p.detail{
+		min-height:35px;
+		color:#000000;
+		font-size:12px;
+		line-height:22px;
+		margin-top:52px;
+		word-wrap:break-word;
+		word-break:break-all;
+	}
+	#leftWanLink{
+		position:absolute;
+		top: 97px;
+		left: 292px;
+		display: none;
+		cursor: pointer;
+	}
+	#rightWanLink{
+		position: absolute;
+		top: 93px;
+		left: 396px;
+		display:none;
+		cursor: pointer;
+	}
+	.wanLink label{
+		font-family: PingFangSC-Semibold;
+		font-size: 10px;
+		color: #FEEB1A;
+		line-height: 9px;
+		cursor: pointer;
+	}
+	.wanLink .arrow{
+		font-size: 17px;
+		top: 1px;
+		position: relative;
+	}
+	div.netStateCon {
+		width: 223px;
+		margin-left: auto;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var WIFI_FILE = uciWireless.fileName;
+		var SECN_WLAN_BS = uciWireless.secName.wlanBS;
+		var OPT_BS_ENBALE = uciWireless.optName.bsEnable;
+		var OPT_WIFI_ENABLE = uciWireless.optName.wifiEnable;
 
+		var wifiAllSwitchEnable;
+		var wifiAllSwitch2GEnable;
+		var wifiAllSwitch5GEnable;
 
+		var data = {};
+		var WIFI_STATE_ON = 1;
+		var gBasicNetStateNiceScroll;
+		var wirelessFile = uciWireless.fileName;
+		var customWirelessFile = uciCustomWireless.fileName;
+		var beWifiSwitchFirstLoaded = true;
+		var beWifiSwitch2GFirstLoaded = true;
+		var beWifiSwitch5GFirstLoaded = true;
+		var wifiSwitch = uciWireless.dynData.wifi_switch;
+		var wifiAllSwitch;
+		var wifiAllSwitch2G;
+		var wifiAllSwitch5G;
+		var wifiAllSwitchDes = id("wifiAllSwitchDes");
+		var wifiAllSwitch2GDes = id("wifiAllSwitch2GDes");
+		var wifiAllSwitch5GDes = id("wifiAllSwitch5GDes");
+		var wifiStatusPollTimerHandle = null;
+		var wifiStatusPollTimeout = 3000;
+		var beFirstLoaded = true;
+		var wireless2GName = uciWireless.dynData.host_2g;
+		var APP_ID = uciAppInfo.dynOptName.id;
+		var bWDSLoaded = false;
+		var bApLoaded = false;
+		var hostSwitch;
+		var hostSwitchDes = id("hostSwitchDes");
+		var hostWifiName = id("hostWifiName");
+		var hostWifiPwd = id("hostWifiPwd");
+		var beFirstLoaded5G = true;
+		var wireless5GName = uciWireless.dynData.host_5g;
+		var hostSwitch5G;
+		var hostSwitchDes5G = id("hostSwitchDes5G");
+		var hostWifiName5G = id("hostWifiName5G");
+		var hostWifiPwd5G = id("hostWifiPwd5G");
+
+		var wdsSecName = uciWireless.dynData.wds_2g;
+		var wdsSecName5g = uciWireless.dynData.wds_5g;
+
+		var beFirstLoadedBs = true;
+		var wirelessNameBs = uciWireless.secName.wlanBS;
+		var hostSwitchBs;
+		var hostSwitchDesBs = id("hostSwitchDesBs");
+		var hostWifiNameBs = id("hostWifiNameBs");
+		var hostWifiPwdBs = id("hostWifiPwdBs");
+
+		var hostWifiNum2G = id("hostWifiNum2G");
+		var hostWifiNum5G = id("hostWifiNum5G");
+		var hostWifiNumBs = id("hostWifiNumBs");
+		var guestWifiNum  = id("guestWifiNum");
+		var guestWifiNum5G  = id("guestWifiNum5G");
+
+		var WIFI_MODE = uciHostsInfo.optName.wifiMode;
+
+		var canvasCloud = id("canvasCloud");
+		var canvasRouter = id("canvasRouter");
+		var cloudImg, wdsImg;
+		var routerBg;
+		var stage,scene;
+		var hostWifiNum = id("hostWifiNum");
+		var guestSwitch, guestSwitch5G;
+		var uciGuestFile = uciGuestNet.fileName;
+		var guest2GName = uciGuestNet.secName.wireless2G;
+		var guestWifiName = id("guestWifiName");
+		var guestWifiPwd = id("guestWifiPwd");
+		var guestSwitchDes = id("guestSwitchDes");
+		var netStateGuestNet = id("netStateGuestNet");
+		var guest5GName = uciGuestNet.secName.wireless5G;
+		var guestWifiName5G = id("guestWifiName5G");
+		var guestWifiPwd5G = id("guestWifiPwd5G");
+		var guestSwitchDes5G = id("guestSwitchDes5G");
+		var netStateGuestNet5G = id("netStateGuestNet5G");
+		var context;
+		var LINE_TWINKLE_TIME = 100;
+		var LAN_WAN_STATUS_TIME = 1000;
+		var canvasContainerHeight, canvasContainerWidth;
+		var beGuestFirstLoaded = true;
+		var beGuestFirstLoaded5G = true;
+		var MAC = uciHostsInfo.optName.mac;
+		var BLOCKED = uciHostsInfo.optName.blocked;
+		var TYPE = uciHostsInfo.optName.type;
+		var epTypes = {
+			inet:uciHostsInfo.optValue.linkType.wired,			// 0为有线
+			wirelessH:uciHostsInfo.optValue.linkType.hostWireless,	// 1为无线主人
+			wirelessG:uciHostsInfo.optValue.linkType.guestWireless,	// 2为无线访客人
+			block:uciHostsInfo.optValue.isBlocked.yes,		// 1为已禁用
+			unBlock:uciHostsInfo.optValue.isBlocked.no,		// 0为允许连接
+			wireless2G: uciHostsInfo.optValue.wifiMode.h2G,
+			wireless5G: uciHostsInfo.optValue.wifiMode.h5G
+		};
+		var topoStatusQueryArg = {};
+		var topoStatusQueryCbk;
+		var wanLinkAttr = {};
+		var wanLinkAttr1 = {};
+		var wanLinkAttr2 = {};
+		var hostSSID = "";
+		var hostPwd = "";
+		var hostSSID5G = "";
+		var hostPwd5G = "";
+		var hostSSIDBs = "";
+		var hostPwdBs = "";
+		var guestSSID = "", guestSSID5G = "";
+		var guestPwd = "", guestPwd5G = "";
+		var DRAW_IMAGE_WAITTIME = 20;
+
+		var dynEncryptOn = 1;
+		var dynEncryptOff = 0;
+
+		var guestDynEncrypt = 0;
+
+		var capMac;
+		var capName;
+		var wdsStatus = "";
+		var apStatus = "";
+
+		var oldWifiSwitchState;
+		var oldWifiSwitch2GState;
+		var oldWifiSwitch5GState;
+
+		/* 判断是否桥模式 */
+		var bridgeMode;
+
+		id("title2G").innerHTML = gGuest5GSupport == true? "2.4G访客网络" : "访客网络";
+
+		/*
+			全局变量，用于表示BS功能是否开启
+		*/
+		var gBsEnable = false;
+
+		/**
+		 * 扩展器相关参数
+		 */
+		var NAME_MAX_LEN = 63;
+		var MAX_EXT_COUNT = 7;
+		var isEditingName = false;
+		var bDrawSta = false;
+		var devIndex = 1;
+		var cldDevIndex = 1;
+		var singleCldRt = null;
+		var cldRtSta;
+		var cldList = [];
+
+		/* args for HNAT */
+		var isHnatOpen = false;
+		var ENABLE = "1";
+		var DISABLE = "0";
+		var FILE_HNAT = "hnat";
+		var SEC_HNAT = "main";
+		var KEY_ENABLE = "enable";
+
+		/* IE版本检测 */
+		var canvasSupport = !isIE || isIENormal;
+
+		function errHandle(errNo, objId)
+		{
+			var noteStr = "";
+
+			switch (errNo)
+			{
+			case ENONE:
+				return true;
+			case EINVSSIDLEN:
+				noteStr = errStr.wlanSsidLenErr;
+				break;
+			case EINVSSIDEMPTY:
+				noteStr = errStr.wlanSsidErr;
+				break;
+			case EINVSSIDBLANK:
+				noteStr = errStr.wlanSsidBlank;
+				break;
+			case EWLANPWDBLANK:
+				noteStr = errStr.wlanPwdNull;
+				break;
+			case EINVPSKLEN:
+				noteStr = errStr.wlanPwdLenValid;
+				break;
+			case EINVWLANPWD:
+				noteStr = errStr.wlanPwdInvalid;
+				break;
+			case ESYSBUSY:
+				noteStr = errStr.invRequestFailTrylater;
+				break;
+			default:
+				noteStr = errStr.invRequestFail;
+				break;
+			}
+
+			showAlert(noteStr, objId);
+			return false;
+		}
+
+		/* 数据列的过滤函数 */
+		function bEptFilterList(list)
+		{
+			var item, mac;
+			var hostNum = 0, host5GNum = 0, guestNum = 0, guest5GNum = 0;;
+
+			for (var index in list)
+			{
+				item = list[index];
+				mac = item[MAC];
+
+				if (mac.length == 0 || mac == "00-00-00-00-00-00")
+				{
+					break;
+				}
+
+				if ((item.type == epTypes.wirelessH) && (item[WIFI_MODE] == epTypes.wireless2G))
+				{
+					hostNum++;
+				}
+				else if ((item.type == epTypes.wirelessH) && (item[WIFI_MODE] == epTypes.wireless5G))
+				{
+					host5GNum++;
+				}
+				else if ((item.type == epTypes.wirelessG) && (item[WIFI_MODE] == epTypes.wireless2G))
+				{
+					guestNum++;
+				}
+				else if ((item.type == epTypes.wirelessG) && (item[WIFI_MODE] == epTypes.wireless5G))
+				{
+					guest5GNum++;
+				}
+			}
+
+			hostWifiNum2G.innerHTML = hostNum + label.entry;
+			hostWifiNum5G.innerHTML = host5GNum + label.entry;
+			hostWifiNumBs.innerHTML = hostNum + host5GNum + label.entry;
+			guestWifiNum.innerHTML = guestNum + label.entry;
+			guestWifiNum5G.innerHTML = guest5GNum + label.entry;
+		}
+
+		function disableSwitch(switchId, flag)
+		{
+			var switchBg = $("#" + switchId + " i.switchBg")[0];
+			var switchBall = $("#" + switchId + " i.switchBall")[0];
+
+			if (flag == true)
+			{
+				switchBall.style.backgroundPosition = "-424px -52px";
+				if (switchBg.onclick != null)
+				{
+					switchBall.oldOnMouseDown = switchBall.onmousedown;
+					switchBg.oldOnClick = switchBg.onclick;
+					switchBg.onclick = null;
+					switchBall.onmousedown = null;
+				}
+			}
+			else
+			{
+				var switchState = parseInt($(switchBall).css('left')) > 0;
+				if (switchState) {
+					switchBall.style.backgroundPosition = "-441px -53px";
+				} else {
+					switchBall.style.backgroundPosition = "-424px -52px";
+				}
+				if (switchBg.oldOnClick != undefined && switchBg.oldOnClick != null) {
+					switchBg.onclick = switchBg.oldOnClick;
+				}
+				if (switchBall.oldOnMouseDown != undefined && switchBall.oldOnMouseDown != null) {
+					switchBall.onmousedown = switchBall.oldOnMouseDown;
+				}
+			}
+		}
+
+		function disable2GHostSet(disabled) {
+			disableInput("hostWifiName", disabled);
+			disableInput("hostWifiPwd", disabled);
+			disableBtn("hostWifiSave2G", disabled);
+			disableSwitch("hostSwitch", disabled);
+		}
+
+		function disable5GHostSet(disabled) {
+			disableInput("hostWifiName5G", disabled);
+			disableInput("hostWifiPwd5G", disabled);
+			disableBtn("hostWifiSave5G", disabled);
+			disableSwitch("hostSwitch5G", disabled);
+		}
+
+		function disableBSWifiSet(disabled) {
+			disableInput("hostWifiNameBs", disabled);
+			disableInput("hostWifiPwdBs", disabled);
+			disableBtn("hostWifiSaveBs", disabled);
+			disableSwitch("hostSwitchBs", disabled);
+		}
+
+		function disable2GGuestSet(disabled) {
+			disableInput("guestWifiName", disabled);
+			disableInput("guestWifiPwd", disabled);
+			disableBtn("guestWifiSave", disabled);
+			disableSwitch("guestSwitch", disabled);
+		}
+
+		function disable5GGuestSet(disabled) {
+			disableInput("guestWifiName5G", disabled);
+			disableInput("guestWifiPwd5G", disabled);
+			disableBtn("guestWifiSave5G", disabled);
+			disableSwitch("guestSwitch5G", disabled);
+		}
+
+		function disableWifiSet(disabled)
+		{
+			disableWifi2GSet(disabled);
+			disableWifi5GSet(disabled);
+			disableBSWifiSet(disabled);
+		}
+
+		function disableWifi2GSet(disabled)
+		{
+			disable2GHostSet(disabled);
+			disable2GGuestSet(disabled);
+		}
+
+		function disableWifi5GSet(disabled)
+		{
+			disable5GHostSet(disabled);
+			disable5GGuestSet(disabled);
+		}
+
+		function disableAllBtn(disabled)
+		{
+			disableBtn("hostWifiSave2G", disabled);
+			disableBtn("hostWifiSave5G", disabled);
+			disableBtn("hostWifiSaveBs", disabled);
+			disableBtn("guestWifiSave", disabled);
+			disableBtn("guestWifiSave5G", disabled);
+		}
+
+		function enableSwitch() {
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				if (gWifiSwitchSplit) {
+					if (wifiAllSwitch2GEnable == 1) {
+						disableSwitch("hostSwitch", false);
+						disableSwitch("guestSwitch", false);
+					}
+					if (wifiAllSwitch5GEnable == 1) {
+						disableSwitch("hostSwitch5G", false);
+						disableSwitch("guestSwitch5G", false);
+					}
+				} else {
+					if (wifiAllSwitchEnable == 1) {
+						disableSwitch("hostSwitch", false);
+						disableSwitch("guestSwitch", false);
+						disableSwitch("hostSwitch5G", false);
+						disableSwitch("guestSwitch5G", false);
+						disableSwitch("hostSwitchBs", false);
+					}
+				}
+			} else {
+				disableSwitch("hostSwitch", false);
+				disableSwitch("guestSwitch", false);
+				disableSwitch("hostSwitch5G", false);
+				disableSwitch("guestSwitch5G", false);
+				disableSwitch("hostSwitchBs", false);
+			}
+		}
+
+		function wifiSwitchChange(state, secName)
+		{
+			var data = {};
+			var wlanCfg = {};
+
+			data[uciWireless.fileName] = {};
+			data[uciWireless.fileName][secName] = wlanCfg;
+
+			if (secName == SECN_WLAN_BS)
+			{
+				wlanCfg[OPT_WIFI_ENABLE] = state;
+			}
+			else
+			{
+				wlanCfg[uciWireless.dynOptName.enable] = state;
+			}
+
+			$.modify(
+				data,
+				function(result)
+				{
+					if (false == errHandle(result[ERR_CODE]))
+					{
+						if (secName == wireless2GName)
+						{
+							hostSwitch.setState(1 - state);
+							hostSwitchDes.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+						}
+						else if (secName == wireless5GName)
+						{
+							hostSwitch5G.setState(1 - state);
+							hostSwitchDes5G.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+						}
+						else if (secName == SECN_WLAN_BS)
+						{
+							hostSwitchBs.setState(1 - state);
+							hostSwitchDesBs.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+						}
+					}
+					else
+					{
+						if (secName == wireless2GName)
+						{
+							hostSwitchDes.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						}
+						else if (secName == wireless5GName)
+						{
+							hostSwitchDes5G.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						}
+						else if (secName == SECN_WLAN_BS)
+						{
+							hostSwitchDesBs.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						}
+
+						if (result["dfs_wait_time"] && result["dfs_wait_time"] != 0)
+						{
+							showDFSPopUpWindow(undefined, parseInt(result["dfs_wait_time"]));
+						}
+					}
+
+					enableSwitch();
+
+					if (gWifiSwitchSupport || gCustomWifiSwitchSupport)
+					{
+						wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+					}
+				},
+				true
+			);
+		}
+
+		function wifiAllSwitchChange(state, optName)
+		{
+			var data = {};
+			var switchCfg = {};
+			var fileName;
+
+			if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+				fileName = wirelessFile;
+			} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+				fileName = customWirelessFile;
+			}
+
+			data[fileName] = {};
+			data[fileName][wifiSwitch] = switchCfg;
+
+			if (state == WIFI_STATE_ON)
+			{
+				if (uciCustomWireless.dynOptName.enable_2g == optName) {
+					switchCfg[uciCustomWireless.dynOptName.enable_2g] = "on";
+				} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+					switchCfg[uciCustomWireless.dynOptName.enable_5g] = "on";
+				}
+				switchCfg[uciCustomWireless.dynOptName.enable] = "on";
+			}
+			else
+			{
+				if (uciCustomWireless.dynOptName.enable_2g == optName) {
+					switchCfg[uciCustomWireless.dynOptName.enable_2g] = "off";
+				} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+					switchCfg[uciCustomWireless.dynOptName.enable_5g] = "off";
+				} else if (uciCustomWireless.dynOptName.enable == optName) {
+					switchCfg[uciCustomWireless.dynOptName.enable] = "off";
+				}
+			}
+			$.modify(data,function(result) {
+				if (false == errHandle(result[ERR_CODE])) {
+					if (uciCustomWireless.dynOptName.enable_2g == optName) {
+						wifiAllSwitch2G.setState(1 - state);
+						wifiAllSwitch2GDes.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+						wifiAllSwitch5G.setState(1 - state);
+						wifiAllSwitch5GDes.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					} else if (uciCustomWireless.dynOptName.enable == optName) {
+						wifiAllSwitch.setState(1 - state);
+						wifiAllSwitchDes.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					}
+				} else {
+					if (uciCustomWireless.dynOptName.enable_2g == optName) {
+						wifiAllSwitch2GDes.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						oldWifiSwitch2GState = state;
+						wifiAllSwitch2GEnable = state;
+						disableWifi2GSet(state == WIFI_STATE_ON ? false : true);
+
+						if (oldWifiSwitch2GState == WIFI_STATE_ON || oldWifiSwitch5GState == WIFI_STATE_ON)
+						{
+							disableBSWifiSet(false);
+						}
+						else
+						{
+							disableBSWifiSet(true);
+						}
+					} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+						wifiAllSwitch5GDes.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						oldWifiSwitch5GState = state;
+						wifiAllSwitch5GEnable = state;
+						disableWifi5GSet(state == WIFI_STATE_ON ? false : true);
+
+						if (oldWifiSwitch2GState == WIFI_STATE_ON || oldWifiSwitch5GState == WIFI_STATE_ON)
+						{
+							disableBSWifiSet(false);
+						}
+						else
+						{
+							disableBSWifiSet(true);
+						}
+					} else if (uciCustomWireless.dynOptName.enable == optName) {
+						wifiAllSwitchDes.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+						oldWifiSwitchState = state;
+						wifiAllSwitchEnable = state;
+						disableWifiSet(state == WIFI_STATE_ON ? false : true);
+						id("wifiSwitchOffTip").style.display = (state == WIFI_STATE_ON)? "none": "block";
+					}
+
+					if (result["wait_time"] != undefined)
+					{
+						showLoading(label.savingCfg, undefined, undefined, false);
+
+						$.setTimeout(function(){
+							closeLoading();
+
+							if (result["dfs_wait_time"] && result["dfs_wait_time"] != 0)
+							{
+								showDFSPopUpWindow(undefined, parseInt(result["dfs_wait_time"]));
+							}
+						}, parseInt(result["wait_time"], 10) * 1000);
+					} else {
+						if (result["dfs_wait_time"] && result["dfs_wait_time"] != 0)
+						{
+							showDFSPopUpWindow(undefined, parseInt(result["dfs_wait_time"]));
+						}
+					}
+
+					wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+				}
+			}, true);
+		}
+
+		function wifiAllSwitchHd(state, optName)
+		{
+			var data = {};
+
+			if (uciCustomWireless.dynOptName.enable_2g == optName) {
+				if (true == beWifiSwitch2GFirstLoaded) {
+					beWifiSwitch2GFirstLoaded = false;
+					wifiAllSwitch2GDes.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+			} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+				if (true == beWifiSwitch5GFirstLoaded)
+				{
+					beWifiSwitch5GFirstLoaded = false;
+					wifiAllSwitch5GDes.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+			} else if (uciCustomWireless.dynOptName.enable == optName) {
+				if (true == beWifiSwitchFirstLoaded)
+				{
+					beWifiSwitchFirstLoaded = false;
+					wifiAllSwitchDes.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+			} else {
+				/* invalid secName */
+				return;
+			}
+
+			if (state != WIFI_STATE_ON)
+			{
+				showConfirm(label.closeDirect, function(result){
+					if (true == result)
+					{
+						wifiAllSwitchChange(state, optName);
+					}
+					else
+					{
+						if (uciCustomWireless.dynOptName.enable_2g == optName) {
+							wifiAllSwitch2G.setState(WIFI_STATE_ON);
+							wifiAllSwitch2GDes.innerHTML = statusStr.opened;
+						} else if (uciCustomWireless.dynOptName.enable_5g == optName) {
+							wifiAllSwitch5G.setState(WIFI_STATE_ON);
+							wifiAllSwitch5GDes.innerHTML = statusStr.opened;
+						} else if (uciCustomWireless.dynOptName.enable == optName) {
+							wifiAllSwitch.setState(WIFI_STATE_ON);
+							wifiAllSwitchDes.innerHTML = statusStr.opened;
+						}
+						wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+					}
+				});
+			}
+			else
+			{
+				wifiAllSwitchChange(state, optName);
+			}
+		}
+
+		function showDisconnectConfirm(state, secName)
+		{
+			disableSwitch("hostSwitch", true);
+			disableSwitch("hostSwitch5G", true);
+			disableSwitch("hostSwitchBs", true);
+			disableSwitch("guestSwitch", true);
+			disableSwitch("guestSwitch5G", true);
+			if (state != WIFI_STATE_ON)
+			{
+				data[uciHostsInfo.fileName] = {};
+				data[uciHostsInfo.fileName][KEY_TABLE] = uciHostsInfo.dynData.host_info;
+
+				$.query(data, function(result){
+					if (ENONE == result[ERR_CODE])
+					{
+						var epStaList = formatTableData(result[uciHostsInfo.fileName][uciHostsInfo.dynData.host_info]);
+						var item;
+
+						for (var index in epStaList)
+						{
+							item = epStaList[index];
+							if (item[uciHostsInfo.optName.mac].toUpperCase() == g_cur_host_mac.toUpperCase())
+							{
+								/* 无线主人网络设备 */
+								if (item[uciHostsInfo.optName.type] == uciHostsInfo.optValue.linkType.hostWireless) {
+									if (secName == wireless2GName && item[uciHostsInfo.optName.wifiMode] == uciHostsInfo.optValue.wifiMode.h2G) {
+										showConfirm(label.wirelessSwitchTip, function (result) {
+													if (true == result) {
+														wifiSwitchChange(state, secName);
+													}
+													else {
+														hostSwitch.setState(WIFI_STATE_ON);
+														hostSwitchDes.innerHTML = statusStr.opened;
+
+														enableSwitch();
+
+														if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+															wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+														}
+													}
+												}
+										);
+									}
+									else if (secName == wireless5GName && item[uciHostsInfo.optName.wifiMode] == uciHostsInfo.optValue.wifiMode.h5G) {
+										showConfirm(label.wirelessSwitchTip, function (result) {
+													if (true == result) {
+														wifiSwitchChange(state, secName);
+													}
+													else {
+														hostSwitch5G.setState(WIFI_STATE_ON);
+														hostSwitchDes5G.innerHTML = statusStr.opened;
+
+														enableSwitch();
+
+														if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+															wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+														}
+													}
+												}
+										);
+									}
+									else if (secName == wirelessNameBs) {
+										showConfirm(label.wirelessSwitchTip, function (result) {
+													if (true == result) {
+														wifiSwitchChange(state, secName);
+													}
+													else {
+														hostSwitchBs.setState(WIFI_STATE_ON);
+														hostSwitchDesBs.innerHTML = statusStr.opened;
+
+														enableSwitch();
+
+														if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+															wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+														}
+													}
+												}
+										);
+									}
+									else
+									{
+										wifiSwitchChange(state, secName);
+									}
+								}
+								else
+								{
+									wifiSwitchChange(state, secName);
+								}
+								break;
+							}
+						}
+					}
+				});
+			}
+			else
+			{
+				wifiSwitchChange(state, secName);
+			}
+		}
+
+		function getWDSInfo(callBack)
+		{
+			var queryData = {};
+			queryData[uciWireless.fileName] = {};
+			queryData[uciWireless.fileName][KEY_NAME] = [wdsSecName, wdsSecName5g];
+
+			$.query(queryData, function(data){
+				if(ENONE == data[ERR_CODE]){
+					callBack(data[uciWireless.fileName]);
+				}
+				else{
+					errHandle(data[ERR_CODE]);
+				}
+			});
+		}
+
+		function hostSwitchHd(state, secName)
+		{
+			var data = {};
+			var ret = false;
+			var confirmMsg;
+
+			if (secName == wireless2GName)
+			{
+				if (true == beFirstLoaded)
+				{
+					beFirstLoaded = false;
+					hostSwitchDes.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+
+				confirmMsg = label.close2G4Passive;
+				if (state != WIFI_STATE_ON) {
+					if (gGuest5GSupport) {
+						ret = hostSwitch5G.state != WIFI_STATE_ON && guestSwitch.state != WIFI_STATE_ON && guestSwitch5G.state != WIFI_STATE_ON;
+					} else {
+						ret = hostSwitch5G.state != WIFI_STATE_ON && guestSwitch.state != WIFI_STATE_ON;
+					}
+				}
+			}
+			else if (secName == wireless5GName)
+			{
+				if (true == beFirstLoaded5G)
+				{
+					beFirstLoaded5G = false;
+					hostSwitchDes5G.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+
+				confirmMsg = label.close5GPassive;
+				if (state != WIFI_STATE_ON) {
+					if (gGuest5GSupport) {
+						ret = hostSwitch.state != WIFI_STATE_ON && guestSwitch.state != WIFI_STATE_ON && guestSwitch5G.state != WIFI_STATE_ON;
+					} else {
+						ret = hostSwitch.state != WIFI_STATE_ON && guestSwitch.state != WIFI_STATE_ON;
+					}
+				}
+			}
+			else
+			{
+				if (true == beFirstLoadedBs)
+				{
+					beFirstLoadedBs = false;
+					hostSwitchDesBs.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+					return;
+				}
+
+				confirmMsg = label.closeHostPassive;
+				if (state != WIFI_STATE_ON) {
+					if (gGuest5GSupport) {
+						ret = guestSwitch.state != WIFI_STATE_ON && guestSwitch5G.state != WIFI_STATE_ON;
+					} else {
+						ret = guestSwitch.state != WIFI_STATE_ON;
+					}
+				}
+			}
+
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				clearTimeout(wifiStatusPollTimerHandle);
+
+				if (ret) {
+					showConfirm(confirmMsg, function(result){
+						if (true == result) {
+							wifiSwitchChange(state, secName);
+						} else {
+							if (secName == wireless2GName) {
+								hostSwitch.setState(WIFI_STATE_ON);
+								hostSwitchDes.innerHTML = statusStr.opened;
+							} else if (secName == wireless5GName) {
+								hostSwitch5G.setState(WIFI_STATE_ON);
+								hostSwitchDes5G.innerHTML = statusStr.opened;
+							} else {
+								hostSwitchBs.setState(WIFI_STATE_ON);
+								hostSwitchDesBs.innerHTML = statusStr.opened;
+							}
+							wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+						}
+					});
+				} else {
+					hostSwitchHdNext(state, secName);
+				}
+			} else {
+				hostSwitchHdNext(state, secName);
+			}
+
+			function hostSwitchHdNext(state, secName) {
+				getWDSInfo(function(wdsInfo) {
+					var isShowConfirm = false;
+					if (0 == state)
+					{
+						if (secName == SECN_WLAN_BS &&
+								((uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName][uciWireless.dynOptName.enable]) ||
+								(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName5g][uciWireless.dynOptName.enable])))
+						{
+							isShowConfirm = true;
+						}
+						else if(secName == wireless2GName &&
+								(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName][uciWireless.dynOptName.enable]))
+						{
+							isShowConfirm = true;
+						}
+						else if(secName == wireless5GName &&
+								(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName5g][uciWireless.dynOptName.enable]))
+						{
+							isShowConfirm = true;
+						}
+					}
+
+					if (isShowConfirm)
+					{
+						/* 弹出确认框 */
+						var tips = gSysModeSupport ? label.wirelessSwitchTipForWDS1 : label.wirelessSwitchTipForWDS;
+						showConfirm(tips, function(result){
+									if (true == result)
+									{
+										showDisconnectConfirm(state, secName);
+									}
+									else
+									{
+										if (secName == wireless2GName)
+										{
+											hostSwitch.setState(1 - state);
+											hostSwitchDes.innerHTML = state == WIFI_STATE_ON ? statusStr.closed : statusStr.opened;
+										}
+										else if (secName == wireless5GName)
+										{
+											hostSwitch5G.setState(1 - state);
+											hostSwitchDes5G.innerHTML = state == WIFI_STATE_ON ? statusStr.closed : statusStr.opened;
+										}
+										else if (secName == SECN_WLAN_BS)
+										{
+											hostSwitchBs.setState(1 - state);
+											hostSwitchDesBs.innerHTML = state == WIFI_STATE_ON ? statusStr.closed : statusStr.opened;
+										}
+
+										if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+											wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+										}
+									}
+								}
+						);
+					}
+					else
+					{
+						showDisconnectConfirm(state, secName);
+					}
+				});
+			}
+		}
+
+		function applyWifiInterfaceCfg(wifiNameInput, wifiPwdInput, secName, saveId)
+		{
+			var data = {};
+			var wlanCfg = {};
+			var ssid = wifiNameInput.value;
+			var pwd = wifiPwdInput.value;
+
+			data[uciWireless.fileName] = {};
+			data[uciWireless.fileName][secName] = wlanCfg;
+
+			wlanCfg[uciWireless.dynOptName.ssid] = ssid;
+			wlanCfg[uciWireless.dynOptName.key] = pwd;
+			wlanCfg[uciWireless.dynOptName.encryption] = (pwd.length > 0 ? uciWireless.dynOptValue.encryption.on :
+															uciWireless.dynOptValue.encryption.off);
+			disableAllBtn(true);
+			setLoadingId(saveId, IMG_HS_LOADING_GREEN);
+			hsLoading(true);
+			$.modify(data, function(result){
+				var code = result[ERR_CODE];
+				var timeout = 0;
+
+				if (ENONE == code)
+				{
+					if (secName == wireless2GName)
+					{
+						hostSSID = ssid;
+						hostPwd = pwd;
+					}
+					else if (secName == wireless5GName)
+					{
+						hostSSID5G = ssid;
+						hostPwd5G = pwd;
+					}
+					else if (secName == SECN_WLAN_BS)
+					{
+						hostSSIDBs = ssid;
+						hostPwdBs = pwd;
+					}
+
+					if (result["dfs_wait_time"] && result["dfs_wait_time"] != 0)
+					{
+						showDFSPopUpWindow(undefined, parseInt(result["dfs_wait_time"]));
+					}
+
+					timeout = parseInt(result["time_out"], 10) * 1000;
+				}
+				else
+				{
+					var bakSsid = "";
+					var bakPwd = "";
+
+					if (secName == wireless2GName)
+					{
+						bakSsid = hostSSID;
+						bakPwd = hostPwd;
+					}
+					else if (secName == wireless5GName)
+					{
+						bakSsid = hostSSID5G;
+						bakPwd = hostPwd5G;
+					}
+					else if (secName == SECN_WLAN_BS)
+					{
+						bakSsid = hostSSIDBs;
+						bakPwd = hostPwdBs;
+					}
+
+					wifiNameInput.value = bakSsid;
+					wifiPwdInput.value = bakPwd;
+					errHandle(code);
+				}
+
+				$.setTimeout(function(){
+					disableAllBtn(false);
+					hsLoading(false);
+				}, timeout);
+			},true);
+		}
+
+		/* ---------------------guset network-------------------------*/
+		function wifiSwitchChangeGuest(state, secName)
+		{
+			var data = {};
+			var wlanCfg = {};
+			var guestSwitchTmp;
+			var guestSwitchDesTmp;
+
+			guestSwitchTmp = secName == guest2GName ? guestSwitch : guestSwitch5G;
+			guestSwitchDesTmp = secName == guest2GName ? guestSwitchDes : guestSwitchDes5G;
+
+			data[uciGuestFile] = {};
+			data[uciGuestFile][secName] = wlanCfg;
+			wlanCfg[uciGuestNet.optName.enable] = state.toString();
+			disableSwitch("hostSwitch", true);
+			disableSwitch("hostSwitch5G", true);
+			disableSwitch("hostSwitchBs", true);
+			disableSwitch("guestSwitch", true);
+			disableSwitch("guestSwitch5G", true);
+
+			$.modify(data, function(result){
+				if (false == errHandle(result[ERR_CODE]))
+				{
+					guestSwitchTmp.setState(1 - state);
+					guestSwitchDesTmp.innerHTML = ((1 - state) == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+				}
+				else
+				{
+					guestSwitchDesTmp.innerHTML = (state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed);
+				}
+				enableSwitch();
+
+				if (gWifiSwitchSupport || gCustomWifiSwitchSupport)
+				{
+					wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+				}
+			});
+		}
+		function applyWifiInterfaceCfgGuest(wifiNameInput, wifiPwdInput, secName, saveId)
+		{
+			var data = {};
+			var wlanCfg = {};
+			var ssid = wifiNameInput.value;
+			var pwd = wifiPwdInput.value;
+
+			data[uciGuestFile] = {};
+			data[uciGuestFile][secName] = wlanCfg;
+			wlanCfg[uciGuestNet.optName.ssid] = ssid;
+			wlanCfg[uciGuestNet.optName.key] = pwd;
+			wlanCfg[uciGuestNet.optName.encrypt] = (pwd.length > 0 ? uciGuestNet.dynOptValue.encryption.on :
+					uciGuestNet.dynOptValue.encryption.off).toString();
+
+			disableAllBtn(true);
+			setLoadingId(saveId, IMG_HS_LOADING_GREEN);
+			hsLoading(true);
+			$.modify(data, function(result){
+				var code = result[ERR_CODE];
+
+				if (ENONE == code)
+				{
+					if (secName == guest2GName)
+					{
+						guestSSID = ssid;
+						guestPwd = pwd;
+					}
+					else if (secName == guest5GName)
+					{
+						guestSSID5G = ssid;
+						guestPwd5G = pwd;
+					}
+				}
+				else
+				{
+					var bakSsid = "";
+					var bakPwd = "";
+
+					if (secName == guest2GName)
+					{
+						bakSsid = guestSSID;
+						bakPwd = guestPwd;
+					}
+					else if (secName == guest5GName)
+					{
+						bakSsid = guestSSID5G;
+						bakPwd = guestPwd5G;
+					}
+
+					wifiNameInput.value = bakSsid;
+					wifiPwdInput.value = bakPwd;
+					errHandle(code);
+				}
+
+				disableAllBtn(false);
+				hsLoading(false);
+			});
+		}
+		function guestSwitchHd(state, secName)
+		{
+			var beGuestFirstLoadedTmp;
+			var guestSwitchDesTmp;
+			var otherGuestEnabled = 1 - WIFI_STATE_ON;		//另一个频段访客网络开关
+			var confirmMsg;
+
+			beGuestFirstLoadedTmp = secName == guest2GName ? beGuestFirstLoaded : beGuestFirstLoaded5G;
+			guestSwitchDesTmp = secName == guest2GName ? guestSwitchDes : guestSwitchDes5G;
+
+			if (true == beGuestFirstLoadedTmp)
+			{
+				if (secName == guest2GName)
+				{
+					beGuestFirstLoaded = false;
+				}
+				else if (secName == guest5GName)
+				{
+					beGuestFirstLoaded5G = false;
+				}
+
+				guestSwitchDesTmp.innerHTML = state == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+
+				return;
+			}
+
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				clearTimeout(wifiStatusPollTimerHandle);
+
+				if (gGuest5GSupport) {
+					otherGuestEnabled = secName == guest2GName ? guestSwitch5G.state : guestSwitch.state;
+				}
+
+				if (state != WIFI_STATE_ON) {
+					if (gBsEnable && hostSwitchBs.state != WIFI_STATE_ON && otherGuestEnabled != WIFI_STATE_ON) {
+						if (gGuest5GSupport) {
+							if (secName == guest2GName) {
+								confirmMsg = "由于主人网络和5G访客网络已关闭，此时关闭2.4G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？";
+							} else {
+								confirmMsg = "由于主人网络和2.4G访客网络已关闭，此时关闭5G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？";
+							}
+						} else {
+							confirmMsg = label.closeGuest2Passive;
+						}
+					} else if (!gBsEnable && hostSwitch.state != WIFI_STATE_ON && hostSwitch5G.state != WIFI_STATE_ON && otherGuestEnabled != WIFI_STATE_ON) {
+						if (gGuest5GSupport) {
+							if (secName == guest2GName) {
+								confirmMsg = "由于2.4G网络、5G网络和5G访客网络已关闭，此时关闭2.4G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？";
+							} else {
+								confirmMsg = "由于2.4G网络、5G网络和2.4G访客网络已关闭，此时关闭5G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？";
+							}
+						} else {
+							confirmMsg = label.closeGuest1Passive;
+						}
+					}
+				}
+
+				if (confirmMsg != undefined) {
+					showConfirm(confirmMsg, function(result){
+						if (true == result) {
+							wifiSwitchChangeGuest(state, secName);
+						} else {
+							if (secName == guest2GName) {
+								guestSwitch.setState(WIFI_STATE_ON);
+								guestSwitchDes.innerHTML = statusStr.opened;
+							} else {
+								guestSwitch5G.setState(WIFI_STATE_ON);
+								guestSwitchDes5G.innerHTML = statusStr.opened;
+							}
+
+							wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+						}
+					});
+				} else {
+					wifiSwitchChangeGuest(state, secName);
+				}
+			} else {
+				wifiSwitchChangeGuest(state, secName);
+			}
+		}
+
+		function getGuestDynEncrypt()
+		{
+			var data = {};
+
+			data[uciFunction.fileName] = {};
+			data[uciFunction.fileName][KEY_NAME] = "new_module_spec";
+
+			$.query(data,
+				function(result)
+				{
+					if (errHandle(result[ERR_CODE]))
+					{
+						var func = result[uciFunction.fileName];
+						var moduleSpec = func.new_module_spec;
+
+						guestDynEncrypt = (moduleSpec["guest_dyn_encrypt"] == dynEncryptOn? dynEncryptOn : dynEncryptOff);
+					}
+				}, false);
+		}
+
+		function wifiSwitchInit()
+		{
+			var data = {};
+			var fileName;
+
+			if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+				fileName = wirelessFile;
+			} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+				fileName = customWirelessFile;
+			}
+			data[fileName] = {};
+			data[fileName][KEY_NAME] = [wifiSwitch];
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var wifiSwitchInfo = result[fileName][wifiSwitch];
+
+					if (gWifiSwitchSplit) {
+						wifiAllSwitch2GEnable = (wifiSwitchInfo[uciCustomWireless.dynOptName.enable] == "on" && wifiSwitchInfo[uciCustomWireless.dynOptName.enable_2g] == "on") ? "1" : "0";
+						wifiAllSwitch5GEnable = (wifiSwitchInfo[uciCustomWireless.dynOptName.enable] == "on" && wifiSwitchInfo[uciCustomWireless.dynOptName.enable_5g] == "on") ? "1" : "0";
+						oldWifiSwitch2GState = wifiAllSwitch2GEnable;
+						oldWifiSwitch5GState = wifiAllSwitch5GEnable;
+
+						wifiAllSwitch2G = new Switch("wifiAllSwitch2G", oldWifiSwitch2GState,
+								function(){
+									return function(state){
+										wifiAllSwitchHd(state, uciCustomWireless.dynOptName.enable_2g);
+									};
+								}()
+						);
+
+						wifiAllSwitch5G = new Switch("wifiAllSwitch5G", oldWifiSwitch5GState,
+								function(){
+									return function(state){
+										wifiAllSwitchHd(state, uciCustomWireless.dynOptName.enable_5g);
+									};
+								}()
+						);
+					} else {
+						wifiAllSwitchEnable = (wifiSwitchInfo[uciCustomWireless.dynOptName.enable] == "on") ? "1" : "0";
+						oldWifiSwitchState = wifiAllSwitchEnable;
+
+						wifiAllSwitch = new Switch("wifiAllSwitch", oldWifiSwitchState,
+								function(){
+									return function(state){
+										wifiAllSwitchHd(state, uciCustomWireless.dynOptName.enable);
+									};
+								}()
+						);
+					}
+				}
+			});
+		}
+
+		/* 无线总开关状态轮询 */
+		function getWiFiStatus(callback)
+		{
+			var data = {};
+			var fileName = "";
+
+			data[wirelessFile] = {};
+			if (gBsEnable)
+			{
+				data[wirelessFile][KEY_NAME] = [SECN_WLAN_BS];
+			}
+			else
+			{
+				data[wirelessFile][KEY_NAME] = [wireless2GName, wireless5GName];
+			}
+			data[uciGuestFile] = {};
+			if (gGuest5GSupport) {
+				data[uciGuestFile][KEY_NAME] = [guest2GName, guest5GName];
+			} else {
+				data[uciGuestFile][KEY_NAME] = guest2GName;
+			}
+
+			if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+				fileName = wirelessFile;
+				data[wirelessFile][KEY_NAME].push(wifiSwitch);
+			} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+				fileName = customWirelessFile;
+				data[customWirelessFile] = {};
+				data[customWirelessFile][KEY_NAME] = [wifiSwitch];
+			}
+
+			$.query(data, function(result){
+				if (result[ERR_CODE] == ENONE)
+				{
+					callback(result[wirelessFile], result[uciGuestFile], result[fileName]);
+				}
+			});
+		}
+
+		function wifiAllSwitchStateQuery()
+		{
+			clearTimeout(wifiStatusPollTimerHandle);
+			getWiFiStatus(function(hostData, guestData, wifiSwitchData){
+				wifiAllSwitchEnable = (wifiSwitchData[wifiSwitch][uciCustomWireless.dynOptName.enable] == uciCustomWireless.optValue.wifiSwitch.enable.on) ? "1" : "0";
+				var guest2GState = parseInt(guestData[guest2GName][uciGuestNet.optName.enable]);
+				var guest5GState;
+				if (gGuest5GSupport) {
+					guest5GState = parseInt(guestData[guest5GName][uciGuestNet.optName.enable]);
+				}
+
+				if (gBsEnable)
+				{
+					var hostBsState = parseInt(hostData[SECN_WLAN_BS][OPT_WIFI_ENABLE]);
+					typeof hostSwitchBs != "undefined" && hostSwitchBs.setState(hostBsState);
+					hostSwitchDesBs.innerHTML = hostBsState == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+				}
+				else
+				{
+					var host2GState = parseInt(hostData[wireless2GName][uciWireless.dynOptName.enable]);
+					var host5GState = parseInt(hostData[wireless5GName][uciWireless.dynOptName.enable]);
+					typeof hostSwitch != "undefined" && hostSwitch.setState(host2GState);
+					hostSwitchDes.innerHTML = host2GState == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+					typeof hostSwitch5G != "undefined" && hostSwitch5G.setState(host5GState);
+					hostSwitchDes5G.innerHTML = host5GState == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+				}
+
+				typeof guestSwitch != "undefined" && guestSwitch.setState(guest2GState);
+				guestSwitchDes.innerHTML = guest2GState == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+				if (gGuest5GSupport) {
+					typeof guestSwitch5G != "undefined" && guestSwitch5G.setState(guest5GState);
+					guestSwitchDes5G.innerHTML = guest5GState == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+				}
+				typeof wifiAllSwitch != "undefined" && wifiAllSwitch.setState(wifiAllSwitchEnable);
+				wifiAllSwitchDes.innerHTML = wifiAllSwitchEnable == WIFI_STATE_ON ? statusStr.opened:statusStr.closed;
+
+				var wifiSetDisable = !(wifiAllSwitchEnable == WIFI_STATE_ON);
+				disableWifiSet(wifiSetDisable);
+				id("wifiSwitchOffTip").style.display = (wifiSetDisable)? "block": "none";
+
+				wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, wifiStatusPollTimeout);
+			});
+		}
+
+		function guestNet2gInit()
+		{
+			var data = {};
+
+			data[uciGuestFile] = {};
+			data[uciGuestFile][KEY_NAME] = guest2GName;
+
+			/* 从module_spec中确定动态密码更新是否开启 */
+			getGuestDynEncrypt();
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					netStateGuestNet.style.display = "block";
+					if (!gGuest5GSupport)
+					{
+						$("#netStateGuestNet li.bottom").attr("class", "");
+					}
+
+					var guestInfo = result[uciGuestFile][guest2GName];
+
+					/* SLP平台初始化时无该值 */
+					if (!guestInfo[uciGuestNet.optName.key])
+					{
+						guestInfo[uciGuestNet.optName.key] = "";
+					}
+
+					guestSwitch = new Switch("guestSwitch", parseInt(guestInfo[uciGuestNet.optName.enable]),
+							function(){
+								return function(state){
+									guestSwitchHd(state, guest2GName);
+								};
+							}()
+					);
+					guestWifiName.value = guestInfo[uciGuestNet.optName.ssid];
+
+					if (uciGuestNet.dynOptValue.encryption.off == guestInfo[uciGuestNet.optName.encrypt])
+					{
+						guestWifiPwd.value = "";
+					}
+					else
+					{
+						guestWifiPwd.value = guestInfo[uciGuestNet.optName.key];
+					}
+
+					guestSSID = guestWifiName.value;
+					guestPwd = guestWifiPwd.value;
+
+					/* 如果密码动态更新已开启，则不能编辑密码框 */
+					if (guestDynEncrypt == dynEncryptOn)
+					{
+						guestWifiPwd.setAttribute("readonly", "readonly");
+					}
+
+					if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+						if (gWifiSwitchSplit) {
+							if (wifiAllSwitch2GEnable != WIFI_STATE_ON)
+							{
+								disable2GGuestSet(true);
+							}
+						} else {
+							if (wifiAllSwitchEnable != WIFI_STATE_ON)
+							{
+								disable2GGuestSet(true);
+							}
+						}
+					}
+				}
+				else
+				{
+					$("#netStateHostNet li.bottom").attr("class", "");
+				}
+			});
+
+			id("guestWifiSave").onclick = function(){
+				var ssid = guestWifiName.value;
+
+				replaceUnicodeBlank(guestWifiPwd);
+
+				if (guestSSID != ssid || guestPwd != guestWifiPwd.value)
+				{
+					if (0 == ssid.length)
+					{
+						showAlert(errStr.wlanSsidErr, guestWifiName);
+						guestWifiName.value = guestSSID;
+						guestWifiPwd.value = guestPwd;
+						return;
+					}
+					else if (/^ +$/gi.test(ssid) == true)
+					{
+						showAlert(errStr.wlanSsidBlank, guestWifiName);
+						guestWifiName.value = guestSSID;
+						guestWifiPwd.value = guestPwd;
+						return;
+					}
+					else if (getCNStrLen(ssid) > 32) {
+						showAlert(errStr.wlanSsidLenErr, guestWifiName);
+						guestWifiName.value = guestSSID;
+						guestWifiPwd.value = guestPwd;
+						return;
+					}
+
+					applyWifiInterfaceCfgGuest(guestWifiName, guestWifiPwd, guest2GName, "guestWifiSave");
+				}
+			};
+		}
+		function guestNet5gInit()
+		{
+			var data = {};
+
+			data[uciGuestFile] = {};
+			data[uciGuestFile][KEY_NAME] = guest5GName;
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					netStateGuestNet5G.style.display = "block";
+					$("#netStateGuestNet5G li.bottom").attr("class", "");
+
+					var guestInfo = result[uciGuestFile][guest5GName];
+
+					/* SLP平台初始化时无该值 */
+					if (!guestInfo[uciGuestNet.optName.key])
+					{
+						guestInfo[uciGuestNet.optName.key] = "";
+					}
+
+					guestSwitch5G = new Switch("guestSwitch5G", parseInt(guestInfo[uciGuestNet.optName.enable]),
+							function(){
+								return function(state){
+									guestSwitchHd(state, guest5GName);
+								};
+							}()
+					);
+
+					guestWifiName5G.value = guestInfo[uciGuestNet.optName.ssid];
+					guestWifiPwd5G.value = (uciGuestNet.dynOptValue.encryption.on == parseInt(guestInfo[uciGuestNet.optName.encrypt]))
+							? guestInfo[uciGuestNet.optName.key] : "";
+					guestSSID5G = guestWifiName5G.value;
+					guestPwd5G = guestWifiPwd5G.value;
+
+					/* 如果密码动态更新已开启，则不能编辑密码框 */
+					if (guestDynEncrypt == dynEncryptOn)
+					{
+						guestWifiPwd.setAttribute("readonly", "readonly");
+					}
+
+					if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+						if (gWifiSwitchSplit) {
+							if (wifiAllSwitch5GEnable != WIFI_STATE_ON)
+							{
+								disable5GGuestSet(true);
+							}
+						} else  {
+							if (wifiAllSwitchEnable != WIFI_STATE_ON)
+							{
+								disable5GGuestSet(true);
+							}
+						}
+					}
+				}
+				else
+				{
+					$("#netStateGuestNet li.bottom").attr("class", "");
+				}
+			});
+
+			id("guestWifiSave5G").onclick = function(){
+				var ssid = guestWifiName5G.value;
+
+				replaceUnicodeBlank(guestWifiPwd5G);
+
+				if (guestSSID5G != ssid || guestPwd5G != guestWifiPwd5G.value)
+				{
+					if (0 == ssid.length)
+					{
+						showAlert(errStr.wlanSsidErr, guestWifiName5G);
+						guestWifiName5G.value = guestSSID5G;
+						guestWifiPwd5G.value = guestPwd5G;
+						return;
+					}
+					else if (/^ +$/gi.test(ssid) == true)
+					{
+						showAlert(errStr.wlanSsidBlank, guestWifiName5G);
+						guestWifiName5G.value = guestSSID5G;
+						guestWifiPwd5G.value = guestPwd5G;
+						return;
+					}
+					else if (getCNStrLen(ssid) > 32) {
+						showAlert(errStr.wlanSsidLenErr, guestWifiName5G);
+						guestWifiName5G.value = guestSSID5G;
+						guestWifiPwd5G.value = guestPwd5G;
+						return;
+					}
+
+					applyWifiInterfaceCfgGuest(guestWifiName5G, guestWifiPwd5G, guest5GName, "guestWifiSave5G");
+				}
+			};
+		}
+		function hostNet2gInit()
+		{
+			var data = {};
+
+			data[wirelessFile] = {};
+			data[wirelessFile][KEY_NAME] = [wireless2GName];
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var wlanInfo = result[wirelessFile][wireless2GName];
+
+					hostSwitch = new Switch("hostSwitch", parseInt(wlanInfo[uciWireless.dynOptName.enable]),
+									function(){
+										return function(state){
+											hostSwitchHd(state, wireless2GName);
+										};
+									}()
+								);
+					hostWifiName.value = wlanInfo[uciWireless.dynOptName.ssid];
+					hostWifiPwd.value = wlanInfo[uciWireless.dynOptName.key];
+					hostSSID = hostWifiName.value;
+					hostPwd = hostWifiPwd.value;
+
+					if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+						if (gWifiSwitchSplit) {
+							if (wifiAllSwitch2GEnable != WIFI_STATE_ON)
+							{
+								disable2GHostSet(true);
+							}
+						} else {
+							if (wifiAllSwitchEnable != WIFI_STATE_ON)
+							{
+								disable2GHostSet(true);
+							}
+						}
+					}
+				}
+			});
+
+			id("hostWifiSave2G").onclick = function(){
+				var ssid  = hostWifiName.value;
+
+				replaceUnicodeBlank(hostWifiPwd);
+
+				if (hostSSID != ssid || hostPwd != hostWifiPwd.value)
+				{
+					if (ssid.length == 0)
+					{
+						showAlert(errStr.wlanSsidErr, hostWifiName);
+						hostWifiName.value = hostSSID;
+						hostWifiPwd.value = hostPwd;
+					}
+					else if (/^ +$/gi.test(ssid) == true)
+					{
+						showAlert(errStr.wlanSsidBlank, hostWifiName);
+						hostWifiName.value = hostSSID;
+						hostWifiPwd.value = hostPwd;
+					}
+					else if (getCNStrLen(ssid) > 32) {
+						showAlert(errStr.wlanSsidLenErr, hostWifiName);
+						hostWifiName.value = hostSSID;
+						hostWifiPwd.value = hostPwd;
+					}
+					else
+					{
+						showConfirm(label.wifiSaveConfirmTip, function(result){
+							if (true == result)
+							{
+								applyWifiInterfaceCfg(hostWifiName, hostWifiPwd, wireless2GName, "hostWifiSave2G");
+							}
+						});
+					}
+				}
+			};
+		}
+		function hostNet5gInit()
+		{
+			var data = {};
+
+			data[wirelessFile] = {};
+			data[wirelessFile][KEY_NAME] = [wireless5GName];
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					// 初始化host5G
+					var wlanInfo5G = result[wirelessFile][wireless5GName];
+					hostSwitch5G = new Switch("hostSwitch5G", parseInt(wlanInfo5G[uciWireless.dynOptName.enable]),
+							function(){
+								return function(state){
+									hostSwitchHd(state, wireless5GName);
+								};
+							}()
+					);
+					hostWifiName5G.value = wlanInfo5G[uciWireless.dynOptName.ssid];
+					hostWifiPwd5G.value = wlanInfo5G[uciWireless.dynOptName.key] ? wlanInfo5G[uciWireless.dynOptName.key] : "";
+					hostSSID5G = hostWifiName5G.value;
+					hostPwd5G = hostWifiPwd5G.value;
+
+					if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+						if (gWifiSwitchSplit) {
+							if (wifiAllSwitch5GEnable != WIFI_STATE_ON)
+							{
+								disable5GHostSet(true);
+							}
+						} else {
+							if (wifiAllSwitchEnable != WIFI_STATE_ON)
+							{
+								disable5GHostSet(true);
+							}
+						}
+					}
+				}
+			});
+
+			id("hostWifiSave5G").onclick = function(){
+				var ssid  = hostWifiName5G.value;
+
+				replaceUnicodeBlank(hostWifiPwd5G);
+
+				if (hostSSID5G != ssid || hostPwd5G != hostWifiPwd5G.value)
+				{
+					if (ssid.length == 0)
+					{
+						showAlert(errStr.wlanSsidErr, hostWifiName5G);
+						hostWifiName5G.value = hostSSID5G;
+						hostWifiPwd5G.value = hostPwd5G;
+					}
+					else if (/^ +$/gi.test(ssid) == true)
+					{
+						showAlert(errStr.wlanSsidBlank, hostWifiName5G);
+						hostWifiName5G.value = hostSSID5G;
+						hostWifiPwd5G.value = hostPwd5G;
+					}
+					else if (getCNStrLen(ssid) > 32) {
+						showAlert(errStr.wlanSsidLenErr, hostWifiName5G);
+						hostWifiName5G.value = hostSSID5G;
+						hostWifiPwd5G.value = hostPwd5G;
+					}
+					else
+					{
+						showConfirm(label.wifiSaveConfirmTip, function(result){
+							if (true == result)
+							{
+								applyWifiInterfaceCfg(hostWifiName5G, hostWifiPwd5G, wireless5GName, "hostWifiSave5G");
+							}
+						});
+					}
+				}
+			};
+		}
+		function netInit()
+		{
+			hostNet2gInit();
+			hostNet5gInit();
+			guestNet2gInit();
+			if (gGuest5GSupport) { guestNet5gInit(); }
+		}
+		function net2GInit()
+		{
+			hostNet2gInit();
+			guestNet2gInit();
+		}
+		function net5GInit()
+		{
+			hostNet5gInit();
+			if (gGuest5GSupport) { guestNet5gInit(); }
+		}
+		function canvasInit()
+		{
+			var canvasContainer = $("#bNetStateTopoCon");
+
+			canvasContainerHeight = canvasContainer.height() + 20;
+			canvasContainerWidth = canvasContainer.width();
+
+			canvasCloud.height = canvasContainerHeight - 25;
+			canvasCloud.width = canvasContainerWidth;
+			canvasRouter.height = canvasContainerHeight - 130;
+			canvasRouter.width = canvasContainerWidth;
+
+			stage = new JTopo.Stage(canvasRouter);
+			scene = new JTopo.Scene(stage);
+			scene.onclick = sceneClickHandler;
+			if(!window.addEventListener) {
+				canvasCloud.onclick = sceneClickHandler;
+				canvasCloud.ontouchstart = sceneClickHandler;
+			} else {
+				canvasCloud.addEventListener("click",sceneClickHandler);
+				canvasCloud.addEventListener("touchstart",sceneClickHandler);
+			}
+		}
+
+		function showResultPopWindow(resultStr) {
+			showCover(function (cover) {
+				var coverId = cover.id;
+				var cover$ = $("#" + coverId);
+				var con = id("Con");
+				var img, p, resultDiv, resultCon;
+
+				cover$.css("opacity", 0.7);
+
+				resultDiv = el("div");
+				resultDiv.className = "resultDiv";
+				con.appendChild(resultDiv);
+
+				resultCon = el("div");
+				resultCon.className = "resultCon";
+				resultDiv.appendChild(resultCon);
+
+				img = el("i");
+				img.className = "alertImg";
+				resultCon.appendChild(img);
+				p = el("p");
+				p.className = "detail";
+				p.innerHTML = resultStr;
+				resultCon.appendChild(p);
+
+				$.setTimeout(function(){
+					hideCover(function () {
+						con.removeChild(resultDiv);
+					});
+				}, 2000);
+			});
+		}
+
+		function rebootChildRoute(mac)
+		{
+			showConfirm(label.rebootConfirm, function(choose){
+				if (true == choose)
+				{
+					var reqData = {};
+					reqData[uciPlc.fileName] = {};
+					reqData[uciPlc.fileName][uciPlc.actionName.rebootExt] = {};
+					reqData[uciPlc.fileName][uciPlc.actionName.rebootExt][uciPlc.optName.mac] = mac;
+
+					$.action(reqData, function(result){
+						var err_code = result[ERR_CODE];
+						if (ENONE == err_code)
+						{
+							var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+							showProgBar(waitTime * 1000, statusStr.rebootingChildRt, function(){
+								closeProgBar();
+							}, true, statusStr.rebootChildRtTip);
+						}
+						else
+						{
+							showAlert(statusStr.rebootRouterFail);
+						}
+					});
+				}
+			});
+		}
+
+		function resetChildRoute(mac)
+		{
+			showConfirm(label.resetConfirm, function(choose)
+			{
+				if (true == choose)
+				{
+					var reqData = {};
+					reqData[uciPlc.fileName] = {};
+					reqData[uciPlc.fileName][uciPlc.actionName.resetExt] = {};
+					reqData[uciPlc.fileName][uciPlc.actionName.resetExt][uciPlc.optName.mac] = mac;
+
+					$.action(reqData, function(result){
+						if (ENONE == result[ERR_CODE])
+						{
+							var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+							showProgBar(waitTime * 1000, label.resetingChildRt, function()
+							{
+								closeProgBar();
+							}, true, statusStr.resetChildRtTip);
+						}
+						else
+						{
+							showAlert(statusStr.resetRouterFail);
+						}
+					});
+				}
+			});
+		}
+
+		function disConnectChildRoute(mac)
+		{
+			var hasChildNode = false;
+			function kickExt() {
+				var reqData = {};
+				reqData[uciPlc.fileName] = {};
+				reqData[uciPlc.fileName][uciPlc.actionName.kickExt] = {};
+				reqData[uciPlc.fileName][uciPlc.actionName.kickExt][uciPlc.optName.mac] = mac;
+
+				showLoading(statusStr.disconcting,undefined, undefined, false);
+				$.action(reqData, function(result){
+					if (ENONE == result[ERR_CODE])
+					{
+						if (hasChildNode) {
+							$.setTimeout(function () {
+								closeLoading();
+								showResultPopWindow("设备已断开，正在自动组网");
+							},1000);
+						} else {
+							$.setTimeout(function () {
+								closeLoading();
+								showResultPopWindow("设备已成功断开");
+							},1000);
+						}
+						showLinkedCldRt();
+					}
+					else
+					{
+						closeLoading();
+						showAlert(statusStr.kickRouterFail);
+					}
+				});
+			}
+
+			for (var i = 0; i < cldList.length; i++) {
+				if (cldList[i].parent_router.toUpperCase() == mac.toUpperCase()) {
+					hasChildNode = true;
+					break;
+				}
+			}
+			if (hasChildNode) {
+				showConfirm("断开连接后，该设备将被移出网络，其他网络设备将自动组成最优网络方案。确定要断开吗？", function(choose)
+				{
+					if (true == choose)
+					{
+						kickExt();
+					}
+				},"断开");
+			} else {
+				showConfirm(label.disconnectConfirm, function(choose)
+				{
+					if (true == choose)
+					{
+						kickExt();
+					}
+				},"断开");
+			}
+		}
+
+		function netSpeedTransBasic(speed)
+		{
+			var kSpeed = 1;
+			var mSpeed = kSpeed * 1024;
+			var gSpeed = mSpeed * 1024;
+
+			speed = parseInt(speed);
+
+			if (speed >= gSpeed)
+			{
+				speed = (speed/gSpeed).toFixed(2) + " GB/s";
+			}
+			else if (speed >= mSpeed)
+			{
+				speed = (speed/mSpeed).toFixed(1) + " MB/s";
+			}
+			else
+			{
+				speed = (speed/kSpeed).toFixed(0) + " KB/s";
+			}
+
+			return speed.toString();
+		}
+
+		function drawWanText(text, px, py, style)
+		{
+			context.save();
+			context.beginPath();
+			context.fillStyle = style == undefined ? "#FFFFFF" : style;
+			context.font = "12px 微软雅黑, 宋体, Arial";
+			context.fillText(text, px, py);
+			context.closePath();
+			context.restore();
+		}
+
+		function windowToCanvas(canvas, x, y)
+		{
+			var bBox = canvas.getBoundingClientRect();
+
+			return {x:x - bBox.left*canvas.width/bBox.width,
+				y:y - bBox.top*canvas.height/bBox.height};
+		}
+
+		function showBasicSubMenuWanCfg()
+		{
+			setBasicSubMenuUrl("WanCfg.htm");
+			id("routerSetMbtn").onclick();
+		}
+
+		function getWDSAppUrlCfg(appID, callBack)
+		{
+			var reqData = {};
+
+			reqData[uciAppInfo.fileName] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.open] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id] = appID;
+			$.action(reqData, function(result){
+				if (result[ERR_CODE] == ENONE)
+				{
+					var url = result[uciAppInfo.dynOptName.pageURL];
+
+					if (true == $.local)
+					{
+						callBack("WDS.htm");
+						return;
+					}
+
+					if (url.indexOf("WDS.htm") >= 0)
+					{
+						callBack(url);
+					}
+				}
+			});
+		}
+
+		function getApAppUrlCfg(appID, callBack)
+		{
+			var reqData = {};
+
+			reqData[uciAppInfo.fileName] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.open] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id] = appID;
+			$.action(reqData, function(result){
+				if (result[ERR_CODE] == ENONE)
+				{
+					var url = result[uciAppInfo.dynOptName.pageURL];
+
+					if (url.indexOf("wired_extender.htm") >= 0)
+					{
+						callBack(url);
+					}
+				}
+			});
+		}
+
+		function getWDSPageUrl(callBack)
+		{
+			var reqData = {};
+
+			bWDSLoaded = false;
+
+			reqData[uciAppInfo.fileName] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp] = null;
+			$.action(reqData, function(result){
+				if (errHandle(result[ERR_CODE]))
+				{
+					var appsList = formatTableData(result[uciAppInfo.optName.installedApp]);
+
+					for (var i = 0, len = appsList.length; i < len; i++)
+					{
+						if (bWDSLoaded == false)
+						{
+							getWDSAppUrlCfg(appsList[i][APP_ID], function(url){
+								bWDSLoaded = true;
+								callBack(url);
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function getApPageUrl(callBack)
+		{
+			var reqData = {};
+
+			bApLoaded = false;
+
+			reqData[uciAppInfo.fileName] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp] = null;
+			$.action(reqData, function(result){
+				if (errHandle(result[ERR_CODE]))
+				{
+					var appsList = formatTableData(result[uciAppInfo.optName.installedApp]);
+
+					for (var i = 0, len = appsList.length; i < len; i++)
+					{
+						if (bApLoaded == false)
+						{
+							getApAppUrlCfg(appsList[i][APP_ID], function(url){
+								bApLoaded = true;
+								callBack(url);
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function showWdsPage()
+		{
+			getWDSPageUrl(function(url){
+				gSetLoadAppDetail("wds", url);
+				id("appsMgtMbtn").onclick();
+			});
+		}
+
+		function showApPage() {
+			getApPageUrl(function(url){
+				gSetLoadAppDetail("wiredExtender", url);
+				id("appsMgtMbtn").onclick();
+			});
+		}
+
+		var gCvsEventData = {
+			click:{
+				wan:{pos:[395, 455, 86, 116], callBack:showBasicSubMenuWanCfg, legal:false},
+				wds:{pos:[395, 455, 86, 116], callBack:showWdsPage, legal:false},
+				ap:{pos:[395, 455, 86, 116], callBack:showApPage, legal:false}
+			},
+			mousemove:{
+				wan:{pos:[395, 455, 86, 116], legal:false},
+				wds:{pos:[395, 455, 86, 116], legal:false},
+				ap:{pos:[395, 455, 86, 116], legal:false}
+			}
+		};
+
+		function resetCvsEventHandle()
+		{
+			canvasCloud.onclick = function(event){
+				event = event || window.event;
+				var pPos = windowToCanvas(canvasCloud, event.clientX, event.clientY);
+
+				for (var block in gCvsEventData["click"])
+				{
+					var eventData = gCvsEventData["click"][block];
+					if((true == eventData.legal) &&
+							pPos.x > eventData.pos[0] && pPos.x < eventData.pos[1] &&
+							pPos.y > eventData.pos[2] && pPos.y < eventData.pos[3])
+					{
+						eventData.callBack();
+					}
+				}
+			};
+
+			canvasCloud.onmousemove = function(event){
+				event = event || window.event;
+				var pPos = windowToCanvas(canvasCloud, event.clientX, event.clientY);
+				var wanZone = gCvsEventData["mousemove"]["wan"];
+				var wdsZone = gCvsEventData["mousemove"]["wds"];
+				var apZone = gCvsEventData["mousemove"]["ap"];
+				var netZone = wdsZone.legal ? wdsZone : (wanZone.legal ? wanZone : apZone);;
+
+				if ((netZone.legal && pPos.x > netZone.pos[0] && pPos.x < netZone.pos[1] && pPos.y > netZone.pos[2] && pPos.y < netZone.pos[3]))
+				{
+					canvasCloud.style.cursor = "pointer";
+				}
+				else
+				{
+					canvasCloud.style.cursor = "default";
+				}
+			};
+		}
+
+		function drawDashLine() {
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			for (var i = 0; i < 7; i++) {
+				context.moveTo(canvasCloud.width / 2, 54 + i * 9);
+				context.lineTo(canvasCloud.width / 2, 60 + i * 9);
+			}
+			context.stroke();
+			context.closePath();
+		}
+
+		function drawLine() {
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			context.moveTo(canvasCloud.width / 2, 54);
+			context.lineTo(canvasCloud.width / 2, 115);
+			context.stroke();
+			context.closePath();
+		}
+
+		/* 双WAN相关 */
+		function linkToNetworkSet(indexPort){
+			var confObj = {
+				colorL:"#70D2EF",
+				colorR:"#4ABDE0",
+				arrId:"routeSetArrow",
+				pageName:"BasicRouteSet.htm",
+				basicMDiv:"routerSetMbtn"
+			};
+			var index = 3;
+			currentSelectedWan = indexPort;
+			loadPage("BasicRouteSet.htm", "basicSCon",function(){
+				id("headL").style.backgroundColor = confObj.colorL;
+				id("headLCnt").style.backgroundColor = confObj.colorL;
+				id("headR").style.backgroundColor = confObj.colorR;
+				id("headRCnt").style.backgroundColor = confObj.colorR;
+				for(var i = 0, len = basicLisConf.length; i < len; i++)
+				{
+					id(basicLisConf[i].arrId).style.visibility = "hidden";
+				}
+				id(basicLisConf[index].arrId).style.visibility = "visible";
+				clearTimeout(gMenuRefreshHD);
+				gMenuRefreshHD = window.setTimeout(basicMenuStateRefresh, 0);
+				setTimeout(function(){$("#network_rsMenu").click();},0);
+			});
+		}
+		function drawLeftLine() {
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			context.moveTo(canvasCloud.width / 2 - 11, 54);
+			context.lineTo(canvasCloud.width / 2 - 11, 115);
+			context.stroke();
+			context.closePath();
+		}
+		function drawRightLine() {
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			context.moveTo(canvasCloud.width / 2 + 11, 54);
+			context.lineTo(canvasCloud.width / 2 + 11, 115);
+			context.stroke();
+			context.closePath();
+		}
+		function drawLeftDashLine(){
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			for (var i = 0; i < 7; i++) {
+				context.moveTo(canvasCloud.width / 2 - 11, 54 + i * 9);
+				context.lineTo(canvasCloud.width / 2 - 11, 60 + i * 9);
+			}
+			context.stroke();
+			context.closePath();
+		}
+		function drawRightDashLine(){
+			context.beginPath();
+			context.strokeStyle = "rgba(255,255,255,1)";
+			context.lineWidth = 2;
+			for (var i = 0; i < 7; i++) {
+				context.moveTo(canvasCloud.width / 2 + 11, 54 + i * 9);
+				context.lineTo(canvasCloud.width / 2 + 11, 60 + i * 9);
+			}
+			context.stroke();
+			context.closePath();
+		}
+		function drawLeftDown(){
+			$("#leftWanLink").hide();
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 351, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(label.wan1PhyErr, 361 - getWanTextWidth(label.wan1PhyErr) - 10 - 2,84);
+		}
+		function drawRightDown(){
+			$("#rightWanLink").hide();
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 373, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(label.wan2PhyErr, 393 + 2,84);
+		}
+		function drawLeftConnecting(){
+			$("#leftWanLink").hide();
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 392, 20, 20, 351, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(statusStr.connting, 361 - getWanTextWidth(statusStr.connting) - 10 - 2,84);
+		}
+		function drawRightConnecting(){
+			$("#rightWanLink").hide();
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 392, 20, 20, 373, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(statusStr.connting, 393 + 2,84);
+		}
+		function drawLeftWanError(wanName,errStr){
+			drawWanText(wanName, canvasCloud.width / 2 - 11 - 13 - getWanTextWidth(wanName), 70);
+			drawWanText(errStr,canvasCloud.width / 2 - 11 -13 - getWanTextWidth(errStr), 88);
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 351, 72, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			$("#leftWanLink").show();
+		}
+		function drawRightWanError(wanName,errStr){
+			drawWanText(wanName, canvasCloud.width / 2 + 11 + 13, 70);
+			drawWanText(errStr,canvasCloud.width / 2 + 11 + 13, 88);
+			$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 373, 72, 20, 20);}, DRAW_IMAGE_WAITTIME);
+			$("#rightWanLink").show();
+		}
+		function getWanTextWidth(text){
+			var result = -1;
+			context.save();
+			context.font = "12px 微软雅黑, 宋体, Arial";
+			result = context.measureText(text).width;
+			context.restore();
+			return result;
+		}
+		function drawLeftWanInfo(wanName,upSpeed,downSpeed) {
+			drawWanText(wanName, canvasCloud.width / 2 - 11 - 13 - getWanTextWidth(wanName), 70);
+			$.setTimeout(function(){context.drawImage(routerBg, 283, 199, 20, 20, 337, 80, 10, 10);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(upSpeed, 337 - 6 - getWanTextWidth(upSpeed), 88);
+			$.setTimeout(function(){context.drawImage(routerBg, 260, 199, 20, 20, 337, 98, 10, 10);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(downSpeed, 337 - 6 - getWanTextWidth(downSpeed), 106);
+			$("#leftWanLink").hide();
+		}
+		function drawRightWanInfo(wanName,upSpeed,downSpeed){
+			drawWanText(wanName, canvasCloud.width / 2 + 11 + 13, 70);
+			$.setTimeout(function(){context.drawImage(routerBg, 283, 199, 20, 20, 396, 80, 10, 10);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(upSpeed, 396 + 10 + 6, 88);
+			$.setTimeout(function(){context.drawImage(routerBg, 260, 199, 20, 20, 396, 98, 10, 10);}, DRAW_IMAGE_WAITTIME);
+			drawWanText(downSpeed, 396 + 10 + 6, 106);
+			$("#rightWanLink").hide();
+		}
+		function drawLeftWan(code,upSpeed,downSpeed){
+			context.clearRect(0, cloudImg.height + 8, canvasContainerWidth/2, 60);
+			if (LINK_UP == code) {
+				// drawLine();
+				drawLeftLine();
+				if (!isHnatOpen) {
+					drawLeftWanInfo("WAN1",upSpeed,downSpeed);
+				}
+			} else {
+				drawLeftDashLine();
+			}
+			if (LINKING_UP == code) {
+				drawLeftConnecting();
+			}
+			if (LINKING_DOWN == code) {
+				drawLeftConnecting();
+			}
+			if (LINK_CODE_AUTH_ERR == code || LINK_DOWN_EXPT == code) {
+				// draw disconnect icon
+				drawLeftWanError("WAN1",errStr.linkNoEcho)
+			}
+			if (LINK_DOWN == code) {
+				drawLeftDown();
+			}
+		}
+		function drawRightWan(code,upSpeed,downSpeed){
+			context.clearRect(canvasContainerWidth/2, cloudImg.height + 8, canvasContainerWidth/2, 60);
+			if (LINK_UP == code) {
+				// drawLine();
+				drawRightLine();
+				if (!isHnatOpen) {
+					drawRightWanInfo("WAN2",upSpeed,downSpeed);
+				}
+			} else {
+				drawRightDashLine();
+			}
+			if (LINKING_UP == code) {
+				drawRightConnecting();
+			}
+			if (LINKING_DOWN == code) {
+				drawRightConnecting();
+			}
+			if (LINK_CODE_AUTH_ERR == code || LINK_DOWN_EXPT == code) {
+				// draw disconnect icon
+				drawRightWanError("WAN2",errStr.linkNoEcho)
+			}
+			if (LINK_DOWN == code) {
+				drawRightDown();
+			}
+		}
+
+		function drawWan(code, upSpeed, downSpeed) {
+			context.clearRect(0, cloudImg.height + 8, canvasContainerWidth, 60);
+			if (LINK_UP == code) {
+				drawLine();
+
+				if (!isHnatOpen) {
+					//draw upload speed icon
+					$.setTimeout(function(){context.drawImage(routerBg, 283, 199, 20, 20, 382, 65, 10, 10);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(upSpeed, 395, 75);
+
+					//draw download speed icon
+					$.setTimeout(function(){context.drawImage(routerBg, 260, 199, 20, 20, 382, 82, 10, 10);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(downSpeed, 395, 91);
+				}
+			} else {
+				drawDashLine();
+			}
+			if (LINKING_UP == code) {
+				// draw connecting icon
+				$.setTimeout(function(){context.drawImage(routerBg, 334, 392, 20, 20, 362, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+				drawWanText(statusStr.connting, 395, 86);
+			}
+			if (LINKING_DOWN == code) {
+				// draw connecting icon
+				$.setTimeout(function(){context.drawImage(routerBg, 334, 392, 20, 20, 362, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+				drawWanText(statusStr.disconcting, 395, 86);
+			}
+			if (LINK_CODE_AUTH_ERR == code || LINK_DOWN_EXPT == code) {
+				// draw disconnect icon
+				$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+				var str = LINK_CODE_AUTH_ERR == code ? errStr.pppoeUserPwdErr : errStr.linkNoEcho;
+				drawWanText(str, 395, 76);
+				drawWanText(label.netSet + " >",395,96,"#FEEB1A");
+
+				gCvsEventData["click"]["wan"]["legal"] = true;
+				gCvsEventData["mousemove"]["wan"]["legal"] = true;
+				resetCvsEventHandle();
+			}
+			if (LINK_DOWN == code) {
+				// draw disconnect icon
+				$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 70, 20, 20);}, DRAW_IMAGE_WAITTIME);
+				drawWanText(statusStr.wanNetworkDown, 395, 86);
+			}
+		}
+
+		/* 设置WAN口的网络拓扑 */
+		function drawWanBasic(wanStatus,drawCallBack){
+			var code = parseInt(wanStatus[uciNetwork.optName.code]);
+			var status = parseInt(wanStatus[uciNetwork.optName.wanStatus]);
+			var phyStatus = parseInt(wanStatus[uciNetwork.optName.phyStatus]);
+			switch(status)
+			{
+				case LINK_DOWN:
+					if (0 == phyStatus)
+					{
+						code = LINK_CODE_PHYDOWN;
+					}
+
+					switch(code)
+					{
+						case LINK_CODE_PHYDOWN:
+							drawCallBack(LINK_DOWN);
+							break;
+						case LINK_CODE_AUTH_ERR:
+							drawCallBack(LINK_CODE_AUTH_ERR);
+							break;
+						case LINK_CODE_MANUAL:
+						case LINK_CODE_NORMAL:
+						case LINK_CODE_NOECHO:
+						case LINK_CODE_UNKNOWN:
+						case LINK_CODE_DENY:
+						case LINK_CODE_SRVDOWN:
+						case LINK_CODE_OPT_UNSUPPORT:
+						case LINK_CODE_AUTH_UNSUPPORT:
+						default:
+							drawCallBack(LINK_DOWN_EXPT);
+							break;
+					}
+					break;
+				case LINK_UP:
+					drawCallBack(LINK_UP,
+							netSpeedTransBasic(wanStatus[uciNetwork.optName.upSpeed]),
+							netSpeedTransBasic(wanStatus[uciNetwork.optName.downSpeed]));
+					break;
+				case LINKING_UP:
+					switch(code) {
+						case LINK_CODE_AUTH_ERR:
+							drawCallBack(LINK_CODE_AUTH_ERR);
+							break;
+						case LINK_CODE_NOECHO:
+						case LINK_CODE_UNKNOWN:
+						case LINK_CODE_DENY:
+						case LINK_CODE_SRVDOWN:
+						case LINK_CODE_OPT_UNSUPPORT:
+						case LINK_CODE_AUTH_UNSUPPORT:
+							drawCallBack(LINK_DOWN_EXPT);
+							break;
+						default:
+							drawCallBack(LINKING_UP);
+					}
+					break;
+				case LINKING_DOWN:
+					drawCallBack(LINKING_DOWN);
+					break;
+				default:
+					drawCallBack(LINK_DOWN);
+					break;
+			}
+		}
+		/* 设置WAN口的网络拓扑 */
+		function drawWanLinkStatus(wanStatus,location)
+		{
+			if(typeof location == "undefined"){
+				drawWanBasic(wanStatus,drawWan);
+			}else if(location=="left"){
+				drawWanBasic(wanStatus,drawLeftWan);
+			}else{
+				drawWanBasic(wanStatus,drawRightWan);
+			}
+		}
+
+		/* 查询设备的品牌信息 */
+		function bEptLinkBandSearch(item)
+		{
+			var bandArr = MacFactoryArr;
+			var len = bandArr.length - 2;
+			var macItem, taItem = bandArr[len + 1];
+			var mac = (item.mac).substring(0, 8).toUpperCase();
+			var re = /:/g;
+			var macStr;
+
+			mac = mac.replace(re, "-");
+			for (var i = 0; i < len; i++)
+			{
+				macItem = bandArr[i];
+
+				if (item[BLOCKED] == "0" && (undefined != (macStr = MacBrands[macItem.name])) && (macStr.indexOf(mac) >= 0))
+				{
+					taItem = macItem;
+					break;
+				}
+			}
+
+			item.posX = -taItem.posX;
+			item.posY = -taItem.posY;
+		}
+
+		function saveExtName(mac, name)
+		{
+			var reqData = {};
+			var argData = {};
+			reqData[uciPlc.fileName] = {};
+			reqData[uciPlc.fileName][uciPlc.actionName.setExtInfo] = argData;
+			argData[uciPlc.optName.mac] = mac;
+			argData[uciPlc.optName.name] = name;
+
+			showLoading("正在保存，请稍候...", undefined, undefined, false);
+			$.action(reqData);
+			$.setTimeout(function () {
+				closeLoading();
+			},2000);
+		}
+
+		function sceneClickHandler() {
+			var operation = $("#cldRtOperation");
+			if (operation.css("display") != "none") {
+				operation.hide();
+				isEditingName = false;
+			}
+		}
+
+		function saveCapName(name) {
+			var reqData = {};
+			var argData = {};
+			reqData[uciProto.fileName] = {};
+			reqData[uciProto.fileName][uciProto.secName.dhcp] = argData;
+			argData[uciProto.optName.hostName] = name;
+
+			showLoading("正在保存，请稍候...", undefined, undefined, false);
+			$.modify(reqData);
+			$.setTimeout(function () {
+				closeLoading();
+			},2000);
+		}
+
+		function showEditNamePopWindow(target) {
+			showCover(function (cover) {
+				var coverId = cover.id;
+				var cover$ = $("#" + coverId);
+				var con = id("Con");
+				var editNameCon, lbl, input, div, button, errorSpan, errorDiv;
+
+				cover$.css("opacity", 0.45);
+
+				div = el("div");
+				div.className = "editNameDiv";
+				con.appendChild(div);
+
+				editNameCon = el("div");
+				editNameCon.className = "editNameCon";
+				div.appendChild(editNameCon);
+
+				lbl = el("label");
+				lbl.innerHTML = label.equipName;
+				editNameCon.appendChild(lbl);
+
+				input = el("input");
+				input.id = "devNameInput";
+				input.value = target.text;
+				input.maxLength = NAME_MAX_LEN;
+				editNameCon.appendChild(input);
+
+				errorDiv = el("div");
+				errorDiv.className = "errorDiv";
+				editNameCon.appendChild(errorDiv);
+
+				errorSpan = el("span");
+				errorDiv.appendChild(errorSpan);
+
+				div = el("div");
+				editNameCon.appendChild(div);
+
+				button = el("button");
+				button.innerHTML = btn.save;
+				button.onclick = function () {
+					var name = id("devNameInput").value;
+					if (/[^0-9a-z_\-\u00b7\u4E00-\u9FFFF\s]/gi.test(name) == true)
+					{
+						errorDiv.style.display = "block";
+						errorSpan.innerHTML = errStr.hostNameErr;
+						return;
+					}
+					if (getCNStrLen(name) > NAME_MAX_LEN)
+					{
+						errorDiv.style.display = "block";
+						errorSpan.innerHTML = "设备名称最大长度为63个字符，一个中文字代表3个字符";
+						return;
+					}
+					if (name.length == 0) {
+						errorDiv.style.display = "block";
+						errorSpan.innerHTML = "设备名称不能为空";
+						return;
+					}
+					target.text = name;
+					if (target.mac === capMac) {
+						saveCapName(name);
+					} else {
+						saveExtName(target.mac, name);
+					}
+					hideCover(function () {
+						con.removeChild(editNameCon.parentNode);
+					});
+					isEditingName = false;
+				};
+
+				div.appendChild(button);
+
+				button = el("button");
+				button.innerHTML = btn.gridCancel;
+				button.className = "cancel";
+				button.onclick = function () {
+					hideCover(function () {
+						con.removeChild(editNameCon.parentNode);
+					});
+					isEditingName = false;
+				};
+				div.appendChild(button);
+			});
+		}
+
+		function nodeMouseover(event, text) {
+			var textTips = $("#nodeTextTips");
+			var top, left;
+			top = event.y + 154;
+			left = event.x + 16  + 120 > 745 ? event.x - 25 : event.x + 16;
+			textTips.css({
+				top: top,
+				left: left
+			}).show();
+			textTips[0].innerText = text;
+		}
+
+		function nodeMouseout() {
+			var textTips = $("#nodeTextTips");
+			textTips.hide();
+		}
+
+		function meshStaClick(event) {
+			var target = event.target;
+			if (null == target) return;
+
+			showConfirm(label.reorganizeNetworkTips, function(choose)
+			{
+				if (true == choose)
+				{
+					addChildRt(true);
+				}
+			}, btn.reorganizeNetwork, btn.notNow);
+		}
+
+		function nodeClick(event) {
+			var target = event.target;
+			if (null == target) return;
+			isEditingName = true;
+
+			if (capMac === target.mac) {
+				id("rebootCldRt").style.display = "none";
+				id("kickCldRt").style.display = "none";
+				id("resetCldRt").style.display = "none";
+				id("cldRtOperation").style.height = "26px";
+				id("editDevName").style.borderBottom = "none";
+			} else {
+				id("rebootCldRt").style.display = "block";
+				id("kickCldRt").style.display = "block";
+				id("resetCldRt").style.display = "block";
+				id("cldRtOperation").style.height = "104px";
+				id("editDevName").style.borderBottom = "solid 1px #F2F2F2";
+			}
+			var operation = $("#cldRtOperation");
+			operation.css({
+				top: target.y + 105,
+				left: target.x + target.width + 10
+			}).show();
+			id("editDevName").onclick = function () {
+				showEditNamePopWindow(target);
+				operation.hide();
+			};
+			id("rebootCldRt").onclick = function () {
+				rebootChildRoute(target.mac);
+				operation.hide();
+				isEditingName = false;
+			};
+			id("kickCldRt").onclick = function () {
+				disConnectChildRoute(target.mac);
+				operation.hide();
+				isEditingName = false;
+			};
+			id("resetCldRt").onclick = function () {
+				resetChildRoute(target.mac);
+				operation.hide();
+				isEditingName = false;
+			};
+		}
+		
+		function generateStaNode(sta) {
+			var node = new JTopo.Node(sta.hostname == "" ? label.anonymousHost : sta.hostname);
+			if (sta.is_mesh && sta.is_mesh == "1") {
+				node.isMeshSta = true;
+				node.setImagePosition(263, 318, 47, 41, 38, 33);
+				node.setSize(64,64);
+				node.onclick = meshStaClick;
+			} else if(sta.is_iptv && sta.is_iptv == "1"){
+				node.setImagePosition(206,358, 50, 50);
+				node.setSize(64,64);
+				node.showOperation = false;
+			} else {
+				bEptLinkBandSearch(sta);
+				node.setImagePosition(sta.posX, sta.posY, 50, 50);
+				node.setSize(64,64);
+				node.showOperation = false;
+			}
+			if (sta[TYPE] == epTypes.inet) {
+				node.setWifiImagePosition(355,308); //wired icon
+			} else {
+				node.setWifiImagePosition(334,329); //wireless strong icon
+			}
+			if(sta.is_iptv && sta.is_iptv == "1"){
+				node.setWifiImagePosition(355,308);
+			}
+			node.textOffsetY = 10;
+			node.mac = sta.mac;
+			node.blocked = sta.blocked;
+			node.up_limit = sta.up_limit;
+			node.down_limit = sta.down_limit;
+			node.onmouseover = nodeMouseover;
+			node.onmouseout = nodeMouseout;
+
+			return node;
+		}
+
+		function generateCldRtNode(cldRt) {
+			var node = new JTopo.Node(cldRt.name);
+			node.setImagePosition(263, 318, 47, 41, 38, 33);
+			node.setSize(64,64);
+			var sta_num = parseInt(cldRt.sta_num_host) + parseInt(cldRt.sta_num_guest);
+			sta_num = sta_num < 10 ? " " + sta_num : sta_num < 99 ? sta_num.toString() : "99+";
+			node.number = sta_num;
+			node.textOffsetY = 10;
+			node.mac = cldRt.mac;
+			node.onmouseover = nodeMouseover;
+			node.onmouseout = nodeMouseout;
+			node.onclick = nodeClick;
+			if (cldRt.uplink_type == 1) {
+				node.setWifiImagePosition(355,308); //wired icon
+			} else if (cldRt.uplink_type == 2){
+				var pos = getWifiImg(cldRt.rate);
+				node.setWifiImagePosition(pos.x,pos.y);
+			}
+
+			return node;
+		}
+
+		function generateMainRouterNode() {
+			var mainRouter = new JTopo.Node(capName);
+			mainRouter.setImagePosition(263, 318, 47, 41, 38, 33);
+			mainRouter.setBound((canvasCloud.width - 64) / 2,5,64,64);
+			mainRouter.mac = capMac;
+			mainRouter.textOffsetY = 10;
+			mainRouter.onclick = nodeClick;
+			mainRouter.onmouseover = nodeMouseover;
+			mainRouter.onmouseout = nodeMouseout;
+
+			return mainRouter;
+		}
+
+		function showLinkedDevice(deviceList) {
+			var staNum;
+			if (isEditingName) {
+				return;
+			}
+
+			if (null != singleCldRt) {
+				deviceList.unshift(singleCldRt);
+			}
+
+			scene.clear();
+
+			var mainRouter = generateMainRouterNode();
+			mainRouter.layout = {width:110, height: 52};
+			scene.add(mainRouter);
+
+			var deviceArr = [];
+			if (deviceList.length <= 6) {
+				staNum = (null != singleCldRt) ? deviceList.length - 1 : deviceList.length;
+				mainRouter.number = " " + staNum;
+				deviceArr = deviceList.slice(0, deviceList.length);
+				id("leftUnfoldBtn").style.display = "none";
+				id("rightUnfoldBtn").style.display = "none";
+				devIndex = 1;
+
+				if (deviceList.length == 5){
+					id("rightCldUnfoldBtn").style.left = "582px";
+					id("leftCldUnfoldBtn").style.left = "167px";
+				} else if (deviceList.length % 2 == 1 || deviceList.length == 6) {
+					id("rightCldUnfoldBtn").style.left = "582px";
+					id("leftCldUnfoldBtn").style.left = "142px";
+				} else {
+					id("rightCldUnfoldBtn").style.left = "527px";
+					id("leftCldUnfoldBtn").style.left = "92px";
+				}
+			} else {
+				staNum = (null != singleCldRt) ? deviceList.length - 1 : deviceList.length;
+				mainRouter.number = staNum < 10 ? " " + staNum : staNum < 99 ? staNum : "99+";
+				deviceArr.push(deviceList[0]);
+				var start;
+				if (devIndex + 4 >= deviceList.length) {
+					start =  deviceList.length - 5;
+					id("rightUnfoldBtn").style.display = "none";
+				} else {
+					start = devIndex;
+					id("rightUnfoldBtn").style.display = "block";
+				}
+				if (1 >= devIndex) {
+					id("leftUnfoldBtn").style.display = "none";
+				} else {
+					id("leftUnfoldBtn").style.display = "block";
+				}
+
+				if(cldRtSta != undefined && cldRtSta.length > 6){
+					id("rightCldUnfoldBtn").style.display = "block";
+					id("leftCldUnfoldBtn").style.display = "block";
+					id("rightCldUnfoldBtn").style.left = "582px";
+					id("leftCldUnfoldBtn").style.left = "142px";
+				} else {
+					id("rightCldUnfoldBtn").style.display = "none";
+					id("leftCldUnfoldBtn").style.display = "none";
+				}
+
+				for (var i = start; i < start + 4; ++i) {
+					deviceArr.push(deviceList[i]);
+				}
+				deviceArr.push(deviceList[deviceList.length-1]);
+			}
+
+			var node;
+			for (var i = 0; i < deviceArr.length; i++) {
+				if (undefined == deviceArr[i].parent_router) { //非子路由
+					node = generateStaNode(deviceArr[i]);
+				} else { //子路由
+					node = generateCldRtNode(deviceArr[i]);
+					node.layout = {width:110, height: 52};
+
+					var cldDeviceArr = [];
+					if (cldRtSta.length <= 6) {
+						cldDeviceArr = cldRtSta.slice(0, cldRtSta.length);
+						id("leftCldUnfoldBtn").style.display = "none";
+						id("rightCldUnfoldBtn").style.display = "none";
+						cldDevIndex = 1;
+					} else {
+						var cldStart;
+						cldDeviceArr.push(cldRtSta[0]);
+						if (cldDevIndex + 4 >= cldRtSta.length) {
+							cldStart =  cldRtSta.length - 5;
+							id("rightCldUnfoldBtn").style.display = "none";
+						} else {
+							cldStart = cldDevIndex;
+							id("rightCldUnfoldBtn").style.display = "block";
+						}
+						if (1 >= cldDevIndex) {
+							id("leftCldUnfoldBtn").style.display = "none";
+						} else {
+							id("leftCldUnfoldBtn").style.display = "block";
+						}
+
+						for (var j = cldStart; j < cldStart + 4; ++j) {
+							cldDeviceArr.push(cldRtSta[j]);
+						}
+						cldDeviceArr.push(cldRtSta[cldRtSta.length - 1]);
+					}
+
+					for (var j = 0; j < cldDeviceArr.length; ++j) {
+						var cldNode = generateStaNode(cldDeviceArr[j]);
+						scene.add(cldNode);
+
+						var link = new JTopo.FlexionalLink(node,cldNode);
+						if (0 === j || cldDeviceArr.length - 1 === j) {
+							link.roundLine = true;
+						}
+						scene.add(link);
+					}
+				}
+				scene.add(node);
+
+				var link = new JTopo.FlexionalLink(mainRouter,node);
+				if (0 === i || deviceArr.length - 1 === i) {
+					link.roundLine = true;
+				}
+				scene.add(link);
+			}
+
+			setTimeout(function () {
+				stage.repaint();
+			}, 100);
+
+			JTopo.layout.layoutNode(scene, mainRouter, true);
+		}
+
+		function getWifiImg(rate) {
+			var pos = {};
+			rate = parseInt(rate);
+
+			if (rate/1024/1024 >= 80) {
+				pos.x = 334;
+				pos.y = 329;
+				return pos;
+			} else {
+				pos.x = 355;
+				pos.y = 329;
+				return pos;
+			}
+		}
+
+		function isFreeRouter(item, cldList) {
+			var parentRouter = item.parent_router;
+			var len = cldList.length;
+
+			if ("00-00-00-00-00-00" === parentRouter) {
+				return true;
+			}
+			if (capMac.toUpperCase() == parentRouter) {
+				return false;
+			}
+			for (var i = 0; i < len; i++) {
+				if (parentRouter.toUpperCase() === cldList[i].mac.toUpperCase()) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		function isAllConnectedToCap(cldList) {
+			for (var i = 0; i < cldList.length; i++) {
+				if(capMac.toUpperCase() != cldList[i].parent_router){
+					return false;
+				}
+			}
+			return true;
+		}
+
+		function showLinkedCldRt()
+		{
+			if (isEditingName)
+			{
+				return;
+			}
+
+			var data = {};
+			data[uciPlc.fileName] = {};
+			data[uciPlc.fileName][KEY_TABLE] = [uciPlc.secType.connectedExt];
+			data[uciHostsInfo.fileName] = {};
+			data[uciHostsInfo.fileName][KEY_TABLE] = uciHostsInfo.dynData.online_host;
+			data[uciHostsInfo.fileName][KEY_NAME] = uciHostsInfo.dynData.capHostNum;
+
+			$.query(data, function(result){
+				if (ENONE == result.error_code) {
+					cldList = formatTableData(result["hyfi"]["connected_ext"]);
+					cldList.sort(function (pre, next) {
+						if (pre.mac > next.mac)
+						{
+							return 1;
+						}
+						else
+						{
+							return -1;
+						}
+					});
+
+					var tableData = formatTableData(result[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);
+					bEptFilterList(tableData);
+					var capMac;
+					addIPTVDevice(tableData,capMac,function(){
+						if (cldList.length <= 1) {
+							if (!bDrawSta) {
+								id("nodeTextTips").style.display = "none";
+								id("cldRtOperation").style.display = "none";
+								$("#addNewDevBtn").removeClass("disabled");
+								id("addNewDevBtn").onclick = addChildRt;
+								devIndex = 1;
+							}
+							bDrawSta = true;
+
+							tableData.sort(
+									function(pre, next)
+									{
+										if (pre.is_iptv && pre.is_iptv == "1") {
+											return 1;
+										}
+										if (next.is_iptv && next.is_iptv == "1") {
+											return -1;
+										}
+										if (pre.is_mesh && pre.is_mesh == "1") {
+											return -1;
+										}
+										if (next.is_mesh && next.is_mesh == "1") {
+											return 1;
+										}
+
+										var ipPreArr = pre.ip.split(".");
+										var ipNextArr = next.ip.split(".");
+
+										for (var i = 0; i < 4; i++)
+										{
+											if (parseInt(ipPreArr[i], 10) == parseInt(ipNextArr[i], 10))
+											{
+												continue;
+											}
+
+											if (parseInt(ipPreArr[i], 10) > parseInt(ipNextArr[i], 10))
+											{
+												return 1;
+											}
+											else
+											{
+												return -1;
+											}
+										}
+
+										return 0;
+									}
+							);
+
+							if (1 == cldList.length) {
+								singleCldRt = cldList[0];
+								$.action({"hosts_info":{"get_ext_host":{"mac":singleCldRt.mac}}}, function (result) {
+									if (ENONE == result[ERR_CODE]) {
+										cldRtSta = formatTableData(result["hosts_info"]["get_ext_host"]);
+										cldRtSta.sort(
+												function(pre, next)
+												{
+													var ipPreArr = pre.ip.split(".");
+													var ipNextArr = next.ip.split(".");
+
+													for (var i = 0; i < 4; i++)
+													{
+														if (parseInt(ipPreArr[i], 10) == parseInt(ipNextArr[i], 10))
+														{
+															continue;
+														}
+
+														if (parseInt(ipPreArr[i], 10) > parseInt(ipNextArr[i], 10))
+														{
+															return 1;
+														}
+														else
+														{
+															return -1;
+														}
+													}
+
+													return 0;
+												}
+										);
+									}
+									addIPTVDevice(cldRtSta,singleCldRt.mac,function(){
+										if (cldRtSta.length > 0 ) {
+											if (canvasRouter.height != 550) {
+												canvasRouter.height = 550;
+											}
+										} else {
+											if (canvasRouter.height != 360) {
+												canvasRouter.height = 360;
+											}
+										}
+										var filterData = []; //过滤掉子路由上的设备
+										for (var j = 0; j < tableData.length; j++) {
+											var sameItem = false;
+											for (var i = 0; i < cldRtSta.length; i++) {
+												if (tableData[j].mac.toUpperCase() == cldRtSta[i].mac.toUpperCase()) {
+													sameItem = true;
+													break;
+												}
+											}
+											if (!sameItem || tableData[j].mac == "") {
+												filterData.push(tableData[j]);
+											}
+										}
+										showLinkedDevice(filterData);
+									});
+								});
+							} else {
+								if (canvasRouter.height != 360) {
+									canvasRouter.height = 360;
+								}
+								singleCldRt = null;
+								showLinkedDevice(tableData);
+							}
+
+							return;
+						}
+
+						if (bDrawSta) {
+							id("leftUnfoldBtn").style.display = "none";
+							id("rightUnfoldBtn").style.display = "none";
+							id("nodeTextTips").style.display = "none";
+							id("cldRtOperation").style.display = "none";
+							devIndex = 1;
+							bDrawSta = false;
+						}
+
+						scene.clear();
+
+						var nodeArr = [];
+						var mainRouter = generateMainRouterNode();
+						var capHostNum = result[uciHostsInfo.fileName][uciHostsInfo.dynData.capHostNum];
+						var totalNumber = capHostNum.host_num + capHostNum.guest_num
+						mainRouter.number = totalNumber < 10 ? " " + totalNumber : totalNumber < 99 ? totalNumber : "99+"
+						scene.add(mainRouter);
+						nodeArr.push(mainRouter);
+
+						if (cldList && cldList.length >= MAX_EXT_COUNT) {
+							$("#addNewDevBtn").addClass("disabled");
+							id("addNewDevBtn").onclick = null;
+						} else {
+							$("#addNewDevBtn").removeClass("disabled");
+							id("addNewDevBtn").onclick = addChildRt;
+						}
+
+						var cldNodeArr = [];
+						if (cldList.length <= 6) {
+							cldNodeArr = cldList.slice(0, cldList.length);
+							id("leftUnfoldBtn").style.display = "none";
+							id("rightUnfoldBtn").style.display = "none";
+						} else {
+							if (isAllConnectedToCap(cldList)) {
+								cldNodeArr.push(cldList[0]);
+								var start;
+								if (devIndex + 4 >= cldList.length) {
+									start =  cldList.length - 5;
+									id("rightUnfoldBtn").style.display = "none";
+								} else {
+									start = devIndex;
+									id("rightUnfoldBtn").style.display = "block";
+								}
+								if (1 >= devIndex) {
+									id("leftUnfoldBtn").style.display = "none";
+								} else {
+									id("leftUnfoldBtn").style.display = "block";
+								}
+
+								for (var i = start; i < start + 4; ++i) {
+									cldNodeArr.push(cldList[i]);
+								}
+								cldNodeArr.push(cldList[cldList.length-1]);
+							} else {
+								cldNodeArr = cldList.slice(0, cldList.length);
+								id("leftUnfoldBtn").style.display = "none";
+								id("rightUnfoldBtn").style.display = "none";
+							}
+						}
+
+						var nodes = {};
+						for (var i = 0; i < cldNodeArr.length; i++) {
+							if(isFreeRouter(cldNodeArr[i], cldNodeArr)) {continue;}
+							var node = generateCldRtNode(cldNodeArr[i]);
+							scene.add(node);
+							nodeArr.push(node);
+
+							var arr = nodes[cldNodeArr[i].parent_router];
+							if (null == arr) {
+								nodes[cldNodeArr[i].parent_router] = [];
+								nodes[cldNodeArr[i].parent_router].push(node);
+							} else {
+								arr.push(node);
+							}
+						}
+
+						for (var parent_mac in nodes) {
+							for (var i = 0; i < nodeArr.length; ++i) {
+								if (parent_mac == nodeArr[i].mac) {
+									for (var j = 0; j < nodes[parent_mac].length; j++) {
+										var link = new JTopo.FlexionalLink(nodeArr[i], nodes[parent_mac][j]);
+										if (0 === j || nodes[parent_mac].length - 1 === j) {
+											link.roundLine = true;
+										}
+										scene.add(link);
+									}
+								}
+							}
+						}
+
+						setTimeout(function () {
+							stage.repaint();
+						}, 100);
+
+						if (cldNodeArr.length > 0) {
+							scene.doLayout(JTopo.layout.TreeLayout(98,176));
+						}
+					});
+				}
+			});
+		}
+
+		function addIPTVDevice(tableData,reMac,callBack){
+			$.query({"port_manage":{"table":["dev_info"]}},function(res){
+				if(res.error_code == ENONE){
+					var deviceList = res["port_manage"]["dev_info"];
+					var phyInfoList = [];
+					var parentRouterMac = "";
+					if(typeof reMac == "undefined"){
+						// 主路由上是否存在IPTV设备
+						for(var i=0;i<deviceList.length;i++){
+							if(deviceList[i]["cap"] == "1"){
+								parentRouterMac = deviceList[i]["mac"];
+								phyInfoList = deviceList[i]["phy_info"];
+								break;
+							}
+						}
+					}else{
+						parentRouterMac = reMac;
+						for(var i=0;i<deviceList.length;i++){
+							if(deviceList[i]["mac"] == reMac){
+								phyInfoList = deviceList[i]["phy_info"];
+								break;
+							}
+						}
+					}
+					for(var i=0;i<phyInfoList.length;i++){
+						if(phyInfoList[i]["role"].slice(0,3).toUpperCase() == "DOW" && phyInfoList[i]["status"] == "1"){
+							var newIptvDevice = {
+								blocked: "0",
+								down_limit: "0",
+								down_speed: "0",
+								forbid_domain: "",
+								forbid_time: "",
+								hostname: "IPTV设备",
+								is_cur_host: "0",
+								is_mesh: "0",
+								limit_time: "",
+								mac: "",
+								plan_rule: [],
+								ssid: "",
+								type: "0",
+								up_limit: "0",
+								up_speed: "0",
+								wifi_mode: "0",
+								is_iptv: "1",
+								parent_mac: parentRouterMac,
+								port_index: i
+							}
+							tableData.push(newIptvDevice);
+						}
+					}
+					typeof callBack == "function" && callBack();
+				}
+			})
+		}
+
+		function topologyDrawStatus()
+		{
+			$.query(topoStatusQueryArg, function(ret){
+				topoStatusQueryCbk(ret);
+
+				/* 防止页面重载时重复获取数据 */
+				if (id(idStr) == null)
+				{
+					return;
+				}
+
+				$.setTimeout(topologyDrawStatus, LAN_WAN_STATUS_TIME);
+			});
+		}
+
+		function drawCloud() {
+			cloudImg = new Image();
+
+			cloudImg.src = "../web-static/images/cloud.png";
+			cloudImg.onload = function(){
+				$.setTimeout(function(){
+					context.drawImage(cloudImg, (canvasCloud.width - cloudImg.width) / 2, 8, 76, 46);
+				}, DRAW_IMAGE_WAITTIME);
+			};
+
+			context.save();
+			context.fillStyle = "#009188";
+			context.JTopoRoundRect((canvasCloud.width - 64) / 2, 115, 64, 64, 12);
+			context.fill();
+			context.restore();
+
+			context.drawImage(routerBg, 263, 318, 47, 41, (canvasCloud.width - 64) / 2 + (64 - 38 )/2, 115 + (64 - 33)/2, 38, 33);
+		}
+
+		function drawRouter() {
+			wdsImg = new Image();
+
+			wdsImg.src = "../web-static/images/ap_router.png";
+			wdsImg.onload = function(){
+				$.setTimeout(function(){
+					context.drawImage(wdsImg, (canvasCloud.width - wdsImg.width) / 2, 0, 64, 64);
+				}, DRAW_IMAGE_WAITTIME);
+			};
+
+			context.save();
+			context.fillStyle = "#009188";
+			context.JTopoRoundRect((canvasCloud.width - 64) / 2, 115, 64, 64, 12);
+			context.fill();
+			context.restore();
+
+			context.drawImage(routerBg, 263, 318, 47, 41, (canvasCloud.width - 64) / 2 + (64 - 38 )/2, 115 + (64 - 33)/2, 38, 33);
+		}
+
+		function drawAp(status) {
+			if (apStatus == status) {
+				return;
+			}
+
+			context.clearRect(0, wdsImg.height, canvasContainerWidth, 50);
+			apStatus = status;
+			switch(status) {
+				case "connecting":
+					drawDashLine();
+
+					$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(statusStr.relayConnecting, 395, 80);
+					break;
+				case "success":
+					drawLine();
+
+					$.setTimeout(function(){context.drawImage(routerBg, 354, 392, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(statusStr.relaySuccess, 395, 80);
+					break;
+			}
+
+			drawWanText(btn.wiredAP + " >",395,96,"#FEEB1A");
+			resetCvsEventHandle();
+		}
+
+		function drawWds(status) {
+			if (wdsStatus == status) {
+				if(status == 'connecting'){
+					context.clearRect(canvasCloud.width/2-2, 54, 4, 22);
+					context.clearRect(canvasCloud.width/2-2, 94, 4, 30);
+					setTimeout(function(){
+						drawDashLine();
+					},LINE_TWINKLE_TIME);
+				}
+				return;
+			}
+
+			context.clearRect(0, wdsImg.height, canvasContainerWidth, 50);
+
+			wdsStatus = status;
+			switch(status){
+				case "unfinished":
+					drawDashLine();
+
+					// draw disconnect icon
+					$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(gSysModeSupport ? statusStr.relayUnfinish : statusStr.wdsUnfinish, 395, 80);
+					break;
+				case "1":
+				case "connecting":
+					drawDashLine();
+
+					// draw connecting icon
+					$.setTimeout(function(){context.drawImage(routerBg, 334, 392, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(gSysModeSupport ? statusStr.relayConnecting : statusStr.wdsConnecting, 395, 80);
+					break;
+				case "0":
+				case "connect_fail":
+					drawDashLine();
+
+					// draw disconnect icon
+					$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(gSysModeSupport ? statusStr.relayFail : statusStr.wdsFail, 395, 80);
+					break;
+				case "2":
+				case "success":
+					drawLine();
+
+					// draw connected icon
+					$.setTimeout(function(){context.drawImage(routerBg, 354, 392, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					drawWanText(gSysModeSupport ? statusStr.relaySuccess : statusStr.wdsSuccess, 395, 80);
+					break;
+				case "idle":
+				default:
+					drawDashLine();
+					$.setTimeout(function(){context.drawImage(routerBg, 334, 413, 20, 20, 362, 75, 20, 20);}, DRAW_IMAGE_WAITTIME);
+					break;
+			}
+			drawWanText(gSysModeSupport ? btn.wirelessRepeater : btn.wds + " >",395,96,"#FEEB1A");
+			resetCvsEventHandle();
+		}
+
+		/* 桥模式下将获取的network LAN MAC + 1后即为出厂MAC */
+		function getFacMacUnderBridge()
+		{
+			var macInt = parseInt(capMac.replace(/-/g, ""), 16);
+			var facMacStr = (macInt + 1).toString(16).toUpperCase();
+			var facMacLen = facMacStr.length;
+			for (var i = 0; i < 12 - facMacLen; i++)
+			{
+				facMacStr = "0" + facMacStr;
+			}
+
+			var facMacStrArr = facMacStr.split("");
+			for (var i = 0; i < 5; i++)
+			{
+				facMacStrArr.splice(10 - 2 * i, 0, "-");
+			}
+			facMacStr = facMacStrArr.join("");
+
+			capMac = facMacStr;
+		}
+
+		//显示无线中继的状态
+		function drawWirelessRelayStatus() {
+			gCvsEventData["click"]["wan"]["legal"] = false;
+			gCvsEventData["mousemove"]["wan"]["legal"] = false;
+			gCvsEventData["click"]["ap"]["legal"] = false;
+			gCvsEventData["mousemove"]["ap"]["legal"] = false;
+			gCvsEventData["click"]["wds"]["legal"] = true;
+			gCvsEventData["mousemove"]["wds"]["legal"] = true;
+
+			canvasSupport && drawRouter();
+
+			var wdsCfgStatusArr = [];
+			var wlanWdsStatusArr = [];
+			var queryArg = {"protocol":{"name":"dhcp"}, "wireless":{}};
+			if (BAND_2 == gBandNum) {
+				wdsCfgStatusArr = ["wds_cfg_status_2g", "wds_cfg_status_5g"];
+				wlanWdsStatusArr = ["wlan_wds_2g_status", "wlan_wds_5g_status"];
+			} else {
+				wdsCfgStatusArr = ["wds_cfg_status_2g", "wds_cfg_status_5g_1", "wds_cfg_status_5g_4"];
+				wlanWdsStatusArr = ["wlan_wds_2g_status", "wlan_wds_5g_1_status", "wlan_wds_5g_4_status"];
+			}
+			queryArg.wireless.name = wdsCfgStatusArr.concat(wlanWdsStatusArr);
+
+			$.query(queryArg, function(result) {
+				capName = result.protocol.dhcp.hostname;
+
+				var IDLE = 0;
+				var FAIL = 1;
+				var SUCCESS = 2;
+				var CONNECTING = 3;
+				var UNFINISHED = 4;
+				var cfgStatus = IDLE;
+				var wlanWdsStatus = 0;
+				var finalStatus;
+				for (var i = 0; i < wdsCfgStatusArr.length; ++i) {
+					var status = result.wireless[wdsCfgStatusArr[i]].status;
+					switch (status) {
+						case "idle":
+							if (cfgStatus <= IDLE) {
+								cfgStatus = IDLE;
+								finalStatus = "idle";
+							}
+							break;
+						case "unfinished":
+							if (cfgStatus <= UNFINISHED) {
+								cfgStatus = UNFINISHED;
+								finalStatus = "unfinished";
+							}
+							break;
+						case "connecting":
+							if (cfgStatus <= CONNECTING) {
+								cfgStatus = CONNECTING;
+								finalStatus = "connecting";
+							}
+							break;
+						case "connect_fail":
+							if (cfgStatus <= FAIL) {
+								cfgStatus = FAIL;
+								finalStatus = "connect_fail";
+							}
+							break;
+						case "success":
+							if (cfgStatus <= SUCCESS) {
+								cfgStatus = SUCCESS;
+								finalStatus = "success";
+							}
+							var tmpStatus = result.wireless[wlanWdsStatusArr[i]].status;
+							if (tmpStatus > 2) { //tmpStatus等于3,4,5时，显示连接失败
+								tmpStatus = 0;
+							}
+							wlanWdsStatus = Math.max(wlanWdsStatus, tmpStatus);
+							break;
+					}
+				}
+
+				if (SUCCESS == cfgStatus) {
+					canvasSupport && drawWds(wlanWdsStatus.toString());
+				} else {
+					canvasSupport && drawWds(finalStatus);
+				}
+				showLinkedCldRt();
+			});
+
+			$("#netStateMbtn i").first().css('visibility', 'hidden');
+		}
+
+		function drawApStatus() {
+			gCvsEventData["click"]["wan"]["legal"] = false;
+			gCvsEventData["mousemove"]["wan"]["legal"] = false;
+			gCvsEventData["click"]["ap"]["legal"] = true;
+			gCvsEventData["mousemove"]["ap"]["legal"] = true;
+			gCvsEventData["click"]["wds"]["legal"] = false;
+			gCvsEventData["mousemove"]["wds"]["legal"] = false;
+
+			canvasSupport && drawRouter();
+
+			var queryArg = {"protocol":{"name":"dhcp"}, "wired_extender":{"name": "status"}};
+			$.query(queryArg, function(result) {
+				capName = result.protocol.dhcp.hostname;
+				if (result.wired_extender.status.state != 3) { //有线中继连接成功
+					canvasSupport && drawAp("connecting");
+				} else {
+					canvasSupport && drawAp("success");
+				}
+				showLinkedCldRt();
+			});
+			$("#netStateMbtn i").first().css('visibility', 'hidden');
+		}
+
+		//显示普通路由器的无线桥接状态
+		function drawNormalWdsStatus(wdsCfgStatus, wlanWdsStatus) {
+			gCvsEventData["click"]["wan"]["legal"] = false;
+			gCvsEventData["mousemove"]["wan"]["legal"] = false;
+			gCvsEventData["click"]["wds"]["legal"] = true;
+			gCvsEventData["mousemove"]["wds"]["legal"] = true;
+
+			canvasSupport && drawRouter();
+
+			$.query({"wireless":{"name":[wdsCfgStatus, wlanWdsStatus]},"protocol":{"name":"dhcp"}}, function(result) {
+				capName = result.protocol.dhcp.hostname;
+				var status = result.wireless[wdsCfgStatus].status;
+
+				if ("success" == status)
+				{
+					status = result.wireless[wlanWdsStatus].status;
+				}
+
+				canvasSupport && drawWds(status);
+				showLinkedCldRt();
+			});
+
+			$("#netStateMbtn i").first().css('visibility', 'hidden');
+		}
+
+		//显示双WAN口状态
+		function drawDualWanStatus() {
+			canvasSupport && drawCloud();
+
+			$.query({"network":{"name":["wan_status","wan_status_2"]},"protocol":{"name":"dhcp"}}, function(result){
+				if (false == compareObj(result.network.wan_status, wanLinkAttr1))
+				{
+					wanLinkAttr1 = result.network.wan_status;
+					canvasSupport && drawWanLinkStatus(wanLinkAttr1,"left");
+				}
+				else
+				{
+					if(result.network.wan_status['link_status'] == LINKING_UP)
+					{
+						context.clearRect(canvasCloud.width/2-2-11, 54, 4, 16);
+						context.clearRect(canvasCloud.width/2-2-11, 90, 4, 30);
+						setTimeout(function(){
+							drawLeftDashLine();
+						},LINE_TWINKLE_TIME);
+					}
+				}
+				if (false == compareObj(result.network.wan_status_2, wanLinkAttr2))
+				{
+					wanLinkAttr2 = result.network.wan_status_2;
+					canvasSupport && drawWanLinkStatus(wanLinkAttr2,"right");
+				}
+				else
+				{
+					if(result.network.wan_status_2['link_status'] == LINKING_UP)
+					{
+						context.clearRect(canvasCloud.width/2-2+11, 54, 4, 16);
+						context.clearRect(canvasCloud.width/2-2+11, 90, 4, 30);
+						setTimeout(function(){
+							drawRightDashLine();
+						},LINE_TWINKLE_TIME);
+					}
+				}
+				capName = result.protocol.dhcp.hostname;
+				showLinkedCldRt();
+			});
+			$("#netStateMbtn i").first().css('visibility', 'visible');
+		}
+
+		function drawNormalRouterStatus() {
+			gCvsEventData["click"]["wan"]["legal"] = true;
+			gCvsEventData["mousemove"]["wan"]["legal"] = true;
+			gCvsEventData["click"]["ap"]["legal"] = false;
+			gCvsEventData["mousemove"]["ap"]["legal"] = false;
+			gCvsEventData["click"]["wds"]["legal"] = false;
+			gCvsEventData["mousemove"]["wds"]["legal"] = false;
+
+			canvasSupport && drawCloud();
+
+			$.query({"network":{"name":["wan_status"]},"protocol":{"name":"dhcp"}}, function(result) {
+				if (false == compareObj(result.network.wan_status, wanLinkAttr))
+				{
+					wanLinkAttr = result.network.wan_status;
+					canvasSupport && drawWanLinkStatus(wanLinkAttr);
+				}
+				else
+				{
+					if(result.network.wan_status['link_status'] == LINKING_UP)
+					{
+						context.clearRect(canvasCloud.width/2-2, 54, 4, 16);
+						context.clearRect(canvasCloud.width/2-2, 90, 4, 30);
+						setTimeout(function(){
+							drawDashLine();
+						},LINE_TWINKLE_TIME);
+					}
+				}
+				capName = result.protocol.dhcp.hostname;
+
+				showLinkedCldRt();
+			});
+			$("#netStateMbtn i").first().css('visibility', 'visible');
+		}
+
+		function topologyInit()
+		{
+			routerBg = new Image();
+			routerBg.src = "../web-static/images/routerBg.png";
+
+			var arg = {"network":{"name":"lan"}};
+			$.query(arg, function(ret) {
+				capMac = ret.network.lan.macaddr.toUpperCase();
+
+				/* 桥模式下主路由的LAN MAC非出厂MAC，将导致错误 */
+				if (gModeSwitchSupport && bridgeMode == uciCustomNetwork.optValue.mode.bridge)
+				{
+					getFacMacUnderBridge();
+				}
+
+				var wlanWdsArr, wdsCfgStatusArr, wlanWdsStatusArr;;
+				var wdsCfgStatus, wlanWdsStatus;
+				if (BAND_2 == gBandNum) {
+					wlanWdsArr = ["wlan_wds_2g", "wlan_wds_5g"];
+					wdsCfgStatusArr = ["wds_cfg_status_2g", "wds_cfg_status_5g"];
+					wlanWdsStatusArr = ["wlan_wds_2g_status", "wlan_wds_5g_status"];
+				} else {
+					wlanWdsArr = ["wlan_wds_2g", "wlan_wds_5g_1", "wlan_wds_5g_4"];
+					wdsCfgStatusArr = ["wds_cfg_status_2g", "wds_cfg_status_5g_1", "wds_cfg_status_5g_4"];
+					wlanWdsStatusArr = ["wlan_wds_2g_status", "wlan_wds_5g_1_status", "wlan_wds_5g_4_status"];
+				}
+
+				topoStatusQueryArg.wireless = {"name":wlanWdsArr};
+				if (gSysModeSupport) {
+					topoStatusQueryArg.system = {"name":"sys_mode"};
+				}
+				if (gMulWanSupport) {
+					topoStatusQueryArg.port_manage = {"table":"mwan"};
+				}
+				topoStatusQueryCbk = function(result) {
+					var dualWanOpen = false;
+					var curSysMode = uciSystem.optValue.sysMode.routerMode;
+					var wdsEnable = false;
+
+					for (var i = 0; i < wlanWdsArr.length; ++i) {
+						if (1 == parseInt(result.wireless[wlanWdsArr[i]].enable)) {
+							wdsEnable = true;
+							wdsCfgStatus = wdsCfgStatusArr[i];
+							wlanWdsStatus = wlanWdsStatusArr[i];
+							break;
+						}
+					}
+
+					if (gSysModeSupport) {
+						curSysMode = result.system.sys_mode.mode;
+					}
+
+					if (gMulWanSupport) {
+						var wanNum = 2;
+						dualWanOpen = true;
+						for(var i=0; i<wanNum; i++){
+							if(result.port_manage.mwan[i]["mwan_"+(i+1)].enable == 0){
+								dualWanOpen = false;
+								break;
+							}
+						}
+					}
+
+					//wdsEnable为true时，显示无线桥接状态
+					//wdsEnable为true的情况：1.无线桥接开启；2.无线桥接流程未走完
+					if (wdsEnable) {
+						if (gSysModeSupport) {
+							drawWirelessRelayStatus();
+						} else {
+							drawNormalWdsStatus(wdsCfgStatus, wlanWdsStatus);
+						}
+					} else if (curSysMode == uciSystem.optValue.sysMode.apMode) {
+						drawApStatus();
+					} else {
+						if (dualWanOpen) {
+							drawDualWanStatus();
+						} else {
+							drawNormalRouterStatus();
+						}
+					}
+				};
+
+				topologyDrawStatus();
+			});
+		}
+
+		function bsConfigInit(data)
+		{
+			hostSwitchBs = new Switch("hostSwitchBs", parseInt(data[OPT_WIFI_ENABLE]),
+						function(state){
+							hostSwitchHd(state, SECN_WLAN_BS);
+						});
+			hostWifiNameBs.value = data[uciWireless.dynOptName.ssid];
+			hostWifiPwdBs.value = data[uciWireless.dynOptName.key];
+			hostSSIDBs = hostWifiNameBs.value;
+			hostPwdBs = hostWifiPwdBs.value;
+
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				if (gWifiSwitchSplit) {
+					if (wifiAllSwitch2GEnable != WIFI_STATE_ON && wifiAllSwitch5GEnable != WIFI_STATE_ON)
+					{
+						disableBSWifiSet(true);
+					}
+				} else {
+					if (wifiAllSwitchEnable != WIFI_STATE_ON)
+					{
+						disableBSWifiSet(true);
+					}
+				}
+			}
+
+			id("hostWifiSaveBs").onclick = function(){
+				var ssid = hostWifiNameBs.value;
+
+				replaceUnicodeBlank(hostWifiPwd);
+
+				if (hostSSIDBs != ssid || hostPwdBs != hostWifiPwdBs.value)
+				{
+					if (ssid.length == 0)
+					{
+						showAlert(errStr.wlanSsidErr, hostWifiNameBs);
+						hostWifiNameBs.value = hostSSIDBs;
+						hostWifiPwdBs.value = hostPwdBs;
+					}
+					else if (/^ +$/gi.test(ssid) == true)
+					{
+						showAlert(errStr.wlanSsidBlank, hostWifiNameBs);
+						hostWifiNameBs.value = hostSSIDBs;
+						hostWifiPwdBs.value = hostPwdBs;
+					}
+					else if (getCNStrLen(ssid) > 32)
+					{
+						showAlert(errStr.wlanSsidLenErr, hostWifiNameBs);
+						hostWifiNameBs.value = hostSSIDBs;
+						hostWifiPwdBs.value = hostPwdBs;
+					}
+					else
+					{
+						showConfirm(label.wifiSaveConfirmTip, function(result){
+							if (true == result)
+							{
+								applyWifiInterfaceCfg(hostWifiNameBs, hostWifiPwdBs, SECN_WLAN_BS, "hostWifiSaveBs");
+							}
+						});
+					}
+				}
+			};
+		}
+
+		function bsInfoInit()
+		{
+			var queryData = {};
+			queryData[WIFI_FILE] = {};
+			queryData[WIFI_FILE][KEY_NAME] = [SECN_WLAN_BS];
+
+			$.query(queryData, function(ret){
+				var bsConfig = ret[WIFI_FILE][SECN_WLAN_BS];
+				var bsEnable = bsConfig[OPT_BS_ENBALE];
+				gBsEnable = bsEnable == ENABLE;
+
+				if (gBsEnable)
+				{
+					id("bsDisableDiv").style.display = "none";
+					id("bsEnableDiv").style.display = "block";
+					bsConfigInit(bsConfig);
+					guestNet2gInit();
+					if (gGuest5GSupport) { guestNet5gInit(); }
+				}
+				else
+				{
+					id("bsDisableDiv").style.display = "block";
+					id("bsEnableDiv").style.display = "none";
+					netInit();
+				}
+
+				if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+					wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+				}
+			});
+		}
+
+		function getBridgeStatus(callback)
+		{
+			var data = {};
+			data[uciCustomNetwork.fileName] = {};
+			data[uciCustomNetwork.fileName][KEY_NAME] = uciCustomNetwork.dynData.bridgestatus;
+
+			$.query(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					bridgeMode = result[uciCustomNetwork.fileName][uciCustomNetwork.dynData.bridgestatus][uciCustomNetwork.optName.enable];
+					typeof callback == "function" && callback();
+				}
+			});
+		}
+
+		function displayInit() {
+			if (gSupportBS)
+			{
+				bsInfoInit();
+			}
+			else
+			{
+				id("bsDisableDiv").style.display = "block";
+				id("bsEnableDiv").style.display = "none";
+				if (gWifiSwitchSplit) {
+					net2GInit();
+					net5GInit();
+				} else {
+					netInit();
+				}
+
+				if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+					wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+				}
+			}
+		}
+
+		function getHnatInfo()
+		{
+			var reqData = {};
+			reqData[FILE_HNAT] = {};
+			reqData[FILE_HNAT][KEY_NAME] = [SEC_HNAT];
+
+			$.query(reqData, function(result){
+				if (ENONE == result[ERR_CODE]) {
+					isHnatOpen = result[FILE_HNAT][SEC_HNAT][KEY_ENABLE] == ENABLE;
+				}
+
+				displayInit();
+			});
+		}
+
+		function drawTopo()
+		{
+			try
+			{
+				var niceScroll = new NiceScroll("topoCon");
+				niceScroll.scrollTipOpacity(1);
+				niceScroll.scrollTipSet({"background":"#22A794"});
+				niceScroll.init();
+
+				if (canvasSupport) {
+					context = canvasCloud.getContext("2d");
+					canvasInit();
+				}
+				topologyInit();
+			}catch(ex){}
+		}
+
+		function initDualWanState(callBack){
+			if(gMulWanSupport){
+				$.query({"port_manage":{"table":"mwan"}},function(res){
+					var wanNum = 2;
+					for(var i=0; i<wanNum; i++){
+						if(res.port_manage.mwan[i]["mwan_"+(i+1)].enable == 0){
+							typeof callBack != "undefined" && callBack(false);
+							return;
+						}
+					}
+					typeof callBack != "undefined" && callBack(true);
+					return;
+				});
+			}else{
+				typeof callBack != "undefined" && callBack(false);
+			}
+		}
+		gBasicNetStateNiceScroll = new NiceScroll("netStateLCon");
+		gBasicNetStateNiceScroll.scrollTipOpacity(1);
+		gBasicNetStateNiceScroll.scrollTipSet({"background":"#1FA793"});
+		gBasicNetStateNiceScroll.init();
+
+		var idStr = "wifiLogo" + (new Date()).getTime();
+		$("i.wifiLogo")[0].id = idStr;
+
+		id("leftWanLink").onclick = function(){
+			linkToNetworkSet(1);
+		}
+		id("rightWanLink").onclick = function(){
+			linkToNetworkSet(2);
+		}
+
+		id("leftUnfoldBtn").onclick = function () {
+			devIndex -= 4;
+			devIndex = devIndex < 1 ? 1 : devIndex;
+			showLinkedCldRt();
+		};
+		id("rightUnfoldBtn").onclick = function () {
+			devIndex += 4;
+			showLinkedCldRt();
+		};
+		id("leftCldUnfoldBtn").onclick = function () {
+			cldDevIndex -= 4;
+			cldDevIndex = cldDevIndex < 1 ? 1 : cldDevIndex;
+			showLinkedCldRt();
+		};
+		id("rightCldUnfoldBtn").onclick = function () {
+			cldDevIndex += 4;
+			showLinkedCldRt();
+		};
+		if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+			if (gWifiSwitchSplit) {
+				$("#wifiSwitchSplit").removeClass("disNone");
+			} else {
+				$("#wifiSwitchUnity").removeClass("disNone");
+			}
+			wifiSwitchInit();
+			wifiStatusPollTimerHandle = $.setTimeout(wifiAllSwitchStateQuery, 0);
+		}
+		if (gModeSwitchSupport)
+		{
+			getBridgeStatus(function(){
+				if (gHnatSupport) {
+					getHnatInfo();
+				} else {
+					displayInit();
+				}
+				drawTopo();
+			});
+		}
+		else
+		{
+			if (gHnatSupport) {
+				getHnatInfo();
+			} else {
+				displayInit();
+			}
+			drawTopo();
+		}
+	}
+	init();
+</script>
 <div class="bConfL bConfLBC"></div>
 <div class="bConfR bConfRBC"></div>
 <div id="bConCnt">
@@ -177,102 +4411,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">function init(){function Q(a,b){var c="";switch(a){case ENONE:return!0;case EINVSSIDLEN:c=errStr.wlanSsidLenErr;break;case EINVSSIDEMPTY:c=errStr.wlanSsidErr;break;case EINVSSIDBLANK:c=errStr.wlanSsidBlank;break;case EWLANPWDBLANK:c=errStr.wlanPwdNull;break;case EINVPSKLEN:c=errStr.wlanPwdLenValid;break;case EINVWLANPWD:c=errStr.wlanPwdInvalid;break;case ESYSBUSY:c=errStr.invRequestFailTrylater;break;default:c=errStr.invRequestFail}showAlert(c,b);return!1}function xc(a){var b,c,f=0,m=0,fa=0,d=0,e;
-for(e in a){b=a[e];c=b[yc];if(0==c.length||"00-00-00-00-00-00"==c)break;b.type==R.wirelessH&&b[Ka]==R.wireless2G?f++:b.type==R.wirelessH&&b[Ka]==R.wireless5G?m++:b.type==R.wirelessG&&b[Ka]==R.wireless2G?fa++:b.type==R.wirelessG&&b[Ka]==R.wireless5G&&d++}zc.innerHTML=f+label.entry;Ac.innerHTML=m+label.entry;Bc.innerHTML=f+m+label.entry;Cc.innerHTML=fa+label.entry;Dc.innerHTML=d+label.entry}function h(a,b){var c=$("#"+a+" i.switchBg")[0],f=$("#"+a+" i.switchBall")[0];!0==b?(f.style.backgroundPosition=
-"-424px -52px",null!=c.onclick&&(f.oldOnMouseDown=f.onmousedown,c.oldOnClick=c.onclick,c.onclick=null,f.onmousedown=null)):(0<parseInt($(f).css("left"))?f.style.backgroundPosition="-441px -53px":f.style.backgroundPosition="-424px -52px",void 0!=c.oldOnClick&&null!=c.oldOnClick&&(c.onclick=c.oldOnClick),void 0!=f.oldOnMouseDown&&null!=f.oldOnMouseDown&&(f.onmousedown=f.oldOnMouseDown))}function Xa(a){disableInput("hostWifiName",a);disableInput("hostWifiPwd",a);disableBtn("hostWifiSave2G",a);h("hostSwitch",
-a)}function Ya(a){disableInput("hostWifiName5G",a);disableInput("hostWifiPwd5G",a);disableBtn("hostWifiSave5G",a);h("hostSwitch5G",a)}function ga(a){disableInput("hostWifiNameBs",a);disableInput("hostWifiPwdBs",a);disableBtn("hostWifiSaveBs",a);h("hostSwitchBs",a)}function Za(a){disableInput("guestWifiName",a);disableInput("guestWifiPwd",a);disableBtn("guestWifiSave",a);h("guestSwitch",a)}function $a(a){disableInput("guestWifiName5G",a);disableInput("guestWifiPwd5G",a);disableBtn("guestWifiSave5G",
-a);h("guestSwitch5G",a)}function Gb(a){Hb(a);Ib(a);ga(a)}function Hb(a){Xa(a);Za(a)}function Ib(a){Ya(a);$a(a)}function La(a){disableBtn("hostWifiSave2G",a);disableBtn("hostWifiSave5G",a);disableBtn("hostWifiSaveBs",a);disableBtn("guestWifiSave",a);disableBtn("guestWifiSave5G",a)}function Ca(){gWifiSwitchSupport||gCustomWifiSwitchSupport?gWifiSwitchSplit?(1==ha&&(h("hostSwitch",!1),h("guestSwitch",!1)),1==ia&&(h("hostSwitch5G",!1),h("guestSwitch5G",!1))):1==E&&(h("hostSwitch",!1),h("guestSwitch",
-!1),h("hostSwitch5G",!1),h("guestSwitch5G",!1),h("hostSwitchBs",!1)):(h("hostSwitch",!1),h("guestSwitch",!1),h("hostSwitch5G",!1),h("guestSwitch5G",!1),h("hostSwitchBs",!1))}function ja(a,b){var c={},f={};c[uciWireless.fileName]={};c[uciWireless.fileName][b]=f;b==B?f[ab]=a:f[uciWireless.dynOptName.enable]=a;$.modify(c,function(c){!1==Q(c[ERR_CODE])?b==w?(H.setState(1-a),ka.innerHTML=1-a==e?statusStr.opened:statusStr.closed):b==x?(I.setState(1-a),la.innerHTML=1-a==e?statusStr.opened:statusStr.closed):
-b==B&&(Y.setState(1-a),ma.innerHTML=1-a==e?statusStr.opened:statusStr.closed):(b==w?ka.innerHTML=a==e?statusStr.opened:statusStr.closed:b==x?la.innerHTML=a==e?statusStr.opened:statusStr.closed:b==B&&(ma.innerHTML=a==e?statusStr.opened:statusStr.closed),c.dfs_wait_time&&0!=c.dfs_wait_time&&showDFSPopUpWindow(void 0,parseInt(c.dfs_wait_time)));Ca();if(gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)},!0)}function Jb(a,b){var c={},f={},m;if(gWifiSwitchSupport&&gWifiSwitchUseWireless)m=
-C;else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)m=Da;c[m]={};c[m][Aa]=f;a==e?(uciCustomWireless.dynOptName.enable_2g==b?f[uciCustomWireless.dynOptName.enable_2g]="on":uciCustomWireless.dynOptName.enable_5g==b&&(f[uciCustomWireless.dynOptName.enable_5g]="on"),f[uciCustomWireless.dynOptName.enable]="on"):uciCustomWireless.dynOptName.enable_2g==b?f[uciCustomWireless.dynOptName.enable_2g]="off":uciCustomWireless.dynOptName.enable_5g==b?f[uciCustomWireless.dynOptName.enable_5g]=
-"off":uciCustomWireless.dynOptName.enable==b&&(f[uciCustomWireless.dynOptName.enable]="off");$.modify(c,function(c){!1==Q(c[ERR_CODE])?uciCustomWireless.dynOptName.enable_2g==b?(bb.setState(1-a),Ma.innerHTML=1-a==e?statusStr.opened:statusStr.closed):uciCustomWireless.dynOptName.enable_5g==b?(cb.setState(1-a),Na.innerHTML=1-a==e?statusStr.opened:statusStr.closed):uciCustomWireless.dynOptName.enable==b&&(Ea.setState(1-a),Fa.innerHTML=1-a==e?statusStr.opened:statusStr.closed):(uciCustomWireless.dynOptName.enable_2g==
-b?(Ma.innerHTML=a==e?statusStr.opened:statusStr.closed,ha=Ga=a,Hb(a==e?!1:!0),Ga==e||Ha==e?ga(!1):ga(!0)):uciCustomWireless.dynOptName.enable_5g==b?(Na.innerHTML=a==e?statusStr.opened:statusStr.closed,ia=Ha=a,Ib(a==e?!1:!0),Ga==e||Ha==e?ga(!1):ga(!0)):uciCustomWireless.dynOptName.enable==b&&(Fa.innerHTML=a==e?statusStr.opened:statusStr.closed,E=db=a,Gb(a==e?!1:!0),id("wifiSwitchOffTip").style.display=a==e?"none":"block"),void 0!=c.wait_time?(showLoading(label.savingCfg,void 0,void 0,!1),$.setTimeout(function(){closeLoading();
-c.dfs_wait_time&&0!=c.dfs_wait_time&&showDFSPopUpWindow(void 0,parseInt(c.dfs_wait_time))},1E3*parseInt(c.wait_time,10))):c.dfs_wait_time&&0!=c.dfs_wait_time&&showDFSPopUpWindow(void 0,parseInt(c.dfs_wait_time)),t=$.setTimeout(y,0))},!0)}function eb(a,b){if(uciCustomWireless.dynOptName.enable_2g==b){if(!0==Kb){Kb=!1;Ma.innerHTML=a==e?statusStr.opened:statusStr.closed;return}}else if(uciCustomWireless.dynOptName.enable_5g==b){if(!0==Lb){Lb=!1;Na.innerHTML=a==e?statusStr.opened:statusStr.closed;return}}else if(uciCustomWireless.dynOptName.enable==
-b){if(!0==Mb){Mb=!1;Fa.innerHTML=a==e?statusStr.opened:statusStr.closed;return}}else return;a!=e?showConfirm(label.closeDirect,function(c){!0==c?Jb(a,b):(uciCustomWireless.dynOptName.enable_2g==b?(bb.setState(e),Ma.innerHTML=statusStr.opened):uciCustomWireless.dynOptName.enable_5g==b?(cb.setState(e),Na.innerHTML=statusStr.opened):uciCustomWireless.dynOptName.enable==b&&(Ea.setState(e),Fa.innerHTML=statusStr.opened),t=$.setTimeout(y,0))}):Jb(a,b)}function Nb(a,b){h("hostSwitch",!0);h("hostSwitch5G",
-!0);h("hostSwitchBs",!0);h("guestSwitch",!0);h("guestSwitch5G",!0);a!=e?(fb[uciHostsInfo.fileName]={},fb[uciHostsInfo.fileName][KEY_TABLE]=uciHostsInfo.dynData.host_info,$.query(fb,function(c){if(ENONE==c[ERR_CODE]){c=formatTableData(c[uciHostsInfo.fileName][uciHostsInfo.dynData.host_info]);var f,m;for(m in c)if(f=c[m],f[uciHostsInfo.optName.mac].toUpperCase()==g_cur_host_mac.toUpperCase()){f[uciHostsInfo.optName.type]==uciHostsInfo.optValue.linkType.hostWireless?b==w&&f[uciHostsInfo.optName.wifiMode]==
-uciHostsInfo.optValue.wifiMode.h2G?showConfirm(label.wirelessSwitchTip,function(c){if(!0==c)ja(a,b);else if(H.setState(e),ka.innerHTML=statusStr.opened,Ca(),gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)}):b==x&&f[uciHostsInfo.optName.wifiMode]==uciHostsInfo.optValue.wifiMode.h5G?showConfirm(label.wirelessSwitchTip,function(c){if(!0==c)ja(a,b);else if(I.setState(e),la.innerHTML=statusStr.opened,Ca(),gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)}):b==Ec?showConfirm(label.wirelessSwitchTip,
-function(c){if(!0==c)ja(a,b);else if(Y.setState(e),ma.innerHTML=statusStr.opened,Ca(),gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)}):ja(a,b):ja(a,b);break}}})):ja(a,b)}function Fc(a){var b={};b[uciWireless.fileName]={};b[uciWireless.fileName][KEY_NAME]=[gb,hb];$.query(b,function(b){ENONE==b[ERR_CODE]?a(b[uciWireless.fileName]):Q(b[ERR_CODE])})}function ib(a,b){function c(a,b){Fc(function(c){var f=!1;0==a&&(b!=B||uciWireless.dynOptValue.enable.on!=c[gb][uciWireless.dynOptName.enable]&&
-uciWireless.dynOptValue.enable.on!=c[hb][uciWireless.dynOptName.enable]?b==w&&uciWireless.dynOptValue.enable.on==c[gb][uciWireless.dynOptName.enable]?f=!0:b==x&&uciWireless.dynOptValue.enable.on==c[hb][uciWireless.dynOptName.enable]&&(f=!0):f=!0);f?showConfirm(gSysModeSupport?label.wirelessSwitchTipForWDS1:label.wirelessSwitchTipForWDS,function(c){if(!0==c)Nb(a,b);else if(b==w?(H.setState(1-a),ka.innerHTML=a==e?statusStr.closed:statusStr.opened):b==x?(I.setState(1-a),la.innerHTML=a==e?statusStr.closed:
-statusStr.opened):b==B&&(Y.setState(1-a),ma.innerHTML=a==e?statusStr.closed:statusStr.opened),gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)}):Nb(a,b)})}var f=!1,m;if(b==w){if(!0==Ob){Ob=!1;ka.innerHTML=a==e?statusStr.opened:statusStr.closed;return}m=label.close2G4Passive;a!=e&&(f=gGuest5GSupport?I.state!=e&&F.state!=e&&S.state!=e:I.state!=e&&F.state!=e)}else if(b==x){if(!0==Pb){Pb=!1;la.innerHTML=a==e?statusStr.opened:statusStr.closed;return}m=label.close5GPassive;a!=e&&(f=gGuest5GSupport?
-H.state!=e&&F.state!=e&&S.state!=e:H.state!=e&&F.state!=e)}else{if(!0==Qb){Qb=!1;ma.innerHTML=a==e?statusStr.opened:statusStr.closed;return}m=label.closeHostPassive;a!=e&&(f=gGuest5GSupport?F.state!=e&&S.state!=e:F.state!=e)}gWifiSwitchSupport||gCustomWifiSwitchSupport?(clearTimeout(t),f?showConfirm(m,function(c){!0==c?ja(a,b):(b==w?(H.setState(e),ka.innerHTML=statusStr.opened):b==x?(I.setState(e),la.innerHTML=statusStr.opened):(Y.setState(e),ma.innerHTML=statusStr.opened),t=$.setTimeout(y,0))}):
-c(a,b)):c(a,b)}function jb(a,b,c,f){var m={},d={},e=a.value,g=b.value;m[uciWireless.fileName]={};m[uciWireless.fileName][c]=d;d[uciWireless.dynOptName.ssid]=e;d[uciWireless.dynOptName.key]=g;d[uciWireless.dynOptName.encryption]=0<g.length?uciWireless.dynOptValue.encryption.on:uciWireless.dynOptValue.encryption.off;La(!0);setLoadingId(f,IMG_HS_LOADING_GREEN);hsLoading(!0);$.modify(m,function(f){var m=f[ERR_CODE],d=0;if(ENONE==m)c==w?(na=e,oa=g):c==x?(pa=e,qa=g):c==B&&(ra=e,sa=g),f.dfs_wait_time&&0!=
-f.dfs_wait_time&&showDFSPopUpWindow(void 0,parseInt(f.dfs_wait_time)),d=1E3*parseInt(f.time_out,10);else{var fa=f="";c==w?(f=na,fa=oa):c==x?(f=pa,fa=qa):c==B&&(f=ra,fa=sa);a.value=f;b.value=fa;Q(m)}$.setTimeout(function(){La(!1);hsLoading(!1)},d)},!0)}function kb(a,b){var c={},f={},m,d;m=b==s?F:S;d=b==s?Oa:Pa;c[D]={};c[D][b]=f;f[uciGuestNet.optName.enable]=a.toString();h("hostSwitch",!0);h("hostSwitch5G",!0);h("hostSwitchBs",!0);h("guestSwitch",!0);h("guestSwitch5G",!0);$.modify(c,function(b){!1==
-Q(b[ERR_CODE])?(m.setState(1-a),d.innerHTML=1-a==e?statusStr.opened:statusStr.closed):d.innerHTML=a==e?statusStr.opened:statusStr.closed;Ca();if(gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)})}function Rb(a,b,c,f){var m={},d={},e=a.value,g=b.value;m[D]={};m[D][c]=d;d[uciGuestNet.optName.ssid]=e;d[uciGuestNet.optName.key]=g;d[uciGuestNet.optName.encrypt]=(0<g.length?uciGuestNet.dynOptValue.encryption.on:uciGuestNet.dynOptValue.encryption.off).toString();La(!0);setLoadingId(f,IMG_HS_LOADING_GREEN);
-hsLoading(!0);$.modify(m,function(f){f=f[ERR_CODE];if(ENONE==f)c==s?(ta=e,ua=g):c==T&&(va=e,wa=g);else{var m="",d="";c==s?(m=ta,d=ua):c==T&&(m=va,d=wa);a.value=m;b.value=d;Q(f)}La(!1);hsLoading(!1)})}function Sb(a,b){var c,f,m=1-e,d;c=b==s?Tb:Ub;f=b==s?Oa:Pa;!0==c?(b==s?Tb=!1:b==T&&(Ub=!1),f.innerHTML=a==e?statusStr.opened:statusStr.closed):gWifiSwitchSupport||gCustomWifiSwitchSupport?(clearTimeout(t),gGuest5GSupport&&(m=b==s?S.state:F.state),a!=e&&(Ia&&Y.state!=e&&m!=e?d=gGuest5GSupport?b==s?"由于主人网络和5G访客网络已关闭，此时关闭2.4G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":
-"由于主人网络和2.4G访客网络已关闭，此时关闭5G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":label.closeGuest2Passive:Ia||H.state==e||I.state==e||m==e||(d=gGuest5GSupport?b==s?"由于2.4G网络、5G网络和5G访客网络已关闭，此时关闭2.4G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":"由于2.4G网络、5G网络和2.4G访客网络已关闭，此时关闭5G访客网络，意味着关闭无线总开关，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":label.closeGuest1Passive)),void 0!=d?showConfirm(d,function(c){!0==c?kb(a,b):(b==s?(F.setState(e),Oa.innerHTML=statusStr.opened):(S.setState(e),Pa.innerHTML=statusStr.opened),t=$.setTimeout(y,
-0))}):kb(a,b)):kb(a,b)}function Gc(){var a={};a[uciFunction.fileName]={};a[uciFunction.fileName][KEY_NAME]="new_module_spec";$.query(a,function(a){Q(a[ERR_CODE])&&(lb=a[uciFunction.fileName].new_module_spec.guest_dyn_encrypt==Qa?Qa:Hc)},!1)}function Ic(){var a={},b;if(gWifiSwitchSupport&&gWifiSwitchUseWireless)b=C;else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)b=Da;a[b]={};a[b][KEY_NAME]=[Aa];$.query(a,function(a){ENONE==a[ERR_CODE]&&(a=a[b][Aa],gWifiSwitchSplit?(ha=
-"on"==a[uciCustomWireless.dynOptName.enable]&&"on"==a[uciCustomWireless.dynOptName.enable_2g]?"1":"0",ia="on"==a[uciCustomWireless.dynOptName.enable]&&"on"==a[uciCustomWireless.dynOptName.enable_5g]?"1":"0",Ga=ha,Ha=ia,bb=new Switch("wifiAllSwitch2G",Ga,function(){return function(a){eb(a,uciCustomWireless.dynOptName.enable_2g)}}()),cb=new Switch("wifiAllSwitch5G",Ha,function(){return function(a){eb(a,uciCustomWireless.dynOptName.enable_5g)}}())):(db=E="on"==a[uciCustomWireless.dynOptName.enable]?
-"1":"0",Ea=new Switch("wifiAllSwitch",db,function(){return function(a){eb(a,uciCustomWireless.dynOptName.enable)}}())))})}function Jc(a){var b={},c="";b[C]={};b[C][KEY_NAME]=Ia?[B]:[w,x];b[D]={};b[D][KEY_NAME]=gGuest5GSupport?[s,T]:s;if(gWifiSwitchSupport&&gWifiSwitchUseWireless)c=C,b[C][KEY_NAME].push(Aa);else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)c=Da,b[Da]={},b[Da][KEY_NAME]=[Aa];$.query(b,function(b){b[ERR_CODE]==ENONE&&a(b[C],b[D],b[c])})}function y(){clearTimeout(t);
-Jc(function(a,b,c){E=c[Aa][uciCustomWireless.dynOptName.enable]==uciCustomWireless.optValue.wifiSwitch.enable.on?"1":"0";c=parseInt(b[s][uciGuestNet.optName.enable]);var f;gGuest5GSupport&&(f=parseInt(b[T][uciGuestNet.optName.enable]));Ia?(a=parseInt(a[B][ab]),"undefined"!=typeof Y&&Y.setState(a),ma.innerHTML=a==e?statusStr.opened:statusStr.closed):(b=parseInt(a[w][uciWireless.dynOptName.enable]),a=parseInt(a[x][uciWireless.dynOptName.enable]),"undefined"!=typeof H&&H.setState(b),ka.innerHTML=b==
-e?statusStr.opened:statusStr.closed,"undefined"!=typeof I&&I.setState(a),la.innerHTML=a==e?statusStr.opened:statusStr.closed);"undefined"!=typeof F&&F.setState(c);Oa.innerHTML=c==e?statusStr.opened:statusStr.closed;gGuest5GSupport&&("undefined"!=typeof S&&S.setState(f),Pa.innerHTML=f==e?statusStr.opened:statusStr.closed);"undefined"!=typeof Ea&&Ea.setState(E);Fa.innerHTML=E==e?statusStr.opened:statusStr.closed;f=E!=e;Gb(f);id("wifiSwitchOffTip").style.display=f?"block":"none";t=$.setTimeout(y,Kc)})}
-function mb(){var a={};a[D]={};a[D][KEY_NAME]=s;Gc();$.query(a,function(a){if(ENONE==a[ERR_CODE]){if(Lc.style.display="block",gGuest5GSupport||$("#netStateGuestNet li.bottom").attr("class",""),a=a[D][s],a[uciGuestNet.optName.key]||(a[uciGuestNet.optName.key]=""),F=new Switch("guestSwitch",parseInt(a[uciGuestNet.optName.enable]),function(){return function(a){Sb(a,s)}}()),J.value=a[uciGuestNet.optName.ssid],K.value=uciGuestNet.dynOptValue.encryption.off==a[uciGuestNet.optName.encrypt]?"":a[uciGuestNet.optName.key],
-ta=J.value,ua=K.value,lb==Qa&&K.setAttribute("readonly","readonly"),gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchSplit?ha!=e&&Za(!0):E!=e&&Za(!0)}else $("#netStateHostNet li.bottom").attr("class","")});id("guestWifiSave").onclick=function(){var a=J.value;replaceUnicodeBlank(K);if(ta!=a||ua!=K.value)0==a.length?(showAlert(errStr.wlanSsidErr,J),J.value=ta,K.value=ua):!0==/^ +$/gi.test(a)?(showAlert(errStr.wlanSsidBlank,J),J.value=ta,K.value=ua):32<getCNStrLen(a)?(showAlert(errStr.wlanSsidLenErr,
-J),J.value=ta,K.value=ua):Rb(J,K,s,"guestWifiSave")}}function Vb(){var a={};a[D]={};a[D][KEY_NAME]=T;$.query(a,function(a){if(ENONE==a[ERR_CODE]){if(Mc.style.display="block",$("#netStateGuestNet5G li.bottom").attr("class",""),a=a[D][T],a[uciGuestNet.optName.key]||(a[uciGuestNet.optName.key]=""),S=new Switch("guestSwitch5G",parseInt(a[uciGuestNet.optName.enable]),function(){return function(a){Sb(a,T)}}()),L.value=a[uciGuestNet.optName.ssid],Z.value=uciGuestNet.dynOptValue.encryption.on==parseInt(a[uciGuestNet.optName.encrypt])?
-a[uciGuestNet.optName.key]:"",va=L.value,wa=Z.value,lb==Qa&&K.setAttribute("readonly","readonly"),gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchSplit?ia!=e&&$a(!0):E!=e&&$a(!0)}else $("#netStateGuestNet li.bottom").attr("class","")});id("guestWifiSave5G").onclick=function(){var a=L.value;replaceUnicodeBlank(Z);if(va!=a||wa!=Z.value)0==a.length?(showAlert(errStr.wlanSsidErr,L),L.value=va,Z.value=wa):!0==/^ +$/gi.test(a)?(showAlert(errStr.wlanSsidBlank,L),L.value=va,Z.value=wa):32<getCNStrLen(a)?
-(showAlert(errStr.wlanSsidLenErr,L),L.value=va,Z.value=wa):Rb(L,Z,T,"guestWifiSave5G")}}function nb(){var a={};a[C]={};a[C][KEY_NAME]=[w];$.query(a,function(a){ENONE==a[ERR_CODE]&&(a=a[C][w],H=new Switch("hostSwitch",parseInt(a[uciWireless.dynOptName.enable]),function(){return function(a){ib(a,w)}}()),M.value=a[uciWireless.dynOptName.ssid],U.value=a[uciWireless.dynOptName.key],na=M.value,oa=U.value,gWifiSwitchSupport||gCustomWifiSwitchSupport)&&(gWifiSwitchSplit?ha!=e&&Xa(!0):E!=e&&Xa(!0))});id("hostWifiSave2G").onclick=
-function(){var a=M.value;replaceUnicodeBlank(U);if(na!=a||oa!=U.value)0==a.length?(showAlert(errStr.wlanSsidErr,M),M.value=na,U.value=oa):!0==/^ +$/gi.test(a)?(showAlert(errStr.wlanSsidBlank,M),M.value=na,U.value=oa):32<getCNStrLen(a)?(showAlert(errStr.wlanSsidLenErr,M),M.value=na,U.value=oa):showConfirm(label.wifiSaveConfirmTip,function(a){!0==a&&jb(M,U,w,"hostWifiSave2G")})}}function ob(){var a={};a[C]={};a[C][KEY_NAME]=[x];$.query(a,function(a){ENONE==a[ERR_CODE]&&(a=a[C][x],I=new Switch("hostSwitch5G",
-parseInt(a[uciWireless.dynOptName.enable]),function(){return function(a){ib(a,x)}}()),N.value=a[uciWireless.dynOptName.ssid],aa.value=a[uciWireless.dynOptName.key]?a[uciWireless.dynOptName.key]:"",pa=N.value,qa=aa.value,gWifiSwitchSupport||gCustomWifiSwitchSupport)&&(gWifiSwitchSplit?ia!=e&&Ya(!0):E!=e&&Ya(!0))});id("hostWifiSave5G").onclick=function(){var a=N.value;replaceUnicodeBlank(aa);if(pa!=a||qa!=aa.value)0==a.length?(showAlert(errStr.wlanSsidErr,N),N.value=pa,aa.value=qa):!0==/^ +$/gi.test(a)?
-(showAlert(errStr.wlanSsidBlank,N),N.value=pa,aa.value=qa):32<getCNStrLen(a)?(showAlert(errStr.wlanSsidLenErr,N),N.value=pa,aa.value=qa):showConfirm(label.wifiSaveConfirmTip,function(a){!0==a&&jb(N,aa,x,"hostWifiSave5G")})}}function Wb(a){showCover(function(b){b=$("#"+b.id);var c=id("Con"),f,d;b.css("opacity",0.7);d=el("div");d.className="resultDiv";c.appendChild(d);b=el("div");b.className="resultCon";d.appendChild(b);f=el("i");f.className="alertImg";b.appendChild(f);f=el("p");f.className="detail";
-f.innerHTML=a;b.appendChild(f);$.setTimeout(function(){hideCover(function(){c.removeChild(d)})},2E3)})}function Nc(a){showConfirm(label.rebootConfirm,function(b){!0==b&&(b={},b[uciPlc.fileName]={},b[uciPlc.fileName][uciPlc.actionName.rebootExt]={},b[uciPlc.fileName][uciPlc.actionName.rebootExt][uciPlc.optName.mac]=a,$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,statusStr.rebootingChildRt,function(){closeProgBar()},!0,statusStr.rebootChildRtTip)):showAlert(statusStr.rebootRouterFail)}))})}
-function Oc(a){showConfirm(label.resetConfirm,function(b){!0==b&&(b={},b[uciPlc.fileName]={},b[uciPlc.fileName][uciPlc.actionName.resetExt]={},b[uciPlc.fileName][uciPlc.actionName.resetExt][uciPlc.optName.mac]=a,$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,label.resetingChildRt,function(){closeProgBar()},!0,statusStr.resetChildRtTip)):showAlert(statusStr.resetRouterFail)}))})}function Pc(a){function b(){var b={};b[uciPlc.fileName]={};b[uciPlc.fileName][uciPlc.actionName.kickExt]=
-{};b[uciPlc.fileName][uciPlc.actionName.kickExt][uciPlc.optName.mac]=a;showLoading(statusStr.disconcting,void 0,void 0,!1);$.action(b,function(a){ENONE==a[ERR_CODE]?(c?$.setTimeout(function(){closeLoading();Wb("设备已断开，正在自动组网")},1E3):$.setTimeout(function(){closeLoading();Wb("设备已成功断开")},1E3),O()):(closeLoading(),showAlert(statusStr.kickRouterFail))})}for(var c=!1,f=0;f<r.length;f++)if(r[f].parent_router.toUpperCase()==a.toUpperCase()){c=!0;break}c?showConfirm("断开连接后，该设备将被移出网络，其他网络设备将自动组成最优网络方案。确定要断开吗？",
-function(a){!0==a&&b()},"断开"):showConfirm(label.disconnectConfirm,function(a){!0==a&&b()},"断开")}function Xb(a){a=parseInt(a);a=1048576<=a?(a/1048576).toFixed(2)+" GB/s":1024<=a?(a/1024).toFixed(1)+" MB/s":(a/1).toFixed(0)+" KB/s";return a.toString()}function l(a,b,c,f){d.save();d.beginPath();d.fillStyle=void 0==f?"#FFFFFF":f;d.font="12px 微软雅黑, 宋体, Arial";d.fillText(a,b,c);d.closePath();d.restore()}function Yb(a,b,c){var f=a.getBoundingClientRect();return{x:b-f.left*a.width/f.width,y:c-f.top*a.height/
-f.height}}function Qc(a,b){var c={};c[uciAppInfo.fileName]={};c[uciAppInfo.fileName][uciAppInfo.actionName.open]={};c[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id]=a;$.action(c,function(a){a[ERR_CODE]==ENONE&&(a=a[uciAppInfo.dynOptName.pageURL],!0==$.local?b("WDS.htm"):0<=a.indexOf("WDS.htm")&&b(a))})}function Rc(a,b){var c={};c[uciAppInfo.fileName]={};c[uciAppInfo.fileName][uciAppInfo.actionName.open]={};c[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id]=
-a;$.action(c,function(a){a[ERR_CODE]==ENONE&&(a=a[uciAppInfo.dynOptName.pageURL],0<=a.indexOf("wired_extender.htm")&&b(a))})}function Sc(a){var b={};pb=!1;b[uciAppInfo.fileName]={};b[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp]=null;$.action(b,function(b){if(Q(b[ERR_CODE])){b=formatTableData(b[uciAppInfo.optName.installedApp]);for(var f=0,d=b.length;f<d;f++)!1==pb&&Qc(b[f][Zb],function(b){pb=!0;a(b)})}})}function Tc(a){var b={};qb=!1;b[uciAppInfo.fileName]={};b[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp]=
-null;$.action(b,function(b){if(Q(b[ERR_CODE])){b=formatTableData(b[uciAppInfo.optName.installedApp]);for(var f=0,d=b.length;f<d;f++)!1==qb&&Rc(b[f][Zb],function(b){qb=!0;a(b)})}})}function rb(){g.onclick=function(a){a=a||window.event;a=Yb(g,a.clientX,a.clientY);for(var b in p.click){var c=p.click[b];!0==c.legal&&a.x>c.pos[0]&&a.x<c.pos[1]&&a.y>c.pos[2]&&a.y<c.pos[3]&&c.callBack()}};g.onmousemove=function(a){a=a||window.event;a=Yb(g,a.clientX,a.clientY);var b=p.mousemove.wan,c=p.mousemove.wds,f=p.mousemove.ap,
-b=c.legal?c:b.legal?b:f;g.style.cursor=b.legal&&a.x>b.pos[0]&&a.x<b.pos[1]&&a.y>b.pos[2]&&a.y<b.pos[3]?"pointer":"default"}}function ba(){d.beginPath();d.strokeStyle="rgba(255,255,255,1)";d.lineWidth=2;for(var a=0;7>a;a++)d.moveTo(g.width/2,54+9*a),d.lineTo(g.width/2,60+9*a);d.stroke();d.closePath()}function sb(){d.beginPath();d.strokeStyle="rgba(255,255,255,1)";d.lineWidth=2;d.moveTo(g.width/2,54);d.lineTo(g.width/2,115);d.stroke();d.closePath()}function $b(a){currentSelectedWan=a;loadPage("BasicRouteSet.htm",
-"basicSCon",function(){id("headL").style.backgroundColor="#70D2EF";id("headLCnt").style.backgroundColor="#70D2EF";id("headR").style.backgroundColor="#4ABDE0";id("headRCnt").style.backgroundColor="#4ABDE0";for(var a=0,c=basicLisConf.length;a<c;a++)id(basicLisConf[a].arrId).style.visibility="hidden";id(basicLisConf[3].arrId).style.visibility="visible";clearTimeout(gMenuRefreshHD);gMenuRefreshHD=window.setTimeout(basicMenuStateRefresh,0);setTimeout(function(){$("#network_rsMenu").click()},0)})}function ac(){d.beginPath();
-d.strokeStyle="rgba(255,255,255,1)";d.lineWidth=2;for(var a=0;7>a;a++)d.moveTo(g.width/2-11,54+9*a),d.lineTo(g.width/2-11,60+9*a);d.stroke();d.closePath()}function bc(){d.beginPath();d.strokeStyle="rgba(255,255,255,1)";d.lineWidth=2;for(var a=0;7>a;a++)d.moveTo(g.width/2+11,54+9*a),d.lineTo(g.width/2+11,60+9*a);d.stroke();d.closePath()}function Uc(){$("#leftWanLink").hide();$.setTimeout(function(){d.drawImage(n,334,413,20,20,351,70,20,20)},q);l(label.wan1PhyErr,361-xa(label.wan1PhyErr)-10-2,84)}function Vc(){$("#rightWanLink").hide();
-$.setTimeout(function(){d.drawImage(n,334,413,20,20,373,70,20,20)},q);l(label.wan2PhyErr,395,84)}function cc(){$("#leftWanLink").hide();$.setTimeout(function(){d.drawImage(n,334,392,20,20,351,70,20,20)},q);l(statusStr.connting,361-xa(statusStr.connting)-10-2,84)}function dc(){$("#rightWanLink").hide();$.setTimeout(function(){d.drawImage(n,334,392,20,20,373,70,20,20)},q);l(statusStr.connting,395,84)}function Wc(a,b){l(a,g.width/2-11-13-xa(a),70);l(b,g.width/2-11-13-xa(b),88);$.setTimeout(function(){d.drawImage(n,
-334,413,20,20,351,72,20,20)},q);$("#leftWanLink").show()}function Xc(a,b){l(a,g.width/2+24,70);l(b,g.width/2+24,88);$.setTimeout(function(){d.drawImage(n,334,413,20,20,373,72,20,20)},q);$("#rightWanLink").show()}function xa(a){var b=-1;d.save();d.font="12px 微软雅黑, 宋体, Arial";b=d.measureText(a).width;d.restore();return b}function Yc(a,b,c){l(a,g.width/2-11-13-xa(a),70);$.setTimeout(function(){d.drawImage(n,283,199,20,20,337,80,10,10)},q);l(b,331-xa(b),88);$.setTimeout(function(){d.drawImage(n,260,199,
-20,20,337,98,10,10)},q);l(c,331-xa(c),106);$("#leftWanLink").hide()}function Zc(a,b,c){l(a,g.width/2+24,70);$.setTimeout(function(){d.drawImage(n,283,199,20,20,396,80,10,10)},q);l(b,412,88);$.setTimeout(function(){d.drawImage(n,260,199,20,20,396,98,10,10)},q);l(c,412,106);$("#rightWanLink").hide()}function $c(a,b,c){d.clearRect(0,ca.height+8,V/2,60);LINK_UP==a?(d.beginPath(),d.strokeStyle="rgba(255,255,255,1)",d.lineWidth=2,d.moveTo(g.width/2-11,54),d.lineTo(g.width/2-11,115),d.stroke(),d.closePath(),
-Ra||Yc("WAN1",b,c)):ac();LINKING_UP==a&&cc();LINKING_DOWN==a&&cc();LINK_CODE_AUTH_ERR!=a&&LINK_DOWN_EXPT!=a||Wc("WAN1",errStr.linkNoEcho);LINK_DOWN==a&&Uc()}function ad(a,b,c){d.clearRect(V/2,ca.height+8,V/2,60);LINK_UP==a?(d.beginPath(),d.strokeStyle="rgba(255,255,255,1)",d.lineWidth=2,d.moveTo(g.width/2+11,54),d.lineTo(g.width/2+11,115),d.stroke(),d.closePath(),Ra||Zc("WAN2",b,c)):bc();LINKING_UP==a&&dc();LINKING_DOWN==a&&dc();LINK_CODE_AUTH_ERR!=a&&LINK_DOWN_EXPT!=a||Xc("WAN2",errStr.linkNoEcho);
-LINK_DOWN==a&&Vc()}function bd(a,b,c){d.clearRect(0,ca.height+8,V,60);LINK_UP==a?(sb(),Ra||($.setTimeout(function(){d.drawImage(n,283,199,20,20,382,65,10,10)},q),l(b,395,75),$.setTimeout(function(){d.drawImage(n,260,199,20,20,382,82,10,10)},q),l(c,395,91))):ba();LINKING_UP==a&&($.setTimeout(function(){d.drawImage(n,334,392,20,20,362,70,20,20)},q),l(statusStr.connting,395,86));LINKING_DOWN==a&&($.setTimeout(function(){d.drawImage(n,334,392,20,20,362,70,20,20)},q),l(statusStr.disconcting,395,86));if(LINK_CODE_AUTH_ERR==
-a||LINK_DOWN_EXPT==a)$.setTimeout(function(){d.drawImage(n,334,413,20,20,362,70,20,20)},q),l(LINK_CODE_AUTH_ERR==a?errStr.pppoeUserPwdErr:errStr.linkNoEcho,395,76),l(label.netSet+" >",395,96,"#FEEB1A"),p.click.wan.legal=!0,p.mousemove.wan.legal=!0,rb();LINK_DOWN==a&&($.setTimeout(function(){d.drawImage(n,334,413,20,20,362,70,20,20)},q),l(statusStr.wanNetworkDown,395,86))}function tb(a,b){var c=parseInt(a[uciNetwork.optName.code]),f=parseInt(a[uciNetwork.optName.wanStatus]),d=parseInt(a[uciNetwork.optName.phyStatus]);
-switch(f){case LINK_DOWN:0==d&&(c=LINK_CODE_PHYDOWN);switch(c){case LINK_CODE_PHYDOWN:b(LINK_DOWN);break;case LINK_CODE_AUTH_ERR:b(LINK_CODE_AUTH_ERR);break;default:b(LINK_DOWN_EXPT)}break;case LINK_UP:b(LINK_UP,Xb(a[uciNetwork.optName.upSpeed]),Xb(a[uciNetwork.optName.downSpeed]));break;case LINKING_UP:switch(c){case LINK_CODE_AUTH_ERR:b(LINK_CODE_AUTH_ERR);break;case LINK_CODE_NOECHO:case LINK_CODE_UNKNOWN:case LINK_CODE_DENY:case LINK_CODE_SRVDOWN:case LINK_CODE_OPT_UNSUPPORT:case LINK_CODE_AUTH_UNSUPPORT:b(LINK_DOWN_EXPT);
-break;default:b(LINKING_UP)}break;case LINKING_DOWN:b(LINKING_DOWN);break;default:b(LINK_DOWN)}}function ub(a,b){"undefined"==typeof b?tb(a,bd):"left"==b?tb(a,$c):tb(a,ad)}function cd(a,b){var c={},f={};c[uciPlc.fileName]={};c[uciPlc.fileName][uciPlc.actionName.setExtInfo]=f;f[uciPlc.optName.mac]=a;f[uciPlc.optName.name]=b;showLoading("正在保存，请稍候...",void 0,void 0,!1);$.action(c);$.setTimeout(function(){closeLoading()},2E3)}function Ja(){var a=$("#cldRtOperation");"none"!=a.css("display")&&(a.hide(),
-W=!1)}function dd(a){var b={},c={};b[uciProto.fileName]={};b[uciProto.fileName][uciProto.secName.dhcp]=c;c[uciProto.optName.hostName]=a;showLoading("正在保存，请稍候...",void 0,void 0,!1);$.modify(b);$.setTimeout(function(){closeLoading()},2E3)}function ed(a){showCover(function(b){b=$("#"+b.id);var c=id("Con"),f,d,e,k;b.css("opacity",0.45);b=el("div");b.className="editNameDiv";c.appendChild(b);f=el("div");f.className="editNameCon";b.appendChild(f);b=el("label");b.innerHTML=label.equipName;f.appendChild(b);
-b=el("input");b.id="devNameInput";b.value=a.text;b.maxLength=ec;f.appendChild(b);k=el("div");k.className="errorDiv";f.appendChild(k);e=el("span");k.appendChild(e);b=el("div");f.appendChild(b);d=el("button");d.innerHTML=btn.save;d.onclick=function(){var b=id("devNameInput").value;!0==/[^0-9a-z_\-\u00b7\u4E00-\u9FFFF\s]/gi.test(b)?(k.style.display="block",e.innerHTML=errStr.hostNameErr):getCNStrLen(b)>ec?(k.style.display="block",e.innerHTML="设备名称最大长度为63个字符，一个中文字代表3个字符"):0==b.length?(k.style.display=
-"block",e.innerHTML="设备名称不能为空"):(a.text=b,a.mac===da?dd(b):cd(a.mac,b),hideCover(function(){c.removeChild(f.parentNode)}),W=!1)};b.appendChild(d);d=el("button");d.innerHTML=btn.gridCancel;d.className="cancel";d.onclick=function(){hideCover(function(){c.removeChild(f.parentNode)});W=!1};b.appendChild(d)})}function vb(a,b){var c=$("#nodeTextTips");c.css({top:a.y+154,left:745<a.x+16+120?a.x-25:a.x+16}).show();c[0].innerText=b}function wb(){$("#nodeTextTips").hide()}function fd(a){null!=a.target&&showConfirm(label.reorganizeNetworkTips,
-function(a){!0==a&&addChildRt(!0)},btn.reorganizeNetwork,btn.notNow)}function fc(a){var b=a.target;if(null!=b){W=!0;da===b.mac?(id("rebootCldRt").style.display="none",id("kickCldRt").style.display="none",id("resetCldRt").style.display="none",id("cldRtOperation").style.height="26px",id("editDevName").style.borderBottom="none"):(id("rebootCldRt").style.display="block",id("kickCldRt").style.display="block",id("resetCldRt").style.display="block",id("cldRtOperation").style.height="104px",id("editDevName").style.borderBottom=
-"solid 1px #F2F2F2");var c=$("#cldRtOperation");c.css({top:b.y+105,left:b.x+b.width+10}).show();id("editDevName").onclick=function(){ed(b);c.hide()};id("rebootCldRt").onclick=function(){Nc(b.mac);c.hide();W=!1};id("kickCldRt").onclick=function(){Pc(b.mac);c.hide();W=!1};id("resetCldRt").onclick=function(){Oc(b.mac);c.hide();W=!1}}}function gc(a){var b=new JTopo.Node(""==a.hostname?label.anonymousHost:a.hostname);if(a.is_mesh&&"1"==a.is_mesh)b.isMeshSta=!0,b.setImagePosition(263,318,47,41,38,33),b.setSize(64,
-64),b.onclick=fd;else{if(a.is_iptv&&"1"==a.is_iptv)b.setImagePosition(206,358,50,50);else{for(var c=MacFactoryArr,f=c.length-2,d,e=c[f+1],k=a.mac.substring(0,8).toUpperCase(),g,k=k.replace(/:/g,"-"),h=0;h<f;h++)if(d=c[h],"0"==a[gd]&&void 0!=(g=MacBrands[d.name])&&0<=g.indexOf(k)){e=d;break}a.posX=-e.posX;a.posY=-e.posY;b.setImagePosition(a.posX,a.posY,50,50)}b.setSize(64,64);b.showOperation=!1}a[hd]==R.inet?b.setWifiImagePosition(355,308):b.setWifiImagePosition(334,329);a.is_iptv&&"1"==a.is_iptv&&
-b.setWifiImagePosition(355,308);b.textOffsetY=10;b.mac=a.mac;b.blocked=a.blocked;b.up_limit=a.up_limit;b.down_limit=a.down_limit;b.onmouseover=vb;b.onmouseout=wb;return b}function hc(a){var b=new JTopo.Node(a.name);b.setImagePosition(263,318,47,41,38,33);b.setSize(64,64);var c=parseInt(a.sta_num_host)+parseInt(a.sta_num_guest),c=10>c?" "+c:99>c?c.toString():"99+";b.number=c;b.textOffsetY=10;b.mac=a.mac;b.onmouseover=vb;b.onmouseout=wb;b.onclick=fc;1==a.uplink_type?b.setWifiImagePosition(355,308):
-2==a.uplink_type&&(a=a.rate,a=parseInt(a),b.setWifiImagePosition(80<=a/1024/1024?334:355,329));return b}function ic(){var a=new JTopo.Node(Ba);a.setImagePosition(263,318,47,41,38,33);a.setBound((g.width-64)/2,5,64,64);a.mac=da;a.textOffsetY=10;a.onclick=fc;a.onmouseover=vb;a.onmouseout=wb;return a}function jc(a){var b;if(!W){null!=ea&&a.unshift(ea);z.clear();var c=ic();c.layout={width:110,height:52};z.add(c);var f=[];if(6>=a.length)b=null!=ea?a.length-1:a.length,c.number=" "+b,f=a.slice(0,a.length),
-id("leftUnfoldBtn").style.display="none",id("rightUnfoldBtn").style.display="none",v=1,5==a.length?(id("rightCldUnfoldBtn").style.left="582px",id("leftCldUnfoldBtn").style.left="167px"):1==a.length%2||6==a.length?(id("rightCldUnfoldBtn").style.left="582px",id("leftCldUnfoldBtn").style.left="142px"):(id("rightCldUnfoldBtn").style.left="527px",id("leftCldUnfoldBtn").style.left="92px");else{b=null!=ea?a.length-1:a.length;c.number=10>b?" "+b:99>b?b:"99+";f.push(a[0]);var d;v+4>=a.length?(d=a.length-5,
-id("rightUnfoldBtn").style.display="none"):(d=v,id("rightUnfoldBtn").style.display="block");1>=v?id("leftUnfoldBtn").style.display="none":id("leftUnfoldBtn").style.display="block";void 0!=u&&6<u.length?(id("rightCldUnfoldBtn").style.display="block",id("leftCldUnfoldBtn").style.display="block",id("rightCldUnfoldBtn").style.left="582px",id("leftCldUnfoldBtn").style.left="142px"):(id("rightCldUnfoldBtn").style.display="none",id("leftCldUnfoldBtn").style.display="none");for(b=d;b<d+4;++b)f.push(a[b]);
-f.push(a[a.length-1])}for(b=0;b<f.length;b++){if(void 0==f[b].parent_router)a=gc(f[b]);else{a=hc(f[b]);a.layout={width:110,height:52};d=[];if(6>=u.length)d=u.slice(0,u.length),id("leftCldUnfoldBtn").style.display="none",id("rightCldUnfoldBtn").style.display="none",G=1;else{var e;d.push(u[0]);G+4>=u.length?(e=u.length-5,id("rightCldUnfoldBtn").style.display="none"):(e=G,id("rightCldUnfoldBtn").style.display="block");1>=G?id("leftCldUnfoldBtn").style.display="none":id("leftCldUnfoldBtn").style.display=
-"block";for(var k=e;k<e+4;++k)d.push(u[k]);d.push(u[u.length-1])}for(k=0;k<d.length;++k){e=gc(d[k]);z.add(e);e=new JTopo.FlexionalLink(a,e);if(0===k||d.length-1===k)e.roundLine=!0;z.add(e)}}z.add(a);e=new JTopo.FlexionalLink(c,a);if(0===b||f.length-1===b)e.roundLine=!0;z.add(e)}setTimeout(function(){Sa.repaint()},100);JTopo.layout.layoutNode(z,c,!0)}}function jd(a,b){var c=a.parent_router,d=b.length;if("00-00-00-00-00-00"===c)return!0;if(da.toUpperCase()==c)return!1;for(var e=0;e<d;e++)if(c.toUpperCase()===
-b[e].mac.toUpperCase())return!1;return!0}function kd(a){for(var b=0;b<a.length;b++)if(da.toUpperCase()!=a[b].parent_router)return!1;return!0}function O(){if(!W){var a={};a[uciPlc.fileName]={};a[uciPlc.fileName][KEY_TABLE]=[uciPlc.secType.connectedExt];a[uciHostsInfo.fileName]={};a[uciHostsInfo.fileName][KEY_TABLE]=uciHostsInfo.dynData.online_host;a[uciHostsInfo.fileName][KEY_NAME]=uciHostsInfo.dynData.capHostNum;$.query(a,function(a){if(ENONE==a.error_code){r=formatTableData(a.hyfi.connected_ext);
-r.sort(function(a,b){return a.mac>b.mac?1:-1});var c=formatTableData(a[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);xc(c);kc(c,void 0,function(){if(1>=r.length)Ta||(id("nodeTextTips").style.display="none",id("cldRtOperation").style.display="none",$("#addNewDevBtn").removeClass("disabled"),id("addNewDevBtn").onclick=addChildRt,v=1),Ta=!0,c.sort(function(a,b){if(a.is_iptv&&"1"==a.is_iptv)return 1;if(b.is_iptv&&"1"==b.is_iptv||a.is_mesh&&"1"==a.is_mesh)return-1;if(b.is_mesh&&"1"==b.is_mesh)return 1;
-for(var c=a.ip.split("."),d=b.ip.split("."),f=0;4>f;f++)if(parseInt(c[f],10)!=parseInt(d[f],10))return parseInt(c[f],10)>parseInt(d[f],10)?1:-1;return 0}),1==r.length?(ea=r[0],$.action({hosts_info:{get_ext_host:{mac:ea.mac}}},function(a){ENONE==a[ERR_CODE]&&(u=formatTableData(a.hosts_info.get_ext_host),u.sort(function(a,b){for(var c=a.ip.split("."),d=b.ip.split("."),f=0;4>f;f++)if(parseInt(c[f],10)!=parseInt(d[f],10))return parseInt(c[f],10)>parseInt(d[f],10)?1:-1;return 0}));kc(u,ea.mac,function(){0<
-u.length?550!=X.height&&(X.height=550):360!=X.height&&(X.height=360);for(var a=[],b=0;b<c.length;b++){for(var d=!1,f=0;f<u.length;f++)if(c[b].mac.toUpperCase()==u[f].mac.toUpperCase()){d=!0;break}d&&""!=c[b].mac||a.push(c[b])}jc(a)})})):(360!=X.height&&(X.height=360),ea=null,jc(c));else{Ta&&(id("leftUnfoldBtn").style.display="none",id("rightUnfoldBtn").style.display="none",id("nodeTextTips").style.display="none",id("cldRtOperation").style.display="none",v=1,Ta=!1);z.clear();var d=[],e=ic(),g=a[uciHostsInfo.fileName][uciHostsInfo.dynData.capHostNum],
-g=g.host_num+g.guest_num;e.number=10>g?" "+g:99>g?g:"99+";z.add(e);d.push(e);r&&r.length>=ld?($("#addNewDevBtn").addClass("disabled"),id("addNewDevBtn").onclick=null):($("#addNewDevBtn").removeClass("disabled"),id("addNewDevBtn").onclick=addChildRt);e=[];if(6>=r.length)e=r.slice(0,r.length),id("leftUnfoldBtn").style.display="none",id("rightUnfoldBtn").style.display="none";else if(kd(r)){e.push(r[0]);var k;v+4>=r.length?(k=r.length-5,id("rightUnfoldBtn").style.display="none"):(k=v,id("rightUnfoldBtn").style.display=
-"block");1>=v?id("leftUnfoldBtn").style.display="none":id("leftUnfoldBtn").style.display="block";for(g=k;g<k+4;++g)e.push(r[g]);e.push(r[r.length-1])}else e=r.slice(0,r.length),id("leftUnfoldBtn").style.display="none",id("rightUnfoldBtn").style.display="none";k={};for(g=0;g<e.length;g++)if(!jd(e[g],e)){var h=hc(e[g]);z.add(h);d.push(h);var l=k[e[g].parent_router];null==l?(k[e[g].parent_router]=[],k[e[g].parent_router].push(h)):l.push(h)}for(var p in k)for(g=0;g<d.length;++g)if(p==d[g].mac)for(h=0;h<
-k[p].length;h++){l=new JTopo.FlexionalLink(d[g],k[p][h]);if(0===h||k[p].length-1===h)l.roundLine=!0;z.add(l)}setTimeout(function(){Sa.repaint()},100);0<e.length&&z.doLayout(JTopo.layout.TreeLayout(98,176))}})}})}}function kc(a,b,c){$.query({port_manage:{table:["dev_info"]}},function(d){if(d.error_code==ENONE){d=d.port_manage.dev_info;var e=[],g="";if("undefined"==typeof b)for(var k=0;k<d.length;k++){if("1"==d[k].cap){g=d[k].mac;e=d[k].phy_info;break}}else for(g=b,k=0;k<d.length;k++)if(d[k].mac==b){e=
-d[k].phy_info;break}for(k=0;k<e.length;k++)"DOW"==e[k].role.slice(0,3).toUpperCase()&&"1"==e[k].status&&a.push({blocked:"0",down_limit:"0",down_speed:"0",forbid_domain:"",forbid_time:"",hostname:"IPTV设备",is_cur_host:"0",is_mesh:"0",limit_time:"",mac:"",plan_rule:[],ssid:"",type:"0",up_limit:"0",up_speed:"0",wifi_mode:"0",is_iptv:"1",parent_mac:g,port_index:k});"function"==typeof c&&c()}})}function lc(){$.query(Ua,function(a){mc(a);null!=id(nc)&&$.setTimeout(lc,md)})}function oc(){ca=new Image;ca.src=
-"../web-static/images/cloud.png";ca.onload=function(){$.setTimeout(function(){d.drawImage(ca,(g.width-ca.width)/2,8,76,46)},q)};d.save();d.fillStyle="#009188";d.JTopoRoundRect((g.width-64)/2,115,64,64,12);d.fill();d.restore();d.drawImage(n,263,318,47,41,(g.width-64)/2+13,130.5,38,33)}function xb(){ya=new Image;ya.src="../web-static/images/ap_router.png";ya.onload=function(){$.setTimeout(function(){d.drawImage(ya,(g.width-ya.width)/2,0,64,64)},q)};d.save();d.fillStyle="#009188";d.JTopoRoundRect((g.width-
-64)/2,115,64,64,12);d.fill();d.restore();d.drawImage(n,263,318,47,41,(g.width-64)/2+13,130.5,38,33)}function pc(a){if(qc!=a){d.clearRect(0,ya.height,V,50);qc=a;switch(a){case "connecting":ba();$.setTimeout(function(){d.drawImage(n,334,413,20,20,362,75,20,20)},q);l(statusStr.relayConnecting,395,80);break;case "success":sb(),$.setTimeout(function(){d.drawImage(n,354,392,20,20,362,75,20,20)},q),l(statusStr.relaySuccess,395,80)}l(btn.wiredAP+" >",395,96,"#FEEB1A");rb()}}function yb(a){if(rc==a)"connecting"==
-a&&(d.clearRect(g.width/2-2,54,4,22),d.clearRect(g.width/2-2,94,4,30),setTimeout(function(){ba()},Va));else{d.clearRect(0,ya.height,V,50);rc=a;switch(a){case "unfinished":ba();$.setTimeout(function(){d.drawImage(n,334,413,20,20,362,75,20,20)},q);l(gSysModeSupport?statusStr.relayUnfinish:statusStr.wdsUnfinish,395,80);break;case "1":case "connecting":ba();$.setTimeout(function(){d.drawImage(n,334,392,20,20,362,75,20,20)},q);l(gSysModeSupport?statusStr.relayConnecting:statusStr.wdsConnecting,395,80);
-break;case "0":case "connect_fail":ba();$.setTimeout(function(){d.drawImage(n,334,413,20,20,362,75,20,20)},q);l(gSysModeSupport?statusStr.relayFail:statusStr.wdsFail,395,80);break;case "2":case "success":sb();$.setTimeout(function(){d.drawImage(n,354,392,20,20,362,75,20,20)},q);l(gSysModeSupport?statusStr.relaySuccess:statusStr.wdsSuccess,395,80);break;default:ba(),$.setTimeout(function(){d.drawImage(n,334,413,20,20,362,75,20,20)},q)}l(gSysModeSupport?btn.wirelessRepeater:btn.wds+" >",395,96,"#FEEB1A");
-rb()}}function nd(){for(var a=(parseInt(da.replace(/-/g,""),16)+1).toString(16).toUpperCase(),b=a.length,c=0;c<12-b;c++)a="0"+a;a=a.split("");for(c=0;5>c;c++)a.splice(10-2*c,0,"-");da=a=a.join("")}function od(){p.click.wan.legal=!1;p.mousemove.wan.legal=!1;p.click.ap.legal=!1;p.mousemove.ap.legal=!1;p.click.wds.legal=!0;p.mousemove.wds.legal=!0;A&&xb();var a=[],b=[],c={protocol:{name:"dhcp"},wireless:{}};BAND_2==gBandNum?(a=["wds_cfg_status_2g","wds_cfg_status_5g"],b=["wlan_wds_2g_status","wlan_wds_5g_status"]):
-(a=["wds_cfg_status_2g","wds_cfg_status_5g_1","wds_cfg_status_5g_4"],b=["wlan_wds_2g_status","wlan_wds_5g_1_status","wlan_wds_5g_4_status"]);c.wireless.name=a.concat(b);$.query(c,function(c){Ba=c.protocol.dhcp.hostname;for(var d=0,e=0,g,h=0;h<a.length;++h)switch(c.wireless[a[h]].status){case "idle":0>=d&&(d=0,g="idle");break;case "unfinished":4>=d&&(d=4,g="unfinished");break;case "connecting":3>=d&&(d=3,g="connecting");break;case "connect_fail":1>=d&&(d=1,g="connect_fail");break;case "success":2>=
-d&&(d=2,g="success");var l=c.wireless[b[h]].status;2<l&&(l=0);e=Math.max(e,l)}2==d?A&&yb(e.toString()):A&&yb(g);O()});$("#netStateMbtn i").first().css("visibility","hidden")}function pd(){p.click.wan.legal=!1;p.mousemove.wan.legal=!1;p.click.ap.legal=!0;p.mousemove.ap.legal=!0;p.click.wds.legal=!1;p.mousemove.wds.legal=!1;A&&xb();$.query({protocol:{name:"dhcp"},wired_extender:{name:"status"}},function(a){Ba=a.protocol.dhcp.hostname;3!=a.wired_extender.status.state?A&&pc("connecting"):A&&pc("success");
-O()});$("#netStateMbtn i").first().css("visibility","hidden")}function qd(a,b){p.click.wan.legal=!1;p.mousemove.wan.legal=!1;p.click.wds.legal=!0;p.mousemove.wds.legal=!0;A&&xb();$.query({wireless:{name:[a,b]},protocol:{name:"dhcp"}},function(c){Ba=c.protocol.dhcp.hostname;var d=c.wireless[a].status;"success"==d&&(d=c.wireless[b].status);A&&yb(d);O()});$("#netStateMbtn i").first().css("visibility","hidden")}function rd(){A&&oc();$.query({network:{name:["wan_status","wan_status_2"]},protocol:{name:"dhcp"}},
-function(a){!1==compareObj(a.network.wan_status,zb)?(zb=a.network.wan_status,A&&ub(zb,"left")):a.network.wan_status.link_status==LINKING_UP&&(d.clearRect(g.width/2-2-11,54,4,16),d.clearRect(g.width/2-2-11,90,4,30),setTimeout(function(){ac()},Va));!1==compareObj(a.network.wan_status_2,Ab)?(Ab=a.network.wan_status_2,A&&ub(Ab,"right")):a.network.wan_status_2.link_status==LINKING_UP&&(d.clearRect(g.width/2-2+11,54,4,16),d.clearRect(g.width/2-2+11,90,4,30),setTimeout(function(){bc()},Va));Ba=a.protocol.dhcp.hostname;
-O()});$("#netStateMbtn i").first().css("visibility","visible")}function sd(){p.click.wan.legal=!0;p.mousemove.wan.legal=!0;p.click.ap.legal=!1;p.mousemove.ap.legal=!1;p.click.wds.legal=!1;p.mousemove.wds.legal=!1;A&&oc();$.query({network:{name:["wan_status"]},protocol:{name:"dhcp"}},function(a){!1==compareObj(a.network.wan_status,Bb)?(Bb=a.network.wan_status,A&&ub(Bb)):a.network.wan_status.link_status==LINKING_UP&&(d.clearRect(g.width/2-2,54,4,16),d.clearRect(g.width/2-2,90,4,30),setTimeout(function(){ba()},
-Va));Ba=a.protocol.dhcp.hostname;O()});$("#netStateMbtn i").first().css("visibility","visible")}function td(){n=new Image;n.src="../web-static/images/routerBg.png";$.query({network:{name:"lan"}},function(a){da=a.network.lan.macaddr.toUpperCase();gModeSwitchSupport&&sc==uciCustomNetwork.optValue.mode.bridge&&nd();var b,c,d,e,g;BAND_2==gBandNum?(b=["wlan_wds_2g","wlan_wds_5g"],c=["wds_cfg_status_2g","wds_cfg_status_5g"],d=["wlan_wds_2g_status","wlan_wds_5g_status"]):(b=["wlan_wds_2g","wlan_wds_5g_1",
-"wlan_wds_5g_4"],c=["wds_cfg_status_2g","wds_cfg_status_5g_1","wds_cfg_status_5g_4"],d=["wlan_wds_2g_status","wlan_wds_5g_1_status","wlan_wds_5g_4_status"]);Ua.wireless={name:b};gSysModeSupport&&(Ua.system={name:"sys_mode"});gMulWanSupport&&(Ua.port_manage={table:"mwan"});mc=function(a){for(var h=!1,l=uciSystem.optValue.sysMode.routerMode,p=!1,n=0;n<b.length;++n)if(1==parseInt(a.wireless[b[n]].enable)){p=!0;e=c[n];g=d[n];break}gSysModeSupport&&(l=a.system.sys_mode.mode);if(gMulWanSupport)for(h=!0,
-n=0;2>n;n++)if(0==a.port_manage.mwan[n]["mwan_"+(n+1)].enable){h=!1;break}p?gSysModeSupport?od():qd(e,g):l==uciSystem.optValue.sysMode.apMode?pd():h?rd():sd()};lc()})}function ud(a){Y=new Switch("hostSwitchBs",parseInt(a[ab]),function(a){ib(a,B)});P.value=a[uciWireless.dynOptName.ssid];za.value=a[uciWireless.dynOptName.key];ra=P.value;sa=za.value;if(gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchSplit?ha!=e&&ia!=e&&ga(!0):E!=e&&ga(!0);id("hostWifiSaveBs").onclick=function(){var a=P.value;
-replaceUnicodeBlank(U);if(ra!=a||sa!=za.value)0==a.length?(showAlert(errStr.wlanSsidErr,P),P.value=ra,za.value=sa):!0==/^ +$/gi.test(a)?(showAlert(errStr.wlanSsidBlank,P),P.value=ra,za.value=sa):32<getCNStrLen(a)?(showAlert(errStr.wlanSsidLenErr,P),P.value=ra,za.value=sa):showConfirm(label.wifiSaveConfirmTip,function(a){!0==a&&jb(P,za,B,"hostWifiSaveBs")})}}function vd(){var a={};a[Cb]={};a[Cb][KEY_NAME]=[B];$.query(a,function(a){a=a[Cb][B];(Ia=a[wd]==tc)?(id("bsDisableDiv").style.display="none",
-id("bsEnableDiv").style.display="block",ud(a)):(id("bsDisableDiv").style.display="block",id("bsEnableDiv").style.display="none",nb(),ob());mb();gGuest5GSupport&&Vb();if(gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)})}function xd(a){var b={};b[uciCustomNetwork.fileName]={};b[uciCustomNetwork.fileName][KEY_NAME]=uciCustomNetwork.dynData.bridgestatus;$.query(b,function(b){ENONE==b[ERR_CODE]&&(sc=b[uciCustomNetwork.fileName][uciCustomNetwork.dynData.bridgestatus][uciCustomNetwork.optName.enable],
-"function"==typeof a&&a())})}function Db(){if(gSupportBS)vd();else if(id("bsDisableDiv").style.display="block",id("bsEnableDiv").style.display="none",gWifiSwitchSplit?(nb(),mb(),ob()):(nb(),ob(),mb()),gGuest5GSupport&&Vb(),gWifiSwitchSupport||gCustomWifiSwitchSupport)t=$.setTimeout(y,0)}function uc(){var a={};a[Eb]={};a[Eb][KEY_NAME]=[vc];$.query(a,function(a){ENONE==a[ERR_CODE]&&(Ra=a[Eb][vc][yd]==tc);Db()})}function wc(){try{var a=new NiceScroll("topoCon");a.scrollTipOpacity(1);a.scrollTipSet({background:"#22A794"});
-a.init();if(A){d=g.getContext("2d");var b=$("#bNetStateTopoCon");Fb=b.height()+20;V=b.width();g.height=Fb-25;g.width=V;X.height=Fb-130;X.width=V;Sa=new JTopo.Stage(X);z=new JTopo.Scene(Sa);z.onclick=Ja;window.addEventListener?(g.addEventListener("click",Ja),g.addEventListener("touchstart",Ja)):(g.onclick=Ja,g.ontouchstart=Ja)}td()}catch(c){}}var Cb=uciWireless.fileName,B=uciWireless.secName.wlanBS,wd=uciWireless.optName.bsEnable,ab=uciWireless.optName.wifiEnable,E,ha,ia,fb={},e=1,Wa,C=uciWireless.fileName,
-Da=uciCustomWireless.fileName,Mb=!0,Kb=!0,Lb=!0,Aa=uciWireless.dynData.wifi_switch,Ea,bb,cb,Fa=id("wifiAllSwitchDes"),Ma=id("wifiAllSwitch2GDes"),Na=id("wifiAllSwitch5GDes"),t=null,Kc=3E3,Ob=!0,w=uciWireless.dynData.host_2g,Zb=uciAppInfo.dynOptName.id,pb=!1,qb=!1,H,ka=id("hostSwitchDes"),M=id("hostWifiName"),U=id("hostWifiPwd"),Pb=!0,x=uciWireless.dynData.host_5g,I,la=id("hostSwitchDes5G"),N=id("hostWifiName5G"),aa=id("hostWifiPwd5G"),gb=uciWireless.dynData.wds_2g,hb=uciWireless.dynData.wds_5g,Qb=
-!0,Ec=uciWireless.secName.wlanBS,Y,ma=id("hostSwitchDesBs"),P=id("hostWifiNameBs"),za=id("hostWifiPwdBs"),zc=id("hostWifiNum2G"),Ac=id("hostWifiNum5G"),Bc=id("hostWifiNumBs"),Cc=id("guestWifiNum"),Dc=id("guestWifiNum5G"),Ka=uciHostsInfo.optName.wifiMode,g=id("canvasCloud"),X=id("canvasRouter"),ca,ya,n,Sa,z;id("hostWifiNum");var F,S,D=uciGuestNet.fileName,s=uciGuestNet.secName.wireless2G,J=id("guestWifiName"),K=id("guestWifiPwd"),Oa=id("guestSwitchDes"),Lc=id("netStateGuestNet"),T=uciGuestNet.secName.wireless5G,
-L=id("guestWifiName5G"),Z=id("guestWifiPwd5G"),Pa=id("guestSwitchDes5G"),Mc=id("netStateGuestNet5G"),d,Va=100,md=1E3,Fb,V,Tb=!0,Ub=!0,yc=uciHostsInfo.optName.mac,gd=uciHostsInfo.optName.blocked,hd=uciHostsInfo.optName.type,R={inet:uciHostsInfo.optValue.linkType.wired,wirelessH:uciHostsInfo.optValue.linkType.hostWireless,wirelessG:uciHostsInfo.optValue.linkType.guestWireless,block:uciHostsInfo.optValue.isBlocked.yes,unBlock:uciHostsInfo.optValue.isBlocked.no,wireless2G:uciHostsInfo.optValue.wifiMode.h2G,
-wireless5G:uciHostsInfo.optValue.wifiMode.h5G},Ua={},mc,Bb={},zb={},Ab={},na="",oa="",pa="",qa="",ra="",sa="",ta="",va="",ua="",wa="",q=20,Qa=1,Hc=0,lb=0,da,Ba,rc="",qc="",db,Ga,Ha,sc;id("title2G").innerHTML=!0==gGuest5GSupport?"2.4G访客网络":"访客网络";var Ia=!1,ec=63,ld=7,W=!1,Ta=!1,v=1,G=1,ea=null,u,r=[],Ra=!1,tc="1",Eb="hnat",vc="main",yd="enable",A=!isIE||isIENormal,p={click:{wan:{pos:[395,455,86,116],callBack:function(){setBasicSubMenuUrl("WanCfg.htm");id("routerSetMbtn").onclick()},legal:!1},wds:{pos:[395,
-455,86,116],callBack:function(){Sc(function(a){gSetLoadAppDetail("wds",a);id("appsMgtMbtn").onclick()})},legal:!1},ap:{pos:[395,455,86,116],callBack:function(){Tc(function(a){gSetLoadAppDetail("wiredExtender",a);id("appsMgtMbtn").onclick()})},legal:!1}},mousemove:{wan:{pos:[395,455,86,116],legal:!1},wds:{pos:[395,455,86,116],legal:!1},ap:{pos:[395,455,86,116],legal:!1}}};Wa=new NiceScroll("netStateLCon");Wa.scrollTipOpacity(1);Wa.scrollTipSet({background:"#1FA793"});Wa.init();var nc="wifiLogo"+(new Date).getTime();
-$("i.wifiLogo")[0].id=nc;id("leftWanLink").onclick=function(){$b(1)};id("rightWanLink").onclick=function(){$b(2)};id("leftUnfoldBtn").onclick=function(){v-=4;v=1>v?1:v;O()};id("rightUnfoldBtn").onclick=function(){v+=4;O()};id("leftCldUnfoldBtn").onclick=function(){G-=4;G=1>G?1:G;O()};id("rightCldUnfoldBtn").onclick=function(){G+=4;O()};if(gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchSplit?$("#wifiSwitchSplit").removeClass("disNone"):$("#wifiSwitchUnity").removeClass("disNone"),Ic(),t=$.setTimeout(y,
-0);gModeSwitchSupport?xd(function(){gHnatSupport?uc():Db();wc()}):(gHnatSupport?uc():Db(),wc())}init();
-</script><style type="text/css">div.bConfLBC{background:#29c4b2}div.bConfRBC{background:#00b8a2}h1.bMdelTitle{text-shadow:2px 2px #27baa8}div.menuCon{height:34.2em;overflow:hidden;margin:20px 5px 0 0;padding-right:7px;position:relative}div.allSwitchCon5GState{margin-left:19px}ul.netStateMenuItem{color:#fff;padding:7px 20px 10px 29px;list-style:none;position:relative;*zoom:1}ul.netStateMenuItemWifiAll{padding-left:30px}ul.netStateMenuItem i.wifiLogo{background:url("../web-static/images/routerBg.png") no-repeat scroll -456px -34px rgba(0,0,0,0);height:20px;left:0;position:absolute;top:2px;width:28px}ul.netStateMenuItem li{font-size:0;margin-bottom:10px}ul.netStateMenuItem li.bottom{border-bottom:1px solid #1fa793;padding-bottom:10px;margin-bottom:0!important}@media screen and (-webkit-min-device-pixel-ratio:0){ul.netStateMenuItem li input{line-height:0!important}}ul.netStateMenuItem li label{font-size:12px;vertical-align:middle}ul.netStateMenuItem li span{font-size:12px;vertical-align:middle}ul.netStateMenuItem li span.wifiModelName{font-size:14px;vertical-align:middle}ul.netStateMenuItem li span.switchDes{font-size:12px;margin-left:3px}ul.netStateMenuItem li input{background:#1fa793;border:0;border-radius:3px;color:#fff;height:20px;font-size:12px;line-height:15px;padding:1px 5px;margin-left:7px;width:120px;vertical-align:middle}ul.netStateMenuItem input.bottomSaveBtn{background:#fbeb1a;border-radius:3px;margin-left:110px;width:50px;height:22px;color:#000;padding:0}span.wifiModelName{display:inline-block;width:88px;font-size:14px;font-weight:bold}div.topoCon{width:100%;height:100%}div.bNetStateTopoCon{height:100%;width:745px;position:relative;zoom:1}#canvasCloud,#canvasRouter{moz-user-select:-moz-none;-moz-user-select:none;-o-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}canvas.coverCanvas{position:absolute;top:110px;left:0}h1.canvasNotSupportTip{padding-top:150px;font-size:14px;color:#fff;text-align:center}input.subBtnDis{color:#fff!important;border:1px solid #fff!important}.textfield{position:absolute;background-color:#22a794;border-radius:4px;border:0;color:#fff;font-family:PingFangSC-Regula;font-size:12px;resize:none;display:none;overflow:hidden;text-indent:2px;z-index:9999}.nodeTextTips{position:absolute;background-color:#f6f0c0;border-color:#695233;color:#3b231b;font-family:PingFangSC-Regula;font-size:12px;display:none;z-index:9999;padding:6px 10px;max-width:100px;overflow-wrap:break-word}table.dataGrid2{width:100%;margin:15px 0 0 0;border-collapse:collapse;border:1px solid #01b8a2;text-align:center}table.dataGrid2 tr{background:transparent;border-bottom:1px solid #01b8a2}table.dataGrid2 td{height:30px;color:#343434;border:1px solid #01b8a2;vertical-align:middle;white-space:pre}@media screen and (-webkit-min-device-pixel-ratio:0){table.dataGrid input.text,table.dataGrid2 input.text{line-height:0!important}}table.dataGrid2 input.text{color:#fff;height:21px;line-height:21px;border:0;border-radius:3px;padding:0 2px;font-size:12px;background:transparent}div.pageListPo span.ListSpan{color:#01b8a2}.cldRtDiv{position:absolute;display:none;width:88px;height:104px;background:#fff;border-radius:4px;color:#333;box-shadow:0 0 5px #888;z-index:999}.cldRtDiv Ul{width:100%;list-style:none}.cldRtDiv Ul Li{border-bottom:solid 1px #f2f2f2;height:25px;cursor:pointer;text-align:left;line-height:25px;padding-left:8px}.cldRtDiv Ul .cldRtLiLast{border-bottom:0}#addNewDevBtn{position:absolute;top:0;right:10px;background:url("../web-static/images/add_router_normal.png");width:101px;height:30px;border:0;display:block;cursor:pointer}#addNewDevBtn.disabled{background:url("../web-static/images/add_router_disable.png");cursor:auto}#addNewDevBtn:focus{outline:0}div.unfoldCon{color:#fff;cursor:pointer}div.unfoldBtn{background:#feeb1a;border-radius:4px;width:22px;text-align:center;margin-bottom:2px}div.unfoldBtn label{font-size:12px;color:#333;letter-spacing:0;line-height:12px;vertical-align:super}#leftUnfoldBtn{position:absolute;top:243px;left:142px;z-index:1200;display:none}#rightUnfoldBtn{position:absolute;top:243px;left:581px;z-index:1200;display:none}#leftCldUnfoldBtn{position:absolute;top:420px;left:92px;z-index:1200;display:none}#rightCldUnfoldBtn{position:absolute;top:420px;left:527px;z-index:1200;display:none}div.editNameDiv{position:absolute;z-index:1011;width:100%;min-width:980px;top:219px}div.editNameDiv div.editNameCon{background:#fff;width:420px;min-height:97px;padding:42px 0;margin:0 auto}div.editNameDiv div.editNameCon label{font-size:14px;color:#000;letter-spacing:-0.43px;margin-right:14px;margin-left:29px}div.editNameDiv div.editNameCon input{border:1px solid #01b8a2;border-radius:4px;width:221px;height:31px;text-indent:11px}div.editNameDiv div.editNameCon div.errorDiv{margin-top:8px;text-align:left;padding:0 98px;display:none}div.editNameDiv div.editNameCon div.errorDiv span{background:url(../web-static/images/routerBg.png) -467px -189px no-repeat transparent;padding-left:18px}div.editNameDiv div.editNameCon div{margin-top:34px;text-align:center}div.editNameDiv div.editNameCon div button{background:#feeb1a;border-radius:3px;border:0;width:80px;height:28px;cursor:pointer}div.editNameDiv div.editNameCon div button.cancel{background:#d9d9d9;margin-left:24px}div.resultDiv{position:absolute;z-index:1011;width:100%;min-width:980px;top:190px}div.resultDiv div.resultCon{background:#fff;width:666px;height:290px;margin:0 auto;text-align:center}div.resultDiv div.resultCon i.alertImg{background:url(../web-static/images/routerBg.png) -318px -41px no-repeat;display:inline-block;height:70px;margin-top:51px;width:70px;transform:scale(1.4)}div.resultDiv div.resultCon p.detail{min-height:35px;color:#000;font-size:12px;line-height:22px;margin-top:52px;word-wrap:break-word;word-break:break-all}#leftWanLink{position:absolute;top:97px;left:292px;display:none;cursor:pointer}#rightWanLink{position:absolute;top:93px;left:396px;display:none;cursor:pointer}.wanLink label{font-family:PingFangSC-Semibold;font-size:10px;color:#feeb1a;line-height:9px;cursor:pointer}.wanLink .arrow{font-size:17px;top:1px;position:relative}div.netStateCon{width:223px;margin-left:auto}</style>

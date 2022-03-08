@@ -1,5 +1,353 @@
+<style type="text/css">
+	div.bConfLBC{
+		background:#B0CB33;
+	}
+	div.bConfRBC{
+		background:#9EBE1D;
+	}
+	h1.bMdelTitle{
+		text-shadow:2px 2px #9DB42D;
+	}
+	div.menuCon{
+		height:34.2em;
+		overflow:hidden;
+		margin:20px 15px 0 auto;
+		padding-right:10px;
+		width:200px;
+		position:relative;
+	}
+	#menuBAppsUl{
+		list-style:none;
+	}
+	#menuBAppsUl li i.menuImg{
+		width:25px;
+		height:25px;
+		cursor:pointer;
+		vertical-align:middle;
+		display:inline-block;
+	}
+	li.menuLi{
+		color:#829a20;
+	}
+	li.menuLiClick{
+		color:#FFFFFF;
+		text-shadow:2px 2px #9DB42D;
+	}
+	li.menuLi i.apps_market{
+		background:url(../web-static/images/routerBg.png) -206px -143px no-repeat;
+	}
+	li.menuLiClick i.apps_market{
+		background:url(../web-static/images/routerBg.png) -233px -143px no-repeat;
+	}
+	li.menuLi i.apps_apllyList{
+		background:url(../web-static/images/routerBg.png) -260px -143px no-repeat;
+	}
+	li.menuLiClick i.apps_apllyList{
+		background:url(../web-static/images/routerBg.png) -288px -143px no-repeat;
+	}
+	label.menuLbl{
+		cursor:pointer;
+		margin-left:15px;
+		vertical-align:middle;
+	}
+	i.menuC{
+		width:10px;
+		height:9px;
+		top:27px;
+		*top:26px;
+		right:10px;
+		font-size:0px;
+		position:absolute;
+		background:url(../web-static/images/routerBg.png) -427px -89px no-repeat;
+	}
+	li.menuLi i.menuC{
+		visibility:hidden;
+	}
+	li.menuLiClick i.menuC{
+		visibility:visible;
+	}
+	#network_rsMenu{
+		border-bottom:0 !important;
+	}
+	#basicAppUpgradeInfo{
+		width:674px;
+		top:-9999px;
+		padding-bottom:45px;
+		position:absolute;
+		background:#FFFFFF;
+		box-shadow:0 0 7px rgba(111, 111, 111, 1);
+		z-index:1003;
+	}
+	div.basicAppUpgradeInfoDetail{
+		_height:expression(this.offsetHeight<270?"":270);
+		max-height:270px;
+		overflow:hidden;
+		margin-top:30px;
+	}
+	#basicAppUpgradeInfoDetail pre{
+		white-space:pre-wrap;
+		word-wrap:break-word;
+		word-break:break-all;
+		padding:0 30px;
+	}
+	a.updateDetail{
+		display:block;
+		color:#FFFFFF;
+	}
+	a.updateInnerDetail{
+		display:block;
+		color:#FFFFFF;
+	}
+	#appsRLoadingCon{
+		display:none;
+		text-align:center;
+		width: 745px;
+	}
+	#appsRLoadingCon i{
+		display:inline-block;
+		height:103px;
+		width:102px;
+		margin-top:45px;
+		background:url(../web-static/images/appsLoading.gif) no-repeat;
+	}
+	#appsRLoadingCon p{
+		color:#FFFFFF;
+		font-size:18px;
+		margin-top:30px;
+		text-align:center;
+	}
+	div.ProgressBarApps{
+		display:none;
+		height:12px;
+		position:relative;
+		padding-left:35px;
+		overflow:hidden;
+		visibility:hidden;
+	}
+	div.ProgressBarApps div.progressBarBg{
+		border-radius:5px;
+		overflow:hidden;
+		background:#transparent;
+		border:1px solid #FFFFFF;
+		margin-top:3px;
+		width:120px;
+	}
+	div.ProgressBarApps p.progressBarDe{
+		width:0px;
+		height:6px;
+		font-size:0px;
+		border-radius:5px;
+		background:#FFFFFF;
+	}
+	div.ProgressBarApps p.progressBarPercent{
+		color:#FFFFFF;
+		font-size:12px;
+		line-height:12px;
+		left:0px;
+		top:0px;
+		position:absolute;
+		text-align:left;
+		width:35px;
+	}
+</style>
+<script type="text/javascript">
+	var gBasicAppsRNiceScroll;
+	var gAppSet = {
+		beAppDetailShow:false,
+		appInstallShow:{detialTag:false, appID:-1},
+		beCloudConnected:false,
+		cloudRetryHd:null
+	};
 
+	function netSpaceTrans(space)
+	{
+		var kSpace = 1024;
+		var mSpace = kSpace * 1024;
+		var gSpace = mSpace * 1024;
 
+		space = parseFloat(space);
+		if (space >= gSpace)
+		{
+			space = (space/gSpace).toFixed(2) + "GB";
+		}
+		else if (space >= mSpace)
+		{
+			space = (space/mSpace).toFixed(3) + "MB";
+		}
+		else
+		{
+			space = (space/kSpace).toFixed(0) + "KB";
+		}
+
+		return space;
+	}
+
+	/* 获取可升级插件数量信息 */
+	function getUpdatePluginsNum()
+	{
+		var data = {};
+		data[uciAppInfo.fileName] = {};
+		data[uciAppInfo.fileName][KEY_NAME] = uciAppInfo.secName.plugin;
+		$.query(data, function(result){
+			if (ENONE == result[ERR_CODE])
+			{
+				if (true == $.local)
+				{
+					basicMenuAppUpdateNumSet(2);
+					return;
+				}
+
+				basicMenuAppUpdateNumSet(result[uciAppInfo.fileName][uciAppInfo.secName.plugin][uciAppInfo.optName.updateNum]);
+			}
+		});
+	}
+
+	/* callBack为没有更新的执行函数 */
+	function basicAppsRefreshLoading(callBack)
+	{
+		var data = {};
+
+		data[uciAppInfo.fileName] = {};
+		data[uciAppInfo.fileName][KEY_NAME] = uciAppInfo.secName.plugin;
+		$.query(data, function(result){
+			var pluginObj, bShow;
+
+			if (ENONE == result[ERR_CODE])
+			{
+				if (true == $.local)
+				{
+					basicAppsLoadingShow(false, statusStr.appsUpdating);
+					return;
+				}
+
+				pluginObj = result[uciAppInfo.fileName][uciAppInfo.secName.plugin];
+				bShow = pluginObj[uciAppInfo.optName.preUpdating] == uciAppInfo.dynOptValue.updated.yes;
+				if (false == bShow && typeof callBack == "function")
+				{
+					callBack();
+				}
+
+				basicAppsLoadingShow(bShow, statusStr.appsUpdating);
+			}
+		});
+	}
+
+	function init()
+	{
+		function basicAppsInit()
+		{
+			basicAppsRefreshLoading();
+			menuInit_Apps(function(options){
+				if (basicAppsRConLoadingObj.bShow == true)
+				{
+					return false;
+				}
+
+				/* 此处为优化页面的一处代码分支 */
+				if (false == gAppSet.beAppDetailShow || "AppsInstalled.htm" == options.url)
+				{
+					gAppSet.beAppDetailShow = false;
+					return true;
+				}
+				else
+				{
+					var appsDetailTitleCon = $("div.appsDetailTitleCon");
+					var nameSpan = $("div.appsDetailTitleCon span.name");
+					var authorP = $("div.appsDetailTitleCon p.author");
+					var tvsP = $("div.appsDetailTitleCon p.tvs");
+					var detailDescP = $("p.detailDesc");
+					var detailInstallBtn = id("detailInstallBtn");
+					var detailUpdateBtn = id("detailUpdateBtn");
+					var detailOpenBtn = id("detailOpenBtn");
+					var appsCon = id("appsMarketList");
+					var appDetailCon = id("appsMarketAppDetail");
+
+					/* 清空APP的显示信息 */
+					function cleanAppDetial()
+					{
+						appsDetailTitleCon.css("background", "");
+						nameSpan.html("");
+						authorP.html("");
+						emptyNodes(tvsP[0]);
+						detailDescP.html("");
+
+						detailInstallBtn.style.display = "none";
+						detailUpdateBtn.style.display = "none";
+						detailOpenBtn.style.display = "none";
+						detailInstallBtn.onclick = null;
+						detailUpdateBtn.onclick = null;
+						detailOpenBtn.onclick = null;
+					}
+
+					cleanAppDetial();
+					appsCon.style.display = "block";
+					appDetailCon.style.display = "none";
+					gAppSet.beAppDetailShow = false;
+					return false;
+				}
+			});
+		}
+
+		/* 检查插件信息，是否需要向云服务器获取数据 */
+		function appsMarketInit()
+		{
+			var reqData = {};
+			var ccs = cloudClientStatus;
+
+			reqData[ccs.fileName] = {};
+			reqData[ccs.fileName][KEY_NAME] = ccs.secName.clientInfo;
+			$.query(reqData, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var data = {};
+					var connectStatus = result[ccs.fileName][ccs.secName.clientInfo][ccs.optName.connectStatus];
+
+					gAppSet.beCloudConnected = (connectStatus == ccs.optValue.connectStatus.connected);
+					if (true == gAppSet.beCloudConnected)
+					{
+						setBasicSubMenuUrl("AppsMarket.htm");
+						basicAppsInit();
+					}
+					else
+					{
+						basicAppsInit();
+					}
+				}
+			});
+		}
+
+		getUpdatePluginsNum();
+
+		gBasicAppsRNiceScroll = new NiceScroll("appsRCon");
+		gBasicAppsRNiceScroll.scrollTipOpacity(1);
+		gBasicAppsRNiceScroll.scrollTipSet({"background":"#90AC1F"});
+		gBasicAppsRNiceScroll.init();
+
+		/* 设置下拉框位于滚动容器底部时自动居中选项 */
+		setSelectAutoMiddleOption({
+			enable: true,
+			outerScrollContainerId: "appsRCon",
+			bottomVal: 7/10
+		});
+
+		if (true == $.local)
+		{
+			setBasicSubMenuUrl("AppsMarket.htm");
+			basicAppsInit();
+		}
+		else if (gLoadAppDetail["appId"].length > 0)
+		{
+			/* 加载指定的app页面 */
+			setBasicSubMenuUrl("AppsInstalled.htm");
+			basicAppsInit();
+		}
+		else
+		{
+			appsMarketInit();
+		}
+	}
+	init();
+</script>
 <div class="bConfL bConfLBC"></div>
 <div class="bConfR bConfRBC"></div>
 <div id="bConCnt">
@@ -17,11 +365,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">var gBasicAppsRNiceScroll,gAppSet={beAppDetailShow:!1,appInstallShow:{detialTag:!1,appID:-1},beCloudConnected:!1,cloudRetryHd:null};function netSpaceTrans(a){a=parseFloat(a);return a=1073741824<=a?(a/1073741824).toFixed(2)+"GB":1048576<=a?(a/1048576).toFixed(3)+"MB":(a/1024).toFixed(0)+"KB"}
-function getUpdatePluginsNum(){var a={};a[uciAppInfo.fileName]={};a[uciAppInfo.fileName][KEY_NAME]=uciAppInfo.secName.plugin;$.query(a,function(a){ENONE==a[ERR_CODE]&&(!0==$.local?basicMenuAppUpdateNumSet(2):basicMenuAppUpdateNumSet(a[uciAppInfo.fileName][uciAppInfo.secName.plugin][uciAppInfo.optName.updateNum]))})}
-function basicAppsRefreshLoading(a){var d={};d[uciAppInfo.fileName]={};d[uciAppInfo.fileName][KEY_NAME]=uciAppInfo.secName.plugin;$.query(d,function(b){ENONE==b[ERR_CODE]&&(!0==$.local?basicAppsLoadingShow(!1,statusStr.appsUpdating):(b=b[uciAppInfo.fileName][uciAppInfo.secName.plugin],b=b[uciAppInfo.optName.preUpdating]==uciAppInfo.dynOptValue.updated.yes,!1==b&&"function"==typeof a&&a(),basicAppsLoadingShow(b,statusStr.appsUpdating)))})}
-function init(){function a(){basicAppsRefreshLoading();menuInit_Apps(function(a){if(!0==basicAppsRConLoadingObj.bShow)return!1;if(!1==gAppSet.beAppDetailShow||"AppsInstalled.htm"==a.url)return gAppSet.beAppDetailShow=!1,!0;a=$("div.appsDetailTitleCon");var c=$("div.appsDetailTitleCon span.name"),d=$("div.appsDetailTitleCon p.author"),h=$("div.appsDetailTitleCon p.tvs"),k=$("p.detailDesc"),e=id("detailInstallBtn"),f=id("detailUpdateBtn"),g=id("detailOpenBtn"),l=id("appsMarketList"),m=id("appsMarketAppDetail");
-a.css("background","");c.html("");d.html("");emptyNodes(h[0]);k.html("");e.style.display="none";f.style.display="none";g.style.display="none";e.onclick=null;f.onclick=null;g.onclick=null;l.style.display="block";m.style.display="none";return gAppSet.beAppDetailShow=!1})}function d(){var b={},c=cloudClientStatus;b[c.fileName]={};b[c.fileName][KEY_NAME]=c.secName.clientInfo;$.query(b,function(b){ENONE==b[ERR_CODE]&&(gAppSet.beCloudConnected=b[c.fileName][c.secName.clientInfo][c.optName.connectStatus]==
-c.optValue.connectStatus.connected,!0==gAppSet.beCloudConnected&&setBasicSubMenuUrl("AppsMarket.htm"),a())})}getUpdatePluginsNum();gBasicAppsRNiceScroll=new NiceScroll("appsRCon");gBasicAppsRNiceScroll.scrollTipOpacity(1);gBasicAppsRNiceScroll.scrollTipSet({background:"#90AC1F"});gBasicAppsRNiceScroll.init();setSelectAutoMiddleOption({enable:!0,outerScrollContainerId:"appsRCon",bottomVal:0.7});!0==$.local?(setBasicSubMenuUrl("AppsMarket.htm"),a()):0<gLoadAppDetail.appId.length?(setBasicSubMenuUrl("AppsInstalled.htm"),
-a()):d()}init();
-</script><style type="text/css">div.bConfLBC{background:#b0cb33}div.bConfRBC{background:#9ebe1d}h1.bMdelTitle{text-shadow:2px 2px #9db42d}div.menuCon{height:34.2em;overflow:hidden;margin:20px 15px 0 auto;padding-right:10px;width:200px;position:relative}#menuBAppsUl{list-style:none}#menuBAppsUl li i.menuImg{width:25px;height:25px;cursor:pointer;vertical-align:middle;display:inline-block}li.menuLi{color:#829a20}li.menuLiClick{color:#fff;text-shadow:2px 2px #9db42d}li.menuLi i.apps_market{background:url(../web-static/images/routerBg.png) -206px -143px no-repeat}li.menuLiClick i.apps_market{background:url(../web-static/images/routerBg.png) -233px -143px no-repeat}li.menuLi i.apps_apllyList{background:url(../web-static/images/routerBg.png) -260px -143px no-repeat}li.menuLiClick i.apps_apllyList{background:url(../web-static/images/routerBg.png) -288px -143px no-repeat}label.menuLbl{cursor:pointer;margin-left:15px;vertical-align:middle}i.menuC{width:10px;height:9px;top:27px;*top:26px;right:10px;font-size:0;position:absolute;background:url(../web-static/images/routerBg.png) -427px -89px no-repeat}li.menuLi i.menuC{visibility:hidden}li.menuLiClick i.menuC{visibility:visible}#network_rsMenu{border-bottom:0!important}#basicAppUpgradeInfo{width:674px;top:-9999px;padding-bottom:45px;position:absolute;background:#fff;box-shadow:0 0 7px rgba(111,111,111,1);z-index:1003}div.basicAppUpgradeInfoDetail{_height:expression(this.offsetHeight<270?"":270);max-height:270px;overflow:hidden;margin-top:30px}#basicAppUpgradeInfoDetail pre{white-space:pre-wrap;word-wrap:break-word;word-break:break-all;padding:0 30px}a.updateDetail{display:block;color:#fff}a.updateInnerDetail{display:block;color:#fff}#appsRLoadingCon{display:none;text-align:center;width:745px}#appsRLoadingCon i{display:inline-block;height:103px;width:102px;margin-top:45px;background:url(../web-static/images/appsLoading.gif) no-repeat}#appsRLoadingCon p{color:#fff;font-size:18px;margin-top:30px;text-align:center}div.ProgressBarApps{display:none;height:12px;position:relative;padding-left:35px;overflow:hidden;visibility:hidden}div.ProgressBarApps div.progressBarBg{border-radius:5px;overflow:hidden;background:#transparent;border:1px solid #fff;margin-top:3px;width:120px}div.ProgressBarApps p.progressBarDe{width:0;height:6px;font-size:0;border-radius:5px;background:#fff}div.ProgressBarApps p.progressBarPercent{color:#fff;font-size:12px;line-height:12px;left:0;top:0;position:absolute;text-align:left;width:35px}</style>

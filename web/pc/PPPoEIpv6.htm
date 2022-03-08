@@ -1,4 +1,23 @@
-
+<style type="text/css">
+	li.macCloneLi{
+		color:#FFFFFF;
+		font-size:12px;
+		line-height:20px !important;
+	}
+	#pppoeSolution{
+		color:#005FB8;
+		font-size:12px;
+		margin-left:10px;
+		text-indent:0px;
+		vertical-align:middle;
+	}
+	#onlineTimeUl{
+		display:none;
+	}
+	.ipv6AddrLine{
+		display:none;
+	}
+</style>
 <div class="block">
 	<ul class="gridLine gridLineA">
 		<label class="desLblA">{%label.netMode%}</label>
@@ -105,26 +124,782 @@
 		<input id="saveHighSet" type="button" value="{%btn.save%}" class="btnA subBtn" />
 	</div>
 </div>
-<script type="text/javascript">function init(e){function n(a,d){var b="";switch(a){case ENONE:return!1;case EPPPOEUSER:b=errStr.pppoeUserErr;break;case EPPPOEPWD:b=errStr.pppoePwdErr;break;case EINVMTU:b=errStr.pppoeMtuErr;break;case EINVNET:b=errStr.ipAddrNetErr;break;case EIPV6INVIP:b=errStr.ipv6AddrErr;break;case EIPV6INVIPFMT:b=errStr.ipv6AddrFmtErr;break;case EIPV6INVGROUPIP:b=errStr.ipv6AddrGroupErr;break;case EIPV6LOOP:b=errStr.ipv6AddrLoopErr;break;case EIPV6LINKLOCAL:b=errStr.ipv6LinkLoaclErr;break;case EIPV66TO4ADDR:b=
-errStr.ipv6Addr6To4Err;break;case EIPV6INVFDNSVR:b=errStr.primDnsErr;break;case EIPV6INVSDNSVR:b=errStr.seDnsErr;break;case EINVTIME:b=errStr.pppoeOffTimeErr;break;case ENOLINK:b=errStr.wanLinkDown;break;case ECONFLICTLANMAC:b=errStr.lanWanMacConflict;break;case ECONFLICTWANMAC:b=errStr.mulWanMacConflict;break;default:b=errStr.invRequestFail}showAlert(b,d);return!0}function G(a){wanCheckWDS(function(){var d={},b={},c={},g={};d[l]=b;1==a||"undefined"==typeof a?(b[w]=g,b[PPPoE_NAME]=c):(b[w+"_"+a]=
-g,b[PPPoE_NAME+"_"+a]=c);var p,e,f,h,u,v,k;p=id("PtlAuto").checked?IP_CONFIG_AUTO:id("PtlDHCPv6").checked?IP_CONFIG_DHCPV6:id("PtlSLAAC").checked?IP_CONFIG_SLAAC:IP_CONFIG_STATIC;k=id("ipAddr").value;e=id("PreDelgOn").checked?PD_MODE_PREFIX:PD_MODE_NON_TEMP;b=id("dnsAuto").checked?DNS_MODE_DYN:DNS_MODE_MAN;f=id("pri_dns_input").value;h=id("snd_dns_input").value;u=id("wanMac");v=u.value;if(!wanMacErrHandle(checkMac(v),u)){c[I]=p;c[J]=b;if(p==IP_CONFIG_STATIC){if(n(checkIPv6(k),"ipAddr"))return;k=k.replace(/：/g,
-":");$("#ipAddr").val(k);c[x]=k}else c[K]=e;if(b==DNS_MODE_MAN){if(n(checkPriDnsV6(f),"pri_dns_input")||n(checkSeDnsV6(h),"snd_dns_input"))return;f=f.replace(/：/g,":");$("#pri_dns_input").val(f);h=h.replace(/：/g,":");$("#snd_dns_input").val(h);c[y]=f;c[z]=h}g[L]=v;updateTimerHandle&&clearTimeout(updateTimerHandle);disableBtn("save",!0);disableBtn("disconnect",!0);setLoadingId("saveHighSet");hsLoading(!0);$.modify(d,function(b){r=e;A=p;m==PPPoE_NAME&&(e==PD_MODE_PREFIX&&p!=IP_CONFIG_STATIC?(lanPrefixChange(!0),
-preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);preDelgOnFlag=!1},2E3));B(a);hsLoading(!1,function(){disableBtn("save",!1);disableBtn("disconnect",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},0);return n(b[ERR_CODE])})}})}function C(a){wanCheckWDS(function(){var d={},b={},c={},g={},e=id("name").value,H=id("psw").value;d[l]=b;1==a||"undefined"==typeof a?(b[WAN_NAME]=g,b[PPPoE_NAME]=c):(b[WAN_NAME+"_"+a]=g,b[PPPoE_NAME+"_"+a]=c);g[M]=PPPoE_NAME;c[D]=id("shareIpv4").checked?
-"1":"0";id("shareIpv4").checked?(b="",b=1==a||"undefined"==typeof a?"pppoe":"pppoe_"+a,$.query({protocol:{name:b}},function(a){a=a.protocol.pppoeKey;c[s]=a.username;c[t]=a.password},!1)):(c[s]=e,c[t]=H);setLoadingId("save");hsLoading(!0);disableBtn("disconnect",!0);disableBtn("saveHighSet",!0);$.modify(d,function(b){b=b[ERR_CODE];ENONE==b?($("#name").val(c[s]),$("#psw").val(c[t]),m=PPPoE_NAME,r==PD_MODE_PREFIX&&A!=IP_CONFIG_STATIC?(lanPrefixChange(!0),preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);
-preDelgOnFlag=!1},2E3),N(a)):(hsLoading(!1,function(){disableBtn("disconnect",!1);disableBtn("saveHighSet",!1)}),updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},0));return n(b)})})}function N(a){var d;d=1==a||"undefined"==typeof a?{network:{change_wanv6_status:{proto:"pppoev6",operate:"connect"}}}:{network:{change_wanv6_status:{proto:"pppoev6_"+a,operate:"connect"}}};updateTimerHandle&&clearTimeout(updateTimerHandle);$.action(d,function(b){hsLoading(!1,function(){disableBtn("disconnect",
-!1);disableBtn("saveHighSet",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})}function O(a){var d;d=1==a||"undefined"==typeof a?{network:{change_wanv6_status:{proto:"pppoev6",operate:"disconnect"}}}:{network:{change_wanv6_status:{proto:"pppoev6_"+a,operate:"disconnect"}}};updateTimerHandle&&clearTimeout(updateTimerHandle);disableBtn("save",!0);disableBtn("saveHighSet",!0);setLoadingId("disconnect");hsLoading(!0);$.action(d,function(b){hsLoading(!1,function(){disableBtn("save",
-!1);disableBtn("saveHighSet",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})}function E(a){var d,b,c="";d=parseInt(a/86400);b=parseInt(a%86400/3600);a=parseInt(a%3600/60);0<d&&(c=d+label.dayT);return c+=b+label.lHour+a+label.minuteT}function F(a,d){var b;b=1==d||"undefined"==typeof d?a[uciNetwork.fileName][WAN_STATUS_NAME]:a[uciNetwork.fileName][WAN_STATUS_NAME+"_"+d];if(b.proto!=PPPoE_NAME)clearTimeout(updateTimerHandle);else{var c="none",g=id("pppoeSolution"),e="none",
-l=id("onlineTimeUl"),f=b.error_code,h=b.ip6addr||"::",m=b[y]||"::",n=b[z]||"::",k=b[uciNetwork.optName.upTime]||0,q=parseInt(b.link_status);switch(q){case LINK_DOWN:case LINKING_UP:disableBtn("disconnect",LINK_DOWN==q||curSysMode!=uciSystem.optValue.sysMode.routerMode);e="none";id("wanIpLbl").innerHTML="::/64";id("pri_dns").innerHTML="::";id("snd_dns").innerHTML="::";h=LINK_DOWN==q?"error":"link";0==parseInt(b[uciNetwork.optName.phyStatus])&&(f=LINK_CODE_PHYDOWN);if(LINK_CODE_MANUAL!=f&&LINK_CODE_NORMAL!=
-f&&LINK_CODE_INET_ERR!=f&&LINK_CODE_PPPOEv4_SWITCH!=f)switch(c="inline-block",hsStatSet(h,linkStatus[q]+label.lBrackets+linkCode[f]+label.rBrackets),f){case LINK_CODE_NOECHO:helpBind(g,"PPPoEServerDeadHelp");break;case LINK_CODE_AUTH_ERR:helpBind(g,"PPPoENPErrHelp");break;case LINK_CODE_UNKNOWN:case LINK_CODE_DENY:case LINK_CODE_SRVDOWN:case LINK_CODE_OPT_UNSUPPORT:case LINK_CODE_AUTH_UNSUPPORT:helpBind(g,"PPPoEOtherErrHelp");break;default:g.onclick=null,c="none"}else hsStatSet(h,linkStatus[q]);break;
-case LINK_UP:id("wanIpLbl").innerHTML=h+"/64";id("pri_dns").innerHTML=m;id("snd_dns").innerHTML=n;curSysMode==uciSystem.optValue.sysMode.routerMode?disableBtn("disconnect",!1):disableBtn("disconnect",!0);id("onlineTimeLbl").innerHTML=E(k);e="block";hsStatSet("correct",linkStatus[LINK_UP]);break;case LINKING_DOWN:id("wanIpLbl").innerHTML="::/64",id("pri_dns").innerHTML="::",id("snd_dns").innerHTML="::",disableBtn("disconnect",!0),id("onlineTimeLbl").innerHTML=E(k),e="block",hsStatSet("link",linkStatus[LINKING_DOWN])}g.style.display=
-c;l.style.display=e}}function B(a){var d={};d[l]={};1==a||"undefined"==typeof a?(d[l][KEY_NAME]=[WAN_NAME,PPPoE_NAME,"wan"],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=["wan_status",WAN_STATUS_NAME,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]):(d[l][KEY_NAME]=[WAN_NAME+"_"+a,PPPoE_NAME+"_"+a,"wan_"+a],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=["wan_status_"+a,WAN_STATUS_NAME+"_"+a,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]);$.query(d,function(b){var c=
-b[l],d;2<=a&&"undefined"!=typeof a?(c=c[PPPoE_NAME+"_"+a],d=b.network["wan_status_"+a],m=b[uciNetwork.fileName][WAN_STATUS_NAME+"_"+a].proto):(c=c[PPPoE_NAME],d=b.network.wan_status,m=b[uciNetwork.fileName][WAN_STATUS_NAME].proto);$("#name").val(c[s]);$("#psw").val(c[t]);"1"==c[D]&&"pppoe"==d.proto?id("shareIpv4").click():"pppoe"!=d.proto&&(id("shareIpv4").disabled=!0);id("PtlAuto").checked=c.ip_config==IP_CONFIG_AUTO?1:0;id("PtlDHCPv6").checked=c.ip_config==IP_CONFIG_DHCPV6?1:0;id("PtlSLAAC").checked=
-c.ip_config==IP_CONFIG_SLAAC?1:0;c.ip_config==IP_CONFIG_STATIC&&($("#ipAddr").val(c[x]),id("PtlStatic").click());r=c.pd_mode;"undefined"!=typeof a?(r=PD_MODE_NON_TEMP,id("PreDelgOff").checked=1,lanPrefixChange(!1),preDelgOnFlag=!1,disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0)):(disableBtn("PreDelgOn",!1),disableBtn("PreDelgOff",!1),c.pd_mode==PD_MODE_NON_TEMP?(id("PreDelgOff").checked=1,m==PPPoE_NAME&&(lanPrefixChange(!1),preDelgOnFlag=!1)):(id("PreDelgOn").checked=1,m==PPPoE_NAME&&(c.ip_config!=
-IP_CONFIG_STATIC?(lanPrefixChange(!0),preDelgOnFlag=!0):(lanPrefixChange(!1),preDelgOnFlag=!1))));curSysMode!=uciSystem.optValue.sysMode.routerMode&&(disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0));c.dns_mode==DNS_MODE_DYN?(id("dnsAuto").click(),dnsSwitchAutoFlag=!0):(id("pri_dns_input").value=c.pri_dns||"::",id("snd_dns_input").value=c.snd_dns&&"::"!=c.snd_dns?c.snd_dns:"",id("dnsManual").click());setMacInfo(b,a);F(b,a)})}function P(a){if(id("shareIpv4").checked){var d="",d=2<=a&&"undefined"!=
-typeof a?"wan_status_"+a:"wan_status";$.query({network:{name:d}},function(b){"pppoe"!=b.network[d].proto?(showAlert("检测到当前IPv4上网方式不为宽带拨号模式，无法复用IPv4拨号链路。请重试",void 0,void 0,function(){$.query({network:{name:d}},function(a){"pppoe"==a.network[d].proto&&curSysMode==uciSystem.optValue.sysMode.routerMode?id("shareIpv4").disabled=!1:(id("shareIpv4").click(),id("shareIpv4").disabled=!0)})}),clearTimeout(alertTimeHd)):C(a)})}else C(a)}var l="protocol",w="wan",M=uciProto.optName.type,s=uciProto.optName.pppoeUsr,
-t=uciProto.optName.pppoePwd,y="pri_dns",z="snd_dns",K="pd_mode",I="ip_config",J="dns_mode",L=uciProto.optName.macaddr,x="specific_ip",D="sharev4",r,m,A;refreshWanStatus=function(a){var d={};d[uciNetwork.fileName]={};d[uciNetwork.fileName][KEY_NAME]=2<=a&&"undefined"!=typeof a?WAN_STATUS_NAME+"_"+a:WAN_STATUS_NAME;updateTimerHandle&&clearTimeout(updateTimerHandle);$.query(d,function(b){F(b,a);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})};$("[name=ipv6GetPtlSwitch]").change(function(){"PtlStatic"==
-this.id?($(".ipv6AddrLine").css("display","block"),$("#ipv6PreDelgLine").css("display","none")):($(".ipv6AddrLine").css("display","none"),$("#ipv6PreDelgLine").css("display","block"))});$("[name=ipv6DnsSwitch]").change(function(){"dnsManual"==this.id?$("ul.dnsLine").css("display","block"):$("ul.dnsLine").css("display","none")});$("#shareIpv4").change(function(){!0==this.checked?$("ul.pppoeUserLine").css("display","none"):$("ul.pppoeUserLine").css("display","block")});if("undefined"==typeof e)selectInit("wanSel",
-wanOptions,LINK_TYPE_PPPOE,wanSelectChange);else{var Q=wanOptions.slice(0,wanOptions.length-1);selectInit("wanSel",Q,LINK_TYPE_PPPOE,wanSelectChange)}B(e);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(e)},2E3);refreshLanStatus(e);disableBtn("disconnect",!0);id("disconnect").onclick=function(){O(e)};id("save").onclick=function(){P(e)};id("saveHighSet").onclick=function(){G(e)};curSysMode!=uciSystem.optValue.sysMode.routerMode&&(id("wanSel").disable(!0),disableInput("shareIpv4",!0),disableInput("name",
-!0),disableInput("psw",!0),disableBtn("disconnect",!0),disableBtn("save",!0),disableInput("PtlAuto",!0),disableInput("PtlDHCPv6",!0),disableInput("PtlSLAAC",!0),disableInput("PtlStatic",!0),disableInput("ipAddr",!0),disableInput("pri_dns_input",!0),disableInput("snd_dns_input",!0),disableInput("wanMac",!0),disableBtn("dnsAuto",!0),disableBtn("dnsManual",!0),disableBtn("saveHighSet",!0))}
-function initWanPortSel(){if($("#dualWanIpv6Wrapper").is(":hidden"))init();else{var e=$("#dualWanIpv6Wrapper").find("label.selected").index()+1;init(e)}}initWanPortSel();
-</script><style type="text/css">li.macCloneLi{color:#fff;font-size:12px;line-height:20px!important}#pppoeSolution{color:#005fb8;font-size:12px;margin-left:10px;text-indent:0;vertical-align:middle}#onlineTimeUl{display:none}.ipv6AddrLine{display:none}</style>
+<script type="text/javascript">
+	function init(currentWanPortIdx)
+	{
+		var uciFile = "protocol";
+		var uciWan = "wan";
+		var uciWanType = uciProto.optName.type;
+		var uciUsrName = uciProto.optName.pppoeUsr;
+		var uciPwd = uciProto.optName.pppoePwd;
+		var uciPriDns = "pri_dns";
+		var uciSndDns = "snd_dns";
+		var uciPdMode = "pd_mode";
+		var uciIpConfig = "ip_config";
+		var uciDnsMode = "dns_mode";
+		var uciWanMac = uciProto.optName.macaddr;
+		var uciSpecIp = "specific_ip";
+		var uciSharev4 = "sharev4";
+
+		var currentPreDelgVal, currentProto, currentIPConfigVal;
+
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+
+			switch (errNo)
+			{
+			case ENONE:
+				return false;
+			case EPPPOEUSER:
+				showStr = errStr.pppoeUserErr;
+				break;
+			case EPPPOEPWD:
+				showStr = errStr.pppoePwdErr;
+				break;
+			case EINVMTU:
+				showStr = errStr.pppoeMtuErr;
+				break;
+			case EINVNET:
+				showStr = errStr.ipAddrNetErr;
+				break;
+			case EIPV6INVIP:
+				showStr = errStr.ipv6AddrErr;
+				break;
+			case EIPV6INVIPFMT:
+				showStr = errStr.ipv6AddrFmtErr;
+				break;
+			case EIPV6INVGROUPIP:
+				showStr = errStr.ipv6AddrGroupErr;
+				break;
+			case EIPV6LOOP:
+				showStr = errStr.ipv6AddrLoopErr;
+				break;
+			case EIPV6LINKLOCAL:
+				showStr = errStr.ipv6LinkLoaclErr;
+				break;
+			case EIPV66TO4ADDR:
+				showStr = errStr.ipv6Addr6To4Err;
+				break;
+			/*
+			case ECOMFLICTNET:
+				showStr = errStr.ispIpLanConflict;
+				break;
+			*/
+			case EIPV6INVFDNSVR:
+				showStr = errStr.primDnsErr;
+				break;
+			case EIPV6INVSDNSVR:
+				showStr = errStr.seDnsErr;
+				break;
+			case EINVTIME:
+				showStr = errStr.pppoeOffTimeErr;
+				break;
+			case ENOLINK:
+				showStr = errStr.wanLinkDown;
+				break;
+			case ECONFLICTLANMAC:
+				showStr = errStr.lanWanMacConflict;
+				break;
+			case ECONFLICTWANMAC:
+				showStr = errStr.mulWanMacConflict;
+				break;
+			default:
+				showStr = errStr.invRequestFail;
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return true;
+		}
+
+		function onSaveHighSet(currentWanPortIdx)
+		{
+			wanCheckWDS(function(){
+				var cfg = {}, cfgProto = {}, cfgPppoe = {}, cfgWan = {};
+				cfg[uciFile] = cfgProto;
+				if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+					cfgProto[uciWan] = cfgWan;
+					cfgProto[PPPoE_NAME] = cfgPppoe;
+				}else{
+					cfgProto[uciWan + "_" + currentWanPortIdx] = cfgWan;
+					cfgProto[PPPoE_NAME + "_" + currentWanPortIdx] = cfgPppoe;
+				}
+
+				var ipconfigVal, pdmodeVal, dnsmodeVal, dns0Val, dns1Val, wanMac, wanMacVal, specipVal;
+
+				ipconfigVal = id("PtlAuto").checked ? IP_CONFIG_AUTO :
+								id("PtlDHCPv6").checked ? IP_CONFIG_DHCPV6 :
+									id("PtlSLAAC").checked ? IP_CONFIG_SLAAC : IP_CONFIG_STATIC;
+				specipVal = id("ipAddr").value;
+
+				pdmodeVal = id("PreDelgOn").checked ? PD_MODE_PREFIX : PD_MODE_NON_TEMP;
+				dnsmodeVal = id("dnsAuto").checked ? DNS_MODE_DYN : DNS_MODE_MAN;
+
+				dns0Val = id("pri_dns_input").value;
+				dns1Val = id("snd_dns_input").value;
+
+				wanMac = id("wanMac");
+				wanMacVal = wanMac.value;
+
+				if (wanMacErrHandle(checkMac(wanMacVal), wanMac))
+				{
+					return;
+				}
+
+				/* protocol.pppoev6 */
+				cfgPppoe[uciIpConfig] = ipconfigVal;
+				cfgPppoe[uciDnsMode] = dnsmodeVal;
+
+				if (ipconfigVal == IP_CONFIG_STATIC)
+				{
+					if (errHandle(checkIPv6(specipVal), "ipAddr"))
+					{
+						return;
+					}
+
+					/* 不需要去掉前导0，但要替换中文冒号 */
+					specipVal = specipVal.replace(/：/g, ":");
+					$("#ipAddr").val(specipVal);
+
+					cfgPppoe[uciSpecIp] = specipVal;
+				}
+				else
+				{
+					cfgPppoe[uciPdMode] = pdmodeVal;
+				}
+
+				if (dnsmodeVal == DNS_MODE_MAN)
+				{
+					if (errHandle(checkPriDnsV6(dns0Val), "pri_dns_input") ||
+						errHandle(checkSeDnsV6(dns1Val), "snd_dns_input"))
+					{
+						return;
+					}
+
+					/* 不需要去掉前导0，但要替换中文冒号 */
+					dns0Val = dns0Val.replace(/：/g, ":");
+					$("#pri_dns_input").val(dns0Val);
+					dns1Val = dns1Val.replace(/：/g, ":");
+					$("#snd_dns_input").val(dns1Val);
+
+					cfgPppoe[uciPriDns] = dns0Val;
+					cfgPppoe[uciSndDns] = dns1Val;
+				}
+
+				/* protocol.wan */
+				cfgWan[uciWanMac] = wanMacVal;
+
+				if (updateTimerHandle)
+				{
+					clearTimeout(updateTimerHandle);
+				}
+
+				disableBtn("save", true);
+				disableBtn("disconnect", true);
+				setLoadingId("saveHighSet");
+				hsLoading(true);
+
+				$.modify(cfg,function(result){
+					currentPreDelgVal = pdmodeVal;
+					currentIPConfigVal = ipconfigVal;
+
+					if (currentProto == PPPoE_NAME)
+					{
+						if (pdmodeVal == PD_MODE_PREFIX && ipconfigVal != IP_CONFIG_STATIC)
+						{
+							lanPrefixChange(true);
+							preDelgOnFlag = true;
+						}
+						else
+						{
+							setTimeout(function(){
+								lanPrefixChange(false);
+								preDelgOnFlag = false;
+							}, 2000);
+						}
+					}
+					getPPPoEData(currentWanPortIdx);
+					hsLoading(false, function(){
+						disableBtn("save", false);
+						disableBtn("disconnect", false);
+					});
+
+					updateTimerHandle = $.setTimeout(function(){
+						refreshWanStatus(currentWanPortIdx);
+					}, 0);
+					return errHandle(result[ERR_CODE]);
+				});
+			});
+		}
+
+		function onSave(currentWanPortIdx)
+		{
+			wanCheckWDS(function(){
+				var cfg = {}, cfgProto = {}, cfgPppoe = {}, cfgWan = {};
+				var nameVal = id("name").value;
+				var pswVal = id("psw").value;
+				cfg[uciFile] = cfgProto;
+				if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+					cfgProto[WAN_NAME] = cfgWan;
+					cfgProto[PPPoE_NAME] = cfgPppoe;
+				}else{
+					cfgProto[WAN_NAME + "_" + currentWanPortIdx] = cfgWan;
+					cfgProto[PPPoE_NAME + "_" + currentWanPortIdx] = cfgPppoe;
+				}
+				cfgWan[uciWanType] = PPPoE_NAME;
+				cfgPppoe[uciSharev4] = id("shareIpv4").checked ? "1" : "0";
+
+				if (id("shareIpv4").checked)
+				{
+					var pppoeKey = "";
+					if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+						pppoeKey = "pppoe";
+					}else{
+						pppoeKey = "pppoe_" + currentWanPortIdx;
+					}
+					$.query({protocol:{name:pppoeKey}}, function(result){
+						var pppoeCfg = result.protocol.pppoeKey;
+
+						cfgPppoe[uciUsrName] = pppoeCfg.username;
+						cfgPppoe[uciPwd] =  pppoeCfg.password;
+					}, false);
+				}
+				else
+				{
+					cfgPppoe[uciUsrName] = nameVal;
+					cfgPppoe[uciPwd] = pswVal;
+				}
+
+				setLoadingId("save");
+				hsLoading(true);
+				disableBtn("disconnect", true);
+				disableBtn("saveHighSet", true);
+
+				$.modify(cfg, function(result){
+					var code = result[ERR_CODE];
+					if (ENONE == code)
+					{
+						$("#" + "name").val(cfgPppoe[uciUsrName]);
+						$("#" + "psw").val(cfgPppoe[uciPwd]);
+						currentProto = PPPoE_NAME;
+						if (currentPreDelgVal == PD_MODE_PREFIX && currentIPConfigVal != IP_CONFIG_STATIC)
+						{
+							lanPrefixChange(true);
+							preDelgOnFlag = true;
+						}
+						else
+						{
+							setTimeout(function(){
+								lanPrefixChange(false);
+								preDelgOnFlag = false;
+							}, 2000);
+						}
+
+						onclickConnect(currentWanPortIdx);
+					}
+					else
+					{
+						hsLoading(false, function(){
+							disableBtn("disconnect", false);
+							disableBtn("saveHighSet", false);
+						});
+
+						//刷新WAN口状态
+						updateTimerHandle = $.setTimeout(function(){
+							refreshWanStatus(currentWanPortIdx);
+						}, 0);
+					}
+					return errHandle(code);
+				});
+			});
+		}
+
+		function onclickConnect(currentWanPortIdx)
+		{
+			var data;
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				data = {"network":{"change_wanv6_status":{"proto":"pppoev6", "operate":"connect"}}};
+			}else{
+				data = {"network":{"change_wanv6_status":{"proto":"pppoev6_" + currentWanPortIdx, "operate":"connect"}}};
+			}
+
+			if (updateTimerHandle)
+			{
+				clearTimeout(updateTimerHandle);
+			}
+
+			$.action(data,function(result){
+				hsLoading(false, function(){
+					disableBtn("disconnect", false);
+					disableBtn("saveHighSet", false);
+				});
+				updateTimerHandle = $.setTimeout(function(){
+					refreshWanStatus(currentWanPortIdx);
+				}, 2000);
+			});
+		}
+
+		function onclickDisconnect(currentWanPortIdx)
+		{
+			var data;
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				data = {"network":{"change_wanv6_status":{"proto":"pppoev6", "operate":"disconnect"}}};
+			}else{
+				data = {"network":{"change_wanv6_status":{"proto":"pppoev6_" + currentWanPortIdx, "operate":"disconnect"}}};
+			}
+			if (updateTimerHandle)
+			{
+				clearTimeout(updateTimerHandle);
+			}
+
+			disableBtn("save", true);
+			disableBtn("saveHighSet", true);
+			setLoadingId("disconnect");
+			hsLoading(true);
+
+			$.action(data, function(result){
+				hsLoading(false, function(){
+					disableBtn("save", false);
+					disableBtn("saveHighSet", false);
+				});
+				updateTimerHandle = $.setTimeout(function(){
+					refreshWanStatus(currentWanPortIdx);
+				}, 2000);
+			});
+		}
+
+		function showConnectTime(secs)
+		{
+			var MIN = 60;
+			var HOU = MIN * 60;
+			var DAY = HOU * 24;
+			var days, hours, mins;
+			var dayTimeStr = "";
+
+			days = parseInt(secs / DAY);
+			hours = parseInt((secs % DAY) / HOU);
+			mins = parseInt((secs % HOU) / MIN);
+
+			if (days > 0)
+			{
+				dayTimeStr = days + label.dayT;
+			}
+
+			dayTimeStr += hours + label.lHour + mins + label.minuteT;
+
+			return dayTimeStr;
+		}
+
+		function setPPPoEWanStatus(data,currentWanPortIdx)
+		{
+			var wanStatus;
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				wanStatus = data[uciNetwork.fileName][WAN_STATUS_NAME];
+			}else{
+				wanStatus = data[uciNetwork.fileName][WAN_STATUS_NAME + "_" + currentWanPortIdx];
+			}
+
+			if (wanStatus["proto"] != PPPoE_NAME)
+			{
+				clearTimeout(updateTimerHandle);
+				return;
+			}
+
+			var dis = "none", advPPPoeHelp = id("pppoeSolution");
+			var onlineTimeDis = "none", onlineTimeUl = id("onlineTimeUl");
+			var code = wanStatus["error_code"];
+
+			var ip = wanStatus["ip6addr"] || "::";
+			var priDns = wanStatus[uciPriDns] || "::";
+			var sndDns = wanStatus[uciSndDns] || "::";
+			var connectTime = wanStatus[uciNetwork.optName.upTime] || 0;
+			var wanLinkStatus = parseInt(wanStatus["link_status"]);
+
+			switch(wanLinkStatus)
+			{
+			case LINK_DOWN:
+			case LINKING_UP:
+				disableBtn("disconnect", (LINK_DOWN == wanLinkStatus || curSysMode != uciSystem.optValue.sysMode.routerMode));
+				onlineTimeDis = "none";
+
+				id("wanIpLbl").innerHTML = "::/64";
+				id("pri_dns").innerHTML = "::";
+				id("snd_dns").innerHTML = "::";
+
+				var linkTipType = (LINK_DOWN == wanLinkStatus) ? "error" : "link";
+
+				if (0 == parseInt(wanStatus[uciNetwork.optName.phyStatus]))
+				{
+					code = LINK_CODE_PHYDOWN;
+				}
+
+				if ((LINK_CODE_MANUAL != code) &&
+					(LINK_CODE_NORMAL != code) &&
+					(LINK_CODE_INET_ERR != code) &&
+					(LINK_CODE_PPPOEv4_SWITCH != code))
+				{
+					dis = "inline-block";
+					hsStatSet(linkTipType, linkStatus[wanLinkStatus] + label.lBrackets + linkCode[code] + label.rBrackets);
+
+					switch(code)
+					{
+					case LINK_CODE_NOECHO:
+						helpBind(advPPPoeHelp, "PPPoEServerDeadHelp");
+						break;
+					case LINK_CODE_AUTH_ERR:
+						helpBind(advPPPoeHelp, "PPPoENPErrHelp");
+						break;
+					case LINK_CODE_UNKNOWN:
+					case LINK_CODE_DENY:
+					case LINK_CODE_SRVDOWN:
+					case LINK_CODE_OPT_UNSUPPORT:
+					case LINK_CODE_AUTH_UNSUPPORT:
+						helpBind(advPPPoeHelp, "PPPoEOtherErrHelp");
+						break;
+					case LINK_CODE_PHYDOWN:
+					default:
+						advPPPoeHelp.onclick = null;
+						dis = "none";
+						break;
+					}
+				}
+				else
+				{
+					hsStatSet(linkTipType, linkStatus[wanLinkStatus]);
+				}
+				break;
+			case LINK_UP:
+				id("wanIpLbl").innerHTML = ip + "/64";
+
+				id("pri_dns").innerHTML = priDns;
+				id("snd_dns").innerHTML = sndDns;
+
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("disconnect", false);
+				} else {
+					disableBtn("disconnect", true);
+				}
+				id("onlineTimeLbl").innerHTML = showConnectTime(connectTime);
+				onlineTimeDis = "block";
+				hsStatSet("correct", linkStatus[LINK_UP]);
+
+				break;
+			case LINKING_DOWN:
+				id("wanIpLbl").innerHTML = "::/64";
+				id("pri_dns").innerHTML = "::";
+				id("snd_dns").innerHTML = "::";
+				disableBtn("disconnect", true);
+				id("onlineTimeLbl").innerHTML = showConnectTime(connectTime);
+				onlineTimeDis = "block";
+				hsStatSet("link", linkStatus[LINKING_DOWN]);
+				break;
+			default:
+				break;
+			}
+
+			advPPPoeHelp.style.display = dis;
+			onlineTimeUl.style.display = onlineTimeDis;
+		}
+
+		function setPPPoECfg(ALL_DATA,currentWanPortIdx)
+		{
+			var data = ALL_DATA[uciFile];
+			var wanCfg,pppoeCfg,wanv4_status;
+			if(currentWanPortIdx >= 2 && typeof currentWanPortIdx != "undefined"){
+				wanCfg = data[WAN_NAME + "_" + currentWanPortIdx];
+				pppoeCfg = data[PPPoE_NAME + "_" + currentWanPortIdx];
+				wanv4_status = ALL_DATA["network"]["wan_status_" + currentWanPortIdx];
+				currentProto = ALL_DATA[uciNetwork.fileName][WAN_STATUS_NAME + "_" + currentWanPortIdx]["proto"];
+			}else{
+				wanCfg = data[WAN_NAME];
+				pppoeCfg = data[PPPoE_NAME];
+				wanv4_status = ALL_DATA["network"]["wan_status"];
+				currentProto = ALL_DATA[uciNetwork.fileName][WAN_STATUS_NAME]["proto"];
+			}
+
+			$("#" + "name").val(pppoeCfg[uciUsrName]);
+			$("#" + "psw").val(pppoeCfg[uciPwd]);
+
+			/* 当sharev4为1时，可判断IPv4当前为PPPoE，此处是为了保险 */
+			if (pppoeCfg[uciSharev4] == "1" && wanv4_status["proto"] == "pppoe")
+			{
+				id("shareIpv4").click();
+			}
+			else if (wanv4_status["proto"] != "pppoe")
+			{
+				id("shareIpv4").disabled = true;
+			}
+
+			/* 地址获取协议 */
+			id("PtlAuto").checked = pppoeCfg.ip_config == IP_CONFIG_AUTO ? 1 : 0;
+			id("PtlDHCPv6").checked = pppoeCfg.ip_config == IP_CONFIG_DHCPV6 ? 1 : 0;
+			id("PtlSLAAC").checked = pppoeCfg.ip_config == IP_CONFIG_SLAAC ? 1 : 0;
+
+			if (pppoeCfg.ip_config == IP_CONFIG_STATIC)
+			{
+				$("#" + "ipAddr").val(pppoeCfg[uciSpecIp]);
+				id("PtlStatic").click();
+			}
+
+			/* 前缀授权 */
+			currentPreDelgVal = pppoeCfg.pd_mode;
+			if(typeof currentWanPortIdx != "undefined"){
+				currentPreDelgVal = PD_MODE_NON_TEMP;
+				id("PreDelgOff").checked = 1;
+				lanPrefixChange(false);
+				preDelgOnFlag = false;
+				disableBtn("PreDelgOn",true);
+				disableBtn("PreDelgOff",true);
+			}else{
+				disableBtn("PreDelgOn",false);
+				disableBtn("PreDelgOff",false);
+				if (pppoeCfg.pd_mode == PD_MODE_NON_TEMP)
+				{
+					id("PreDelgOff").checked = 1;
+
+					if (currentProto == PPPoE_NAME)
+					{
+						lanPrefixChange(false);
+						preDelgOnFlag = false;
+					}
+				}
+				else
+				{
+					id("PreDelgOn").checked = 1;
+
+					if (currentProto == PPPoE_NAME)
+					{
+						if (pppoeCfg.ip_config != IP_CONFIG_STATIC)
+						{
+							lanPrefixChange(true);
+							preDelgOnFlag = true;
+						}
+						else
+						{
+							lanPrefixChange(false);
+							preDelgOnFlag = false;
+						}
+					}
+				}
+			}
+
+			if (curSysMode != uciSystem.optValue.sysMode.routerMode) {
+				disableBtn("PreDelgOn",true);
+				disableBtn("PreDelgOff",true);
+			}
+			/* DNS服务器 */
+			if (pppoeCfg.dns_mode == DNS_MODE_DYN)
+			{
+				id("dnsAuto").click();
+				dnsSwitchAutoFlag = true;
+			}
+			else
+			{
+				id("pri_dns_input").value = pppoeCfg["pri_dns"] || "::";
+				id("snd_dns_input").value = (pppoeCfg["snd_dns"] && pppoeCfg["snd_dns"] != "::") ? pppoeCfg["snd_dns"] : "";
+
+				id("dnsManual").click();
+			}
+
+			setMacInfo(ALL_DATA,currentWanPortIdx);
+
+			/* 设置WAN口状态 */
+			setPPPoEWanStatus(ALL_DATA,currentWanPortIdx);
+		}
+
+		function getPPPoEData(currentWanPortIdx)
+		{
+			var data = {};
+			data[uciFile] = {};
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				// 单WAN或WAN1口数据
+				data[uciFile][KEY_NAME] = [WAN_NAME, PPPoE_NAME,"wan"];
+				data[uciNetwork.fileName] = {};
+				data[uciNetwork.fileName][KEY_NAME] = ["wan_status", WAN_STATUS_NAME, uciNetwork.dynData.ifaceMac, uciNetwork.secName.lan];
+			}else{
+				data[uciFile][KEY_NAME] = [WAN_NAME + "_" + currentWanPortIdx, PPPoE_NAME + "_" + currentWanPortIdx,"wan_"+ currentWanPortIdx];
+				data[uciNetwork.fileName] = {};
+				data[uciNetwork.fileName][KEY_NAME] = ["wan_status_"+ currentWanPortIdx, WAN_STATUS_NAME + "_" + currentWanPortIdx, uciNetwork.dynData.ifaceMac, uciNetwork.secName.lan];
+			}
+
+			$.query(data, function(res){
+				setPPPoECfg(res,currentWanPortIdx);
+			});
+		}
+
+		refreshWanStatus = function(currentWanPortIdx)
+		{
+			var data = {};
+			data[uciNetwork.fileName] = {};
+			if(currentWanPortIdx >= 2 && typeof currentWanPortIdx != "undefined"){
+				data[uciNetwork.fileName][KEY_NAME] = WAN_STATUS_NAME + "_" + currentWanPortIdx;
+			}else{
+				data[uciNetwork.fileName][KEY_NAME] = WAN_STATUS_NAME;
+			}
+
+			if (updateTimerHandle)
+			{
+				clearTimeout(updateTimerHandle);
+			}
+
+			$.query(data, function(res){
+				setPPPoEWanStatus(res,currentWanPortIdx);
+				updateTimerHandle = $.setTimeout(function(){
+					refreshWanStatus(currentWanPortIdx);
+				}, 2000);
+			});
+		}
+
+		function beforeSave(currentWanPortIdx)
+		{
+			/* 当sharev4勾选时，检查IPv4是否为PPPoE */
+			if (id("shareIpv4").checked)
+			{
+				var wanStatusKey = "";
+				if(currentWanPortIdx >= 2 && typeof currentWanPortIdx != "undefined"){
+					wanStatusKey = "wan_status_" + currentWanPortIdx;
+				}else{
+					wanStatusKey = "wan_status";
+				}
+				$.query({network:{name:wanStatusKey}}, function(data){
+					var wan_status = data.network[wanStatusKey];
+
+					if (wan_status.proto != "pppoe")
+					{
+						showAlert("检测到当前IPv4上网方式不为宽带拨号模式，无法复用IPv4拨号链路。请重试",
+							undefined, undefined, function(){
+								$.query({network:{name:wanStatusKey}}, function(result)
+								{
+									if (result.network[wanStatusKey].proto == "pppoe" && curSysMode == uciSystem.optValue.sysMode.routerMode)
+									{
+										id("shareIpv4").disabled = false;
+									}
+									else
+									{
+										id("shareIpv4").click();
+										id("shareIpv4").disabled = true;
+									}
+								});
+							});
+						clearTimeout(alertTimeHd);
+					}
+					else
+					{
+						onSave(currentWanPortIdx);
+					}
+				});
+			}
+			else
+			{
+				onSave(currentWanPortIdx);
+			}
+		}
+
+		$("[name=ipv6GetPtlSwitch]").change(function(){
+			if (this.id == "PtlStatic")
+			{
+				$(".ipv6AddrLine").css("display", "block");
+				$("#ipv6PreDelgLine").css("display", "none");
+			}
+			else
+			{
+				$(".ipv6AddrLine").css("display", "none");
+				$("#ipv6PreDelgLine").css("display", "block");
+			}
+		});
+
+		$("[name=ipv6DnsSwitch]").change(function(){
+			if (this.id == "dnsManual")
+			{
+				$("ul.dnsLine").css("display", "block");
+			}
+			else
+			{
+				$("ul.dnsLine").css("display", "none");
+			}
+		});
+
+		$("#shareIpv4").change(function(){
+			if (this.checked == true)
+			{
+				$("ul.pppoeUserLine").css("display", "none");
+			}
+			else
+			{
+				$("ul.pppoeUserLine").css("display", "block");
+			}
+		})
+
+		/*
+		$("[name=ipv6PreDelgSwitch]").change(function(){
+			if (this.id == "PreDelgOn")
+			{
+				lanPrefixChange(true);
+				preDelgOnFlag = true;
+			}
+			else
+			{
+				lanPrefixChange(false);
+				preDelgOnFlag = false;
+			}
+		});
+		*/
+
+		if(typeof currentWanPortIdx == "undefined"){
+			selectInit("wanSel", wanOptions, LINK_TYPE_PPPOE, wanSelectChange);
+		}else{
+			// 多WAN开启时不支持桥模式选择
+			var wanNewOptions = wanOptions.slice(0,wanOptions.length - 1);
+			selectInit("wanSel", wanNewOptions, LINK_TYPE_PPPOE, wanSelectChange);
+		}
+		getPPPoEData(currentWanPortIdx);
+		updateTimerHandle = $.setTimeout(function(){
+			refreshWanStatus(currentWanPortIdx);
+		}, 2000);
+		refreshLanStatus(currentWanPortIdx);
+		disableBtn("disconnect", true);
+
+		id("disconnect").onclick = function(){
+			onclickDisconnect(currentWanPortIdx);
+		}
+		id("save").onclick = function(){
+			beforeSave(currentWanPortIdx);
+		}
+		id("saveHighSet").onclick = function(){
+			onSaveHighSet(currentWanPortIdx);
+		}
+
+		if (curSysMode != uciSystem.optValue.sysMode.routerMode) {
+			id("wanSel").disable(true);
+			disableInput("shareIpv4", true);
+			disableInput("name", true);
+			disableInput("psw", true);
+			disableBtn("disconnect", true);
+			disableBtn("save", true);
+			disableInput("PtlAuto",true);
+			disableInput("PtlDHCPv6",true);
+			disableInput("PtlSLAAC",true);
+			disableInput("PtlStatic",true);
+			disableInput("ipAddr",true);
+			disableInput("pri_dns_input",true);
+			disableInput("snd_dns_input",true);
+			disableInput("wanMac",true);
+			disableBtn("dnsAuto",true);
+			disableBtn("dnsManual",true);
+			disableBtn("saveHighSet",true);
+		}
+	}
+
+	function initWanPortSel(){
+		if($("#dualWanIpv6Wrapper").is(":hidden")){
+			// 多WAN未开启
+			init();
+		}else{
+			var currentSelPort = $("#dualWanIpv6Wrapper").find("label.selected").index();
+			var currentWanPortIdx = currentSelPort + 1;
+			init(currentWanPortIdx);
+		}
+	}
+	initWanPortSel();
+</script>

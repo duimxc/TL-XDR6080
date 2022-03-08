@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: package/libnl-tiny
 Section: libs
 Architecture: ipq
-Installed-Size: 12519
+Installed-Size: 12522
 Description:  This package contains a stripped down version of libnl

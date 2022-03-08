@@ -4,6 +4,6 @@ Depends: libc, libssp, libpthread, librt
 Source: tp_package/lib/libcyassl
 Section: libs
 Architecture: ipq
-Installed-Size: 83059
+Installed-Size: 83061
 Description:  CyaSSL is an SSL library optimized for small footprint, both on disk and for
  memory use.

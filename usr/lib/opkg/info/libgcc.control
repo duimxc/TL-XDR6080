@@ -7,5 +7,5 @@ Status: unknown hold not-installed
 Essential: yes
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Architecture: ipq
-Installed-Size: 19166
+Installed-Size: 19168
 Description:  GCC support library

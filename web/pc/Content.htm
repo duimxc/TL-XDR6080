@@ -1,22 +1,439 @@
+<script type="text/javascript">
+	/*
+		全局变量，用于表示是否支持BS功能
+		初始化页面：Content.htm
+		使用页面：WlanCfg.htm、WlanNetwork1Band.htm、WlanNetwork2Band.htm、WlanNetwork3Band.htm
+	*/
+	var gSupportBS = false;
 
-<script type="text/javascript">var gSupportBS=!1,BAND_1=0,BAND_2=1,BAND_3=2,gBandNum=BAND_2,gWifiSwitchSupport=!1,gCustomWifiSwitchSupport=!1,gWifiSwitchUseWireless=!1,gWifiSwitchSplit=!1,gAuthSupport=!1,gAuthSupport2g=!1,gAuthSupport5g=!1,gCipherSupport=!1,gCipherSupport2g=!1,gCipherSupport5g=!1,gMultiSSIDSupport=!1,gPinWpsSupport=!1,gModeSwitchSupport=!1,gElinkSupport=!1,gWoLinkSupport=!1,gCustomLedSupport=!1,gHnatSupport=!1,gMacFilterSupport=!1,gAlinkTestSupport=!1,gUsernameSupport=!1,gMultiAccountSupport=!1,gUsernameHasInitialValue=
-!1,gPasswordHasInitialValue=!1,gUsernameChangeable=!1,gIpv6Support=!1,gMeshSupport=!1,g11AxSupport={},gWlanHost5gSupport160MBandWidth=!1,gNasSupport=!1,gWanPortDetectSupport=!1,gGuest5GSupport=!1,gEasyMeshUpgradeSupport=!1,gSysModeSupport=!1,gSupportWanPortSwap=!1,gSfpRateSupport=!1,gSupportPortManage=!1,gMulWanSupport=!1,gMWanLoadBalanceSupport=!1,gIptvSupport=!1,gLagSupport=!1,gGameSupport=!1,gSupportStaCapability=!1,wanPortDescList,wanPortValueList,wanPortDisplayList,wanPortRateList,wanPortRateDescList,
-ethLayoutList,devicePowerPos,gSmbCloudSupport=!1,gGetQRCodeSupport=!1,gTelnetSupport=gWoLinkSupport=!1,showAndlinkLogo=!1,showAndlinkQRcode=!1,showElinkLogo=!1,PWD_MIN_LEN=6,PWD_MAX_LEN=32,showPwdStrength=!0,maxManageDevNum=64;
-function init(){function c(c){var f=new Image;f.src=c;f.complete||(f.onload=function(){})}function g(c,f){var a=formatTableData(c[uciHostsInfo.fileName][uciHostsInfo.dynData.host_info]),b;g_cur_host_mac=c[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];for(var d in a)if(b=a[d],b[uciHostsInfo.optName.mac].toUpperCase()==g_cur_host_mac.toUpperCase()){g_host_conn_type=b[uciHostsInfo.optName.type];break}a=c[uciFunction.fileName][uciFunction.secName.newModuleSpec];gSupportBS=
-a[uciFunction.optName.wlanBS]==uciFunction.optValue.enable;gWifiSwitchSupport=a[uciFunction.optName.wifiSwitch]==uciFunction.optValue.enable;gCustomWifiSwitchSupport=a[uciFunction.optName.customWifiSwitch]==uciFunction.optValue.enable;gWifiSwitchSplit=a[uciFunction.optName.wifiSwitchSplit]==uciFunction.optValue.enable;gWifiSwitchSupport&&(b={},b[uciWireless.fileName]={},b[uciWireless.fileName][KEY_NAME]=uciWireless.dynData.wifi_switch,$.query(b,function(a){ENONE==a[ERR_CODE]&&(gWifiSwitchUseWireless=
-!0)}));void 0!=a.manage_sta_num&&(maxManageDevNum=a.manage_sta_num);void 0!=a[uciFunction.optName.wlanServiceAttr]&&(-1!=$.inArray("auth",a[uciFunction.optName.wlanServiceAttr])&&(gAuthSupport=!0),-1!=$.inArray("cipher",a[uciFunction.optName.wlanServiceAttr])&&(gCipherSupport=!0));void 0!=a[uciFunction.optName.wlanServiceAttr2g]&&(-1!=$.inArray("auth",a[uciFunction.optName.wlanServiceAttr2g])&&(gAuthSupport2g=!0),-1!=$.inArray("cipher",a[uciFunction.optName.wlanServiceAttr2g])&&(gCipherSupport2g=
-!0));void 0!=a[uciFunction.optName.wlanServiceAttr5g]&&(-1!=$.inArray("auth",a[uciFunction.optName.wlanServiceAttr5g])&&(gAuthSupport5g=!0),-1!=$.inArray("cipher",a[uciFunction.optName.wlanServiceAttr5g])&&(gCipherSupport5g=!0));gMultiSSIDSupport=a[uciFunction.optName.supportMultiSsid]==uciFunction.optValue.enable;gPinWpsSupport=a[uciFunction.optName.supportPinWps]==uciFunction.optValue.enable;gModeSwitchSupport=a[uciFunction.optName.modeSwitch]==uciFunction.optValue.enable;gElinkSupport=a[uciFunction.optName.elink]==
-uciFunction.optValue.enable;gWoLinkSupport=a[uciFunction.optName.wolink]==uciFunction.optValue.enable;gCustomLedSupport=a[uciFunction.optName.customLed]==uciFunction.optValue.enable;gHnatSupport=a[uciFunction.optName.hnat]==uciFunction.optValue.enable;gMacFilterSupport=a.mac_filter_config==uciFunction.optValue.enable;gAlinkTestSupport=a.alink_test==uciFunction.optValue.enable;gMultiAccountSupport=a.multi_account==uciFunction.optValue.enable;gIpv6Support=a[uciFunction.optName.ipv6]==uciFunction.optValue.enable;
-gMeshSupport=a[uciFunction.optName.wifisonMesh]==uciFunction.optValue.enable;gWanPortDetectSupport=a[uciFunction.optName.wanPortDetect]==uciFunction.optValue.enable;gGuest5GSupport=a[uciFunction.optName.guest5g]==uciFunction.optValue.enable;gEasyMeshUpgradeSupport=a[uciFunction.optName.supportEyUp]==uciFunction.optValue.enable;gSfpRateSupport=a[uciFunction.optName.sfpRate]==uciFunction.optValue.enable;gSupportPortManage=a[uciFunction.optName.portManage]==uciFunction.optValue.enable;gMulWanSupport=
--1!=$.inArray(uciPortConfig.secType.mwan,a[uciFunction.optName.portSubFunc]);gIptvSupport=-1!=$.inArray(uciPortConfig.secType.iptv,a[uciFunction.optName.portSubFunc]);gLagSupport=-1!=$.inArray(uciPortConfig.secType.lag,a[uciFunction.optName.portSubFunc]);gGameSupport=-1!=$.inArray(uciPortConfig.secType.game,a[uciFunction.optName.portSubFunc]);gSupportStaCapability=a[uciFunction.optName.massiveSta]==uciFunction.optValue.enable;gSmbCloudSupport=a[uciFunction.optName.smbCloud]==uciFunction.optValue.enable;
-gGetQRCodeSupport=a[uciFunction.optName.supportQRCode]==uciFunction.optValue.enable;-1!=$.inArray("nas",a[uciFunction.optName.moduleList])&&(gNasSupport=!0);void 0!=a.mwan_load_balance_mode&&(gMWanLoadBalanceSupport=!0);b=("0000"+(a[uciFunction.optName.usernameChangeable]||0).toString(2)).slice(-4);gUsernameChangeable=b[0]==uciFunction.optValue.enable;gUsernameHasInitialValue=b[1]==uciFunction.optValue.enable;gUsernameSupport=b[2]==uciFunction.optValue.enable;gPasswordHasInitialValue=b[3]==uciFunction.optValue.enable;
-for(b=0;b<a[uciFunction.optName.mode2g].length;b++)if(-1!=a[uciFunction.optName.mode2g][b].search("ax")){g11AxSupport.wlan2g=!0;break}if(a[uciFunction.optName.channel5g1]){gBandNum=BAND_3;for(b=0;b<a[uciFunction.optName.mode5g1].length;b++)if(-1!=a[uciFunction.optName.mode5g1][b].search("ax")){g11AxSupport.wlan5g1=!0;break}for(b=0;b<a[uciFunction.optName.mode5g4].length;b++)if(-1!=a[uciFunction.optName.mode5g4][b].search("ax")){g11AxSupport.wlan5g4=!0;break}}else if(a[uciFunction.optName.channel5g])for(gBandNum=
-BAND_2,-1!=$.inArray("80MHz",a[uciFunction.optName.bandWidth5g])&&(gWlanHost5gSupport160MBandWidth=!0),b=0;b<a[uciFunction.optName.mode5g].length;b++){if(-1!=a[uciFunction.optName.mode5g][b].search("ax")){g11AxSupport.wlan5g=!0;break}}else gBandNum=BAND_1;if(a[uciFunction.optName.wanPortList]&&a[uciFunction.optName.wanPortDescList]||a[uciFunction.optName.wanPortIndexList]){gSupportWanPortSwap=!0;ethLayoutList=a[uciFunction.optName.ethLayout];devicePowerPos=a[uciFunction.optName.powerPos];d=a[uciFunction.optName.wanPortRateList];
-var g=a[uciFunction.optName.wanPortRateDescList];wanPortRateList={};wanPortRateDescList={};if(a[uciFunction.optName.wanPortList]){var e=a[uciFunction.optName.wanPortList],h=a[uciFunction.optName.wanPortDescList];wanPortDescList={};wanPortValueList={};wanPortDisplayList=[];for(b=0;b<e.length;b++)wanPortDescList[h[b]]=e[b],wanPortValueList[e[b]]=h[b],wanPortRateList[e[b]]=d[b].split("_"),wanPortRateDescList[e[b]]=g[b].split("_"),wanPortDisplayList.push({str:h[b],value:e[b]})}else for(e=a[uciFunction.optName.wanPortIndexList],
-b=0;b<e.length;b++)wanPortRateList[e[b]]=d[b].split("_"),wanPortRateDescList[e[b]]=g[b].split("_")}a.sys_mode&&(gSysModeSupport=!0);$.setExternLoading(function(a){hsLoading(a)});!0==f?(helpInit(),!0==OS.portable&&!1==OS.iPad&&!1==phoneSet.bContinuePCSet?loadPage("PhoneWizard.htm","Con"):loadPage("Wizard.htm","Con")):(setUpgradeErrCBCloudPush(function(){helpInit();gOnlineUpgradeFail=!0;loadBasic(ROUTE_SET_INDEX,gEasyMeshUpgradeSupport?"SysUpgradeEyUp.htm":"SysUpgrade.htm")}),checkOnlineUpgrading(function(){helpInit();
-!0===$.authRltObj.bHandLg?!0==$.local?(showCon(loginId),loadLgLessPage("LoginAuthLog.htm","Login",void 0,{bRecordLoadPage:!1})):$.queryAuthLog(function(a){var b=a.unauth_log_list;$.authRltObj.authLog=b;$.authRltObj.code=ESYSCLIENTNORMAL;$.authRltObj.client=a.curIP;2<=b.length?(showCon(loginId),loadLgLessPage("LoginAuthLog.htm","Login",void 0,{bRecordLoadPage:!1})):contentPageLoad()}):contentPageLoad()}))}var d={};d[uciSystem.fileName]={};d[uciSystem.fileName][KEY_NAME]=[uciSystem.secName.sys];d[uciHostsInfo.fileName]=
-{};d[uciHostsInfo.fileName][KEY_TABLE]=uciHostsInfo.dynData.host_info;d[uciNetwork.fileName]={};d[uciNetwork.fileName][KEY_NAME]=uciNetwork.dynData.ifaceMac;d[uciFunction.fileName]={};d[uciFunction.fileName][KEY_NAME]=uciFunction.secName.newModuleSpec;"undefined"!=typeof PRE_LOAD_IMAGE&&!0==PRE_LOAD_IMAGE&&(c(window.location+"web-static/images/loadingRouteSet.gif"),c(window.location+"web-static/images/appsLoading.gif"),c(window.location+"web-static/images/hsLoadingBlue.gif"),c(window.location+"web-static/images/hsLoadingRed.gif"),
-c(window.location+"web-static/images/hsLoadingGreen.gif"),c(window.location+"web-static/images/hsLoadingYellow.gif"),c(window.location+"web-static/images/wzdDetecting.gif"),setInterval(function(){c(window.location+"web-static/images/loadingRouteSet.gif");c(window.location+"web-static/images/appsLoading.gif");c(window.location+"web-static/images/hsLoadingBlue.gif");c(window.location+"web-static/images/hsLoadingRed.gif");c(window.location+"web-static/images/hsLoadingGreen.gif");c(window.location+"web-static/images/hsLoadingYellow.gif");
-c(window.location+"web-static/images/wzdDetecting.gif")},1E4));$.query(d,function(c){var d;d=c[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory]!=uciSystem.optValue.isFactory.no;if(gUsernameSupport&&gUsernameHasInitialValue&&gPasswordHasInitialValue&&d){d=!1;var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.secName.sys]={};a[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory]=uciSystem.optValue.isFactory.no;$.modify(a,function(){g(c,d)})}else g(c,
-d)})}init();
+	/*
+	* 全局变量gBandNum表示产品为单频、双频或三频
+	* 仅在此处进行初始化，默认为双频
+	*
+	**/
+	var BAND_1 = 0;	// 单频
+	var BAND_2 = 1;	// 双频
+	var BAND_3 = 2;	// 三频
+	var gBandNum = BAND_2;	// 默认为双频
+
+	/* 以下功能已在接口规范中定义，均能从new_module_spec根据相应功能字段获取功能是否支持 */
+	var gWifiSwitchSupport = false; //是否支持无线总开关(部分出货机型用到以及之后渠道版也使用)
+	var gCustomWifiSwitchSupport = false; //是否支持无线总开关(目前只有xdr6060易展版使用)
+	var gWifiSwitchUseWireless = false; // 当new_module_spec使用wifi_switch字段时，
+					// 表示是否使用wireless里的wifi_switch。
+					// 若否，则使用custom_wireless的wifi_switch（定制机型使用）
+	var gWifiSwitchSplit = false; //不同频段总开关分开显示
+	var gAuthSupport = false; //无线设置页面是否支持全频段认证类型显示
+	var gAuthSupport2g = false; //无线设置页面是否支持2g认证类型显示
+	var gAuthSupport5g = false; //无线设置页面是否支持5g认证类型显示
+	var gCipherSupport = false; //无线设置页面是否支持全频段加密方式显示
+	var gCipherSupport2g = false; //无线设置页面是否支持2g加密方式显示
+	var gCipherSupport5g = false; //无线设置页面是否支持5g加密方式显示
+	var gMultiSSIDSupport = false; //是否支持多SSID
+	var gPinWpsSupport = false; //是否支持PIN码WPS
+	var gModeSwitchSupport = false; //是否支持路由/桥切换
+	var gElinkSupport = false; //是否支持elink
+	var gWoLinkSupport = false; //是否支持wo-link
+	var gCustomLedSupport = false; //是否支持LED灯设置
+	var gHnatSupport = false; //是否支持hnat
+	var gMacFilterSupport = false; //是否支持黑白名单
+	var gAlinkTestSupport = false; // 是否支持andlink if6配置
+	var gUsernameSupport = false; // 是否支持用户名
+	var gMultiAccountSupport = false; // 是否支持多重账号
+	var gUsernameHasInitialValue = false; // 用户名是否有初始值
+	var gPasswordHasInitialValue = false; // 密码是否有初始值
+	var gUsernameChangeable = false; // 用户名是否可修改
+	var gIpv6Support = false; //是否支持ipv6
+	var gMeshSupport = false; //是否支持Mesh功能
+	var g11AxSupport = {}; //是否支持11AX
+	var gWlanHost5gSupport160MBandWidth = false;//无线频宽是否支持160MHz
+	var gNasSupport = false; //是否支持文件共享
+	var gWanPortDetectSupport = false; //是否支持WAN口自动探测
+	var gGuest5GSupport = false; //是否支持5G访客网络
+	var gEasyMeshUpgradeSupport = false;
+	var gSysModeSupport = false;
+
+	var gSupportWanPortSwap = false;	//是否支持LAN-WAN切换功能
+	var gSfpRateSupport = false;		//是否支持光口速率设置
+	var gSupportPortManage = false; // 是否支持端口管理
+	var gMulWanSupport = false;		// 端口管理中是否支持双WAN设置
+	var gMWanLoadBalanceSupport = false;	//端口管理双WAN设置是否支持均衡模式
+	var gIptvSupport = false;		// 端口管理中是否支持IPTV
+	var gLagSupport = false;		// 端口管理中是否支持端口聚合
+	var gGameSupport = false;		//端口管理中是否支持游戏加速设置
+	var gSupportStaCapability = false; // 是否支持高带机量
+	var wanPortDescList, wanPortValueList, wanPortDisplayList, wanPortRateList, wanPortRateDescList;
+	var ethLayoutList;  // ethernet_port_layout中当前端口信息
+	var devicePowerPos; // 当前机型电源位置
+
+	var gSmbCloudSupport = false;	// 是否支持商云管理
+	var gGetQRCodeSupport = false;	// 是否支持设备二维码获取
+
+	/* 以下功能暂未在接口规范中定义，无法在new_module_spec获知功能是否支持，因此暂时在此声明功能标记变量，设为固定值
+	 * 在需要使用某项功能的机型OEM目录下将相应功能配置为true
+	 */
+
+	/* ----   功能标记变量声明开始   ---- */
+	var gWoLinkSupport = false; //是否支持wo-link
+	var gTelnetSupport = false; // 是否支持Telnet
+	var showAndlinkLogo = false; // 是否显示andlink LOGO
+	var showAndlinkQRcode = false; // 是否显示和家亲二维码
+	var showElinkLogo = false; // 是否显示elink LOGO
+	var PWD_MIN_LEN = 6; // 管理员密码最小长度
+	var PWD_MAX_LEN = 32; // 管理员密码最大长度
+	var showPwdStrength = true; // 是否显示密码强度
+	var maxManageDevNum = 64;
+
+	/* ----   功能标记变量声明结束   ---- */
+
+	function init()
+	{
+		var reqData = {};
+
+		reqData[uciSystem.fileName] = {};
+		reqData[uciSystem.fileName][KEY_NAME] = [uciSystem.secName.sys];
+
+		reqData[uciHostsInfo.fileName] = {};
+		reqData[uciHostsInfo.fileName][KEY_TABLE] = uciHostsInfo.dynData.host_info;
+
+		reqData[uciNetwork.fileName] = {};
+		reqData[uciNetwork.fileName][KEY_NAME] = uciNetwork.dynData.ifaceMac;
+
+		reqData[uciFunction.fileName] = {};
+		reqData[uciFunction.fileName][KEY_NAME] = uciFunction.secName.newModuleSpec;
+
+		/* 动图预加载 */
+		function preLoadImg(url)
+		{
+			var img = new Image();
+			img.src = url;
+			if (img.complete)
+			{
+				return;
+			}
+			img.onload = function(){
+				return;
+			}
+		}
+
+		if (typeof PRE_LOAD_IMAGE != "undefined" && PRE_LOAD_IMAGE == true)
+		{
+			preLoadImg(window.location + "web-static/images/loadingRouteSet.gif");
+			preLoadImg(window.location + "web-static/images/appsLoading.gif");
+			preLoadImg(window.location + "web-static/images/hsLoadingBlue.gif");
+			preLoadImg(window.location + "web-static/images/hsLoadingRed.gif");
+			preLoadImg(window.location + "web-static/images/hsLoadingGreen.gif");
+			preLoadImg(window.location + "web-static/images/hsLoadingYellow.gif");
+			preLoadImg(window.location + "web-static/images/wzdDetecting.gif");
+
+			setInterval(function(){	preLoadImg(window.location + "web-static/images/loadingRouteSet.gif");
+									preLoadImg(window.location + "web-static/images/appsLoading.gif");
+									preLoadImg(window.location + "web-static/images/hsLoadingBlue.gif");
+									preLoadImg(window.location + "web-static/images/hsLoadingRed.gif");
+									preLoadImg(window.location + "web-static/images/hsLoadingGreen.gif");
+									preLoadImg(window.location + "web-static/images/hsLoadingYellow.gif");
+									preLoadImg(window.location + "web-static/images/wzdDetecting.gif");}, 10000);
+		}
+
+		$.query(reqData, function(dataObj){
+			var isDefault;
+
+			isDefault = dataObj[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory] != uciSystem.optValue.isFactory.no;
+
+			/* 支持用户名情况下，出厂默认有用户名密码，不走设置向导，因此在登录成功后需要设置成非出厂模式 */
+			if (gUsernameSupport && gUsernameHasInitialValue && gPasswordHasInitialValue && isDefault)
+			{
+				isDefault = false;
+
+				var data = {};
+				data[uciSystem.fileName] = {};
+				data[uciSystem.fileName][uciSystem.secName.sys] = {};
+				data[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory] = uciSystem.optValue.isFactory.no;
+				$.modify(data, function(){
+					load(dataObj, isDefault);
+				});
+			}
+			else
+			{
+				load(dataObj, isDefault);
+			}
+		});
+
+		function load(dataObj, isDefault) {
+			var epStaList = formatTableData(dataObj[uciHostsInfo.fileName][uciHostsInfo.dynData.host_info]);
+			var item, type;
+
+			g_cur_host_mac = dataObj[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];
+
+			for (var index in epStaList)
+			{
+				item = epStaList[index];
+				if (item[uciHostsInfo.optName.mac].toUpperCase() == g_cur_host_mac.toUpperCase())
+				{
+					g_host_conn_type = item[uciHostsInfo.optName.type];
+					break;
+				}
+			}
+
+			var moduleSpecObj = dataObj[uciFunction.fileName][uciFunction.secName.newModuleSpec];
+
+			/* 是否支持BS功能 */
+			gSupportBS = moduleSpecObj[uciFunction.optName.wlanBS] == uciFunction.optValue.enable;
+			gWifiSwitchSupport = moduleSpecObj[uciFunction.optName.wifiSwitch] == uciFunction.optValue.enable;
+			gCustomWifiSwitchSupport = moduleSpecObj[uciFunction.optName.customWifiSwitch] == uciFunction.optValue.enable;
+			gWifiSwitchSplit = moduleSpecObj[uciFunction.optName.wifiSwitchSplit] == uciFunction.optValue.enable;
+			if (gWifiSwitchSupport) {
+				var wifiSwitchReq = {};
+				wifiSwitchReq[uciWireless.fileName] = {};
+				wifiSwitchReq[uciWireless.fileName][KEY_NAME]= uciWireless.dynData.wifi_switch;
+				$.query(wifiSwitchReq, function (rsp) {
+					if (ENONE == rsp[ERR_CODE]) {
+						gWifiSwitchUseWireless = true;
+					}
+				})
+			}
+
+			if (moduleSpecObj["manage_sta_num"] != undefined)
+			{
+				maxManageDevNum = moduleSpecObj["manage_sta_num"];
+			}
+
+			if (moduleSpecObj[uciFunction.optName.wlanServiceAttr] != undefined)
+			{
+				/* 判断全频段支持的认证类型和加密算法, */
+				if ($.inArray("auth", moduleSpecObj[uciFunction.optName.wlanServiceAttr]) != -1)
+				{
+					gAuthSupport = true;
+				}
+				if ($.inArray("cipher", moduleSpecObj[uciFunction.optName.wlanServiceAttr]) != -1)
+				{
+					gCipherSupport = true;
+				}
+			}
+			if (moduleSpecObj[uciFunction.optName.wlanServiceAttr2g] != undefined)
+			{
+			    /* 判断2G频段支持的认证类型和加密算法, */
+				if ($.inArray("auth", moduleSpecObj[uciFunction.optName.wlanServiceAttr2g]) != -1)
+				{
+					gAuthSupport2g = true;
+				}
+				if ($.inArray("cipher", moduleSpecObj[uciFunction.optName.wlanServiceAttr2g]) != -1)
+				{
+					gCipherSupport2g = true;
+				}
+			}
+			if (moduleSpecObj[uciFunction.optName.wlanServiceAttr5g] != undefined)
+			{
+				/* 判断5G频段支持的认证类型和加密算法, */
+				if ($.inArray("auth", moduleSpecObj[uciFunction.optName.wlanServiceAttr5g]) != -1)
+				{
+					gAuthSupport5g = true;
+				}
+				if ($.inArray("cipher", moduleSpecObj[uciFunction.optName.wlanServiceAttr5g]) != -1)
+				{
+					gCipherSupport5g = true;
+				}
+			}
+			gMultiSSIDSupport = moduleSpecObj[uciFunction.optName.supportMultiSsid] == uciFunction.optValue.enable;
+			gPinWpsSupport = moduleSpecObj[uciFunction.optName.supportPinWps] == uciFunction.optValue.enable;
+			gModeSwitchSupport = moduleSpecObj[uciFunction.optName.modeSwitch] == uciFunction.optValue.enable;
+			gElinkSupport = moduleSpecObj[uciFunction.optName.elink] == uciFunction.optValue.enable;
+			gWoLinkSupport = moduleSpecObj[uciFunction.optName.wolink] == uciFunction.optValue.enable;
+			gCustomLedSupport = moduleSpecObj[uciFunction.optName.customLed] == uciFunction.optValue.enable;
+			gHnatSupport = moduleSpecObj[uciFunction.optName.hnat] == uciFunction.optValue.enable;
+			gMacFilterSupport = moduleSpecObj["mac_filter_config"] == uciFunction.optValue.enable;
+			gAlinkTestSupport = moduleSpecObj["alink_test"] == uciFunction.optValue.enable;
+			gMultiAccountSupport = moduleSpecObj["multi_account"] == uciFunction.optValue.enable;
+			gIpv6Support = moduleSpecObj[uciFunction.optName.ipv6] == uciFunction.optValue.enable;
+			gMeshSupport = moduleSpecObj[uciFunction.optName.wifisonMesh] == uciFunction.optValue.enable;
+			gWanPortDetectSupport = moduleSpecObj[uciFunction.optName.wanPortDetect] == uciFunction.optValue.enable;
+			gGuest5GSupport = moduleSpecObj[uciFunction.optName.guest5g] == uciFunction.optValue.enable;
+			gEasyMeshUpgradeSupport = moduleSpecObj[uciFunction.optName.supportEyUp] == uciFunction.optValue.enable;
+			gSfpRateSupport = moduleSpecObj[uciFunction.optName.sfpRate] == uciFunction.optValue.enable;
+			gSupportPortManage = moduleSpecObj[uciFunction.optName.portManage] == uciFunction.optValue.enable;
+			gMulWanSupport = ($.inArray(uciPortConfig.secType.mwan,moduleSpecObj[uciFunction.optName.portSubFunc])) != -1;
+		 	gIptvSupport = ($.inArray(uciPortConfig.secType.iptv,moduleSpecObj[uciFunction.optName.portSubFunc])) != -1;
+			gLagSupport = ($.inArray(uciPortConfig.secType.lag,moduleSpecObj[uciFunction.optName.portSubFunc])) != -1;
+		 	gGameSupport = ($.inArray(uciPortConfig.secType.game,moduleSpecObj[uciFunction.optName.portSubFunc])) != -1;
+			gSupportStaCapability = moduleSpecObj[uciFunction.optName.massiveSta] == uciFunction.optValue.enable;
+			gSmbCloudSupport = moduleSpecObj[uciFunction.optName.smbCloud] == uciFunction.optValue.enable;
+			gGetQRCodeSupport = moduleSpecObj[uciFunction.optName.supportQRCode] == uciFunction.optValue.enable;
+			if ($.inArray("nas", moduleSpecObj[uciFunction.optName.moduleList]) != -1) {
+				gNasSupport = true;
+			}
+			if (moduleSpecObj["mwan_load_balance_mode"] != undefined) {
+				gMWanLoadBalanceSupport = true;
+			}
+
+			var usernameSupportVal = ("0000" + (moduleSpecObj[uciFunction.optName.usernameChangeable] || 0).toString(2)).slice(-4);
+			gUsernameChangeable = usernameSupportVal[0] == uciFunction.optValue.enable;
+			gUsernameHasInitialValue = usernameSupportVal[1] == uciFunction.optValue.enable;
+			gUsernameSupport = usernameSupportVal[2] == uciFunction.optValue.enable;
+			gPasswordHasInitialValue = usernameSupportVal[3] == uciFunction.optValue.enable;
+
+			for (var i = 0; i < moduleSpecObj[uciFunction.optName.mode2g].length; i++)
+			{
+				if (moduleSpecObj[uciFunction.optName.mode2g][i].search("ax") != -1)
+				{
+					g11AxSupport["wlan2g"] = true;
+					break;
+				}
+			}
+
+			/* 判断产品支持的频段数量 */
+			if (moduleSpecObj[uciFunction.optName.channel5g1])
+			{
+				gBandNum = BAND_3;
+				for (var i = 0; i < moduleSpecObj[uciFunction.optName.mode5g1].length; i++)
+				{
+					if (moduleSpecObj[uciFunction.optName.mode5g1][i].search("ax") != -1)
+					{
+						g11AxSupport["wlan5g1"] = true;
+						break;
+					}
+				}
+				for (var i = 0; i < moduleSpecObj[uciFunction.optName.mode5g4].length; i++)
+				{
+					if (moduleSpecObj[uciFunction.optName.mode5g4][i].search("ax") != -1)
+					{
+						g11AxSupport["wlan5g4"] = true;
+						break;
+					}
+				}
+			}
+			else if (moduleSpecObj[uciFunction.optName.channel5g])
+			{
+				gBandNum = BAND_2;
+				if ($.inArray("80MHz",moduleSpecObj[uciFunction.optName.bandWidth5g]) != -1) {
+					gWlanHost5gSupport160MBandWidth = true;
+				}
+
+				for (var i = 0; i < moduleSpecObj[uciFunction.optName.mode5g].length; i++)
+				{
+					if (moduleSpecObj[uciFunction.optName.mode5g][i].search("ax") != -1)
+					{
+						g11AxSupport["wlan5g"] = true;
+						break;
+					}
+				}
+			}
+			else
+			{
+				gBandNum = BAND_1;
+			}
+
+			/* 判断产品是否支持LAN-WAN切换功能 */
+			if ((moduleSpecObj[uciFunction.optName.wanPortList] && moduleSpecObj[uciFunction.optName.wanPortDescList]) ||
+				moduleSpecObj[uciFunction.optName.wanPortIndexList])
+			{
+				gSupportWanPortSwap = true;
+
+				// 获取ethernet_port_layout中当前端口信息 ethernet_port_layout为{"4-3-3-3-3"}表示从左到右，依次为2.5GE口-GE口-GE口-GE口-GE口
+				ethLayoutList = moduleSpecObj[uciFunction.optName.ethLayout];
+				devicePowerPos = moduleSpecObj[uciFunction.optName.powerPos];
+
+				var wanPortRateListData = moduleSpecObj[uciFunction.optName.wanPortRateList];
+				var wanPortRateDescListData = moduleSpecObj[uciFunction.optName.wanPortRateDescList];
+
+				wanPortRateList = {};
+				wanPortRateDescList = {};
+
+				if (moduleSpecObj[uciFunction.optName.wanPortList]) {
+					var wanPortListData = moduleSpecObj[uciFunction.optName.wanPortList];
+					var wanPortListDescData = moduleSpecObj[uciFunction.optName.wanPortDescList];
+
+					wanPortDescList = {};
+					wanPortValueList = {};
+					wanPortDisplayList = [];
+
+					for (var i = 0; i < wanPortListData.length; i++)
+					{
+						wanPortDescList[wanPortListDescData[i]] = wanPortListData[i];
+						wanPortValueList[wanPortListData[i]] = wanPortListDescData[i];
+						wanPortRateList[wanPortListData[i]] = wanPortRateListData[i].split("_");
+						wanPortRateDescList[wanPortListData[i]] = wanPortRateDescListData[i].split("_");
+						wanPortDisplayList.push({str: wanPortListDescData[i], value: wanPortListData[i]});
+					}
+				} else {
+					var wanPortIndexListData = moduleSpecObj[uciFunction.optName.wanPortIndexList];
+					for (var i = 0; i < wanPortIndexListData.length; i++)
+					{
+						wanPortRateList[wanPortIndexListData[i]] = wanPortRateListData[i].split("_");
+						wanPortRateDescList[wanPortIndexListData[i]] = wanPortRateDescListData[i].split("_");
+					}
+				}
+			}
+
+			if (moduleSpecObj["sys_mode"]) {
+				gSysModeSupport = true;
+			}
+
+			$.setExternLoading(function(state){hsLoading(state);});
+
+			if (isDefault == true)
+			{
+				/* 初始化帮助 */
+				helpInit();
+
+				if (OS.portable == true && OS.iPad == false && phoneSet["bContinuePCSet"] == false)
+				{
+					loadPage("PhoneWizard.htm", "Con");
+				}
+				else
+				{
+					loadPage("Wizard.htm", "Con");
+				}
+			}
+			else
+			{
+				function unUpgradingHd()
+				{
+					/* 初始化帮助 */
+					helpInit();
+
+					if($.authRltObj["bHandLg"] === true)	/* 手动点击登录 */
+					{
+						if (true == $.local)
+						{
+							showCon(loginId);
+							loadLgLessPage("LoginAuthLog.htm", "Login", undefined, {bRecordLoadPage:false});
+							return;
+						}
+
+						$.queryAuthLog(function(result){
+							var unAuthLogList = result["unauth_log_list"];
+
+							$.authRltObj["authLog"] = unAuthLogList;
+							$.authRltObj["code"] = ESYSCLIENTNORMAL;
+							$.authRltObj["client"] = result["curIP"];
+
+							if (unAuthLogList.length >= 2)
+							{
+								showCon(loginId);
+								loadLgLessPage("LoginAuthLog.htm", "Login", undefined, {bRecordLoadPage:false});
+							}
+							else
+							{
+								contentPageLoad();
+							}
+						});
+					}
+					else
+					{
+						contentPageLoad();
+					}
+				}
+
+				setUpgradeErrCBCloudPush(function(){
+					helpInit();
+					gOnlineUpgradeFail = true;
+					loadBasic(ROUTE_SET_INDEX,
+						gEasyMeshUpgradeSupport?"SysUpgradeEyUp.htm": "SysUpgrade.htm");
+				});
+
+				checkOnlineUpgrading(unUpgradingHd);
+			}
+		}
+	}
+	init();
 </script>

@@ -1,39 +1,1243 @@
-(function(e){CanvasRenderingContext2D.prototype.JTopoRoundRect=function(d,c,a,h,f){"undefined"==typeof f&&(f=5);this.beginPath();this.moveTo(d+f,c);this.lineTo(d+a-f,c);this.quadraticCurveTo(d+a,c,d+a,c+f);this.lineTo(d+a,c+h-f);this.quadraticCurveTo(d+a,c+h,d+a-f,c+h);this.lineTo(d+f,c+h);this.quadraticCurveTo(d,c+h,d,c+h-f);this.lineTo(d,c+f);this.quadraticCurveTo(d,c,d+f,c);this.closePath()};JTopo={zIndex_Link:2,zIndex_Node:3};e.JTopo=JTopo})(window);
-(function(e){e.util={isIE:!(!window.attachEvent||-1!==navigator.userAgent.indexOf("Opera")),getEventPosition:function(d){var c={},a;for(a in d)"returnValue"!=a&&"keyLocation"!=a&&(c[a]=d[a]);c.changedTouches?c.changedTouches[0].pageX?(c.pageX=c.changedTouches[0].pageX,c.pageY=c.changedTouches[0].pageY):(c.pageX=c.changedTouches[0].clientX+document.body.scrollLeft-document.body.clientLeft,c.pageY=c.changedTouches[0].clientY+document.body.scrollTop-document.body.clientTop):c.pageX||(c.pageX=c.clientX+
-document.body.scrollLeft-document.body.clientLeft,c.pageY=c.clientY+document.body.scrollTop-document.body.clientTop);return c},getOffsetPosition:function(d){if(!d)return{left:0,top:0};var c=0,a=0;if("getBoundingClientRect"in document.documentElement){c=d.getBoundingClientRect();a=d.ownerDocument;d=a.body;var h=a.documentElement,f=h.clientLeft||d.clientLeft||0,a=c.top+(self.pageYOffset||h&&h.scrollTop||d.scrollTop)-(h.clientTop||d.clientTop||0),c=c.left+(self.pageXOffset||h&&h.scrollLeft||d.scrollLeft)-
-f}else{do a+=d.offsetTop||0,c+=d.offsetLeft||0,d=d.offsetParent;while(d)}return{left:c,top:a}},clone:function(d){for(var c in d);return d}}})(JTopo);
-(function(e){e.Stage=function(d){function c(a){a=e.util.getEventPosition(a);var g=e.util.getOffsetPosition(b.canvas);a.offsetLeft=a.pageX-g.left;a.offsetTop=a.pageY-g.top;a.x=a.offsetLeft;a.y=a.offsetTop;a.target=null;return a}function a(a){a=c(a);b.dispatchEventToScenes("click",a)}function h(a){a=c(a);b.dispatchEventToScenes("dbclick",a)}function f(a){a=c(a);b.dispatchEventToScenes("touchstart",a)}function g(a){a=c(a);b.dispatchEventToScenes("mousemove",a)}var b=this;this.initialize=function(b){e.util.isIE||
-!window.addEventListener?(d.onclick=a,d.ondblclick=h,d.onmousemove=g):(d.addEventListener("click",a),d.addEventListener("dblclick",h),d.addEventListener("mousemove",g),d.addEventListener("touchstart",f));this.canvas=b;this.graphics=b.getContext("2d");this.childs=[];this.frames=24;this.needRepaint=!0};d&&this.initialize(d);this.dispatchEventToScenes=function(b,a){0!=this.frames&&(this.needRepaint=!0);this.childs.forEach(function(g){var c=g[b+"Handler"];if(null==c)throw Error("Function not found:"+
-b+"Handler");c.call(g,a)})};this.add=function(b){for(var a=0;a<this.childs.length;a++)if(this.childs[a]==b)return;b.addTo(this);this.childs.push(b)};this.paint=function(){null!=this.canvas&&(this.graphics.save(),this.graphics.clearRect(0,0,this.canvas.width,this.canvas.height),this.childs.forEach(function(a){a.repaint(b.graphics)}),this.graphics.restore())};this.repaint=function(){0==this.frames||0>this.frames&&!1==this.needRepaint||(this.paint(),0>this.frames&&(this.needRepaint=!1))}}})(JTopo);
-(function(e){e.Scene=function(d){var c=this;this.initialize=function(){this.elementType="scene";this.childs=[];this.zIndexMap={};this.zIndexArray=[];this.touchstartCallback=this.dbclickCallback=null};this.initialize();this.addTo=function(a){this.stage!==a&&null!=a&&(this.stage=a)};null!=d&&(d.add(this),this.addTo(d));this.paint=function(a){null!=this.stage&&(a.save(),a.restore(),a.save(),this.paintChilds(a),a.restore())};this.repaint=function(a){this.paint(a)};this.paintChilds=function(a){for(var c=
-0;c<this.zIndexArray.length;c++)for(var d=this.zIndexMap[this.zIndexArray[c]],g=0;g<d.length;g++){var b=d[g];a.save();if(1==b.transformAble){var l=b.getCenterLocation();a.translate(l.x,l.y)}b.paint(a);a.restore()}};this.add=function(a){this.childs.push(a);null==this.zIndexMap[a.zIndex]&&(this.zIndexMap[a.zIndex]=[],this.zIndexArray.push(a.zIndex),this.zIndexArray.sort(function(a,c){return c-a}));this.zIndexMap[""+a.zIndex].push(a)};this.clear=function(){this.childs=[];this.zIndexArray=[];this.zIndexMap=
-{}};this.getElementByXY=function(a,c){var d=null,g=this.zIndexMap[e.zIndex_Node];if(g&&0<g.length)for(var b=g.length-1;0<=b;b--){var l=g[b];(l instanceof e.Node||l instanceof e.ButtonNode)&&l.isInBound(a,c)&&(d=l)}return d};this.selectElement=function(a){var d=c.getElementByXY(a.x,a.y);null!=d&&(a.target=d);this.currentElement=d};this.toSceneEvent=function(a){a=e.util.clone(a);null!=this.currentElement&&(a.target=this.currentElement);a.scene=this;return a};this.clickHandler=function(a){if("function"==
-typeof this.onclick)this.onclick();this.selectOperationNode(a);a=this.toSceneEvent(a);this.currentElement&&(a.target=this.currentElement,this.currentElement.clickHandler(a))};this.getEditNodeByXY=function(a,c){var d=null,g=this.zIndexMap[e.zIndex_Node];if(g&&0<g.length)for(var b=g.length-1;0<=b;b--){var l=g[b];l instanceof e.Node&&l.isInEditBound(a,c)&&(d=l)}return d};this.getOperationNodeByXY=function(a,c){var d=null,g=this.zIndexMap[e.zIndex_Node];if(g&&0<g.length)for(var b=g.length-1;0<=b;b--){var l=
-g[b];l instanceof e.Node&&l.isInOperationBound(a,c)&&(d=l)}return d};this.selectEditNode=function(a){var c=this.getEditNodeByXY(a.x,a.y);null!=c&&(a.target=c);this.currentElement=c};this.selectOperationNode=function(a){var c=this.getOperationNodeByXY(a.x,a.y);null!=c&&(a.target=c);this.currentElement=c};this.dbclickHandler=function(a){this.selectEditNode(a);a={};this.currentElement&&(a.target=this.currentElement,a.pageX=this.currentElement.x+Math.floor(this.currentElement.textX),a.pageY=this.currentElement.y+
-Math.floor(this.currentElement.textY),a.textWidth=this.currentElement.textRectWidth,a.textHeight=this.currentElement.textRectHeight,this.dbclickCallback(a))};this.touchstartHandler=function(a){this.selectEditNode(a);var c={};if(this.currentElement)c.target=this.currentElement,c.pageX=this.currentElement.x+Math.floor(this.currentElement.textX),c.pageY=this.currentElement.y+Math.floor(this.currentElement.textY),c.textWidth=this.currentElement.textRectWidth,c.textHeight=this.currentElement.textRectHeight,
-this.touchstartCallback(c);else if(this.selectOperationNode(a),this.currentElement){if("function"==typeof this.onclick)this.onclick();c=this.toSceneEvent(a);this.currentElement&&(c.target=this.currentElement,this.currentElement.clickHandler(c))}};this.mousemoveHandler=function(a){a=this.toSceneEvent(a);var d=c.getElementByXY(a.x,a.y);if(null==d||d instanceof e.Node)d=c.getEditNodeByXY(a.x,a.y),null==d&&(d=c.getOperationNodeByXY(a.x,a.y));null!=d?(c.mouseOverElement&&c.mouseOverElement!==d&&(a.target=
-d,c.mouseOverElement.mouseoutHandler(a,c)),c.mouseOverElement=d,0==d.isMouseOver&&(a.target=d,d.mouseoverHandler(a,c))):c.mouseOverElement?(a.target=d,c.mouseOverElement.mouseoutHandler(a,c),c.mouseOverElement=null):a.target=null};this.getCenterLocation=function(){return{x:c.stage.canvas.width/2,y:c.stage.canvas.height/2}};this.doLayout=function(a){a&&a(this,this.childs)};this.dbclick=function(a){null!=a&&(this.dbclickCallback=a)};this.tarchstart=function(a){null!=a&&(this.touchstartCallback=a)}}})(JTopo);
-(function(e){function d(){this.initialize=function(){d.prototype.initialize.apply(this,arguments);this.elementType="interactiveElement";this.isMouseOver=!1};this.initialize();this.isInBound=function(c,a){return c>this.x&&c<this.x+this.width&&a>this.y&&a<this.y+this.height};this.clickHandler=function(c){};this.mouseoverHandler=function(c,a){this.isMouseOver=!0;a.stage.canvas.style.cursor="pointer"};this.mouseoutHandler=function(c,a){this.isMouseOver=!1;a.stage.canvas.style.cursor="default"}}d.prototype=
-new function(){this.initialize=function(){this.elementType="displayElement";this.cy=this.cx=this.y=this.x=0;this.height=this.width=64;this.visible=!0;this.scaleY=this.scaleX=this.alpha=1;this.fillColor=this.borderColor=this.strokeColor="22,124,255";this.transformAble=!1;this.zIndex=0};this.initialize();this.setLocation=function(c,a){this.x=c;this.y=a};this.getCenterLocation=function(){return{x:this.x+this.width/2,y:this.y+this.height/2}};this.setSize=function(c,a){this.width=c;this.height=a};this.setBound=
-function(c,a,d,e){this.setLocation(c,a);this.setSize(d,e)};this.getCx=function(){return this.x+this.width/2};this.getCy=function(){return this.y+this.height/2}};e.InteractiveElement=d})(JTopo);
-(function(e){function d(a){this.wrapText=function(b,a,g,c){this.textRectHeight=4;if(null!=b&&""!=b){var d=288>a.measureText(b).width?!0:!1,e="",f=0,h=b.split(""),n="",k=0;d||(e=b.slice(b.length-5,b.length),f=a.measureText(e).width);for(b=0;b<h.length;b++){var d=n+h[b],t=a.measureText(d).width,p=a.measureText("田").width+2,k=k+a.measureText(h[b]).width;if(288<k)break;if(96<t)a.fillText(n,g,c),n=h[b],c+=p,this.textRectHeight+=13;else if(192<k&&t>96-f){n=n+"..."+e;break}else n=d}288>=k&&(96<k?(e=a.measureText(n).width,
-a.fillText(n,g+(96-e)/2,c)):a.fillText(n,g,c),this.textRectHeight+=13)}};this.initialize=function(b){d.prototype.initialize.apply(this,arguments);this.zIndex=e.zIndex_Node;this.text=b;this.font="12px 微软雅黑, 宋体, Arial";this.fontColor="255,255,255";this.textOffsetY=this.textOffsetX=0;this.transformAble=!0;this.number=this.outLinks=this.inLinks=null;this.textY=this.textX=this.textRectWidth=this.textRectHeight=0;this.showOperation=!0;this.image};this.initialize(a);this.paint=function(b){if(this.image){b.save();
-b.fillStyle="#009188";b.JTopoRoundRect(-this.width/2,-this.height/2,this.width,this.height,12);b.fill();b.restore();var a=b.globalAlpha;b.globalAlpha=this.alpha;b.drawImage(this.image,this.imgOffsetX,this.imgOffsetY,this.imgWidth,this.imgHeight,-this.imgScaleWidth/2,-this.imgScaleHeight/2,this.imgScaleWidth,this.imgScaleHeight);b.globalAlpha=a;this.paintText(b);this.paintNumber(b);this.paintOperation(b)}else{var g=this;f=new Image;f.src="../web-static/images/routerBg.png";f.onload=function(){g.image=
-f;g.paintText(b);g.paintNumber(b);g.paintOperation(b)}}};this.paintOperation=function(b){this.showOperation&&(this.isMeshSta?b.drawImage(this.image,376,331,22,22,this.width/2-13,-this.height/2-6,22,22):b.drawImage(this.image,376,308,22,22,this.width/2-13,-this.height/2-6,22,22))};this.paintNumber=function(b){if(null!=this.number&&0!=this.number){var a=this.width/2-18,g=this.height/2-7;"99+"==this.number&&(a-=10,g+=0);b.beginPath();b.font=this.font;b.save();b.fillStyle="rgba(0, 176, 165, 1)";"99+"==
-this.number?b.JTopoRoundRect(this.width/2-35,this.height/2-22,34,20,12):b.arc(this.width/2-11,this.height/2-12,10,0,2*Math.PI);b.fill();b.restore();b.fillStyle="rgba("+this.fontColor+","+this.alpha+")";b.fillText(this.number,a,g);b.closePath()}};this.paintText=function(b){var a=this.text;if(void 0!=a&&""!=a){b.beginPath();b.font=this.font;var g=b.measureText(a).width,c=b.measureText("田").width,g=this.getTextPosition(g,c);b.fillStyle="rgba("+this.fontColor+","+this.alpha+")";this.wrapText(a,b,g.x,
-g.y);b.closePath()}};this.getTextPosition=function(b,a){var g={x:-(96<b?96:b)/2,y:this.height/2+a};null!=this.textOffsetX&&(g.x+=this.textOffsetX);null!=this.textOffsetY&&(g.y+=this.textOffsetY);return g};this.setImagePosition=function(b,a,g,c,d,e){this.imgOffsetX=b;this.imgOffsetY=a;this.imgWidth=g;this.imgHeight=c;this.imgScaleWidth=d||g;this.imgScaleHeight=e||c;if(void 0==f){var h=this;f=new Image;f.src="../web-static/images/routerBg.png";f.onload=function(){h.image=f}}else this.image=f};this.setWifiImagePosition=
-function(b,a){this.wifiImgOffsetX=b;this.wifiImgOffsetY=a}}function c(){c.prototype.initialize.apply(this,arguments);this.mouseoverHandler=function(a,b){this.isMouseOver=!0;b.stage.canvas.style.cursor="pointer";if(!this.isInOperationBound(a.x,a.y)&&"function"==typeof this.onmouseover){var c={};c.x=this.x;c.y=this.y;c.textWidth=this.textRectWidth;c.textHeight=this.textRectHeight;this.onmouseover(c,this.text)}};this.mouseoutHandler=function(a,b){this.isMouseOver=!1;b.stage.canvas.style.cursor="default";
-if(!this.isInOperationBound(a.x,a.y)&&"function"==typeof this.onmouseout)this.onmouseout()};this.clickHandler=function(a){if(this.isInOperationBound(a.x,a.y)&&(a={target:this},"function"==typeof this.onclick))this.onclick(a)};this.isInOperationBound=function(a,b){return a>this.x+this.width-14&&a<this.x+this.width+10&&b>this.y-10&&b<this.y+16?!0:!1};this.isInEditBound=function(a,b){var c=this.width>this.textRectWidth?0:(this.textRectWidth-this.width)/2;return a>this.x-c&&a<this.x+this.width+c&&b>this.y+
-this.height+this.textOffsetY&&b<this.y+this.height+this.textRectHeight+this.textOffsetY?!0:!1}}function a(a){this.initialize();this.text=a;this.elementType="TextNode";this.paint=function(a){a.beginPath();a.font=this.font;this.width=a.measureText(this.text).width;this.height=a.measureText("田").width;a.strokeStyle="rgba("+this.fontColor+", "+this.alpha+")";a.fillStyle="rgba("+this.fontColor+", "+this.alpha+")";a.fillText(this.text,-this.width/2,this.height/2);a.closePath()}}function h(a){this.initialize=
-function(a){h.prototype.initialize.apply(this,arguments);this.text=a;this.elementType="ButtonNode";this.fontColor="51, 51, 51";this.font="10px 微软雅黑, 宋体, Arial";this.backgroundColor="254, 235, 26";this.onclick=null};this.initialize(a);this.paint=function(a){a.beginPath();a.font=this.font;this.width=a.measureText(this.text).width+16;this.height=a.measureText("田").width+6;a.save();a.fillStyle="rgba("+this.backgroundColor+",1)";a.JTopoRoundRect(0,0,this.width,this.height,4);a.fill();a.restore();a.strokeStyle=
-"rgba("+this.fontColor+", "+this.alpha+")";a.fillStyle="rgba("+this.fontColor+", "+this.alpha+")";a.fillText(this.text,8,this.height-4);a.closePath()};this.clickHandler=function(a){if("function"==typeof this.onclick)this.onclick(a)}}var f;d.prototype=new e.InteractiveElement;c.prototype=new d;a.prototype=new c;h.prototype=new d;e.Node=c;e.TextNode=a;e.ButtonNode=h})(JTopo);
-(function(e){function d(a,c,f){this.initialize=function(a,b,c){d.prototype.initialize.apply(this,arguments);this.elementType="link";this.zIndex=e.zIndex_Link;0!=arguments.length&&(this.text=c,this.nodeA=a,this.nodeZ=b,this.nodeA&&null==this.nodeA.outLinks&&(this.nodeA.outLinks=[]),this.nodeA&&null==this.nodeA.inLinks&&(this.nodeA.inLinks=[]),this.nodeZ&&null==this.nodeZ.outLinks&&(this.nodeZ.outLinks=[]),this.nodeZ&&null==this.nodeZ.inLinks&&(this.nodeZ.inLinks=[]),null!=this.nodeA&&this.nodeA.outLinks.push(this),
-null!=this.nodeZ&&this.nodeZ.outLinks.push(this),this.lineWidth=2,this.transformAble=!1,this.dashedPattern=null,this.strokeColor="255, 255, 255",this.bundleGap=12)};this.initialize(a,c,f);this.paintPath=function(a,b){a.beginPath();a.moveTo(b[0].x,b[0].y);for(var c=1;c<b.length;++c)a.lineTo(b[c].x,b[c].y);a.stroke();a.closePath()};this.paintWifiImage=function(a,b){b[b.length-1]&&this.nodeZ.image&&a.drawImage(this.nodeZ.image,this.nodeZ.wifiImgOffsetX,this.nodeZ.wifiImgOffsetY,20,20,b[b.length-1].x-
-10,b[b.length-1].y-18,20,20)};this.paint=function(a){if(null!=this.nodeA&&null!=this.nodeZ){var b=this.getPath();a.strokeStyle="rgba("+this.strokeColor+","+this.alpha+")";a.lineWidth=this.lineWidth;this.paintPath(a,b);this.paintWifiImage(a,b)}}}function c(a,d,e){this.initialize=function(){this.roundLine=!1;c.prototype.initialize.apply(this,arguments)};this.initialize(a,d,e);this.getStartPosition=function(){var a={x:this.nodeA.getCx()};a.y=this.nodeA.y+this.nodeA.height+this.nodeA.textRectHeight+this.nodeA.textOffsetY;
-return a};this.getEndPosition=function(){var a={x:this.nodeZ.getCx(),y:this.nodeZ.getCy()};a.y=this.nodeZ.y-8;return a};this.getPath=function(){var a=this.getStartPosition(),b=this.getEndPosition();if(this.nodeA===this.nodeZ)return[a,b];var c=[];c.push({x:a.x,y:a.y});c.push({x:a.x,y:b.y-32});c.push({x:b.x,y:b.y-32});c.push({x:b.x,y:b.y});return c};this.paintPath=function(a,b){a.beginPath();a.moveTo(b[0].x,b[0].y);null==this.dashedPattern&&(a.lineTo(b[1].x,b[1].y),this.roundLine?b[2].x<b[0].x?(a.lineTo(b[2].x+
-5,b[2].y),a.moveTo(b[2].x,b[2].y+5),a.arc(b[2].x+5,b[2].y+5,5,1*Math.PI,1.5*Math.PI),a.moveTo(b[2].x,b[2].y+5)):b[2].x>b[0].x?(a.lineTo(b[2].x-5,b[2].y),a.arc(b[2].x-5,b[2].y+5,5,1.5*Math.PI,0),a.moveTo(b[2].x,b[2].y+5)):a.lineTo(b[2].x,b[2].y):a.lineTo(b[2].x,b[2].y),a.lineTo(b[3].x,b[3].y));a.stroke();a.closePath()}}d.prototype=new e.InteractiveElement;c.prototype=new d;e.Link=d;e.FlexionalLink=c})(JTopo);
-(function(e){function d(c,b,e,w){b.x+=e;b.y+=w;b=a(c,b);for(var f=0;f<b.length;f++)d(c,b[f],e,w)}function c(c,b){function d(b,f){var h=a(c,b);null==e[f]&&(e[f]={},e[f].nodes=[],e[f].childs=[]);e[f].nodes.push(b);e[f].childs.push(h);for(var r=0;r<h.length;r++)d(h[r],f+1),h[r].parent=b}var e=[];d(b,0);return e}function a(a,b){for(var c=[],d=0;d<a.length;d++)a[d]instanceof e.Link&&a[d].nodeA===b&&c.push(a[d].nodeZ);return c}function h(a,b,c){if(a.layout){var d=a.layout,e=null,f=d.width||50,h=a.x,e=a.y+
-a.height+61;a=b.length;var d=d.height||50,r=[];c=c?h-a/2*f+f/2:h;for(h=0;a>=h;h++)r.push({x:c+h*f,y:e+d});for(e=r;0>e[0].x;)for(c=0;c<e.length;++c)e[c].x+=f;20>e[0].x&&(e[0].x=20);for(f=0;f<b.length;f++)b[f].setLocation(e[f].x,e[f].y)}}function f(c,b,d){var e=a(c.childs,b);if(0==e.length)return null;h(b,e,d);6===e.length?f(c,e[0],!1):f(c,e[0],!0);return null}e.layout=e.Layout={layoutNode:f,adjustPosition:h,getNodeChilds:a,getTreeDeep:function(c,b){function d(b,c,g){c=a(b,c);g>e&&(e=g);for(var f=0;f<
-c.length;f++)d(b,c[f],g+1)}var e=0;d(c,b,0);return e},getRootNodes:function(a){var b=[],c=a.filter(function(a){if(a instanceof e.Link)return!0;b.push(a);return!1});a=b.filter(function(a){for(var b=0;b<c.length;++b)if(c[b].nodeZ===a)return!1;return!0});return a=a.filter(function(a){for(var b=0;b<c.length;b++)if(c[b].nodeA===a)return!0;return!1})},TreeLayout:function(a,b){return function(f){function h(v,r){var m=e.layout.getTreeDeep(v,r),n=c(v,r),k=n[""+m].nodes,t=m*b;t+b>f.stage.canvas.height&&(f.stage.canvas.height=
-t+b);for(var p=0;p<k.length;p++){var s=k[p],q=p*(a+10);s.setLocation(q,t)}for(p=m-1;0<=p;p--)for(m=n[""+p].nodes,v=n[""+p].childs,k=0;k<m.length;k++)if(s=m[k],q=v[k],s.y=0==p?0:p*b,0<q.length?s.x=(q[0].x+q[q.length-1].x)/2:0<k&&(s.x=m[k-1].x+m[k-1].width+54),0<k&&s.x<m[k-1].x+m[k-1].width+54)for(q=m[k-1].x+m[k-1].width+54,s=Math.abs(q-s.x),q=k;q<m.length;q++)d(f.childs,m[q],s,0)}var u=e.layout.getRootNodes(f.childs);if(0<u.length){h(f.childs,u[0]);var x=f.getCenterLocation().x-(u[0].x+u[0].width/
-2);f.childs.forEach(function(a){a instanceof e.Node&&(a.x+=x,a.y+=5)})}}}}})(JTopo);
+(function(window){
+	CanvasRenderingContext2D.prototype.JTopoRoundRect = function (x, y, width, height, borderRadius) {
+		if ("undefined" == typeof borderRadius) {
+			borderRadius = 5;
+        }
+        this.beginPath();
+        this.moveTo(x + borderRadius, y);
+        this.lineTo(x + width - borderRadius, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
+        this.lineTo(x + width, y + height - borderRadius);
+        this.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+        this.lineTo(x + borderRadius, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
+        this.lineTo(x, y + borderRadius);
+        this.quadraticCurveTo(x, y, x + borderRadius, y);
+        this.closePath();
+    };
+	JTopo = {
+		zIndex_Link: 2,
+        zIndex_Node: 3
+	};
+	window.JTopo = JTopo;
+})(window);
+
+(function(JTopo){
+	function cloneEvent(event) {
+		var newEvent = {};
+		for (var key in event) {
+			if ("returnValue" != key && "keyLocation" != key) {
+				newEvent[key] = event[key];
+			}
+		}
+		return newEvent;
+	}
+
+	function clone(obj) {
+		var newObj = {};
+		for(var key in obj) {
+			newObj[key] = obj[key];
+		}
+		return obj;
+	}
+
+	function mouseCoords(event) {
+		var newEvent = cloneEvent(event);
+		if (newEvent.changedTouches) {
+			if (!newEvent.changedTouches[0].pageX) {
+				newEvent.pageX = newEvent.changedTouches[0].clientX + document.body.scrollLeft - document.body.clientLeft;
+				newEvent.pageY = newEvent.changedTouches[0].clientY + document.body.scrollTop - document.body.clientTop;
+			} else {
+				newEvent.pageX = newEvent.changedTouches[0].pageX;
+				newEvent.pageY = newEvent.changedTouches[0].pageY;
+			}
+		} else if (!newEvent.pageX) {
+			newEvent.pageX = newEvent.clientX + document.body.scrollLeft - document.body.clientLeft;
+			newEvent.pageY = newEvent.clientY + document.body.scrollTop - document.body.clientTop;
+		}
+		return newEvent;
+	}
+
+	function getEventPosition(event) {
+		var newEvent = mouseCoords(event);
+		return newEvent;
+	}
+
+	function getOffsetPosition(element) {
+		if (!element) {
+			return {
+				left: 0,
+				top: 0
+			};
+		}
+
+		var elementLeft = 0, elementTop = 0;
+		if ("getBoundingClientRect" in document.documentElement){
+			var elementClientRect = element.getBoundingClientRect();
+			var ownerDocument = element.ownerDocument;
+			var body = ownerDocument.body;
+			var documentElement = ownerDocument.documentElement;
+			var top = documentElement.clientTop || body.clientTop || 0;
+			var left = documentElement.clientLeft || body.clientLeft || 0;
+			elementTop = elementClientRect.top + (self.pageYOffset || documentElement && documentElement.scrollTop || body.scrollTop) - top;
+			elementLeft = elementClientRect.left + (self.pageXOffset || documentElement && documentElement.scrollLeft || body.scrollLeft) - left;
+		} else {
+			do {
+				elementTop += element.offsetTop || 0;
+				elementLeft += element.offsetLeft || 0;
+				element = element.offsetParent;
+			} while (element);
+		}
+
+		return {
+			left: elementLeft,
+			top: elementTop
+		};
+	}
+
+	JTopo.util = {
+		isIE: !(!window.attachEvent || -1 !== navigator.userAgent.indexOf("Opera")),
+		getEventPosition: getEventPosition,
+		getOffsetPosition: getOffsetPosition,
+		clone: clone
+	};
+})(JTopo);
+
+/* Stage */
+(function(JTopo){
+	function Stage(canvas) {
+		function getEventPosition(event) {
+			var newEvent = JTopo.util.getEventPosition(event);
+			var canvasOffset = JTopo.util.getOffsetPosition(_this.canvas);
+			newEvent.offsetLeft = newEvent.pageX - canvasOffset.left;
+			newEvent.offsetTop = newEvent.pageY - canvasOffset.top;
+			newEvent.x = newEvent.offsetLeft;
+			newEvent.y = newEvent.offsetTop;
+			newEvent.target = null;
+			return newEvent;
+		}
+
+		function onclick(event) {
+			var newEvent = getEventPosition(event);
+			_this.dispatchEventToScenes("click", newEvent);
+		}
+
+		function ondblclick(event) {
+			var newEvent = getEventPosition(event);
+			_this.dispatchEventToScenes("dbclick", newEvent);
+		}
+
+		function ontouchStart(event) {
+			var newEvent = getEventPosition(event);
+			_this.dispatchEventToScenes("touchstart", newEvent);
+		}
+
+		function onmousemove(event) {
+			var newEvent = getEventPosition(event);
+			_this.dispatchEventToScenes("mousemove", newEvent);
+		}
+
+		function initClickEvent() {
+			if (JTopo.util.isIE || !window.addEventListener) {
+				canvas.onclick = onclick;
+				canvas.ondblclick = ondblclick;
+				canvas.onmousemove = onmousemove;
+			} else {
+				canvas.addEventListener("click",onclick);
+				canvas.addEventListener("dblclick",ondblclick);
+				canvas.addEventListener("mousemove",onmousemove);
+				canvas.addEventListener("touchstart",ontouchStart);
+			}
+		}
+
+		var _this = this;
+		this.initialize = function(canvas) {
+			initClickEvent(canvas);
+			this.canvas = canvas;
+			this.graphics = canvas.getContext('2d');
+			this.childs = [];
+			this.frames = 24;
+			this.needRepaint = true;
+		};
+		if (canvas) {
+			this.initialize(canvas);
+		}
+
+		this.dispatchEventToScenes = function (elementName, event) {
+			if (0 != this.frames) {
+				this.needRepaint = true;
+			}
+			this.childs.forEach(function(child) {
+				var handler = child[elementName + "Handler"];
+				if (null == handler) {
+					throw new Error("Function not found:" + elementName + "Handler");
+				} else {
+					handler.call(child,event);
+				}
+			});
+		};
+
+		this.add = function (scene) {
+			for (var i = 0; i < this.childs.length; i++) {
+				if (this.childs[i] == scene) return;
+			}
+			scene.addTo(this);
+			this.childs.push(scene);
+		};
+
+		this.paint = function () {
+			if (null != this.canvas) {
+				this.graphics.save();
+				this.graphics.clearRect(0,0,this.canvas.width,this.canvas.height);
+				this.childs.forEach(function(child){
+					child.repaint(_this.graphics);
+				});
+				this.graphics.restore();
+			}
+		};
+
+		this.repaint = function (){
+			if (0 != this.frames) {
+				if (!(this.frames < 0 && false == this.needRepaint)) {
+					this.paint();
+					if (this.frames < 0) {
+						this.needRepaint = false;
+					}
+				}
+			}
+		};
+	}
+	JTopo.Stage = Stage;
+})(JTopo);
+
+/* Scene */
+(function(JTopo){
+	function Scene(stage) {
+		var _this = this;
+		this.initialize = function () {
+			this.elementType = "scene";
+			this.childs = [];
+			this.zIndexMap = {};
+			this.zIndexArray = [];
+			this.dbclickCallback = null;
+			this.touchstartCallback = null;
+		};
+		this.initialize();
+
+		this.addTo = function (stage) {
+			if (this.stage !== stage && null != stage) {
+				this.stage = stage;
+			}
+		};
+
+		if (null != stage) {
+			stage.add(this);
+			this.addTo(stage);
+		}
+
+		this.paint = function (context) {
+			if (null != this.stage) {
+				context.save();
+				context.restore();
+				context.save();
+				this.paintChilds(context);
+				context.restore();
+			}
+		};
+
+		this.repaint = function (context) {
+			this.paint(context);
+		};
+
+		this.paintChilds = function (context) {
+			for (var i = 0; i < this.zIndexArray.length; i++) {
+				var index = this.zIndexArray[i];
+				var arr = this.zIndexMap[index];
+				for (var j = 0; j < arr.length; j++) {
+					var child = arr[j];
+					/*if (this.isVisible(child))*/ {
+						context.save();
+						if (1 == child.transformAble) {
+							var centerPos = child.getCenterLocation();
+							context.translate(centerPos.x, centerPos.y);
+						}
+						child.paint(context);
+						context.restore();
+					}
+				}
+			}
+		};
+
+		this.add = function (child) {
+			this.childs.push(child);
+			if (null == this.zIndexMap[child.zIndex]) {
+				this.zIndexMap[child.zIndex] = [];
+				this.zIndexArray.push(child.zIndex);
+				this.zIndexArray.sort(function(a,b){
+					return b - a;
+				});
+			}
+
+			this.zIndexMap["" + child.zIndex].push(child);
+		};
+
+		this.clear = function () {
+			this.childs = [];
+			this.zIndexArray = [];
+			this.zIndexMap = {};
+		};
+
+		this.getElementByXY = function (x, y) {
+			var element = null;
+			var nodeArr = this.zIndexMap[JTopo.zIndex_Node];
+			if (nodeArr && nodeArr.length > 0) {
+				for (var j = nodeArr.length - 1; j >= 0; j--) {
+					var child = nodeArr[j];
+					if ((child instanceof JTopo.Node || child instanceof JTopo.ButtonNode) &&
+						child.isInBound(x,y)) {
+						element = child;
+					}
+				}
+			}
+			return element;
+		};
+
+		this.selectElement = function (event) {
+			var element = _this.getElementByXY(event.x, event.y);
+
+            if (null != element) {
+                event.target = element;
+            }
+            this.currentElement = element;
+        };
+
+		this.toSceneEvent = function (event) {
+			var newEvent = JTopo.util.clone(event);
+			if (null != this.currentElement) {
+				newEvent.target = this.currentElement;
+			}
+			newEvent.scene = this;
+			return newEvent;
+		};
+
+		this.clickHandler = function (event) {
+			if ("function" == typeof this.onclick) {
+				this.onclick();
+			}
+
+			this.selectOperationNode(event);
+			var newEvent = this.toSceneEvent(event);
+			if (this.currentElement) {
+				newEvent.target = this.currentElement;
+				this.currentElement.clickHandler(newEvent);
+			}
+		};
+
+		this.getEditNodeByXY = function (x,y) {
+			var element = null;
+			var nodeArr = this.zIndexMap[JTopo.zIndex_Node];
+			if (nodeArr && nodeArr.length > 0) {
+				for (var j = nodeArr.length - 1; j >= 0; j--) {
+					var child = nodeArr[j];
+					if (child instanceof JTopo.Node &&
+						child.isInEditBound(x,y)) {
+						element = child;
+					}
+				}
+			}
+
+			return element;
+		};
+
+		this.getOperationNodeByXY = function (x,y) {
+			var element = null;
+			var nodeArr = this.zIndexMap[JTopo.zIndex_Node];
+			if (nodeArr && nodeArr.length > 0) {
+				for (var j = nodeArr.length - 1; j >= 0; j--) {
+					var child = nodeArr[j];
+					if (child instanceof JTopo.Node &&
+						child.isInOperationBound(x,y)) {
+						element = child;
+					}
+				}
+			}
+
+			return element;
+		};
+
+		this.selectEditNode = function (event) {
+			var element = this.getEditNodeByXY(event.x, event.y);
+
+			if (null != element) {
+				event.target = element;
+			}
+			this.currentElement = element;
+		};
+
+		this.selectOperationNode = function (event) {
+			var element = this.getOperationNodeByXY(event.x, event.y);
+
+			if (null != element) {
+				event.target = element;
+			}
+			this.currentElement = element;
+		};
+
+		this.dbclickHandler = function (event) {
+			this.selectEditNode(event);
+			var newEvent = {};
+			if (this.currentElement) {
+				newEvent.target = this.currentElement;
+				newEvent.pageX = this.currentElement.x + Math.floor(this.currentElement.textX);
+				newEvent.pageY = this.currentElement.y + Math.floor(this.currentElement.textY);
+				newEvent.textWidth = this.currentElement.textRectWidth;
+				newEvent.textHeight = this.currentElement.textRectHeight;
+				this.dbclickCallback(newEvent);
+			}
+		};
+
+		this.touchstartHandler = function (event) {
+			this.selectEditNode(event);
+			var newEvent = {};
+			if (this.currentElement) {
+				newEvent.target = this.currentElement;
+				newEvent.pageX = this.currentElement.x + Math.floor(this.currentElement.textX);
+				newEvent.pageY = this.currentElement.y + Math.floor(this.currentElement.textY);
+				newEvent.textWidth = this.currentElement.textRectWidth;
+				newEvent.textHeight = this.currentElement.textRectHeight;
+				this.touchstartCallback(newEvent);
+				return;
+			}
+
+			this.selectOperationNode(event);
+			if (this.currentElement) {
+				if ("function" == typeof this.onclick) {
+					this.onclick();
+				}
+
+				var newEvent = this.toSceneEvent(event);
+				if (this.currentElement) {
+					newEvent.target = this.currentElement;
+					this.currentElement.clickHandler(newEvent);
+				}
+			}
+		}
+
+		this.mousemoveHandler = function (event) {
+			var newEvent = this.toSceneEvent(event);
+			var node = _this.getElementByXY(newEvent.x, newEvent.y);
+			if (null == node || node instanceof JTopo.Node) {
+				node = _this.getEditNodeByXY(newEvent.x, newEvent.y);
+				if (node == null) {
+					node = _this.getOperationNodeByXY(newEvent.x, newEvent.y);
+				}
+			}
+			if (null != node) {
+				if (_this.mouseOverElement && _this.mouseOverElement !== node) {
+					newEvent.target = node;
+					_this.mouseOverElement.mouseoutHandler(newEvent, _this);
+				}
+				_this.mouseOverElement = node;
+				if (0 == node.isMouseOver) {
+					newEvent.target = node;
+					node.mouseoverHandler(newEvent, _this);
+				}
+			} else if (_this.mouseOverElement) {
+				newEvent.target = node;
+				_this.mouseOverElement.mouseoutHandler(newEvent, _this);
+				_this.mouseOverElement = null;
+			} else {
+				newEvent.target = null;
+			}
+		};
+
+		this.getCenterLocation = function () {
+			return {
+				x: _this.stage.canvas.width / 2,
+                y: _this.stage.canvas.height / 2
+			};
+		};
+
+		this.doLayout = function (layout) {
+                layout && layout(this, this.childs);
+        };
+
+        this.dbclick = function(callback) {
+        	if (null != callback) {
+        		this.dbclickCallback = callback;
+        	}
+        };
+
+		this.tarchstart = function(callback) {
+			if (null != callback) {
+				this.touchstartCallback = callback;
+			}
+		};
+	}
+	JTopo.Scene = Scene;
+})(JTopo);
+
+/* Element */
+(function(JTopo){
+	function Element() {
+		this.initialize = function (){
+			this.elementType = "displayElement";
+			this.x = 0;
+			this.y = 0;
+			this.cx = 0;
+			this.cy = 0;
+			this.width = 64;
+			this.height = 64;
+			this.visible = true;
+			this.alpha = 1;
+			this.scaleX = 1;
+			this.scaleY = 1;
+			this.strokeColor = "22,124,255";
+			this.borderColor = "22,124,255";
+			this.fillColor = "22,124,255";
+			this.transformAble = false;
+			this.zIndex = 0;
+		};
+		this.initialize();
+
+		this.setLocation = function (x,y){
+			this.x = x;
+			this.y = y;
+		};
+
+		this.getCenterLocation = function () {
+			return {
+				x: this.x + this.width / 2,
+				y: this.y + this.height / 2
+			};
+		};
+
+		this.setSize = function (width, height) {
+			this.width = width;
+			this.height = height;
+		};
+
+		this.setBound = function (x,y,width,height) {
+			this.setLocation(x,y);
+			this.setSize(width,height);
+		};
+
+		this.getCx = function () {
+			return this.x + this.width / 2;
+		};
+
+		this.getCy = function () {
+			return this.y + this.height / 2;
+		};
+	}
+
+	function InteractiveElement () {
+		this.initialize = function () {
+			InteractiveElement.prototype.initialize.apply(this,arguments);
+			this.elementType = "interactiveElement";
+			this.isMouseOver = false;
+		};
+
+		this.initialize();
+
+		this.isInBound = function (x,y) {
+			return x > this.x && x < this.x + this.width &&
+					y > this.y && y < this.y + this.height;
+		};
+
+		this.clickHandler = function(event) {};
+
+		this.mouseoverHandler = function (event, scene) {
+			this.isMouseOver = true;
+			scene.stage.canvas.style.cursor = "pointer";
+		};
+
+		this.mouseoutHandler = function (event, scene) {
+			this.isMouseOver = false;
+			scene.stage.canvas.style.cursor = "default";
+		};
+	}
+	InteractiveElement.prototype = new Element();
+	JTopo.InteractiveElement = InteractiveElement;
+})(JTopo);
+
+/* Node */
+(function (JTopo) {
+	function BaseNode (text) {
+		/* 自动换行显示 */
+		this.wrapText = function (text,context,x,y){
+			var TEXT_AREA_WIDTH = 96;
+			this.textRectHeight = 4;
+			if (null != text && "" != text) {
+				var canFullShow = context.measureText(text).width < TEXT_AREA_WIDTH * 3 ? true : false;
+				var lastFiveCharacters = "";
+				var lastFiveLen = 0;
+				var arrText = text.split('');
+    			var line = '';
+				var totalLen = 0;
+
+				if (!canFullShow) {
+					lastFiveCharacters = text.slice(text.length - 5, text.length);
+					lastFiveLen = context.measureText(lastFiveCharacters).width;
+				}
+				for (var n = 0; n < arrText.length; n++) {
+			        var testLine = line + arrText[n];
+			        var testWidth = context.measureText(testLine).width;
+			        var lineHeight = context.measureText("田").width + 2;
+					totalLen += context.measureText(arrText[n]).width;
+					if (totalLen > TEXT_AREA_WIDTH * 3) { break;}
+					if (testWidth > TEXT_AREA_WIDTH) {
+						 context.fillText(line, x, y);
+						 line = arrText[n];
+						 y += lineHeight;
+						 this.textRectHeight += 13;
+					} else {
+						if (totalLen > TEXT_AREA_WIDTH * 2 && testWidth > TEXT_AREA_WIDTH - lastFiveLen){
+							line = line + "..." + lastFiveCharacters;
+							break;
+						} else {
+							line = testLine;
+						}
+					}
+			    }
+				if (totalLen <= TEXT_AREA_WIDTH * 3) {
+					var lineWidth;
+					if (totalLen > TEXT_AREA_WIDTH) {
+						lineWidth = context.measureText(line).width;
+						context.fillText(line, x + (TEXT_AREA_WIDTH - lineWidth) / 2, y);
+						this.textRectHeight += 13;
+					} else {
+						context.fillText(line, x, y);
+						this.textRectHeight += 13;
+					}
+				}
+			}
+		}
+
+		this.initialize = function (text) {
+			BaseNode.prototype.initialize.apply(this,arguments);
+			this.zIndex = JTopo.zIndex_Node;
+			this.text = text;
+			this.font = "12px 微软雅黑, 宋体, Arial";
+			this.fontColor = "255,255,255";
+			this.textOffsetX = 0;
+			this.textOffsetY = 0;
+			this.transformAble = true;
+			this.inLinks = null;
+			this.outLinks = null;
+			this.number = null;
+			this.textRectHeight = 0;
+			this.textRectWidth = 0;
+			this.textX = 0;
+			this.textY = 0;
+			this.showOperation = true;
+			this.image;
+		};
+		this.initialize(text);
+		this.paint = function (context) {
+			if (this.image) {
+				context.save();
+				context.fillStyle = "#009188";
+				context.JTopoRoundRect(-this.width/2, -this.height/2, this.width, this.height, 12);
+				context.fill();
+				context.restore();
+
+				var gAlpha = context.globalAlpha;
+				context.globalAlpha = this.alpha;
+				context.drawImage(this.image, this.imgOffsetX, this.imgOffsetY, this.imgWidth, this.imgHeight, -this.imgScaleWidth/2, -this.imgScaleHeight/2, this.imgScaleWidth, this.imgScaleHeight);
+				context.globalAlpha = gAlpha;
+				this.paintText(context);
+				this.paintNumber(context);
+				this.paintOperation(context);
+			} else {
+				var that = this;
+				routerBg = new Image();
+				routerBg.src = "../web-static/images/routerBg.png";
+				routerBg.onload = function (){
+					that.image = routerBg;
+					that.paintText(context);
+					that.paintNumber(context);
+					that.paintOperation(context);
+				};
+			}
+		};
+
+		this.paintOperation = function (context) {
+			if (this.showOperation) {
+				if (this.isMeshSta) {
+					context.drawImage(this.image, 376, 331, 22, 22, this.width / 2 - 13,  -this.height / 2 - 6, 22, 22);
+				} else {
+					context.drawImage(this.image, 376, 308, 22, 22, this.width / 2 - 13,  -this.height / 2 - 6, 22, 22);
+				}
+			}
+		};
+
+		this.paintNumber = function (context) {
+			if (null != this.number && this.number != 0) {
+				var numberPos = {
+					x: this.width/2 - 18,
+					y: this.height/2 - 7
+				};
+				if ("99+" == this.number) {
+					numberPos.x -= 10;
+					numberPos.y += 0;
+				}
+				context.beginPath();
+				context.font = this.font;
+				context.save();
+				context.fillStyle = "rgba(0, 176, 165, 1)";
+				if ("99+" == this.number) {
+					context.JTopoRoundRect(this.width/2 - 35, this.height/2 - 22, 34, 20, 12);
+				} else {
+					context.arc(this.width/2 - 11, this.height/2 - 12, 10, 0, 2*Math.PI);
+				}
+				context.fill();
+				context.restore();
+				context.fillStyle = "rgba(" + this.fontColor + "," + this.alpha + ")";
+				context.fillText(this.number,numberPos.x,numberPos.y);
+				context.closePath();
+			}
+		};
+
+		this.paintText = function (context) {
+			var text = this.text;
+			if (undefined != text && "" != text) {
+				context.beginPath();
+				context.font = this.font;
+				var textWidth = context.measureText(text).width,
+					textHeight = context.measureText("田").width;
+
+				var textPos = this.getTextPosition(textWidth, textHeight);
+				context.fillStyle = "rgba(" + this.fontColor + "," + this.alpha + ")";
+				this.wrapText(text,context,textPos.x,textPos.y);
+				context.closePath();
+			}
+		};
+
+		this.getTextPosition = function (textWidth, textHeight) {
+			textWidth = textWidth > 96 ? 96 : textWidth;
+			var textPos = {
+				x: - textWidth / 2,
+				y: this.height / 2 + textHeight
+			};
+
+			if (null != this.textOffsetX) {
+				textPos.x += this.textOffsetX;
+			}
+			if (null != this.textOffsetY) {
+				textPos.y += this.textOffsetY;
+			}
+
+			return textPos;
+		};
+
+		this.setImagePosition = function (offsetX, offsetY, width, height, scaleWidth, scaleHeight) {
+			this.imgOffsetX = offsetX;
+			this.imgOffsetY = offsetY;
+			this.imgWidth = width;
+			this.imgHeight = height;
+			this.imgScaleWidth = scaleWidth || width;
+			this.imgScaleHeight = scaleHeight || height;
+
+			if (undefined == routerBg) {
+				var that = this;
+				routerBg = new Image();
+				routerBg.src = "../web-static/images/routerBg.png";
+				routerBg.onload = function (){
+					that.image = routerBg;
+				};
+			} else {
+				this.image = routerBg;
+			}
+		};
+
+		this.setWifiImagePosition = function (offsetX, offsetY) {
+			this.wifiImgOffsetX = offsetX;
+			this.wifiImgOffsetY = offsetY;
+		};
+	}
+	function Node() {
+		Node.prototype.initialize.apply(this,arguments);
+
+		this.mouseoverHandler = function (event, scene) {
+			this.isMouseOver = true;
+			scene.stage.canvas.style.cursor = "pointer";
+
+			if (this.isInOperationBound(event.x, event.y)) {
+				return;
+			}
+
+			if ("function" == typeof this.onmouseover) {
+				var newEvent = {};
+				newEvent.x = this.x;
+				newEvent.y = this.y;
+				newEvent.textWidth = this.textRectWidth;
+				newEvent.textHeight = this.textRectHeight;
+				this.onmouseover(newEvent, this.text);
+			}
+		};
+
+		this.mouseoutHandler = function (event, scene) {
+			this.isMouseOver = false;
+			scene.stage.canvas.style.cursor = "default";
+
+			if (this.isInOperationBound(event.x, event.y)) {
+				return;
+			}
+
+			if ("function" == typeof this.onmouseout) {
+				this.onmouseout();
+			}
+		};
+
+		this.clickHandler = function(event) {
+			if (this.isInOperationBound(event.x, event.y)) {
+				var newNevent = {};
+				newNevent.target = this;
+				if ("function" == typeof this.onclick) {
+					this.onclick(newNevent);
+				}
+			}
+		};
+
+		this.isInOperationBound = function (x,y) {
+			if (x > this.x + this.width - 14 && x < this.x + this.width + 10 &&
+				y > this.y - 10 && y < this.y + 16) {
+				return true;
+			}
+			return false;
+		};
+
+		this.isInEditBound = function (x,y) {
+			var offsetX = this.width > this.textRectWidth ? 0 : (this.textRectWidth - this.width) / 2;
+			if (x > this.x - offsetX && x < this.x + this.width + offsetX &&
+				y > this.y + this.height + this.textOffsetY && y < this.y + this.height + this.textRectHeight + this.textOffsetY) {
+				return true;
+			}
+			return false;
+		};
+	}
+	function TextNode(text) {
+        this.initialize();
+        this.text = text;
+        this.elementType = "TextNode";
+        this.paint = function (context) {
+            context.beginPath();
+            context.font = this.font;
+            this.width = context.measureText(this.text).width;
+            this.height = context.measureText("田").width;
+            context.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+            context.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+            context.fillText(this.text, -this.width / 2, this.height / 2);
+            context.closePath();
+        };
+    }
+    function ButtonNode(text) {
+    	this.initialize = function (text) {
+			ButtonNode.prototype.initialize.apply(this,arguments);
+			this.text = text;
+	        this.elementType = "ButtonNode";
+	        this.fontColor = "51, 51, 51";
+	        this.font = "10px 微软雅黑, 宋体, Arial";
+			this.backgroundColor = "254, 235, 26";
+	        this.onclick = null;
+		};
+    	this.initialize(text);
+        
+        this.paint = function (context) {
+            context.beginPath();
+            context.font = this.font;
+            this.width = context.measureText(this.text).width + 16;
+            this.height = context.measureText("田").width + 6;
+            context.save();
+            context.fillStyle = "rgba(" + this.backgroundColor + ",1)";
+			context.JTopoRoundRect(0, 0, this.width, this.height, 4);
+			context.fill();
+            context.restore();
+            context.strokeStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+            context.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+            context.fillText(this.text, 8, this.height - 4);
+            context.closePath();
+        };
+
+        this.clickHandler = function(event) {
+        	if ("function" == typeof this.onclick) {
+        		this.onclick(event);
+        	}
+        };
+    }
+
+	var routerBg;
+	var images = {};
+	BaseNode.prototype = new JTopo.InteractiveElement();
+	Node.prototype = new BaseNode();
+	TextNode.prototype = new Node();
+	ButtonNode.prototype = new BaseNode();
+	JTopo.Node = Node;
+	JTopo.TextNode = TextNode;
+	JTopo.ButtonNode = ButtonNode;
+})(JTopo);
+
+/* Link */
+(function (JTopo){
+	function Link(nodeA, nodeZ, text) {
+		this.initialize = function (nodeA, nodeZ, text){
+			Link.prototype.initialize.apply(this,arguments);
+			this.elementType = "link";
+			this.zIndex = JTopo.zIndex_Link;
+			if (0 != arguments.length) {
+				this.text = text;
+				this.nodeA = nodeA;
+				this.nodeZ = nodeZ;
+				this.nodeA && null == this.nodeA.outLinks && (this.nodeA.outLinks = []);
+				this.nodeA && null == this.nodeA.inLinks && (this.nodeA.inLinks = []);
+				this.nodeZ && null == this.nodeZ.outLinks && (this.nodeZ.outLinks = []);
+				this.nodeZ && null == this.nodeZ.inLinks && (this.nodeZ.inLinks = []);
+				null != this.nodeA && this.nodeA.outLinks.push(this);
+				null != this.nodeZ && this.nodeZ.outLinks.push(this);
+				this.lineWidth = 2;
+				this.transformAble = false;
+				this.dashedPattern = null;
+				this.strokeColor = "255, 255, 255";
+				this.bundleGap = 12;
+			}
+		};
+		this.initialize(nodeA, nodeZ, text);
+
+		this.paintPath = function (context, posArr) {
+			context.beginPath();
+			context.moveTo(posArr[0].x, posArr[0].y);
+			for (var i = 1; i < posArr.length; ++i){
+				context.lineTo(posArr[i].x,posArr[i].y);
+			}
+
+			context.stroke();
+			context.closePath();
+		};
+
+		this.paintWifiImage = function (context, posArr) {
+			if (posArr[posArr.length - 1] && this.nodeZ.image) {
+				context.drawImage(this.nodeZ.image, this.nodeZ.wifiImgOffsetX, this.nodeZ.wifiImgOffsetY, 20, 20, posArr[posArr.length - 1].x - 10, posArr[posArr.length - 1].y - 18,20,20);
+			}
+		};
+
+		this.paint = function (context) {
+			if (null != this.nodeA && null != this.nodeZ) {
+				var posArr = this.getPath();
+				context.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
+				context.lineWidth = this.lineWidth;
+				this.paintPath(context,posArr);
+				this.paintWifiImage(context,posArr);
+			}
+		};
+	}
+
+	function FlexionalLink(nodeA, nodeZ, text) {
+		this.initialize = function () {
+			this.roundLine = false;
+			FlexionalLink.prototype.initialize.apply(this,arguments);
+		};
+		this.initialize(nodeA, nodeZ, text);
+
+		this.getStartPosition = function () {
+			var pos = {
+				x: this.nodeA.getCx()
+			};
+
+			pos.y = this.nodeA.y + this.nodeA.height + this.nodeA.textRectHeight + this.nodeA.textOffsetY;
+
+			return pos;
+		};
+
+		this.getEndPosition = function () {
+			var pos = {
+				x: this.nodeZ.getCx(),
+				y: this.nodeZ.getCy()
+			};
+
+			pos.y = this.nodeZ.y - 8;
+
+			return pos;
+		};
+
+		this.getPath = function () {
+			var startPos = this.getStartPosition();
+			var endPos = this.getEndPosition();
+			if (this.nodeA === this.nodeZ) return [startPos,endPos];
+
+			var posArr = [];
+			posArr.push({
+				x: startPos.x,
+				y: startPos.y
+			});
+			posArr.push({
+				x: startPos.x,
+				y: endPos.y - 32
+			});
+			posArr.push({
+				x: endPos.x,
+				y: endPos.y - 32
+			});
+			posArr.push({
+				x: endPos.x,
+				y: endPos.y
+			});
+
+			return posArr;
+		};
+
+		this.paintPath = function (context, posArr) {
+			context.beginPath();
+			context.moveTo(posArr[0].x, posArr[0].y);
+
+			if (null == this.dashedPattern) {
+				context.lineTo(posArr[1].x,posArr[1].y);
+				if (!this.roundLine) {
+					context.lineTo(posArr[2].x,posArr[2].y);
+				} else {
+					if (posArr[2].x < posArr[0].x) {
+						context.lineTo(posArr[2].x + 5,posArr[2].y);
+						context.moveTo(posArr[2].x,posArr[2].y + 5);
+						context.arc(posArr[2].x + 5, posArr[2].y + 5, 5, 1*Math.PI, 1.5*Math.PI);
+						context.moveTo(posArr[2].x,posArr[2].y + 5);
+					} else if (posArr[2].x > posArr[0].x){
+						context.lineTo(posArr[2].x - 5,posArr[2].y);
+						context.arc(posArr[2].x - 5, posArr[2].y + 5, 5, 1.5*Math.PI, 0);
+						context.moveTo(posArr[2].x,posArr[2].y + 5);
+					} else {
+						context.lineTo(posArr[2].x,posArr[2].y);
+					}
+				}
+				context.lineTo(posArr[3].x,posArr[3].y);
+			}
+
+			context.stroke();
+			context.closePath();
+		};
+	}
+	Link.prototype = new JTopo.InteractiveElement();
+	FlexionalLink.prototype = new Link();
+	JTopo.Link = Link;
+	JTopo.FlexionalLink = FlexionalLink;
+})(JTopo);
+
+/* layout */
+(function(JTopo){
+	function getRootNodes(childs) {
+		var nodes = [];
+		var links = childs.filter(function(child){
+			if (child instanceof JTopo.Link) {
+				return true;
+			}
+
+			nodes.push(child);
+			return false;
+		});
+
+		childs = nodes.filter(function (node) {
+			for (var i = 0; i < links.length; ++i) {
+				if (links[i].nodeZ === node) return false;
+			}
+			return true;
+		});
+		childs = childs.filter(function(node){
+			for (var i = 0; i < links.length; i++) {
+				if (links[i].nodeA === node) return true;
+			}
+			return false;
+		});
+
+		return childs;
+	}
+
+	function rightShift (childs, node, offsetX, offsetY) {
+		node.x += offsetX;
+		node.y += offsetY;
+		var nodeChilds = getNodeChilds(childs, node);
+		for (var i = 0; i < nodeChilds.length; i++) {
+			rightShift(childs,nodeChilds[i],offsetX,offsetY);
+		}
+	}
+
+	function parseTree(childs, rootNode) {
+		function getTreeNodes(rootNode, index) {
+			var nodeArr = getNodeChilds(childs, rootNode);
+			if (null == treeNodes[index]) {
+				treeNodes[index] = {};
+				treeNodes[index].nodes = [];
+				treeNodes[index].childs = [];
+			}
+			treeNodes[index].nodes.push(rootNode);
+			treeNodes[index].childs.push(nodeArr);
+			for (var i = 0; i < nodeArr.length; i++) {
+				getTreeNodes(nodeArr[i], index + 1);
+				nodeArr[i].parent = rootNode;
+			};
+		}
+		var treeNodes = [];
+		getTreeNodes(rootNode,0);
+		return treeNodes;
+	}
+	function TreeLayout(width, height) {
+		return function (scene) {
+			function generateTree(childs, rootNode) {
+				var treeDeep = JTopo.layout.getTreeDeep(childs,rootNode),
+				treeNodes = parseTree(childs,rootNode),
+				lastNodes = treeNodes[""+treeDeep].nodes;
+
+				var lastNodeHeight = treeDeep * height;
+				if (lastNodeHeight + height> scene.stage.canvas.height) {
+					scene.stage.canvas.height = lastNodeHeight + height;
+				}
+
+				for (var i = 0; i < lastNodes.length; i++) {
+					var node = lastNodes[i],
+						x = i * (width + 10),
+						y = lastNodeHeight;
+					node.setLocation(x,y);
+				}
+
+				for (var i = treeDeep - 1; i >= 0; i--) {
+					var nodes = treeNodes["" + i].nodes,
+						childs = treeNodes["" + i].childs;
+					for (var j = 0; j < nodes.length; j++) {
+						var node = nodes[j],
+							childNodes = childs[j];
+
+						if (0 == i) {
+							node.y = 0;
+						} else {
+							node.y = i * height;
+						}
+
+						if (childNodes.length > 0) {
+							node.x = (childNodes[0].x + childNodes[childNodes.length - 1].x) / 2;
+						} else if (j > 0) {
+							node.x = nodes[j-1].x + nodes[j-1].width + 54;
+						}
+
+						if (j > 0) {
+							if (node.x < nodes[j-1].x + nodes[j-1].width + 54) {
+								var x = nodes[j-1].x + nodes[j-1].width + 54,
+									offsetX = Math.abs(x - node.x);
+								for (var k = j; k < nodes.length; k++) {
+									rightShift(scene.childs, nodes[k], offsetX, 0);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			var rootNodes = JTopo.layout.getRootNodes(scene.childs);
+			if (rootNodes.length > 0) {
+				generateTree(scene.childs, rootNodes[0]);
+
+				var centerPos = scene.getCenterLocation();
+				var offsetX = centerPos.x - (rootNodes[0].x + rootNodes[0].width / 2);
+				scene.childs.forEach(function(child){
+					if (child instanceof JTopo.Node) {
+						child.x += offsetX;
+						child.y += 5;
+					}
+				});
+			}
+		};
+	}
+
+	function getNodeChilds(childs, rootNode) {
+		var nodes = [];
+		for (var i = 0; i < childs.length; i++) {
+			if (childs[i] instanceof JTopo.Link &&
+				childs[i].nodeA === rootNode) {
+				nodes.push(childs[i].nodeZ);
+			}
+		}
+		return nodes;
+	}
+
+	function calculateNodesPosition(centerFlag ,x, y, childNodeNum, width, height) {
+		var arr = [];
+		var leftmostNode;
+		if (centerFlag) {
+			leftmostNode = x - childNodeNum / 2 * width + width / 2;
+		} else {
+			leftmostNode = x;
+		}
+
+		for (var j = 0; childNodeNum >= j; j++) {
+			arr.push({
+				x: leftmostNode + j * width,
+				y: y + height
+			});
+		}
+		return arr
+	}
+
+	function adjustPosition(rootNode, childNodes, centerFlag) {
+		if (rootNode.layout) {
+			var layout = rootNode.layout,
+				calculatedPos = null;
+			var width = layout.width || 50,
+				height = layout.height || 50;
+
+			calculatedPos = calculateNodesPosition(centerFlag, rootNode.x, rootNode.y + rootNode.height + 61, childNodes.length, width, height);
+
+			while (calculatedPos[0].x < 0) {
+				for (var i = 0; i < calculatedPos.length; ++i) {
+					calculatedPos[i].x += width;
+				}
+			}
+
+			if (calculatedPos[0].x < 20) {
+				calculatedPos[0].x = 20;
+			}
+
+			for (var j = 0; j < childNodes.length; j++) {
+				childNodes[j].setLocation(calculatedPos[j].x, calculatedPos[j].y)
+			}
+		}
+	}
+	
+	function layoutNode(scene, node, centerFlag) {
+		var childNodes = getNodeChilds(scene.childs, node);
+		if (0 == childNodes.length)  {
+			return null;
+		}
+
+		adjustPosition(node, childNodes, centerFlag);
+
+		if (childNodes.length === 6) {
+			layoutNode(scene, childNodes[0], false);
+		} else {
+			layoutNode(scene, childNodes[0], true);
+		}
+
+		return null
+	}
+
+	function getTreeDeep(childs, rootNode) {
+		function calculateTreeDeep(childs, rootNode, deep) {
+			var nodeArr = getNodeChilds(childs, rootNode);
+			if (deep > treeDeep) {
+				treeDeep = deep;
+			}
+			for (var i = 0; i < nodeArr.length; i++) {
+				calculateTreeDeep(childs,nodeArr[i],deep+1);
+			}
+		}
+
+		var treeDeep = 0;
+		calculateTreeDeep(childs,rootNode,0);
+		return treeDeep;
+	}
+
+	JTopo.layout = JTopo.Layout = {
+		layoutNode: layoutNode,
+		adjustPosition: adjustPosition,
+		getNodeChilds: getNodeChilds,
+		getTreeDeep: getTreeDeep,
+		getRootNodes: getRootNodes,
+		TreeLayout: TreeLayout
+	};
+})(JTopo);

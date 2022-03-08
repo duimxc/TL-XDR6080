@@ -1,5 +1,515 @@
+<style type="text/css">
+	body{
+		background-position:1688px 535px;
+		background-size:66px 32px;
+		background-color:#5e85c0;
+		background-image:url(../web-static/images/cloudF.png);
+		background-repeat:no-repeat;
+		font-size:12px;
+		height:100%;
+	}
+	div.logo{
+		width:980px;
+		height:60px;
+		margin:0px auto;
+		position:relative;
+	}
+	.tpLogo{
+		display: inline-block;
+		width: 131px;
+		height: 100%;
+	}
+	.andlinkLogo{
+		display: inline-block;
+		width: 205px;
+		height: 100%;
+	}
+	.elinkLogo{
+		display: inline-block;
+		width: 214px;
+		height: 100%;
+	}
+	.andlinkQRcode{
+		width: 170px;
+		height: 102px;
+		padding: 12px;
+		margin: 60px 0 0 65px;
+		background: #fff;
+		box-sizing: border-box;
+	}
+	.andlinkQRcode i.des{
+		display: inline-block;
+		height:30px;
+		width:60px;
+		margin: 24px 0 24px 8px;
+	}
+	div.lgCon{
+		width:980px;
+		margin:0px auto;
+		position:relative;
+	}
+	div.lgCon ul.lg{
+		font-size:0px;
+		margin:125px 0 0 340px;
+		list-style:none;
+		width:510px;
+	}
+	li.lgTitle{
+		color:#FFFFFF;
+		font-size:24px;
+		font-weight:bold;
+		margin-bottom:35px;
+	}
+	li.lgInput{
+		margin-bottom:25px;
+	}
+	ul.lgPwd{
+		font-size:0;
+		height:35px;
+		position:relative;
+		list-style:none;
+		*zoom:1;
+	}
+	ul.lgPwd li.inputPwd{
+		background:#FFFFFF;
+		border-radius:3px;
+		float:left;
+		font-size:0;
+		height:35px;
+		line-height:35px;
+		overflow:hidden;
+		width:300px;
+	}
+	li.inputPwd label.pwd{
+		border-right:1px solid #5E85BF;
+		color:#3C3E43;
+		display:inline-block;
+		font-size:14px;
+		line-height:35px;
+		text-align:center;
+		vertical-align:top;
+		width:50px;
+	}
+	@media screen and (-webkit-min-device-pixel-ratio:0)
+	{
+		li.inputPwd input{
+			line-height:0px !important;
+		}
+	}
+	li.inputPwd input{
+		background:#FFFFFF;
+		border:none;
+		font-size:12px;
+		height:35px;
+		*height:34px;
+		line-height:35px;
+		*line-height:34px;
+		margin-left:9px;
+		padding:0;
+		vertical-align:top;
+		width:230px;
+	}
+	ul.lgPwd li.pwdNote{
+		float:left;
+		height:35px;
+		line-height:35px;
+		visibility:hidden;
+		width:210px;
+	}
+	#pwdTipStr, #usrTipStr{
+		background:#FFFFFF;
+		color:#A6A6A6;
+		height:30px;
+		*line-height:34px;
+		font-size:12px;
+		left:56px;
+		position:absolute;
+		top:1px;
+	}
+	i.tip{
+		background:url(../web-static/images/routerBg.png) -441px -68px no-repeat;
+		display:inline-block;
+		height:13px;
+		margin-left:7px;
+		vertical-align:middle;
+		width:13px;
+	}
+	#loginError{
+		color:#FFFFFF;
+		font-size:12px;
+		line-height:16px;
+		margin-left:7px;
+		vertical-align:middle;
+		display:inline-block;
+	}
+	li.lgBtn{
+		margin-bottom:8px;
+	}
+	li.lgBtn input{
+		font-size:14px;
+		padding-top:6px;
+		padding-bottom:6px;
+		*padding-top:5px;
+		*padding-bottom:3px;
+		width:300px;
+	}
+	li.loginHelp{
+		font-size:12px;
+		margin-bottom:55px;
+	}
+	span.loginHelp{
+		color:#FFFFFF;
+		cursor:pointer;
+		text-decoration:underline;
+	}
+	#loginFeg{
+		background:#4A6CA0;
+		border-radius:3px;
+		color:white;
+		margin-top:13px;
+		position:relative;
+		visibility:hidden;
+		width:300px;
+	}
+	#loginFeg p{
+		line-height:20px;
+		padding:12px;
+		text-indent:0px;
+		word-break:break-all;
+		word-wrap:break-word;
+	}
+	#loginFeg i{
+		height:0px;
+		line-height:0px;
+		width:0px;
+		top:-9px;
+		left:15px;
+		position:absolute;
+		border-style:solid;
+		border-color:#5E85BF #5E85BF #4A6CA0 #5E85BF;
+		border-width:0px 9px 9px 9px;
+	}
+	#Cover p{
+		padding:0px;
+		text-align:center;
+		color:#FFFFFF;
+		font-weight:bold;
+		font-size:16px;
+	}
+	img.loginBgF{
+		height:41px;
+		position:absolute;
+		top:45px;
+		right:-92px;
+		width:92px;
+	}
+	img.loginBgS{
+		position:absolute;
+		top:95px;
+		left:-63px;
+		height:32px;
+		width:66px;
+	}
+	img.loginBgT{
+		position:absolute;
+		height:57px;
+		width:136px;
+		top:105px;
+		left:0px;
+	}
+	img.loginBgFi{
+		position:absolute;
+		top:250px;
+		right:30px;
+		height:40px;
+		width:94px;
+	}
+	img.loginBgSi{
+		position:absolute;
+		top:460px;
+		left:190px;
+		height:40px;
+		width:94px;
+	}
+	label.proName{
+		font-size:12px;
+		color:#FFFFFF;
+		top:21px;
+		right:10px;
+		position:absolute;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		/* 开启/关闭用户名支持 */
+		var gUsernameSupport = false;
 
+		/* 开启/关闭显示Andlink/elink LOGO & 和家亲二维码 */
+		var showAndlinkLogo = false;
+		var showAndlinkQRcode = false;
+		var showElinkLogo = false;
 
+		var PSWIlegal = "PSWIlegal";
+		var lgUsr = id("lgUsr");
+		var lgPwd = id("lgPwd");
+		var pwdTipStr = id("pwdTipStr");
+		var usrTipStr = id("usrTipStr");
+		var lockTime = 1800;
+		id("prName").innerHTML=label.productName + proName;
+
+		function showUsrTipStr()
+		{
+			if (this.value.length == 0)
+			{
+				usrTipStr.style.display = "inline";
+			}
+		}
+		function hideUsrTipStr()
+		{
+			usrTipStr.style.display = "none";
+		}
+		function showPwdTipStr()
+		{
+			if (this.value.length == 0)
+			{
+				pwdTipStr.style.display = "inline";
+			}
+		}
+		function hidePwdTipStr()
+		{
+			pwdTipStr.style.display = "none";
+		}
+		function lgShowErrorCon()
+		{
+			setStyle(id("lgPwdNote"), {"visibility":"visible"});
+			disInputTip($("#lgPwd ~ i.tip")[0], "error");
+		}
+		function lgHideErrorCon()
+		{
+			setStyle(id("lgPwdNote"), {"visibility":"hidden"});
+			disInputTip($("#lgPwd ~ i.tip")[0], "null");
+		}
+		function enterKeyupHandle(event)
+		{
+			event = event || window.event;
+			if (event.keyCode == 13)	// enter handle
+			{
+				return lgDoSub();
+			}
+		}
+		function lgTimerCheck()
+		{
+			lgObj.max--;
+
+			if (lgObj.max == 0)
+			{
+				lgObj.max = lockTime;
+				lgPwd.disabled = false;
+				lgPwd.focus();
+				id("loginSub").disabled = false;
+				hideCover(function(cover){emptyNodes(cover);});
+				return;
+			}
+
+			$.setTimeout(arguments.callee, lgObj.timeout);
+		}
+		function showLgError(code)
+		{
+			var cover, logTimes, errcount;
+			var lineHeight = "16px";
+			var loginError = id("loginError");
+
+			switch(code)
+			{
+			case ESYSLOCKEDFOREVER:
+				window.top.location.reload();
+				break;
+			case ESYSLOCKED:
+				window.top.location.reload();
+				break;
+			case EUNAUTH:
+				errcount = $.authRltObj["time"];
+				logTimes = (errcount == undefined ? lgObj.cnt : errcount);
+				if (lgObj.cnt == logTimes)
+				{
+					break;
+				}
+				if (logTimes <= lgObj.minTipCnt)
+				{
+					loginError.innerHTML = label.loginErrorTipH + logTimes +label.loginErrorTipT;
+				}
+				else
+				{
+					loginError.innerHTML = gUsernameSupport ? label.loginUsrPwdErr : label.loginPwdErr;
+					lineHeight = "35px";
+				}
+
+				lgShowErrorCon();
+				break;
+			case PSWIlegal:
+				loginError.innerHTML = gUsernameSupport ? label.loginUsrPwdErr : label.loginPwdErr;
+				lgShowErrorCon();
+				break;
+			case ESYSCLIENTFULL:
+				lgPwd.disabled = true;
+				id("loginSub").disabled = true;
+				showCover(function(cover){
+					var detail, height;
+
+					cover.innerHTML = "<p>"+label.loginFull+"</p>";
+					detail = $("#Cover p");
+					height = (document.documentElement.clientHeight - detail[0].offsetHeight)/2;
+					height = height - height*0.3;
+					detail.css("marginTop", height);
+				});
+				break;
+			case ESYSCLIENTNORMAL:
+			default:
+				break;
+			}
+
+			loginError.style.lineHeight = lineHeight;
+
+			if (lgPwd.value.length > 0)
+			{
+				setInputCursor(lgPwd);
+			}
+		}
+		function showLoginHelp()
+		{
+			var loginFeg = id("loginFeg");
+			if (loginFeg.style.visibility == "visible")
+			{
+				loginFeg.style.visibility = "hidden";
+			}
+			else
+			{
+				loginFeg.style.visibility = "visible";
+			}
+		}
+		function lgDoSub()
+		{
+			var pwdVal = lgPwd.value;
+
+			if (gUsernameSupport)
+			{
+				var usrVal = lgUsr.value;
+			}
+
+			/* 检查密码 */
+			/*if (pwdVal.length > 32 || pwdVal.length < 6)
+			{
+				showLgError(ESYSCLIENTNORMAL);
+				return;
+			}
+
+			if (!lgChkPswVal(pwdVal))
+			{
+				showLgError(PSWIlegal);
+				return;
+			}*/
+
+			if (gUsernameSupport)
+			{
+				$.authUsrPwd(usrVal, $.orgAuthPwd(pwdVal), function(errCode){
+					if (errCode == ENONE)
+					{
+						lgUsr.value = "";
+						lgPwd.value = "";
+						$.authRltObj["bHandLg"] = true;
+						unloadLogin();
+					}
+					else
+					{
+						showLgError(parseInt($.authRltObj["code"]));
+					}
+				});
+			}
+			else
+			{
+				$.auth($.orgAuthPwd(pwdVal), function(errCode){
+					if (errCode == ENONE)
+					{
+						lgPwd.value = "";
+						$.authRltObj["bHandLg"] = true;
+						unloadLogin();
+					}
+					else
+					{
+						showLgError(parseInt($.authRltObj["code"]));
+					}
+				});
+			}
+		}
+		function lgChkPswVal(szValue)
+		{
+			return (/^[\x21-\x7e]+$/.test(szValue));
+		}
+		function loginHelpInit()
+		{
+			$("span.loginHelp")[0].onclick = showLoginHelp;
+		}
+		function pageSet()
+		{
+			var loginSub = id("loginSub");
+
+			loginHelpInit();
+			showLgError(parseInt($.authRltObj["code"]));
+			loginSub.onclick = lgDoSub;
+
+			if (gUsernameSupport)
+			{
+				lgUsr.value = "";
+				lgUsr.onkeyup = enterKeyupHandle;
+				lgUsr.onkeydown = lgHideErrorCon;
+				lgUsr.onblur = showUsrTipStr;
+				lgUsr.onfocus = hideUsrTipStr;
+				lgUsr.onclick = hideUsrTipStr;
+				$("#lgUsrBlock").show();
+			}
+
+			lgPwd.value = "";
+			lgPwd.onkeyup = enterKeyupHandle;
+			lgPwd.onkeydown = lgHideErrorCon;
+			lgPwd.onclick = hidePwdTipStr;
+			lgPwd.onblur = showPwdTipStr;
+			lgPwd.onfocus = hidePwdTipStr;
+
+			/* 根据配置判断是否需要显示andlink/elink LOGO & 和家亲二维码 */
+			var tpLogoBg = "url(../web-static/images/logo.png) no-repeat scroll 0 18px";
+			var andlinkLogoBg = "url(../web-static/images/logo_andlink.png) no-repeat scroll 0 18px";
+			var andlinkQRcodeSrc = "../web-static/images/QRcode_andlink.png";
+			var andlinkQRcodeDesBg = "url(../web-static/images/downloadAndlinkAPP.png) no-repeat";
+			var elinkLogoBg = "url(../web-static/images/logo_elink.png) no-repeat scroll 0 18px";
+
+			if (showAndlinkLogo)
+			{
+				$(".andlinkLogo").css("background", andlinkLogoBg);
+			}
+			else if (showElinkLogo)
+			{
+				$(".elinkLogo").css("background", elinkLogoBg);
+			}
+			else
+			{
+				$(".tpLogo").css("background", tpLogoBg);
+			}
+			showAndlinkQRcode && $(".andlinkQRcode img").attr("src", andlinkQRcodeSrc);
+			showAndlinkQRcode && $(".andlinkQRcode i.des").css("background", andlinkQRcodeDesBg);
+
+			$(".tpLogo").toggle(!showAndlinkLogo && !showElinkLogo);
+			$(".andlinkLogo").toggle(showAndlinkLogo);
+			$(".elinkLogo").toggle(showElinkLogo);
+			$(".andlinkQRcode").toggle(showAndlinkQRcode);
+			$(".loginHelp").toggle(!showAndlinkQRcode);
+		}
+
+		var lgObj = {max:lockTime, cnt:20, minTipCnt:3, timeout:1000};
+		pageSet();
+	}
+	init();
+</script>
 <div class="logo">
 	<i class="tpLogo" id="tpLogo"></i>
 	<i class="andlinkLogo" id="andlinkLogo"></i>
@@ -51,9 +561,4 @@
 	<img src="../web-static/images/cloudS.png" class="loginBgT" />
 	<img src="../web-static/images/cloudS.png" class="loginBgFi" />
 	<img src="../web-static/images/cloudS.png" class="loginBgSi" />
-</div><script type="text/javascript">function init(){function s(){0==this.value.length&&(h.style.display="inline")}function k(){h.style.display="none"}function t(){0==this.value.length&&(l.style.display="inline")}function m(){l.style.display="none"}function n(){setStyle(id("lgPwdNote"),{visibility:"visible"});disInputTip($("#lgPwd ~ i.tip")[0],"error")}function p(){setStyle(id("lgPwdNote"),{visibility:"hidden"});disInputTip($("#lgPwd ~ i.tip")[0],"null")}function q(a){a=a||window.event;if(13==a.keyCode)return r()}function g(a){var c=
-"16px",f=id("loginError");switch(a){case ESYSLOCKEDFOREVER:window.top.location.reload();break;case ESYSLOCKED:window.top.location.reload();break;case EUNAUTH:a=$.authRltObj.time;a=void 0==a?d.cnt:a;if(d.cnt==a)break;a<=d.minTipCnt?f.innerHTML=label.loginErrorTipH+a+label.loginErrorTipT:(f.innerHTML=e?label.loginUsrPwdErr:label.loginPwdErr,c="35px");n();break;case u:f.innerHTML=e?label.loginUsrPwdErr:label.loginPwdErr;n();break;case ESYSCLIENTFULL:b.disabled=!0,id("loginSub").disabled=!0,showCover(function(a){var b;
-a.innerHTML="<p>"+label.loginFull+"</p>";a=$("#Cover p");b=(document.documentElement.clientHeight-a[0].offsetHeight)/2;a.css("marginTop",b-0.3*b)})}f.style.lineHeight=c;0<b.value.length&&setInputCursor(b)}function v(){var a=id("loginFeg");a.style.visibility="visible"==a.style.visibility?"hidden":"visible"}function r(){var a=b.value;if(e)var d=c.value;e?$.authUsrPwd(d,$.orgAuthPwd(a),function(a){a==ENONE?(c.value="",b.value="",$.authRltObj.bHandLg=!0,unloadLogin()):g(parseInt($.authRltObj.code))}):
-$.auth($.orgAuthPwd(a),function(a){a==ENONE?(b.value="",$.authRltObj.bHandLg=!0,unloadLogin()):g(parseInt($.authRltObj.code))})}var e=!1,u="PSWIlegal",c=id("lgUsr"),b=id("lgPwd"),l=id("pwdTipStr"),h=id("usrTipStr");id("prName").innerHTML=label.productName+proName;var d={max:1800,cnt:20,minTipCnt:3,timeout:1E3};(function(){var a=id("loginSub");$("span.loginHelp")[0].onclick=v;g(parseInt($.authRltObj.code));a.onclick=r;e&&(c.value="",c.onkeyup=q,c.onkeydown=p,c.onblur=s,c.onfocus=k,c.onclick=k,$("#lgUsrBlock").show());
-b.value="";b.onkeyup=q;b.onkeydown=p;b.onclick=m;b.onblur=t;b.onfocus=m;$(".tpLogo").css("background","url(../web-static/images/logo.png) no-repeat scroll 0 18px");$(".tpLogo").toggle(!0);$(".andlinkLogo").toggle(!1);$(".elinkLogo").toggle(!1);$(".andlinkQRcode").toggle(!1);$(".loginHelp").toggle(!0)})()}init();
-</script><style type="text/css">body{background-position:1688px 535px;background-size:66px 32px;background-color:#5e85c0;background-image:url(../web-static/images/cloudF.png);background-repeat:no-repeat;font-size:12px;height:100%}div.logo{width:980px;height:60px;margin:0 auto;position:relative}.tpLogo{display:inline-block;width:131px;height:100%}.andlinkLogo{display:inline-block;width:205px;height:100%}.elinkLogo{display:inline-block;width:214px;height:100%}.andlinkQRcode{width:170px;height:102px;padding:12px;margin:60px 0 0 65px;background:#fff;box-sizing:border-box}.andlinkQRcode i.des{display:inline-block;height:30px;width:60px;margin:24px 0 24px 8px}div.lgCon{width:980px;margin:0 auto;position:relative}div.lgCon ul.lg{font-size:0;margin:125px 0 0 340px;list-style:none;width:510px}li.lgTitle{color:#fff;font-size:24px;font-weight:bold;margin-bottom:35px}li.lgInput{margin-bottom:25px}ul.lgPwd{font-size:0;height:35px;position:relative;list-style:none;*zoom:1}ul.lgPwd li.inputPwd{background:#fff;border-radius:3px;float:left;font-size:0;height:35px;line-height:35px;overflow:hidden;width:300px}li.inputPwd label.pwd{border-right:1px solid #5e85bf;color:#3c3e43;display:inline-block;font-size:14px;line-height:35px;text-align:center;vertical-align:top;width:50px}@media screen and (-webkit-min-device-pixel-ratio:0){li.inputPwd input{line-height:0!important}}li.inputPwd input{background:#fff;border:0;font-size:12px;height:35px;*height:34px;line-height:35px;*line-height:34px;margin-left:9px;padding:0;vertical-align:top;width:230px}ul.lgPwd li.pwdNote{float:left;height:35px;line-height:35px;visibility:hidden;width:210px}#pwdTipStr,#usrTipStr{background:#fff;color:#a6a6a6;height:30px;*line-height:34px;font-size:12px;left:56px;position:absolute;top:1px}i.tip{background:url(../web-static/images/routerBg.png) -441px -68px no-repeat;display:inline-block;height:13px;margin-left:7px;vertical-align:middle;width:13px}#loginError{color:#fff;font-size:12px;line-height:16px;margin-left:7px;vertical-align:middle;display:inline-block}li.lgBtn{margin-bottom:8px}li.lgBtn input{font-size:14px;padding-top:6px;padding-bottom:6px;*padding-top:5px;*padding-bottom:3px;width:300px}li.loginHelp{font-size:12px;margin-bottom:55px}span.loginHelp{color:#fff;cursor:pointer;text-decoration:underline}#loginFeg{background:#4a6ca0;border-radius:3px;color:white;margin-top:13px;position:relative;visibility:hidden;width:300px}#loginFeg p{line-height:20px;padding:12px;text-indent:0;word-break:break-all;word-wrap:break-word}#loginFeg i{height:0;line-height:0;width:0;top:-9px;left:15px;position:absolute;border-style:solid;border-color:#5e85bf #5E85Bf #4a6ca0 #5E85BF;border-width:0 9px 9px 9px}#Cover p{padding:0;text-align:center;color:#fff;font-weight:bold;font-size:16px}img.loginBgF{height:41px;position:absolute;top:45px;right:-92px;width:92px}img.loginBgS{position:absolute;top:95px;left:-63px;height:32px;width:66px}img.loginBgT{position:absolute;height:57px;width:136px;top:105px;left:0}img.loginBgFi{position:absolute;top:250px;right:30px;height:40px;width:94px}img.loginBgSi{position:absolute;top:460px;left:190px;height:40px;width:94px}label.proName{font-size:12px;color:#fff;top:21px;right:10px;position:absolute}</style>
+</div>

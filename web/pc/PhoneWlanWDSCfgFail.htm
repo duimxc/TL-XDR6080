@@ -1,5 +1,65 @@
+<script type="text/javascript">
+	function init()
+	{
+		var failStr;
 
+		switch(gWDSFailStatus)
+		{
+		case PWD_ERROR:
+			// 存在密码错误，直接跳转到上一页
+			loadPage("PhoneWlanWDSCfgSecond.htm", "phCon");
+			break;
+		case DHCP_FAIL:
+			failStr = label.phDHCPFail;
+			break;
+		case WDS_CONNECT_FAIL:
+		case WDS_TIMEOUT:
+			failStr = label.phWDSFail;
+			break;
+		case SIGNAL_WEAK:
+		case WDS_FAIL:
+		default:
+			failStr = gWDSFailStr;
+			break;
+		}
 
+		$(".detectTip").text(failStr);
+		$("#pre").click(function() {
+			backFromNextPage = true;
+			gWDSPwdErrList = [];
+			wdsCanceldHandle();
+			for (var freq in wdsTargetSelFreq) {
+				wdsTargetSelFreq[freq].selected = false;
+				wdsTargetSelFreq[freq].bs = false;
+			}
+			loadPage("PhoneWlanWDSCfgFirst.htm", "phCon");
+		});
+		$("#retry").click(function() {
+			failRetry = true;
+			gWDSPwdErrList = [];
+			loadPage("PhoneWlanWDSCfgSecond.htm", "phCon");
+		})
+	}
+	init();
+</script>
+<style type="text/css">
+	p.detectTip{
+		color:#ffffff;
+		font-size:15px;
+		text-align:center;
+		margin-bottom:20px;
+	}
+	div.textCenter{
+		margin-top:120px;
+		padding:0 36px;
+		text-align:center;
+	}
+	img.detected{
+		height:80px;
+		margin:20px auto 20px;
+		width:83px;
+	}
+</style>
 <div class="textCenter">
 	<img class="detected" src="../web-static/images/wzdWarn.png" />
 	<p class="detectTip"></p>
@@ -7,6 +67,4 @@
 <div class="phFunc">
     <label id="pre" class="phTwoBtn">{%btn.preStep%}</label>
     <label id="retry" class="phTwoBtn" style="margin-left:20px;">{%btn.retry%}</label>
-</div><script type="text/javascript">function init(){var a;switch(gWDSFailStatus){case PWD_ERROR:loadPage("PhoneWlanWDSCfgSecond.htm","phCon");break;case DHCP_FAIL:a=label.phDHCPFail;break;case WDS_CONNECT_FAIL:case WDS_TIMEOUT:a=label.phWDSFail;break;default:a=gWDSFailStr}$(".detectTip").text(a);$("#pre").click(function(){backFromNextPage=!0;gWDSPwdErrList=[];wdsCanceldHandle();for(var a in wdsTargetSelFreq)wdsTargetSelFreq[a].selected=!1,wdsTargetSelFreq[a].bs=!1;loadPage("PhoneWlanWDSCfgFirst.htm","phCon")});$("#retry").click(function(){failRetry=
-!0;gWDSPwdErrList=[];loadPage("PhoneWlanWDSCfgSecond.htm","phCon")})}init();
-</script><style type="text/css">p.detectTip{color:#fff;font-size:15px;text-align:center;margin-bottom:20px}div.textCenter{margin-top:120px;padding:0 36px;text-align:center}img.detected{height:80px;margin:20px auto 20px;width:83px}</style>
+</div>

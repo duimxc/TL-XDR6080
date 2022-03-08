@@ -6,6 +6,6 @@ Section: base
 Essential: yes
 Maintainer: Nicolas Thill <nico@openwrt.org>
 Architecture: ipq
-Installed-Size: 210960
+Installed-Size: 210968
 Description:  The Swiss Army Knife of embedded Linux.
  It slices, it dices, it makes Julian Fries.

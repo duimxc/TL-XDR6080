@@ -1,9 +1,9 @@
 Package: kmod-qca-nss-ecm-standard
 Version: 4.4.60-1
-Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), kmod-qca-nss-drv, iptables-mod-extra, kmod-ipt-conntrack, kmod-pppoe
+Depends: kernel (=4.4.60-1-a506bed59bd9524e13e88ca7ae2a68df), kmod-qca-nss-drv, iptables-mod-extra, kmod-ipt-conntrack, kmod-pppoe
 Provides: kmod-qca-nss-ecm
 Source: tp_package/ethernet-driver/ipq-nss/qca-nss-ecm
 Section: kernel
 Architecture: ipq
-Installed-Size: 285872
+Installed-Size: 286660
 Description:  QCA NSS Enhanced Connection Manager (ECM)

@@ -4,5 +4,5 @@ Depends: libc, libssp, libjson, libpthread, libsecurity, libcyassl2, zlib, libnl
 Source: tp_package/u_packages/tdmp
 Section: utils
 Architecture: ipq
-Installed-Size: 1246982
+Installed-Size: 1255497
 Description:  Data Module Service

@@ -1,0 +1,8 @@
+Package: sys_toolkit
+Version: 1
+Depends: libc, libssp
+Source: tp_package/u_packages/sys_toolkit
+Section: toolkit
+Architecture: ipq
+Installed-Size: 13861
+Description:  This package contains a sys toolkit and system scripts for OpenWrt.

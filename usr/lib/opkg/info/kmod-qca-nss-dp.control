@@ -1,8 +1,8 @@
 Package: kmod-qca-nss-dp
 Version: 4.4.60-1
-Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), kmod-qca-ssdk-nohnat, kmod-rtl8367sc
+Depends: kernel (=4.4.60-1-a506bed59bd9524e13e88ca7ae2a68df), kmod-qca-ssdk-nohnat, kmod-rtl8367sc
 Source: tp_package/ethernet-driver/ipq-nss/qca-nss-dp
 Section: kernel
 Architecture: ipq
-Installed-Size: 18861
+Installed-Size: 18860
 Description:  Kernel driver for NSS data plane

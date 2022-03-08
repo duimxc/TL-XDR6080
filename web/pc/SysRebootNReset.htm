@@ -1,5 +1,256 @@
+<script type="text/javascript">
+	function init()
+	{
+		var rebootTbl = new DataGrid();
+		var resetTbl = new DataGrid();
+		var data, facIp = "";
+		var domainName;
 
+		function rebootAll() {
+			var reqData = {
+				hyfi: {
+					reboot_all:null
+				}
+			};
 
+			showConfirm("重启预计需要几分钟。重启过程中，所有设备和路由器会断开连接。", function (result) {
+				if (true == result) {
+					$.action(reqData, function(result){
+						var err_code = result[ERR_CODE]
+						if (ENONE == err_code)
+						{
+							var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+							showProgBar(waitTime * 1000, undefined, function(){
+								lanDetecting(function(){
+									window.location.reload();
+								});
+							}, true, statusStr.rebootTip);
+						}
+					});
+				}
+			},"重启");
+		}
+
+		function rebootMainRouter() {
+			var reqData = {
+				system: {
+					reboot:null
+				}
+			};
+
+			$.action(reqData, function(result){
+				var err_code = result[ERR_CODE]
+				if (ENONE == err_code)
+				{
+					var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+					showProgBar(waitTime * 1000, undefined, function(){
+						lanDetecting(function(){
+							window.location.reload();
+						});
+					}, true, statusStr.rebootTip);
+				}
+			});
+		}
+
+		function rebootChildRouter(index) {
+			var reqData = {};
+			reqData[uciPlc.fileName] = {};
+			reqData[uciPlc.fileName][uciPlc.actionName.rebootExt] = {};
+			reqData[uciPlc.fileName][uciPlc.actionName.rebootExt][uciPlc.optName.mac] =  rebootTbl._ops.data[index].mac;
+
+			$.action(reqData, function(result){
+				var err_code = result[ERR_CODE];
+				if (ENONE == err_code)
+				{
+					var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+					showProgBar(waitTime * 1000, statusStr.rebootingChildRt, function(){
+						closeProgBar();
+					}, true, statusStr.rebootChildRtTip);
+				}
+				else
+				{
+					showAlert(statusStr.rebootRouterFail);
+				}
+			});
+		}
+
+		function resetMainRouter() {
+			var reqData = {
+				system: {
+					reset:null
+				}
+			};
+
+			$.action(reqData, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+					showProgBar(waitTime * 1000, label.reseting, function()
+					{
+						$.setLgPwd("");
+						$.changeDomain(facIp);
+						lanDetecting(function(){
+							window.location.href = ((location.href.toString()).indexOf(domainName) == -1) ?
+									("http://" + facIp) : ("http://" + domainName);
+						});
+					}, true, statusStr.resetTip);
+				}
+			});
+		}
+
+		function resetChildRouter(index) {
+			var reqData = {};
+			reqData[uciPlc.fileName] = {};
+			reqData[uciPlc.fileName][uciPlc.actionName.resetExt] = {};
+			reqData[uciPlc.fileName][uciPlc.actionName.resetExt][uciPlc.optName.mac] = resetTbl._ops.data[index].mac;
+
+			$.action(reqData, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var waitTime = parseInt(result["wait_time"], 10) || 30;
+
+					showProgBar(waitTime * 1000, label.resetingChildRt, function()
+					{
+						closeProgBar();
+					}, true, statusStr.resetChildRtTip);
+				}
+				else
+				{
+					showAlert(statusStr.resetRouterFail);
+				}
+			});
+		}
+
+		function rebootRouter(index) {
+			var entry = rebootTbl._ops.data[index];
+			showConfirm(label.rebootConfirm, function(choose){
+				if (true == choose)
+				{
+					if (entry.is_cap) {
+						rebootMainRouter();
+					} else {
+						rebootChildRouter(index);
+					}
+				}
+			});
+		}
+
+		function resetRouter(index) {
+			var entry = rebootTbl._ops.data[index];
+			showConfirm(label.resetConfirm, function(choose){
+				if (true == choose)
+				{
+					if (entry.is_cap) {
+						resetMainRouter();
+					} else {
+						resetChildRouter(index);
+					}
+				}
+			});
+		}
+		
+		function tblRefresh() {
+			var data = {};
+			data[uciProto.fileName] = {};
+			data[uciProto.fileName][KEY_NAME] = uciProto.secName.dhcp;
+
+			data[uciPlc.fileName] = {};
+			data[uciPlc.fileName][KEY_TABLE] = uciPlc.secType.connectedExt;
+
+			$.query(data,function (result) {
+				if (ENONE == result[ERR_CODE]) {
+					var router = {};
+					router.name = result[uciProto.fileName][uciProto.secName.dhcp][uciProto.optName.hostName];
+					router.is_cap = true;
+
+					var cldList = formatTableData(result[uciPlc.fileName][uciPlc.secType.connectedExt]);
+					var tblData = [router];
+					tblData = cldList.concat(tblData);
+
+					rebootTbl.setDataSource(tblData);
+					rebootTbl.refresh();
+
+					resetTbl.setDataSource(tblData);
+					resetTbl.refresh();
+				}
+			});
+		}
+
+		function initTable() {
+			rebootTbl.init({
+				id:"rebootTbl",
+				data:[],
+				edit:false,
+				hasSelBox:false,
+				head:[{field:label.equipName, width:33},
+					{field:label.operation, width:33}],
+				list:[{edit:false, name:"name", type:"str"},
+					{value:btn.reboot, type:"btn", click:rebootRouter, className:"subBtn tblBtn"}]
+			});
+
+			resetTbl.init({
+				id:"resetTbl",
+				data:[],
+				edit:false,
+				hasSelBox:false,
+				head:[{field:label.equipName, width:33},
+					{field:label.operation, width:33}],
+				list:[{edit:false, name:"name", type:"str"},
+					{value:btn.reset, type:"btn", click:resetRouter, className:"subBtn tblBtn"}]
+			});
+		}
+		
+		function pageInit() {
+			data = {};
+			data[uciNetwork.fileName] = {};
+			data[uciNetwork.fileName][KEY_NAME] = uciNetwork.secName.lan;
+			data[uciDeviceInfo.fileName] = {};
+			data[uciDeviceInfo.fileName][KEY_NAME] = uciDeviceInfo.secName.info;
+
+			$.query(data, function(result) {
+				if (ENONE != result[ERR_CODE]) {
+					return;
+				}
+
+				facIp = result[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.facIp];
+				domainName = result[uciDeviceInfo.fileName][uciDeviceInfo.secName.info][uciDeviceInfo.optName.domainName];
+			});
+
+			initTable();
+			tblRefresh();
+		}
+
+		id("rebootAll").onclick = rebootAll;
+
+		pageInit();
+	}
+
+	init();
+</script>
+<style type="text/css">
+	table.dataGrid td{
+		height:39px;
+		border: 1px solid #1E96D4;
+	}
+	.tblBtn{
+		height:25px;
+		margin:auto 3px;
+	}
+	div.SysRebootBlock {
+		color: #FFFFFF;
+		margin-top: 14px;
+		margin-bottom: 60px;
+		text-align: left;
+	}
+	input.btnA {
+		margin-left: 0;
+		padding: 5px 0;
+	}
+</style>
 <div id="hcCo" class="hcCo">
 	<div class="hsHelp"></div>
 	<div class="title" style="margin-bottom: 20px;">
@@ -16,11 +267,3 @@
 		<table id="resetTbl" class="dataGrid"></table>
 	</div>
 </div>
-<script type="text/javascript">function init(){function k(){$.action({system:{reboot:null}},function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,void 0,function(){lanDetecting(function(){window.location.reload()})},!0,statusStr.rebootTip))})}function l(a){var b={};b[uciPlc.fileName]={};b[uciPlc.fileName][uciPlc.actionName.rebootExt]={};b[uciPlc.fileName][uciPlc.actionName.rebootExt][uciPlc.optName.mac]=d._ops.data[a].mac;$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*
-a,statusStr.rebootingChildRt,function(){closeProgBar()},!0,statusStr.rebootChildRtTip)):showAlert(statusStr.rebootRouterFail)})}function m(){$.action({system:{reset:null}},function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,label.reseting,function(){$.setLgPwd("");$.changeDomain(g);lanDetecting(function(){window.location.href=-1==location.href.toString().indexOf(h)?"http://"+g:"http://"+h})},!0,statusStr.resetTip))})}function n(a){var b={};b[uciPlc.fileName]={};b[uciPlc.fileName][uciPlc.actionName.resetExt]=
-{};b[uciPlc.fileName][uciPlc.actionName.resetExt][uciPlc.optName.mac]=f._ops.data[a].mac;$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,label.resetingChildRt,function(){closeProgBar()},!0,statusStr.resetChildRtTip)):showAlert(statusStr.resetRouterFail)})}function p(a){var b=d._ops.data[a];showConfirm(label.rebootConfirm,function(c){!0==c&&(b.is_cap?k():l(a))})}function q(a){var b=d._ops.data[a];showConfirm(label.resetConfirm,function(c){!0==c&&(b.is_cap?
-m():n(a))})}function r(){var a={};a[uciProto.fileName]={};a[uciProto.fileName][KEY_NAME]=uciProto.secName.dhcp;a[uciPlc.fileName]={};a[uciPlc.fileName][KEY_TABLE]=uciPlc.secType.connectedExt;$.query(a,function(a){if(ENONE==a[ERR_CODE]){var c={};c.name=a[uciProto.fileName][uciProto.secName.dhcp][uciProto.optName.hostName];c.is_cap=!0;a=formatTableData(a[uciPlc.fileName][uciPlc.secType.connectedExt]);c=[c];c=a.concat(c);d.setDataSource(c);d.refresh();f.setDataSource(c);f.refresh()}})}var d=new DataGrid,
-f=new DataGrid,e,g="",h;id("rebootAll").onclick=function(){var a={hyfi:{reboot_all:null}};showConfirm("重启预计需要几分钟。重启过程中，所有设备和路由器会断开连接。",function(b){!0==b&&$.action(a,function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,void 0,function(){lanDetecting(function(){window.location.reload()})},!0,statusStr.rebootTip))})},"重启")};(function(){e={};e[uciNetwork.fileName]={};e[uciNetwork.fileName][KEY_NAME]=uciNetwork.secName.lan;e[uciDeviceInfo.fileName]={};e[uciDeviceInfo.fileName][KEY_NAME]=
-uciDeviceInfo.secName.info;$.query(e,function(a){ENONE==a[ERR_CODE]&&(g=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.facIp],h=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info][uciDeviceInfo.optName.domainName])});d.init({id:"rebootTbl",data:[],edit:!1,hasSelBox:!1,head:[{field:label.equipName,width:33},{field:label.operation,width:33}],list:[{edit:!1,name:"name",type:"str"},{value:btn.reboot,type:"btn",click:p,className:"subBtn tblBtn"}]});f.init({id:"resetTbl",data:[],edit:!1,
-hasSelBox:!1,head:[{field:label.equipName,width:33},{field:label.operation,width:33}],list:[{edit:!1,name:"name",type:"str"},{value:btn.reset,type:"btn",click:q,className:"subBtn tblBtn"}]});r()})()}init();
-</script><style type="text/css">table.dataGrid td{height:39px;border:1px solid #1e96d4}.tblBtn{height:25px;margin:auto 3px}div.SysRebootBlock{color:#fff;margin-top:14px;margin-bottom:60px;text-align:left}input.btnA{margin-left:0;padding:5px 0}</style>

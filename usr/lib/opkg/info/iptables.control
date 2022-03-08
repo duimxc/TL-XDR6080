@@ -4,7 +4,7 @@ Depends: libc, libssp, kmod-ipt-core, libip4tc, libxtables
 Source: tp_package/u_packages/iptables
 Section: net
 Architecture: ipq
-Installed-Size: 68818
+Installed-Size: 68821
 Description:  IPv4 firewall administration tool.
  
  Matches:

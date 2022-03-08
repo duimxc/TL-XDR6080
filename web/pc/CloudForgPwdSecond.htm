@@ -1,4 +1,216 @@
+<script type="text/javascript">
+	var PageObj = {
+		INLINE_BLOCK:"inline-block",
+		chkPswVal: function(szValue)
+		{
+			return (/^[\x21-\x7e]+$/.test(szValue));
+		},
+		pwdConfFocus: function()
+		{
+			this.lgPwdNote.style.visibility = "hidden";
+		},
+		pwdFocus: function()
+		{
+			this.lgPwdConfNote.style.visibility = "hidden";
+		},
+		pwdConfCheck: function()
+		{
+			var pwdConf = this.pwdConf;
+			var pwd = this.pwd;
 
+			this.pwdConfFocus();
+
+			if (pwdConf.value == pwd.value)
+			{
+				this.lgPwdConfNote.style.visibility = "hidden";
+				return true;
+			}
+			else
+			{
+				this.lgPwdConfNote.style.visibility = "visible";
+				return false;
+			}
+		},
+		pwdBlur: function()
+		{
+			var pwd = id("pwd");
+			var len = pwd.value.length;
+
+			if (len >= 0 && len < 6)
+			{
+				$("#lgPwdNoteLess").css("display", this.INLINE_BLOCK).css("visibility", "visible");
+			}
+		},
+		pwdCheckMixChars: function(str)
+		{
+			var hasNum = false;
+			var hasLetter = false;
+			var hasSymbol = false;
+
+			hasNum = /\d/g.test(str);
+			hasLetter = /[a-zA-Z]/g.test(str);
+			hasSymbol = /[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(str);
+
+			return hasNum&&hasSymbol&&hasLetter;
+		},
+		pwdCheck: function()
+		{
+			var width = 24, tip = "";
+			var pwd = this.pwd;
+			var lgPwdlessTip = this.INLINE_BLOCK;
+			var lgPwdValTip = this.INLINE_BLOCK;
+			var pwdValue = pwd.value;
+			var len = pwdValue.length;
+			var lgPwdNoteVi = "visible";
+			var result = true;
+
+			if (len >= 0 && len < 6)
+			{
+				result = false;
+				lgPwdValTip = "none";
+			}
+			else if(!this.chkPswVal(pwdValue))
+			{
+				lgPwdlessTip = "none";
+				result = false;
+			}
+			else if (len > 32)
+			{
+				lgPwdlessTip = "none";
+				lgPwdValTip = "none";
+				result = false;
+			}
+			else
+			{
+				lgPwdlessTip = "none";
+				lgPwdValTip = "none";
+			}
+
+			if ("none" != lgPwdlessTip || "none" != lgPwdValTip)
+			{
+				lgPwdNoteVi = "hidden";
+			}
+			else if (/^\d+$/.test(pwdValue) ||
+					/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(pwdValue) ||
+					/^[a-zA-Z]+$/.test(pwdValue))
+			{
+				if (len <= 10)
+				{
+					tip = label.weak;
+					width = width;
+				}
+				else
+				{
+					tip = label.media;
+					width = width*2;
+				}
+			}
+			else if (true == this.pwdCheckMixChars(pwdValue))
+			{
+				tip = label.strong;
+				width = width*3;
+			}
+			else
+			{
+				if (len <= 10)
+				{
+					tip = label.media;
+					width = width*2;
+				}
+				else
+				{
+					tip = label.strong;
+					width = width*3;
+				}
+			}
+
+			this.lgPwdNote.style.visibility = lgPwdNoteVi;
+			this.lgPwdNoteLess.style.display = lgPwdlessTip;
+			this.lgPwdNoteInvalidChar.style.display = lgPwdValTip;
+			this.pwdDep.innerHTML = tip;
+			this.chgPwdDep.style.width = width + "px";
+
+			return result;
+		},
+		pwdConfChange: function(event)
+		{
+			event = event || window.event;
+			var code = event.keyCode;
+
+			if (this.pwdConfCheck() && code == 13)
+			{
+				this.onsub();
+			}
+		},
+		onsub: function()
+		{
+			var result, pwd = this.pwd;
+			var pwdConf = this.pwdConf;
+			var obj = this;
+
+			if (!this.pwdCheck() || !this.pwdConfCheck())
+			{
+				return;
+			}
+
+			gCloudAccount["pwd"] = pwd.value;
+			gResetCloudAccountPwd(function(){
+				loadPage("CloudForgPwdThird.htm", "cloudForgDetial", undefined, {bClearPageTickArray:false});
+			}, function(){
+				loadPage("CloudForgPwdThird.htm", "cloudForgDetial", undefined, {bClearPageTickArray:false});
+			}, cloudAccountQueryStop);
+		},
+
+		init: function(){
+			var obj = this;
+			var pwd = id("pwd");
+			var pwdConf = id("pwdConf");
+
+			$("ul.cloudNav li").each(function(index){
+				if (1 == index)
+				{
+					this.className = "select";
+				}
+				else
+				{
+					this.className = "";
+				}
+			});
+			id("nextStep").onclick = function(){
+				if (true == $.local)
+				{
+					loadPage("CloudForgPwdThird.htm", "cloudForgDetial", undefined, {bClearPageTickArray:false});
+				}
+				else
+				{
+					obj.onsub();
+				}
+			};
+
+			this.INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+			this.pwdConf = pwdConf;
+			this.pwd = id("pwd");
+			this.pwdConfLbl = id("pwdConfLbl");
+			this.lgPwdNote = id("lgPwdNote");
+			this.lgPwdConfNote = id("lgPwdConfNote");
+			this.lgPwdNoteLess = id("lgPwdNoteLess");
+			this.lgPwdNoteInvalidChar = id("lgPwdNoteInvalidChar");
+			this.pwdDep = id("pwdDep");
+			this.chgPwdDep = id("chgPwdDep");
+
+			pwdConf.onkeyup =function(event){obj.pwdConfChange(event)};
+			pwdConf.onfocus = function(){obj.pwdConfFocus()};
+			pwdConf.onblur = function(){obj.pwdConfCheck()};
+
+			pwd.onkeyup = function(){obj.pwdCheck()};
+			pwd.onblur = function(){obj.pwdBlur()};
+			pwd.onfocus = function(){obj.pwdFocus()};
+			this.lgPwdNoteInvalidChar.style.visibility = "visible";
+			this.lgPwdNoteInvalidChar.style.display = "none";
+		}
+	};
+	PageObj.init();
+</script>
 <h1 class="cloudForgH1">{%label.cloudPwdReset%}</h1>
 <ul class="gridLine gridLineD mpPhoneRgt50">
 	<label class="desLblB">{%label.loginSetPwd%}</label>
@@ -35,10 +247,3 @@
 	</li>
 </ul>
 <input id="nextStep" type="button" value="{%btn.nextStep%}" class="subBtn cloudSub" />
-<script type="text/javascript">var PageObj={INLINE_BLOCK:"inline-block",chkPswVal:function(a){return/^[\x21-\x7e]+$/.test(a)},pwdConfFocus:function(){this.lgPwdNote.style.visibility="hidden"},pwdFocus:function(){this.lgPwdConfNote.style.visibility="hidden"},pwdConfCheck:function(){var a=this.pwdConf,b=this.pwd;this.pwdConfFocus();if(a.value==b.value)return this.lgPwdConfNote.style.visibility="hidden",!0;this.lgPwdConfNote.style.visibility="visible";return!1},pwdBlur:function(){var a=id("pwd").value.length;0<=a&&6>a&&$("#lgPwdNoteLess").css("display",
-this.INLINE_BLOCK).css("visibility","visible")},pwdCheckMixChars:function(a){var b=!1,c=!1,d=!1,b=/\d/g.test(a),c=/[a-zA-Z]/g.test(a),d=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(a);return b&&d&&c},pwdCheck:function(){var a=24,b="",c=this.INLINE_BLOCK,d=this.INLINE_BLOCK,e=this.pwd.value,f=e.length,h="visible",g=!0;0<=f&&6>f?(g=!1,d="none"):this.chkPswVal(e)?32<f?(d=c="none",g=!1):d=c="none":(c="none",g=!1);"none"!=c||"none"!=d?h="hidden":/^\d+$/.test(e)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(e)||
-/^[a-zA-Z]+$/.test(e)?10>=f?b=label.weak:(b=label.media,a*=2):!0==this.pwdCheckMixChars(e)?(b=label.strong,a*=3):10>=f?(b=label.media,a*=2):(b=label.strong,a*=3);this.lgPwdNote.style.visibility=h;this.lgPwdNoteLess.style.display=c;this.lgPwdNoteInvalidChar.style.display=d;this.pwdDep.innerHTML=b;this.chgPwdDep.style.width=a+"px";return g},pwdConfChange:function(a){a=a||window.event;a=a.keyCode;if(this.pwdConfCheck()&&13==a)this.onsub()},onsub:function(){var a=this.pwd;this.pwdCheck()&&this.pwdConfCheck()&&
-(gCloudAccount.pwd=a.value,gResetCloudAccountPwd(function(){loadPage("CloudForgPwdThird.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1})},function(){loadPage("CloudForgPwdThird.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1})},cloudAccountQueryStop))},init:function(){var a=this,b=id("pwd"),c=id("pwdConf");$("ul.cloudNav li").each(function(a){this.className=1==a?"select":""});id("nextStep").onclick=function(){if(!0==$.local)loadPage("CloudForgPwdThird.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1});
-else a.onsub()};this.INLINE_BLOCK=isIESix||isIESeven?"inline":"inline-block";this.pwdConf=c;this.pwd=id("pwd");this.pwdConfLbl=id("pwdConfLbl");this.lgPwdNote=id("lgPwdNote");this.lgPwdConfNote=id("lgPwdConfNote");this.lgPwdNoteLess=id("lgPwdNoteLess");this.lgPwdNoteInvalidChar=id("lgPwdNoteInvalidChar");this.pwdDep=id("pwdDep");this.chgPwdDep=id("chgPwdDep");c.onkeyup=function(b){a.pwdConfChange(b)};c.onfocus=function(){a.pwdConfFocus()};c.onblur=function(){a.pwdConfCheck()};b.onkeyup=function(){a.pwdCheck()};
-b.onblur=function(){a.pwdBlur()};b.onfocus=function(){a.pwdFocus()};this.lgPwdNoteInvalidChar.style.visibility="visible";this.lgPwdNoteInvalidChar.style.display="none"}};PageObj.init();
-</script>

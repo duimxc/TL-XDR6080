@@ -1,5 +1,84 @@
-﻿
+﻿<script type="text/javascript">
+	function init()
+	{
+		var uciFile = uciWireless.fileName;
+		var uciSecWifi2G = uciWireless.dynData.host_2g;
+		var uciSecWifi5G = uciWireless.dynData.host_5g;
+		var optMode = uciWireless.dynOptName.mode;
 
+		var axCheck = id("axCheckbox");
+
+		function onSave()
+		{
+			if (!axCheck.checked)
+			{
+				gIsWifiCfgChged = true;
+				if (gWifiCfgToSave[uciFile][uciSecWifi2G] == undefined)
+				{
+					gIsWifiCfgBsChged = true;
+				}
+
+				gWifiCfgToSave[uciFile] = gWifiCfgToSave[uciFile] || {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G] = gWifiCfgToSave[uciFile][uciSecWifi2G] || {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G][optMode] = uciWireless.dynOptValue.mode.m_11bgn;
+
+				gWifiCfgToSave[uciFile][uciSecWifi5G] = gWifiCfgToSave[uciFile][uciSecWifi5G] || {};
+				gWifiCfgToSave[uciFile][uciSecWifi5G][optMode] = uciWireless.dynOptValue.mode.m_11ac;
+			}
+
+			loadPage('WizardEnd2Band.htm', "wizardCon");
+		}
+
+		/* 设置导航栏颜色 */
+		wzdNavSet(2);
+		wzdConSet({"height":"680px"});
+		axCheck.checked = true;
+		id("pre").onclick = function(){
+			loadPage('WizardWirelessCfg.htm', "wizardCon");
+		};
+		id("sub").onclick = onSave;
+	}
+	init();
+</script>
+<style type="text/css">
+	li.wzdSubLi input{
+		width:152px;
+	}
+	li.wzdSubLi input.btnL{
+		margin-right:24px !important;
+		background-color: #FFFFFF;
+	}
+	li.axCheckboxLi{
+		list-style:none;
+		margin-left:192px;
+	}
+	input.axCheck{
+		height:12px !important;
+		margin:0;
+		vertical-align:middle !important;
+		width:12px !important;
+	}
+	label.axCheckboxLbl{
+		color:#FFFFFF !important;
+		display:inline !important;
+		font-size:14px;
+		line-height:22px;
+		height:22px;
+	}
+	ul.wzdConTileUlW{
+		margin-bottom:32px;
+	}
+	div.wzdContent span{
+		margin-left:207px;
+		font-size:12px;
+		color:#0D6A90;
+		line-height:20px;
+		display:block;
+	}
+	div.wzdContent a{
+		color:#0D6A90;
+	}
+</style>
 <ul class="wzdConTitleUl wzdConTileUlW">
 	<p class="wzdConTitle">{%label.wifi802Ax%}</p>
 	<p class="wzdConTitleDes">{%label.wifi802AxTip%}</p>
@@ -23,6 +102,4 @@
 		<input id="pre" type="button" class="btnL" value="{%btn.preStep%}" />
 		<input id="sub" type="button" value="{%btn.finish%}" />
 	</li>
-</ul><script type="text/javascript">function init(){var a=uciWireless.fileName,b=uciWireless.dynData.host_2g,c=uciWireless.dynData.host_5g,d=uciWireless.dynOptName.mode,e=id("axCheckbox");wzdNavSet(2);wzdConSet({height:"680px"});e.checked=!0;id("pre").onclick=function(){loadPage("WizardWirelessCfg.htm","wizardCon")};id("sub").onclick=function(){e.checked||(gIsWifiCfgChged=!0,void 0==gWifiCfgToSave[a][b]&&(gIsWifiCfgBsChged=!0),gWifiCfgToSave[a]=gWifiCfgToSave[a]||{},gWifiCfgToSave[a][b]=gWifiCfgToSave[a][b]||{},gWifiCfgToSave[a][b][d]=
-uciWireless.dynOptValue.mode.m_11bgn,gWifiCfgToSave[a][c]=gWifiCfgToSave[a][c]||{},gWifiCfgToSave[a][c][d]=uciWireless.dynOptValue.mode.m_11ac);loadPage("WizardEnd2Band.htm","wizardCon")}}init();
-</script><style type="text/css">li.wzdSubLi input{width:152px}li.wzdSubLi input.btnL{margin-right:24px!important;background-color:#fff}li.axCheckboxLi{list-style:none;margin-left:192px}input.axCheck{height:12px!important;margin:0;vertical-align:middle!important;width:12px!important}label.axCheckboxLbl{color:#fff!important;display:inline!important;font-size:14px;line-height:22px;height:22px}ul.wzdConTileUlW{margin-bottom:32px}div.wzdContent span{margin-left:207px;font-size:12px;color:#0d6a90;line-height:20px;display:block}div.wzdContent a{color:#0d6a90}</style>
+</ul>

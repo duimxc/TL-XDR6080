@@ -1,4 +1,67 @@
+<script type="text/javascript">
+	function init()
+	{
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+			var cloudErrRel;
 
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				showAlert(label.cloudUnbindSuccess);
+				return true;
+			case EINVHOSTID:
+				showStr = label.cloudUnbindFail + label.cloudServerNoRespCheckNetwork;
+				break;
+			case EINDEVICEALREADYUNBOUND:
+				showStr = label.cloudUnbindFail + label.cloudAccountReadyUnbind;
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(errNo)
+				if (cloudErrRel.result == false)
+				{
+					showStr = cloudErrRel.tip;
+				}
+				else
+				{
+					showStr = errStr.invRequestFail;
+				}
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return false;
+		}
+
+		id("cAccount").innerHTML += cloudAccount;
+
+		id("unbind").onclick = function(){
+			showConfirm(label.cloudUnbindConfirm, unbindAccount);
+		};
+
+		id("chgPwd").onclick = function(){
+			loadPage("CloudAccountThird.htm", "hcCo");
+		};
+
+		function unbindAccount(unbindConfirm)
+		{
+			if (true == unbindConfirm)
+			{
+				showLoading(label.unbinding, undefined, undefined, false);
+				cloudAccountUnind(function(code){
+					closeLoading();
+					if (errHandle(code))
+					{
+						basicCloudSet(false);
+						loadPage("CloudAccountFirst.htm", "hcCo");
+					}
+				});
+			}
+		}
+	}
+	init();
+</script>
 <div class="title">
 	<label class="title">{%label.cloudAccountManage%}</label>
 </div>
@@ -8,6 +71,4 @@
 		<input id="unbind" type="button" value="{%btn.unbind%}" class="btnB subBtn" />
 		<input id="chgPwd" type="button" value="{%label.cloudChgPwd%}" class="btnB subBtn" />
 	</div>
-</div><script type="text/javascript">function init(){function c(c){!0==c&&(showLoading(label.unbinding,void 0,void 0,!1),cloudAccountUnind(function(a){closeLoading();a:{var b="";switch(parseInt(a)){case ENONE:showAlert(label.cloudUnbindSuccess);a=!0;break a;case EINVHOSTID:b=label.cloudUnbindFail+label.cloudServerNoRespCheckNetwork;break;case EINDEVICEALREADYUNBOUND:b=label.cloudUnbindFail+label.cloudAccountReadyUnbind;break;default:a=cloudErrHandle(a),b=!1==a.result?a.tip:errStr.invRequestFail}showAlert(b,void 0);a=!1}a&&(basicCloudSet(!1),
-loadPage("CloudAccountFirst.htm","hcCo"))}))}id("cAccount").innerHTML+=cloudAccount;id("unbind").onclick=function(){showConfirm(label.cloudUnbindConfirm,c)};id("chgPwd").onclick=function(){loadPage("CloudAccountThird.htm","hcCo")}}init();
-</script>
+</div>

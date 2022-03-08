@@ -1,9 +1,56 @@
-
-
+<style type="text/css">
+	div.phoneCon{
+		background:#4cb1d9;
+		font-size:0;
+		overflow:hidden;
+		text-align:center;
+		width:100%;
+		height:100%;
+	}
+	img.appLogo{
+		height:100px;
+		margin:80px auto 40px;
+		width:100px;
+	}
+	p{
+		color:#FFFFFF;
+		font-size:18px;
+		margin:0 auto 50px;
+	}
+	label.appBtn{
+		background-color:#FEEB1A;
+		border:none;
+		border-radius:3px;
+		color:#3C3E43;
+		cursor:pointer;
+		display:inline-block;
+		font-size:14px;
+		padding:8px 15px;
+	}
+	label.btnL{
+		margin-right:20px;
+	}
+</style>
+<script type="text/javascript">
+	id("downLoadApp").onclick = function(){
+		location.href = "https://wap.tplinkcloud.com.cn/appdown";
+	};
+	id("continuePCSet").onclick = function(){
+		phoneSet["bContinuePCSet"] = true;
+		if (true == phoneSet["bPhoneWizardSet"])
+		{
+			phoneSet["bPhoneWizardSet"] = false;
+			loadPage("Content.htm", "Con");
+		}
+		else
+		{
+			showLogin();
+		}
+	};
+</script>
 <div class="phoneCon">
 	<img class="appLogo" src="../web-static/images/appLogo.png" />
 	<p>{%label.phoneAppTip%}</p>
 	<label id="continuePCSet" class="appBtn btnL">{%label.phoneAppBrowser%}</label>
 	<label id="downLoadApp" class="appBtn">{%label.phoneAppDownload%}</label>
-</div><script type="text/javascript">id("downLoadApp").onclick=function(){location.href="https://wap.tplinkcloud.com.cn/appdown"};id("continuePCSet").onclick=function(){phoneSet.bContinuePCSet=!0;!0==phoneSet.bPhoneWizardSet?(phoneSet.bPhoneWizardSet=!1,loadPage("Content.htm","Con")):showLogin()};
-</script><style type="text/css">div.phoneCon{background:#4cb1d9;font-size:0;overflow:hidden;text-align:center;width:100%;height:100%}img.appLogo{height:100px;margin:80px auto 40px;width:100px}p{color:#fff;font-size:18px;margin:0 auto 50px}label.appBtn{background-color:#feeb1a;border:0;border-radius:3px;color:#3c3e43;cursor:pointer;display:inline-block;font-size:14px;padding:8px 15px}label.btnL{margin-right:20px}</style>
+</div>

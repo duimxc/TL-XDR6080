@@ -1,5 +1,63 @@
+<script type="text/javascript">
+	function init()
+	{
+		/* 设置导航栏颜色 */
+		wzdNavSet(1);
+		wzdConSet({"height":"480px"});
 
+		if (gModeSwitchSupport) {
+			var data = {};
 
+			data[uciCustomNetwork.fileName] = {};
+			data[uciCustomNetwork.fileName][KEY_NAME] = [uciCustomNetwork.dynData.bridgestatus];
+
+			$.query(data, function(dataObj){
+				var bridgeStatus = parseInt(dataObj.custom_network.bridge_status.enable);
+
+				if(1 == bridgeStatus){
+					$("div.menuCon").addClass("disNone");
+					$("div.dividingLineCon").addClass("disNone");
+					$("#wizardBridgeWanIpWarn").removeClass("disNone");
+				}
+			});
+		}
+		id("sub").onclick = function(){
+			saveNetworkCfg(uciProto.optValue.proto.dynIp, function(){
+				loadPage('WizardWirelessCfg.htm', "wizardCon");
+			});
+		};
+
+		if (true == bWzdWanTypeDetected)
+		{
+			$("i.connect").css("display","block");
+		}
+		else
+		{
+			$("i.disConnect").css("display","block");
+		}
+
+		showNetworkCfg(uciProto.optValue.proto.dynIp);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			$("#wanPortSelDiv").removeClass("disNone");
+			wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+
+		if (gSysModeSupport) {
+			$("#wzdAp").removeClass("disNone");
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	p.tipsP {
+		text-align: center;
+		color: #FFF;
+		font-size: 14px;
+		margin-bottom: 10px;
+	}
+</style>
 <ul class="wzdConTitleUl">
 	<p class="wzdConTitle">{%label.netSet%}</p>
 </ul>
@@ -35,6 +93,3 @@
     <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_STATIC)">{%label.staticIp%} ></a>
     <a id="wzdAp"  class="disNone" href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)">{%label.wiredRepeater%} ></a>
 </div>
-<script type="text/javascript">function init(){wzdNavSet(1);wzdConSet({height:"480px"});if(gModeSwitchSupport){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,function(a){1==parseInt(a.custom_network.bridge_status.enable)&&($("div.menuCon").addClass("disNone"),$("div.dividingLineCon").addClass("disNone"),$("#wizardBridgeWanIpWarn").removeClass("disNone"))})}id("sub").onclick=function(){saveNetworkCfg(uciProto.optValue.proto.dynIp,function(){loadPage("WizardWirelessCfg.htm",
-"wizardCon")})};!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");showNetworkCfg(uciProto.optValue.proto.dynIp);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));gSysModeSupport&&$("#wzdAp").removeClass("disNone")}init();
-</script><style type="text/css">p.tipsP{text-align:center;color:#FFF;font-size:14px;margin-bottom:10px}</style>

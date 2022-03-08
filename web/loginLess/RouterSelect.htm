@@ -1,11 +1,266 @@
+<script type="text/javascript">
+	function init()
+	{
+		var HOST_ROUTER = 0;
+		var SAME_SUBNET_ROUTER = 1;
+		var NOT_SAME_SUBNET_ROUTER = 2;
 
+		function sortDomainArryByType(a, b)
+		{
+			var typeA = 0;
+			var typeB = 0;
 
+			for (var prop in a)
+			{
+				typeA = a[prop].type;
+			}
+
+			for (var prop in b)
+			{
+				typeB = b[prop].type;
+			}
+
+			return (parseInt(typeA) - parseInt(typeB));
+		}
+
+		function sortDomainArryByIP(pre, next)
+		{
+			var ipPre, ipNext, ipPreArr, ipNextArr;
+
+			for (var prop in pre)
+			{
+				ipPre = pre[prop].ip;
+			}
+
+			for (var prop in next)
+			{
+				ipNext = next[prop].ip;
+			}
+
+			ipPreArr = ipPre.split(".");
+			ipNextArr = ipNext.split(".");
+
+			for (var i = 0; i < 4; i++)
+			{
+				if (parseInt(ipPreArr[i], 10) == parseInt(ipNextArr[i], 10))
+				{
+					continue;
+				}
+
+				if (parseInt(ipPreArr[i], 10) > parseInt(ipNextArr[i], 10))
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+
+			return 0;
+		}
+
+		function getDomainConflictRouterInfo()
+		{
+			var routerInfo;
+
+			if ($.local == true)
+			{
+				routerInfo = [{domain_array_1:{name:"Lan Xiang", ip:"192.168.1.12", mac:"22-22-22-33-33-33", type:1}},
+							  {domain_array_2:{name:"wajueji", ip:"192.168.100.123", mac:"22-22-2B-33-33-33", type:2}},
+							  {domain_array_3:{name:"wozuiqiang", ip:"192.168.1.112", mac:"22-2B-22-33-33-33", type:1}},
+							  {domain_array_4:{name:"najiaqiang", ip:"192.2.12.12", mac:"22-2B-22-33-33-33", type:2}},
+							  {domain_array_5:{name:"BlueFly", ip:"192.168.1.22", mac:"22-2B-22-33-33-33", type:0}},
+							  {domain_array_6:{name:"挖掘机挖坑", ip:"192.168.1.2", mac:"22-2B-22-33-33-33", type:1}},
+							  {domain_array_7:{name:"我要写个很长的名字，很长很长很长很长", ip:"192.168.12.88", mac:"22-2B-22-33-33-33", type:2}}];
+			}
+			else
+			{
+				routerInfo = gDomainDetectArr;
+			}
+
+			routerInfo = routerInfo.sort(sortDomainArryByIP);
+			return routerInfo.sort(sortDomainArryByType);
+		}
+
+		function initRouterSelectList()
+		{
+			var routerInfo = getDomainConflictRouterInfo();
+			var ulCon = document.getElementById("routerSelect");
+			var liCon, aCon, spanCon, labelCon;
+			var item;
+
+			for (var index in routerInfo)
+			{
+				for (var prop in routerInfo[index])
+				{
+					item = routerInfo[index][prop];
+				}
+
+				liCon = document.createElement("li");
+				ulCon.appendChild(liCon);
+
+				aCon = document.createElement("a");
+				aCon.className = "abled";
+				aCon.href = "http://" + item.ip;
+				liCon.appendChild(aCon);
+
+				spanCon = document.createElement("span");
+				spanCon.className = "routerName";
+				labelCon = document.createElement("label");
+				labelCon.className = "routerNameLabel";
+				labelCon.innerHTML = item.name;
+				labelCon.setAttribute('title',item.name);
+				spanCon.appendChild(labelCon);
+				aCon.appendChild(spanCon);
+
+				spanCon = document.createElement("span");
+				spanCon.className = "routerIp";
+				spanCon.innerHTML = "IP:" + item.ip;
+				aCon.appendChild(spanCon);
+
+				spanCon = document.createElement("span");
+				spanCon.className = "routerMac";
+				spanCon.innerHTML = "MAC:" + item.mac.toUpperCase();
+				aCon.appendChild(spanCon);
+
+				switch(parseInt(item.type))
+				{
+				case HOST_ROUTER:
+					spanCon = document.createElement("span");
+					spanCon.className = "hostRouter";
+					spanCon.innerHTML = "<i></i>" + label.hostRouter;
+					liCon.appendChild(spanCon);
+					break;
+				case NOT_SAME_SUBNET_ROUTER:
+					spanCon = document.createElement("span");
+					spanCon.className = "disabledRouter";
+					spanCon.innerHTML = "<i></i>" + label.notSameSubnetRouter;
+					liCon.appendChild(spanCon);
+					aCon.href = "javascript:void(0);";
+					aCon.className = "disabled";
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		initRouterSelectList();
+	}
+
+	init();
+</script>
+<style type="text/css">
+	body{
+		background:#5E85BF;
+		height:100%;
+		margin:0;
+		width:100%;
+	}
+	div.logo{
+		width:980px;
+		height:60px;
+		background:url(../web-static/images/logo.png) no-repeat 0 21px;
+		margin:0px auto;
+	}
+	div.routerCon{
+		color:#FFFFFF;
+		font-size:12px;
+		margin:0 auto;
+		width:980px;
+	}
+	div.routerCon h1{
+		font-size:24px;
+		text-align:center;
+		text-shadow:1px 1px #3c3e43;
+	}
+	ul.routerSelect{
+		list-style:none;
+		padding:5px 0 0 243px;
+	}
+	ul.routerSelect li{
+		font-size:0;
+		margin-top:20px;
+	}
+	ul.routerSelect a{
+		border-radius:3px;
+		color:#FFFFFF;
+		display:inline-block;
+		height:45px;
+		line-height:45px;
+		text-decoration:none;
+		vertical-align:middle;
+	}
+	ul.routerSelect a.abled{
+		background-color:#4068A6;
+		cursor:pointer;
+	}
+	ul.routerSelect a.abled:hover{
+		background-color:#FEEB1A;
+		color:#000000;
+	}
+	ul.routerSelect a.disabled{
+		background-color:#9CAFCC;
+		cursor:default;
+	}
+	span.routerName{
+		display:inline-block;
+		font-size:12px;
+		height:45px;
+		overflow:hidden;
+		text-indent:20px;
+		text-overflow:ellipsis;
+		width:220px;
+		padding-right: 25px;
+		white-space: nowrap;
+	}
+	span.routerIp{
+		display:inline-block;
+		font-size:12px;
+		overflow:hidden;
+		width:125px;
+	}
+	span.routerMac{
+		display:inline-block;
+		font-size:12px;
+		overflow:hidden;
+		width:180px;
+	}
+	span.hostRouter{
+		display:inline-block;
+		line-height:18px;
+		font-size:12px;
+		margin-left:7px;
+		vertical-align:middle;
+	}
+	span.hostRouter i{
+		background:url(../web-static/images/routerBg.png) no-repeat -424px -67px;
+		display:inline-block;
+		line-height:18px;
+		height:18px;
+		width:17px;
+		vertical-align:middle;
+	}
+	span.disabledRouter{
+		display:inline-block;
+		font-size:12px;
+		line-height:18px;
+		margin-left:7px;
+		vertical-align:middle;
+		width:160px;
+	}
+	span.disabledRouter i{
+		background:url(../web-static/images/routerBg.png) no-repeat -466px -187px;
+		display:inline-block;
+		line-height:18px;
+		height:18px;
+		width:18px;
+		vertical-align:middle;
+	}
+</style>
 <div class="logo"></div>
 <div class="routerCon">
 	<h1>{%label.domainDetectTitle%}</h1>
 	<ul id="routerSelect" class="routerSelect"></ul>
-</div><script type="text/javascript">function init(){function k(c,e){var d=0,b=0,a;for(a in c)d=c[a].type;for(a in e)b=e[a].type;return parseInt(d)-parseInt(b)}function l(c,e){var d,b,a;for(a in c)d=c[a].ip;for(a in e)b=e[a].ip;d=d.split(".");b=b.split(".");for(a=0;4>a;a++)if(parseInt(d[a],10)!=parseInt(b[a],10))return parseInt(d[a],10)>parseInt(b[a],10)?1:-1;return 0}(function(){var c;c=!0==$.local?[{domain_array_1:{name:"Lan Xiang",ip:"192.168.1.12",mac:"22-22-22-33-33-33",type:1}},{domain_array_2:{name:"wajueji",ip:"192.168.100.123",
-mac:"22-22-2B-33-33-33",type:2}},{domain_array_3:{name:"wozuiqiang",ip:"192.168.1.112",mac:"22-2B-22-33-33-33",type:1}},{domain_array_4:{name:"najiaqiang",ip:"192.2.12.12",mac:"22-2B-22-33-33-33",type:2}},{domain_array_5:{name:"BlueFly",ip:"192.168.1.22",mac:"22-2B-22-33-33-33",type:0}},{domain_array_6:{name:"挖掘机挖坑",ip:"192.168.1.2",mac:"22-2B-22-33-33-33",type:1}},{domain_array_7:{name:"我要写个很长的名字，很长很长很长很长",ip:"192.168.12.88",mac:"22-2B-22-33-33-33",type:2}}]:gDomainDetectArr;c=c.sort(l);c=c.sort(k);
-var e=document.getElementById("routerSelect"),d,b,a,g,f,h;for(h in c){for(var m in c[h])f=c[h][m];d=document.createElement("li");e.appendChild(d);b=document.createElement("a");b.className="abled";b.href="http://"+f.ip;d.appendChild(b);a=document.createElement("span");a.className="routerName";g=document.createElement("label");g.className="routerNameLabel";g.innerHTML=f.name;g.setAttribute("title",f.name);a.appendChild(g);b.appendChild(a);a=document.createElement("span");a.className="routerIp";a.innerHTML=
-"IP:"+f.ip;b.appendChild(a);a=document.createElement("span");a.className="routerMac";a.innerHTML="MAC:"+f.mac.toUpperCase();b.appendChild(a);switch(parseInt(f.type)){case 0:a=document.createElement("span");a.className="hostRouter";a.innerHTML="<i></i>"+label.hostRouter;d.appendChild(a);break;case 2:a=document.createElement("span"),a.className="disabledRouter",a.innerHTML="<i></i>"+label.notSameSubnetRouter,d.appendChild(a),b.href="javascript:void(0);",b.className="disabled"}}})()}init();
-</script><style type="text/css">body{background:#5e85bf;height:100%;margin:0;width:100%}div.logo{width:980px;height:60px;background:url(../web-static/images/logo.png) no-repeat 0 21px;margin:0 auto}div.routerCon{color:#fff;font-size:12px;margin:0 auto;width:980px}div.routerCon h1{font-size:24px;text-align:center;text-shadow:1px 1px #3c3e43}ul.routerSelect{list-style:none;padding:5px 0 0 243px}ul.routerSelect li{font-size:0;margin-top:20px}ul.routerSelect a{border-radius:3px;color:#fff;display:inline-block;height:45px;line-height:45px;text-decoration:none;vertical-align:middle}ul.routerSelect a.abled{background-color:#4068a6;cursor:pointer}ul.routerSelect a.abled:hover{background-color:#feeb1a;color:#000}ul.routerSelect a.disabled{background-color:#9cafcc;cursor:default}span.routerName{display:inline-block;font-size:12px;height:45px;overflow:hidden;text-indent:20px;text-overflow:ellipsis;width:220px;padding-right:25px;white-space:nowrap}span.routerIp{display:inline-block;font-size:12px;overflow:hidden;width:125px}span.routerMac{display:inline-block;font-size:12px;overflow:hidden;width:180px}span.hostRouter{display:inline-block;line-height:18px;font-size:12px;margin-left:7px;vertical-align:middle}span.hostRouter i{background:url(../web-static/images/routerBg.png) no-repeat -424px -67px;display:inline-block;line-height:18px;height:18px;width:17px;vertical-align:middle}span.disabledRouter{display:inline-block;font-size:12px;line-height:18px;margin-left:7px;vertical-align:middle;width:160px}span.disabledRouter i{background:url(../web-static/images/routerBg.png) no-repeat -466px -187px;display:inline-block;line-height:18px;height:18px;width:18px;vertical-align:middle}</style>
+</div>

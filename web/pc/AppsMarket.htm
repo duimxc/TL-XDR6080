@@ -1,5 +1,362 @@
+<style type="text/css">
+	div.appsMarketCon{
+		width: 745px;
+		padding:0 16px 0 63px;
+		box-sizing: border-box;
+	}
+	#netExpt{
+		display:none;
+		text-align:center;
+	}
+	img.warnTag{
+		height:103px;
+		margin-top:45px;
+		width:102px;
+	}
+	#netExpt p{
+		color:#FFFFFF;
+		font-size:18px;
+		margin-top:30px;
+		text-align:center;
+	}
+	#appsNetLoading{
+		display:none;
+		text-align:center;
+	}
+	#appsNetLoading i{
+		display:inline-block;
+		height:103px;
+		width:102px;
+		margin-top:45px;
+		background:url(../web-static/images/appsLoading.gif) no-repeat;
+	}
+	#appsNetLoading p{
+		margin-top:30px;
+		text-align:center;
+	}
+	#appsNetRetry{
+		width:70px;
+		margin-top:30px;
+		padding-top:3px;
+		padding-bottom:3px;
+		*padding-top:2px;
+		*padding-bottom:1px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var GET_CLOUD_STATUS_TIME = 1000;
+		var appsMarketExpt = id("appsMarketExpt");
+		var appsNetLoading = id("appsNetLoading");
+		var appsExptTip = $("#appsMarketExpt p");
+		var deviceLegality = true;
 
+		function loadAppsExpt(beCloudConnected)
+		{
+			var appsMarketDetail = id("appsMarketDetail");
+			var netExpt = id("netExpt");
 
+			if (true == beCloudConnected)
+			{
+				netExpt.style.display = "none";
+				appsMarketDetail.style.display = "block";
+			}
+			else
+			{
+				netExpt.style.display = "block";
+				appsMarketDetail.style.display = "none";
+			}
+		}
+
+		function appsExptShow(showLoading, tip)
+		{
+			if (true == showLoading)
+			{
+				appsMarketExpt.style.display = "none";
+				appsNetLoading.style.display = "block";
+			}
+			else
+			{
+				appsMarketExpt.style.display = "block";
+				appsNetLoading.style.display = "none";
+				appsExptTip.html(tip);
+			}
+		}
+
+		function appsShowLoading()
+		{
+			appsExptShow(true);
+			loadAppsExpt(false);
+		}
+
+		function appsShowExpt(tip)
+		{
+			appsExptShow(false, tip);
+			loadAppsExpt(false);
+		}
+
+		function appsShowDetail()
+		{
+			loadAppsExpt(true);
+		}
+
+		function appsLoadMarketFail(cloudRetryHd)
+		{
+			if (false == deviceLegality)
+			{
+				appsShowExpt(label.cloudDeviceInfoExpt);
+			}
+			else
+			{
+				appsShowExpt(label.cloudNetworkExpt);
+			}
+
+			gAppSet["cloudRetryHd"] = cloudRetryHd;
+			emptyNodes(appsMarketDetail);
+		}
+
+		/* 精选精选应用的信息 */
+		function loadCloudAppMarket(callBack)
+		{
+			var data = {};
+			var loadAppTimeoutHd = null;
+
+			function loadFailHd()
+			{
+				clearTimeout(loadAppTimeoutHd);
+				appsLoadMarketFail(connectCloud);
+			}
+
+			function callBackHd(errCode)
+			{
+				if (ENONE != errCode)
+				{
+					loadFailHd();
+				}
+				else
+				{
+					clearTimeout(loadAppTimeoutHd);
+					callBack();
+				}
+			}
+
+			data[uciAppInfo.fileName] = {};
+			data[uciAppInfo.fileName][KEY_NAME] = uciAppInfo.secName.plugin;
+
+			$.query(data, function (result){
+				var dataRel = result[uciAppInfo.fileName][uciAppInfo.secName.plugin];
+				var notInsNum = dataRel[uciAppInfo.optName.notInstalledNum];
+				var updateNum = dataRel[uciAppInfo.optName.updateNum];
+
+				function getAppsCanUpdate(errCode)
+				{
+					if (ENONE != errCode)
+					{
+						loadFailHd();
+					}
+					else
+					{
+						(updateNum > 0) ? getAppsCanUpdateInfo(0, updateNum-1, callBackHd, loadFailHd, loadFailHd) : callBackHd(ENONE);
+					}
+				}
+
+				(notInsNum > 0) ? getAppsUninstalledInfo(0, notInsNum-1, getAppsCanUpdate, loadFailHd, loadFailHd) : getAppsCanUpdate(ENONE);
+			});
+
+			loadAppTimeoutHd = $.setTimeout(function(){
+				loadFailHd();
+			}, 15*1000);
+		}
+
+		function connectCloud()
+		{
+			var data = {};
+			var waitHd = null, queryHd = null;
+			var ucc = uciCloudConfig;
+			var wdsStatus = uciWireless.dynOptValue.enable.off;
+
+			function getWDSStatus(handle)
+			{
+				var rqData = {};
+
+				rqData[uciWireless.fileName] = {};
+				rqData[uciWireless.fileName][KEY_NAME] = [uciWireless.dynData.wds_2g];
+
+				if (gBandNum == BAND_2) {
+					rqData[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g);
+				}
+
+				$.query(rqData, function(result){
+					if (result[ERR_CODE] == ENONE) {
+						if (gBandNum == BAND_1 &&
+								result[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable] == uciWireless.dynOptValue.enable.on) {
+						wdsStatus = uciWireless.dynOptValue.enable.on;
+					}
+						if (gBandNum == BAND_2 &&
+								(result[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable] == uciWireless.dynOptValue.enable.on ||
+								result[uciWireless.fileName][uciWireless.dynData.wds_5g][uciWireless.dynOptName.enable] == uciWireless.dynOptValue.enable.on)) {
+							wdsStatus = uciWireless.dynOptValue.enable.on;
+						}
+					}
+
+					handle();
+				});
+			}
+
+			function actionConnectCloud()
+			{
+				var reqData = {};
+				var ccs = cloudClientStatus;
+				var lUCC = uciCloudConfig;
+
+				reqData[ccs.fileName] = {};
+				reqData[ccs.fileName][KEY_NAME] = ccs.secName.clientInfo;
+
+				reqData[uciNetwork.fileName] = {};
+				reqData[uciNetwork.fileName][KEY_NAME] = [uciNetwork.dynData.wanStatus];
+
+				reqData[lUCC.fileName] = {};
+				reqData[lUCC.fileName][KEY_NAME] = [lUCC.secName.deviceLegality];
+
+				$.query(reqData, function(result){
+					if (ENONE == result[ERR_CODE])
+					{
+						var connectStatus = result[ccs.fileName][ccs.secName.clientInfo][ccs.optName.connectStatus];
+
+						var wanStatus = result[uciNetwork.fileName][uciNetwork.dynData.wanStatus];
+
+						if ((parseInt(wanStatus["link_status"]) == LINK_DOWN) && (parseInt(wanStatus["error_code"]) == LINK_CODE_PHYDOWN) &&
+							wdsStatus == uciWireless.dynOptValue.enable.off)
+						{
+							clearTimeout(queryHd);
+							appsLoadMarketFail(connectCloud);
+							return;
+						}
+
+						if (result[lUCC.fileName][lUCC.secName.deviceLegality][lUCC.optName.illegal] == lUCC.optValue.illegal.yes)
+						{
+							deviceLegality = false;
+						}
+						else
+						{
+							deviceLegality = true;
+						}
+
+						if (false == deviceLegality)
+						{
+							clearTimeout(queryHd);
+							appsLoadMarketFail(connectCloud);
+							return;
+						}
+
+						gAppSet.beCloudConnected = (connectStatus == ccs.optValue.connectStatus.connected);
+						if (true == gAppSet.beCloudConnected)
+						{
+							gAppSet.beCloudConnected = true;
+							loadCloudAppMarket(function(){
+								appsShowDetail();
+								clearTimeout(waitHd);
+								loadPage("AppsMarketList.htm", "appsMarketDetail");
+							});
+						}
+						else
+						{
+							queryHd = $.setTimeout(actionConnectCloud, 1000);
+						}
+					}
+				});
+			}
+
+			appsShowLoading();
+			data[ucc.fileName] = {};
+			data[ucc.fileName][ucc.actionName.reconnect] = {};
+			data[ucc.fileName][ucc.actionName.reconnect][ucc.optName.reconnectTime] = ucc.optValue.reconnectVal;
+			$.action(data, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					getWDSStatus(actionConnectCloud);
+					waitHd = $.setTimeout(function(){
+						clearTimeout(queryHd);
+						appsLoadMarketFail(connectCloud);
+					}, 20*1000);
+				}
+				else
+				{
+					appsLoadMarketFail(connectCloud);
+				}
+			});
+		}
+
+		function getCloudApps()
+		{
+			var reqData = {};
+			var ccs = cloudClientStatus;
+			var lUCC = uciCloudConfig;
+			var timeoutHd = null;
+			var timeout = 1000;
+
+			timeoutHd = $.setTimeout(appsShowLoading, timeout);
+
+			reqData[ccs.fileName] = {};
+			reqData[ccs.fileName][KEY_NAME] = ccs.secName.clientInfo;
+
+			reqData[lUCC.fileName] = {};
+			reqData[lUCC.fileName][KEY_NAME] = [lUCC.secName.deviceLegality];
+
+			$.query(reqData, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var connectStatus = result[ccs.fileName][ccs.secName.clientInfo][ccs.optName.connectStatus];
+
+					if (result[lUCC.fileName][lUCC.secName.deviceLegality][lUCC.optName.illegal] == lUCC.optValue.illegal.yes)
+					{
+						deviceLegality = false;
+					}
+					else
+					{
+						deviceLegality = true;
+					}
+
+					gAppSet.beCloudConnected = (connectStatus == ccs.optValue.connectStatus.connected);
+					if (true == gAppSet.beCloudConnected)
+					{
+						loadCloudAppMarket(function(){
+							clearTimeout(timeoutHd);
+							appsShowDetail();
+							loadPage("AppsMarketList.htm", "appsMarketDetail");
+						});
+					}
+					else
+					{
+						clearTimeout(timeoutHd);
+						appsLoadMarketFail(connectCloud);
+					}
+				}
+				else
+				{
+					clearTimeout(timeoutHd);
+					appsLoadMarketFail(connectCloud);
+				}
+			});
+		}
+
+		id("appsNetRetry").onclick = function(){
+			(gAppSet["cloudRetryHd"])();
+		};
+
+		if (true == $.local)
+		{
+			appsShowDetail();
+			loadPage("AppsMarketList.htm", "appsMarketDetail");
+		}
+		else
+		{
+			getCloudApps();
+		}
+	}
+	init();
+</script>
 <div class="appsMarketCon">
 	<div id="netExpt">
 		<div id="appsMarketExpt">
@@ -13,12 +370,4 @@
 		</div>
 	</div>
 	<div id="appsMarketDetail" class="disNone"></div>
-</div><script type="text/javascript">function init(){function l(a){var c=id("appsMarketDetail"),b=id("netExpt");!0==a?(b.style.display="none",c.style.display="block"):(b.style.display="block",c.style.display="none")}function g(a,c){!0==a?(m.style.display="none",q.style.display="block"):(m.style.display="block",q.style.display="none",u.html(c))}function r(){g(!0);l(!1)}function h(a){!1==n?g(!1,label.cloudDeviceInfoExpt):g(!1,label.cloudNetworkExpt);l(!1);gAppSet.cloudRetryHd=a;emptyNodes(appsMarketDetail)}function s(a){function c(){clearTimeout(e);
-h(k)}function b(b){ENONE!=b?c():(clearTimeout(e),a())}var f={},e=null;f[uciAppInfo.fileName]={};f[uciAppInfo.fileName][KEY_NAME]=uciAppInfo.secName.plugin;$.query(f,function(a){function e(a){ENONE!=a?c():0<t?getAppsCanUpdateInfo(0,t-1,b,c,c):b(ENONE)}a=a[uciAppInfo.fileName][uciAppInfo.secName.plugin];var p=a[uciAppInfo.optName.notInstalledNum],t=a[uciAppInfo.optName.updateNum];0<p?getAppsUninstalledInfo(0,p-1,e,c,c):e(ENONE)});e=$.setTimeout(function(){c()},15E3)}function k(){function a(c){var a=
-{};a[uciWireless.fileName]={};a[uciWireless.fileName][KEY_NAME]=[uciWireless.dynData.wds_2g];gBandNum==BAND_2&&a[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g);$.query(a,function(a){a[ERR_CODE]==ENONE&&(gBandNum==BAND_1&&a[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable]==uciWireless.dynOptValue.enable.on&&(g=uciWireless.dynOptValue.enable.on),gBandNum!=BAND_2||a[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable]!=uciWireless.dynOptValue.enable.on&&
-a[uciWireless.fileName][uciWireless.dynData.wds_5g][uciWireless.dynOptName.enable]!=uciWireless.dynOptValue.enable.on||(g=uciWireless.dynOptValue.enable.on));c()})}function c(){var a={},b=cloudClientStatus,d=uciCloudConfig;a[b.fileName]={};a[b.fileName][KEY_NAME]=b.secName.clientInfo;a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.dynData.wanStatus];a[d.fileName]={};a[d.fileName][KEY_NAME]=[d.secName.deviceLegality];$.query(a,function(a){if(ENONE==a[ERR_CODE]){var p=a[b.fileName][b.secName.clientInfo][b.optName.connectStatus],
-m=a[uciNetwork.fileName][uciNetwork.dynData.wanStatus];parseInt(m.link_status)==LINK_DOWN&&parseInt(m.error_code)==LINK_CODE_PHYDOWN&&g==uciWireless.dynOptValue.enable.off?(clearTimeout(e),h(k)):(n=a[d.fileName][d.secName.deviceLegality][d.optName.illegal]==d.optValue.illegal.yes?!1:!0,!1==n?(clearTimeout(e),h(k)):(gAppSet.beCloudConnected=p==b.optValue.connectStatus.connected,!0==gAppSet.beCloudConnected?(gAppSet.beCloudConnected=!0,s(function(){l(!0);clearTimeout(f);loadPage("AppsMarketList.htm",
-"appsMarketDetail")})):e=$.setTimeout(c,1E3)))}})}var b={},f=null,e=null,d=uciCloudConfig,g=uciWireless.dynOptValue.enable.off;r();b[d.fileName]={};b[d.fileName][d.actionName.reconnect]={};b[d.fileName][d.actionName.reconnect][d.optName.reconnectTime]=d.optValue.reconnectVal;$.action(b,function(b){ENONE==b[ERR_CODE]?(a(c),f=$.setTimeout(function(){clearTimeout(e);h(k)},2E4)):h(k)})}function v(){var a={},c=cloudClientStatus,b=uciCloudConfig,f=null,f=$.setTimeout(r,1E3);a[c.fileName]={};a[c.fileName][KEY_NAME]=
-c.secName.clientInfo;a[b.fileName]={};a[b.fileName][KEY_NAME]=[b.secName.deviceLegality];$.query(a,function(a){if(ENONE==a[ERR_CODE]){var d=a[c.fileName][c.secName.clientInfo][c.optName.connectStatus];n=a[b.fileName][b.secName.deviceLegality][b.optName.illegal]==b.optValue.illegal.yes?!1:!0;gAppSet.beCloudConnected=d==c.optValue.connectStatus.connected;!0==gAppSet.beCloudConnected?s(function(){clearTimeout(f);l(!0);loadPage("AppsMarketList.htm","appsMarketDetail")}):(clearTimeout(f),h(k))}else clearTimeout(f),
-h(k)})}var m=id("appsMarketExpt"),q=id("appsNetLoading"),u=$("#appsMarketExpt p"),n=!0;id("appsNetRetry").onclick=function(){gAppSet.cloudRetryHd()};!0==$.local?(l(!0),loadPage("AppsMarketList.htm","appsMarketDetail")):v()}init();
-</script><style type="text/css">div.appsMarketCon{width:745px;padding:0 16px 0 63px;box-sizing:border-box}#netExpt{display:none;text-align:center}img.warnTag{height:103px;margin-top:45px;width:102px}#netExpt p{color:#fff;font-size:18px;margin-top:30px;text-align:center}#appsNetLoading{display:none;text-align:center}#appsNetLoading i{display:inline-block;height:103px;width:102px;margin-top:45px;background:url(../web-static/images/appsLoading.gif) no-repeat}#appsNetLoading p{margin-top:30px;text-align:center}#appsNetRetry{width:70px;margin-top:30px;padding-top:3px;padding-bottom:3px;*padding-top:2px;*padding-bottom:1px}</style>
+</div>

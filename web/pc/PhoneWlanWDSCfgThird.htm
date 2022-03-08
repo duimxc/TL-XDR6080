@@ -1,5 +1,299 @@
+<script type="text/javascript">
+	function init()
+	{
+		var BS_SWITCH_ENABLE = "1";
+		var switchBS;
+		var bands = ["2G", "5G", "5G1", "5G2", "BS"];
+		var band2 = [FREQ_2G, FREQ_5G];
+		var band3 = [FREQ_2G, FREQ_5G1, FREQ_5G4];
 
+		function switchBSHd(state)
+		{
+			var switchBg = $("#switchBS").children(':first-child');
+			if (state == "1")
+			{
+				switchBg.attr("class", "switchBg");
+				$(".openBS").show();
+				$(".closeBS").hide();
+			}
+			else{
+				switchBg.attr("class", "switchBgOff");
+				$(".openBS").hide();
+				$(".closeBS").show();
 
+				if (gBandNum == BAND_3) {
+					$(".input5G1").show();
+					$(".input5G2").show();
+				}
+
+				if (gBandNum == BAND_2) {
+					$(".input5G").show();
+				}
+			}
+		}
+
+		function errorHandle(errNo, labelFor, noteId)
+        {
+            switch(errNo)
+            {
+			case ENONE:
+				return false;
+			case EINVSSIDEMPTY:
+				// 无线名称为空
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidErr);
+				break;
+			case EINVSSIDBLANK:
+				// 无线名称全为空格
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidBlank);
+				break;
+			case EINVSSIDLEN:
+				// 无线名称长度错误
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidLenErr);
+				break;
+			case EINVWLANPWD:
+				// 密码非法字符
+				showPhoneNote(labelFor, noteId, errStr.wlanPwdInvalid);
+				break;
+			case EINVPSKLEN:
+				// 密码长度错误
+				showPhoneNote(labelFor, noteId, errStr.wlanPwdLenValid);
+				break;
+            default:
+                showAlert(errStr.invRequestFail);
+                break;
+            }
+
+            return true;
+		}
+
+		function checkWlanNameAndPwd(freq)
+		{
+			var nameVal = id("wlanName" + freq).value;
+			var pwdVal = id("wlanPwd" + freq).value;
+			var data = {};
+
+			closePhoneNote("wlanName" +  freq, "wlanNameNote" + freq);
+
+			if (errorHandle(checkWlanName(nameVal), "wlanName" +  freq, "wlanNameNote" + freq) ||
+				errorHandle(checkWlanPwd(pwdVal), "wlanPwd" +  freq, "wlanPwdNote" + freq))
+			{
+				return false;
+			}
+			data.ssid = nameVal;
+			data.key = pwdVal;
+			data.encryption = pwdVal == "" ? 0 : 1;
+
+			return data;
+		}
+
+		function togglePwdShow(freq)
+		{
+			var togglePwdShowId = "#togglePwdShow" + freq;
+			$(togglePwdShowId).click(function() {
+				$(togglePwdShowId).toggleClass("pwdShowOff pwdShowOn");
+				id("wlanPwd" + freq).type = $(togglePwdShowId).attr("class") == "pwdShowOff"
+					? "password" : "text";
+			});
+		}
+
+		$("#next").click(function() {
+			var dhcpsArg = {"udhcpd":{"enable":"0", "auto":"1"}};
+			var lanArg = {"lan":{"ipaddr":gLanIP, "ip_mode":"dynamic", "netmask": gLanMask}};
+			var wlanHostArg = {};
+			var checkResult;
+
+			gLocalAPInfo[FREQ_BS].bs_enable = switchBS.state;
+			/* 如果BandSteering功能打开，则修改wlan_bs配置 */
+			if (gSupportBS && BS_SWITCH_ENABLE == switchBS.state)
+			{
+				checkResult = checkWlanNameAndPwd("BS");
+				if (false == checkResult)
+				{
+					return;
+				}
+
+				gLocalAPInfo[FREQ_BS].ssid = checkResult.ssid;
+				gLocalAPInfo[FREQ_BS].key = checkResult.key;
+				gLocalAPInfo[FREQ_BS].encryption = checkResult.encryption;
+				wlanHostArg.wlan_bs = {
+					"bs_enable": switchBS.state,
+                    "ssid":gLocalAPInfo[FREQ_BS].ssid,
+                    "key":gLocalAPInfo[FREQ_BS].key,
+                    "encryption":gLocalAPInfo[FREQ_BS].encryption
+                };
+			}
+			else
+			{
+				var checkBand = gBandNum == BAND_3 ? band3 : band2;
+				for (var i = 0; i < checkBand.length; i++) {
+					var freq = checkBand[i];
+					checkResult = checkWlanNameAndPwd(bands[freq]);
+					if (false == checkResult)
+					{
+						return;
+					}
+					gLocalAPInfo[freq].ssid = checkResult.ssid;
+					gLocalAPInfo[freq].key = checkResult.key;
+					gLocalAPInfo[freq].encryption = checkResult.encryption;
+					var name = gKeyNames[gBandNum].wlan_host[freq];
+					var hostArg = {
+						"ssid":gLocalAPInfo[freq].ssid,
+						"key":gLocalAPInfo[freq].key,
+						"encryption":gLocalAPInfo[freq].encryption
+					};
+					wlanHostArg[name] = hostArg;
+				}
+				wlanHostArg.wlan_bs = {"bs_enable":"0"};
+			}
+
+			var data = {};
+			data.network = lanArg;
+			data.dhcpd = dhcpsArg;
+			data.wireless = wlanHostArg;
+
+			gWifiCfgToSave = data;
+			gSysMode = uciSystem.optValue.sysMode.wdsMode;
+			if (g11AxSupport["wlan2g"] || g11AxSupport["wlan5g"] || g11AxSupport["wlan5g1"] || g11AxSupport["wlan5g4"]) {
+				loadPage("PhoneWizardWirelessAx.htm", "phCon");
+			} else {
+				$.modify({"system":{"sys_mode":{"mode": gSysMode}}}, function(result) {
+					if (true == errHandle(result[ERR_CODE])) {
+						$.modify(gWifiCfgToSave, function(resp) {
+							if (true == errHandle(resp[ERR_CODE])) {
+								loadPage("PhoneWlanWDSCfgEnd.htm", "phCon");
+							}
+						});
+					}
+				});
+			}
+		});
+		$("#pre").click(function() {
+			backFromNextPage = true;
+			gWDSPwdErrList = [];
+			loadPage("PhoneWlanWDSCfgSecond.htm", "phCon");
+		});
+
+		for (var freq in bands)
+		{
+			togglePwdShow(bands[freq]);
+		}
+
+		if (gBandNum == BAND_3) {
+			$(".phBSTip").html(label.phBS3BandTip);
+		}
+
+		switchBS = new Switch(
+			"switchBS",
+			gLocalAPInfo[FREQ_BS].bs_enable,
+			function(){
+				return function(state){
+					switchBSHd(state);
+				};
+			}()
+		);
+
+		for (var freq = 0; freq < FREQ_BS; freq++) {
+			if ("undefined" != typeof wdsTargetSelFreq[freq] && wdsTargetSelFreq[freq].selected && wdsTargetSelFreq[freq].status == 2) {
+				$("#wlanName" + bands[freq]).val(gRootAPInfo[freq].ssid);
+				$("#wlanPwd" + bands[freq]).val(gRootAPInfo[freq].key);
+			}
+			else {
+				$("#wlanName" + bands[freq]).val(gLocalAPInfo[freq].ssid);
+				$("#wlanPwd" + bands[freq]).val(gLocalAPInfo[freq].key);
+			}
+		}
+
+		//多频合一时，local无线设置默认使用2.4G的前端配置；2.4G桥接不成功，才使用5G或5G1、5G4的
+		if (gSupportBS)
+		{
+            for (var freq in wdsTargetSelFreq) {
+                if (wdsTargetSelFreq[freq].selected && wdsTargetSelFreq[freq].status == 2) {
+					$("#wlanNameBS").val(gRootAPInfo[freq].ssid);
+					$("#wlanPwdBS").val(gRootAPInfo[freq].key);
+                    break;
+                }
+			}
+		}
+		else
+		{
+			$(".switchBSUl").hide();
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	p.WDSTitle{
+		width:280px;
+		margin:16px auto;
+		color:#FFFFFF;
+		font-size:14px;
+		text-align:left;
+	}
+	.phInputUl p{
+		color:#ffffff;
+		font-size:14px;
+		text-align:left;
+	}
+	.phInputUl .titleTip{
+		font-size:14px;
+		font-weight:bold;
+		margin-bottom:8px;
+	}
+	li.phInputLi input{
+		box-sizing:border-box;
+	}
+	.ib{
+		display: inline-block;
+	}
+	#switchBS{
+		font-size:14px;
+		line-height: 20px;
+		float: right;
+	}
+	.input5G{
+		display: none;
+	}
+	.input5G1{
+		display: none;
+	}
+	.input5G2{
+		display: none;
+	}
+	.bold{
+		font-weight:bold;
+	}
+	ul.switchBSUl{
+		margin: 0 auto;
+		width: 280px;
+		height:42px;
+		border-bottom:solid 1px rgba(255, 255, 255, 0.4);
+	}
+	ul.switchBSUl p.titleBS{
+		line-height:42px;
+		font-size:14px;
+		color:#FFFFFF;
+	}
+	ul.switchBSUl div{
+		margin-top:9px;
+	}
+	p.ctxBS{
+		font-size:14px;
+		color:#FFFFFF;
+		margin: 8px auto 40px;
+		width: 280px;
+		margin-top:8px;
+	}
+	li.phErrTip i.error{
+		background:url(../web-static/images/error@2x.png) no-repeat;
+		width:16px;
+		height:16px;
+		top:0;
+		background-size:cover;
+	}
+	li.phErrTip span.errDes {
+		line-height:16px;
+	}
+</style>
 <h1 class="phoneTitle">{%label.phWDSTitle%}</h1>
 <div class="WDSThBlock">
 	<p class="WDSTitle">{%label.phSetWDSNameAndPwd%}</p>
@@ -131,11 +425,4 @@
 <div class="phFunc">
 	<label id="pre" class="phTwoBtn">{%btn.preStep%}</label>
 	<label id="next" class="phTwoBtn" style="margin-left:20px;">{%btn.nextStep%}</label>
-</div><script type="text/javascript">function init(){function f(a,c,b){switch(a){case ENONE:return!1;case EINVSSIDEMPTY:showPhoneNote(c,b,errStr.wlanSsidErr);break;case EINVSSIDBLANK:showPhoneNote(c,b,errStr.wlanSsidBlank);break;case EINVSSIDLEN:showPhoneNote(c,b,errStr.wlanSsidLenErr);break;case EINVWLANPWD:showPhoneNote(c,b,errStr.wlanPwdInvalid);break;case EINVPSKLEN:showPhoneNote(c,b,errStr.wlanPwdLenValid);break;default:showAlert(errStr.invRequestFail)}return!0}function k(a){var c=id("wlanName"+a).value,b=id("wlanPwd"+a).value,
-d={};closePhoneNote("wlanName"+a,"wlanNameNote"+a);if(f(checkWlanName(c),"wlanName"+a,"wlanNameNote"+a)||f(checkWlanPwd(b),"wlanPwd"+a,"wlanPwdNote"+a))return!1;d.ssid=c;d.key=b;d.encryption=""==b?0:1;return d}function l(a){var c="#togglePwdShow"+a;$(c).click(function(){$(c).toggleClass("pwdShowOff pwdShowOn");id("wlanPwd"+a).type="pwdShowOff"==$(c).attr("class")?"password":"text"})}var g,d=["2G","5G","5G1","5G2","BS"],m=[FREQ_2G,FREQ_5G],n=[FREQ_2G,FREQ_5G1,FREQ_5G4];$("#next").click(function(){var a=
-{lan:{ipaddr:gLanIP,ip_mode:"dynamic",netmask:gLanMask}},c={},b;gLocalAPInfo[FREQ_BS].bs_enable=g.state;if(gSupportBS&&"1"==g.state){b=k("BS");if(!1==b)return;gLocalAPInfo[FREQ_BS].ssid=b.ssid;gLocalAPInfo[FREQ_BS].key=b.key;gLocalAPInfo[FREQ_BS].encryption=b.encryption;c.wlan_bs={bs_enable:g.state,ssid:gLocalAPInfo[FREQ_BS].ssid,key:gLocalAPInfo[FREQ_BS].key,encryption:gLocalAPInfo[FREQ_BS].encryption}}else{for(var f=gBandNum==BAND_3?n:m,h=0;h<f.length;h++){var e=f[h];b=k(d[e]);if(!1==b)return;gLocalAPInfo[e].ssid=
-b.ssid;gLocalAPInfo[e].key=b.key;gLocalAPInfo[e].encryption=b.encryption;c[gKeyNames[gBandNum].wlan_host[e]]={ssid:gLocalAPInfo[e].ssid,key:gLocalAPInfo[e].key,encryption:gLocalAPInfo[e].encryption}}c.wlan_bs={bs_enable:"0"}}b={};b.network=a;b.dhcpd={udhcpd:{enable:"0",auto:"1"}};b.wireless=c;gWifiCfgToSave=b;gSysMode=uciSystem.optValue.sysMode.wdsMode;g11AxSupport.wlan2g||g11AxSupport.wlan5g||g11AxSupport.wlan5g1||g11AxSupport.wlan5g4?loadPage("PhoneWizardWirelessAx.htm","phCon"):$.modify({system:{sys_mode:{mode:gSysMode}}},
-function(a){!0==errHandle(a[ERR_CODE])&&$.modify(gWifiCfgToSave,function(a){!0==errHandle(a[ERR_CODE])&&loadPage("PhoneWlanWDSCfgEnd.htm","phCon")})})});$("#pre").click(function(){backFromNextPage=!0;gWDSPwdErrList=[];loadPage("PhoneWlanWDSCfgSecond.htm","phCon")});for(var a in d)l(d[a]);gBandNum==BAND_3&&$(".phBSTip").html(label.phBS3BandTip);g=new Switch("switchBS",gLocalAPInfo[FREQ_BS].bs_enable,function(){return function(a){var c=$("#switchBS").children(":first-child");"1"==a?(c.attr("class",
-"switchBg"),$(".openBS").show(),$(".closeBS").hide()):(c.attr("class","switchBgOff"),$(".openBS").hide(),$(".closeBS").show(),gBandNum==BAND_3&&($(".input5G1").show(),$(".input5G2").show()),gBandNum==BAND_2&&$(".input5G").show())}}());for(a=0;a<FREQ_BS;a++)"undefined"!=typeof wdsTargetSelFreq[a]&&wdsTargetSelFreq[a].selected&&2==wdsTargetSelFreq[a].status?($("#wlanName"+d[a]).val(gRootAPInfo[a].ssid),$("#wlanPwd"+d[a]).val(gRootAPInfo[a].key)):($("#wlanName"+d[a]).val(gLocalAPInfo[a].ssid),$("#wlanPwd"+
-d[a]).val(gLocalAPInfo[a].key));if(gSupportBS)for(a in wdsTargetSelFreq){if(wdsTargetSelFreq[a].selected&&2==wdsTargetSelFreq[a].status){$("#wlanNameBS").val(gRootAPInfo[a].ssid);$("#wlanPwdBS").val(gRootAPInfo[a].key);break}}else $(".switchBSUl").hide()}init();
-</script><style type="text/css">p.WDSTitle{width:280px;margin:16px auto;color:#fff;font-size:14px;text-align:left}.phInputUl p{color:#fff;font-size:14px;text-align:left}.phInputUl .titleTip{font-size:14px;font-weight:bold;margin-bottom:8px}li.phInputLi input{box-sizing:border-box}.ib{display:inline-block}#switchBS{font-size:14px;line-height:20px;float:right}.input5G{display:none}.input5G1{display:none}.input5G2{display:none}.bold{font-weight:bold}ul.switchBSUl{margin:0 auto;width:280px;height:42px;border-bottom:solid 1px rgba(255,255,255,0.4)}ul.switchBSUl p.titleBS{line-height:42px;font-size:14px;color:#fff}ul.switchBSUl div{margin-top:9px}p.ctxBS{font-size:14px;color:#fff;margin:8px auto 40px;width:280px;margin-top:8px}li.phErrTip i.error{background:url(../web-static/images/error@2x.png) no-repeat;width:16px;height:16px;top:0;background-size:cover}li.phErrTip span.errDes{line-height:16px}</style>
+</div>

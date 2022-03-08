@@ -1,4 +1,30 @@
+<script type="text/javascript">
+	function cloneCurHostMac()
+	{
+		function setMac(data)
+		{
+			var macVal = data[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];
 
+			var cfg = {}, cfgProto = {}, cfgWan = {};
+			cfg[uciProto.fileName] = cfgProto;
+			cfgProto[uciProto.secName.wan] = cfgWan;
+			cfgWan[uciProto.optName.macaddr] = macVal;
+
+			$.modify(cfg, null, true);
+		}
+
+		function getMacInfo()
+		{
+			var data = {};
+			data[uciNetwork.fileName] = {};
+			data[uciNetwork.fileName][KEY_NAME] = [uciNetwork.dynData.ifaceMac];
+
+			$.query(data, setMac);
+		}
+
+		getMacInfo();
+	}
+</script>
 
 <ul id="PPPoEHelp" class="help">
 	<li class="title">宽带拨号上网方式</li>
@@ -368,5 +394,4 @@
 </ul>
 <ul id="wiredRepeaterHelp" class="help">
 	<li class="title">通过本应用可以将路由器设置成AP模式，满足组网需求。</li>
-</ul><script type="text/javascript">function cloneCurHostMac(){function e(a){a=a[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];var b={},c={},d={};b[uciProto.fileName]=c;c[uciProto.secName.wan]=d;d[uciProto.optName.macaddr]=a;$.modify(b,null,!0)}(function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.dynData.ifaceMac];$.query(a,e)})()};
-</script>
+</ul>

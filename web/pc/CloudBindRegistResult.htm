@@ -1,5 +1,107 @@
+<style type="text/css">
+	i.cloudBRRelt{
+		display:inline-block;
+		height:101px;
+		width:100px;
+	}
+	div.cloudBRRelCon{
+		padding-top:60px;
+		text-align:center;
+	}
+	p.cloudBRReltTip{
+		font-size:24px;
+		font-weight:bold;
+		color:#FFFFFF;
+		margin-top:50px;
+	}
+	p.cloudBRReltTipS{
+		font-size:14px;
+		color:#FFFFFF;
+		margin-top:17px;
+	}
+	p.cloudBRReltTipSS{
+		margin-top:6px !important;
+	}
+	p.cloudBRReltTipS span{
+		font-size:24px;
+		font-weight:bold;
+	}
+	p.cloudBRReltTipS a{
+		color:#184283;
+		font-weight:bold;
+	}
+	#cloudBRRelFuncCon{
+		margin-top:30px;
+	}
+	#cloudBRRelFuncCon input{
+		font-size:14px !important;
+		padding:7px 25px;
+		*padding:4.5px 15px 3px;
+		margin:0 5px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var redirectWaitTime = 5;
+		var redirectTimeout = 1000;
+		var returnBtn = id("return");
+		var bindRelt = new Boolean(gCloudAccountBR["success"]);
+		var pageRedirectHD;
 
+		function pageRedirect()
+		{
+			if (0 == redirectWaitTime)
+			{
+				cloudGoBackBR({"binded":bindRelt, "account":gCloudAccountBR["account"]});
+				return;
+			}
 
+			id("periodLast").innerHTML = redirectWaitTime--;
+			pageRedirectHD = $.setTimeout(pageRedirect, redirectTimeout);
+		}
+
+		function pageSet()
+		{
+			if (true == bindRelt)
+			{
+				id("cloudSuccessTip").innerHTML = gCloudAccountBR["noteF"];
+				$("i.cloudBRRelt").css("background", "url(../web-static/images/greenCoWhite.png) no-repeat");
+				id("cloudBRSuccess").style.display = "block";
+				returnBtn.style.display = "none";
+				pageRedirect();
+			}
+			else
+			{
+				id("cloudFailTip").innerHTML = gCloudAccountBR["noteF"];
+				id("cloudFailTipS").innerHTML = gCloudAccountBR["noteS"];
+				$("i.cloudBRRelt").css("background", "url(../web-static/images/wzdWarn.png) no-repeat");
+				id("cloudBRFail").style.display = "block";
+				id("cloudBRRelFuncCon").style.display = "block";
+				returnBtn.style.display = "block";
+			}
+		}
+
+		id("retry").onclick = function(){
+			gCloudAccountBRHd(pageSet, pageSet, cloudAccountQueryStop);
+		}
+		$("p.cloudBRReltTipSS a").bind("click", function(){
+			clearTimeout(pageRedirectHD);
+			cloudGoBackBR({"binded":bindRelt, "account":gCloudAccountBR["account"]});
+		});
+		if (true == gCloudAccountBR["bFWzd"])
+		{
+			returnBtn.value = "{%btn.skip%}>";
+		}
+		else
+		{
+			returnBtn.value = "{%btn.backWzd%}>";
+		}
+		returnBtn.onclick = function(){cloudGoBackBR({"binded":bindRelt, "account":gCloudAccountBR["account"]})};
+		pageSet();
+	}
+	init();
+</script>
 <div class="cloudBRRelCon">
 	<input id="return" class="returnBtn" type="button" />
 	<i class="cloudBRRelt"></i>
@@ -20,7 +122,3 @@
 		<input id="retry" type="button" class="subBtn" value="{%btn.retry%}" />
 	</div>
 </div>
-<script type="text/javascript">function init(){function d(){0==e?cloudGoBackBR({binded:a,account:gCloudAccountBR.account}):(id("periodLast").innerHTML=e--,f=$.setTimeout(d,g))}function c(){!0==a?(id("cloudSuccessTip").innerHTML=gCloudAccountBR.noteF,$("i.cloudBRRelt").css("background","url(../web-static/images/greenCoWhite.png) no-repeat"),id("cloudBRSuccess").style.display="block",b.style.display="none",d()):(id("cloudFailTip").innerHTML=gCloudAccountBR.noteF,id("cloudFailTipS").innerHTML=gCloudAccountBR.noteS,$("i.cloudBRRelt").css("background",
-"url(../web-static/images/wzdWarn.png) no-repeat"),id("cloudBRFail").style.display="block",id("cloudBRRelFuncCon").style.display="block",b.style.display="block")}var e=5,g=1E3,b=id("return"),a=new Boolean(gCloudAccountBR.success),f;id("retry").onclick=function(){gCloudAccountBRHd(c,c,cloudAccountQueryStop)};$("p.cloudBRReltTipSS a").bind("click",function(){clearTimeout(f);cloudGoBackBR({binded:a,account:gCloudAccountBR.account})});b.value=!0==gCloudAccountBR.bFWzd?"{%btn.skip%}>":"{%btn.backWzd%}>";
-b.onclick=function(){cloudGoBackBR({binded:a,account:gCloudAccountBR.account})};c()}init();
-</script><style type="text/css">i.cloudBRRelt{display:inline-block;height:101px;width:100px}div.cloudBRRelCon{padding-top:60px;text-align:center}p.cloudBRReltTip{font-size:24px;font-weight:bold;color:#fff;margin-top:50px}p.cloudBRReltTipS{font-size:14px;color:#fff;margin-top:17px}p.cloudBRReltTipSS{margin-top:6px!important}p.cloudBRReltTipS span{font-size:24px;font-weight:bold}p.cloudBRReltTipS a{color:#184283;font-weight:bold}#cloudBRRelFuncCon{margin-top:30px}#cloudBRRelFuncCon input{font-size:14px!important;padding:7px 25px;*padding:4.5px 15px 3px;margin:0 5px}</style>

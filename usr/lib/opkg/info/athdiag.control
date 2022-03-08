@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/sys_packages/qca_util/qca_framework/qca-athdiag
 Section: QCA
 Architecture: ipq
-Installed-Size: 4364
+Installed-Size: 4367
 Description:  athdiag command support for ath10k

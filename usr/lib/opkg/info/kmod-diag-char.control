@@ -1,6 +1,6 @@
 Package: kmod-diag-char
 Version: 4.4.60+1-1
-Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), kmod-lib-crc-ccitt
+Depends: kernel (=4.4.60-1-a506bed59bd9524e13e88ca7ae2a68df), kmod-lib-crc-ccitt
 Source: tp_package/sys_packages/qca_util/qca_framework/platform_drivers
 Section: kernel
 Architecture: ipq

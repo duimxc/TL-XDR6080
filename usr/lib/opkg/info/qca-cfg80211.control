@@ -5,5 +5,5 @@ Source: tp_package/sys_packages/qca_util/qca_framework/qca-cfg80211
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 6648
+Installed-Size: 6649
 Description:  QCA cfg80211 utils

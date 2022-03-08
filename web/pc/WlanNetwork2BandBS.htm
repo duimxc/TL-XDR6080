@@ -1,5 +1,2141 @@
+<script type="text/javascript">
+	function init()
+	{
+		var HOST_TYPE_WIRELESS = uciHostsInfo.optValue.linkType.hostWireless;
+		var IS_CURRENT_HOST = 1;
+
+		var wlanWidth = id("wlanWidth");
+		var wlanWidth5g = id("wlanWidth5g");
+		var channel = id("channel");
+		var channel5g = id("channel5g");
+		var mode = id("wlanMode");
+		var mode5g = id("wlanMode5g");
+
+		var hostSecName = uciWireless.dynData.host_2g;
+		var wdsSecName = uciWireless.dynData.wds_2g;
+		var hostSecName5g = uciWireless.dynData.host_5g;
+		var wdsSecName5g = uciWireless.dynData.wds_5g;
+
+		var BW_160M_SUPPORT = false;				// 是否支持80+80MHz
+		var BW_160M_DISCONNECTED = "80MHz+80MHz";
+
+		var muMimoAvailable2g = false;  // 2g是否支持MU-MIMO功能
+		var muMimoAvailable5g = false;  // 5g是否支持MU-MIMO功能
+		var twtAvailable2g = false;     // 2.4g是否支持TWT功能
+		var twtAvailable5g = false;     // 5g是否支持TWT功能
+		var ofdmaAvailable2g = false;   // 2.4g是否支持OFDMA功能
+		var ofdmaAvailable5g = false;   // 5g是否支持OFDMA功能
+
+		var wlanPwd = id("wlanPwd");
+
+		var firstLoadDataGrid = true;
+		var dataGridLs;
+
+		var oldBsInfo = {};
+		var oldWlanInfo = {};
+		var oldSwitchInfo = {};
+		var wdsInfo = {};
+		var oldWlanInfo5g = {};
+		var wdsInfo5g = {};
+		var lastChan5gValue;
+
+		var guestOpen = false;
+
+		var channelOpt2g = [], channelOpt5g = [];
+		var txPowerOpt = [{str:label.txPowerHigh, value:uciWireless.dynOptValue.power.high},
+			{str:label.txPowerMiddle, value:uciWireless.dynOptValue.power.mid},
+			{str:label.txPowerLow, value:uciWireless.dynOptValue.power.low}];
+
+		var bandWidthOpt2g = [{str:label.wirelessAuto40M, value:uciWireless.dynOptValue.bandwidth.auto},
+			{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20}];
+
+		var authOptDefault = [{str:label.wpaPskSel, value:uciWireless.dynOptValue.auth.psk},
+			{str:label.wpa2PskSel, value:uciWireless.dynOptValue.auth.psk2},
+			{str:label.wirelessPsk, value:uciWireless.dynOptValue.auth.pskMixed}];
+
+		var cipherOpt2g = [{str:label.aes, value:uciWireless.dynOptValue.cipher.aes},
+			{str:label.tkip, value:uciWireless.dynOptValue.cipher.tkip}];
+
+		var modeOpt2g;
+		if (g11AxSupport["wlan2g"])
+		{
+			modeOpt2g = [{str:label.hwmode11bgn_ax, value:uciWireless.dynOptValue.mode.m_11bgn_ax},
+				{str:label.hwmode11bgn, value:uciWireless.dynOptValue.mode.m_11bgn},
+				{str:label.hwmode11bg, value:uciWireless.dynOptValue.mode.m_11bg},
+				{str:label.hwmode11n, value:uciWireless.dynOptValue.mode.m_11n},
+				{str:label.hwmode11g, value:uciWireless.dynOptValue.mode.m_11g},
+				{str:label.hwmode11b, value:uciWireless.dynOptValue.mode.m_11b}];
+		}
+		else
+		{
+			modeOpt2g = [{str:label.hwmode11bgn, value:uciWireless.dynOptValue.mode.m_11bgn},
+				{str:label.hwmode11bg, value:uciWireless.dynOptValue.mode.m_11bg},
+				{str:label.hwmode11n, value:uciWireless.dynOptValue.mode.m_11n},
+				{str:label.hwmode11g, value:uciWireless.dynOptValue.mode.m_11g},
+				{str:label.hwmode11b, value:uciWireless.dynOptValue.mode.m_11b}];
+		}
+
+		var muMimo5g = [{str:label.muMIMOon, value:uciWireless.dynOptValue.muMIMO.on},
+			{str:label.muMIMOoff, value:uciWireless.dynOptValue.muMIMO.off}];
+
+		var bandWidthOpt5g = [{str:label.wirelessAuto40M, value:uciWireless.dynOptValue.bandwidth.auto},
+			{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20}];
+
+		var bandWidthOpt5gExt = [{str:label.wirelessAuto80M, value:uciWireless.dynOptValue.bandwidth.auto},
+			{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20},
+			{str:label.chanbw40, value:uciWireless.dynOptValue.bandwidth.bw40}];
+
+		var bandWidthOpt5gSpecial = [{str:label.wirelessAuto, value:uciWireless.dynOptValue.bandwidth.auto},
+			{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20},
+			{str:label.chanbw40, value:uciWireless.dynOptValue.bandwidth.bw40},
+			{str:label.chanbw80Add80, value:uciWireless.dynOptValue.bandwidth.bw80Add80}];
+		
+		var bandWidthOpt5g_160M = [{str:label.wirelessAuto160M, value:uciWireless.dynOptValue.bandwidth.auto},
+			{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20},
+			{str:label.chanbw40, value:uciWireless.dynOptValue.bandwidth.bw40},
+			{str:label.chanbw80, value:uciWireless.dynOptValue.bandwidth.bw80}];
+
+		var bandWidthOpt5g_ax_band4 = [{str:label.chanbw20, value:uciWireless.dynOptValue.bandwidth.bw20},
+			{str:label.chanbw40, value:uciWireless.dynOptValue.bandwidth.bw40},
+			{str:label.chanbw80, value:uciWireless.dynOptValue.bandwidth.bw80}];
+
+		var authOpt5g = [{str:label.wpaPskSel, value:uciWireless.dynOptValue.auth.psk},
+			{str:label.wpa2PskSel, value:uciWireless.dynOptValue.auth.psk2},
+			{str:label.wirelessPsk, value:uciWireless.dynOptValue.auth.pskMixed}];
+
+		var cipherOpt5g = [{str:label.aes, value:uciWireless.dynOptValue.cipher.aes},
+			{str:label.tkip, value:uciWireless.dynOptValue.cipher.tkip}];
+
+		var authOptStr = [label.wirelessPsk, label.wpaPskSel, label.wpa2PskSel, label.wirelessWpa2PskWpa3Sae, label.wirelessWpa3Sae];
+
+		var modeOpt5g;
+		if (g11AxSupport["wlan5g"])
+		{
+			modeOpt5g = [{str:label.hwmode11ac_ax, value:uciWireless.dynOptValue.mode.m_11ac_ax},
+				{str:label.hwmode11ac, value:uciWireless.dynOptValue.mode.m_11ac},
+				{str:label.hwmode11an, value:uciWireless.dynOptValue.mode.m_11an}];
+		}
+		else
+		{
+			modeOpt5g = [{str:label.hwmode11ac, value:uciWireless.dynOptValue.mode.m_11ac},
+				{str:label.hwmode11an, value:uciWireless.dynOptValue.mode.m_11an}];
+		}
+
+		var uciGuestFile = uciGuestNet.fileName;
+		var uciGuest = uciGuestNet.secName.wireless2G;
+		var uciGuest5G = uciGuestNet.secName.wireless5G;
+		var uciGuestEnable = uciGuestNet.optName.enable;
+
+		function onPreSave()
+		{
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				/* 获取访客网络状态
+					先从后台获取访客网络状态再执行onSaveBasic() */
+				var guestData = {};
+				guestData[uciGuestFile] = {};
+				guestData[uciGuestFile][KEY_NAME] = [uciGuest];
+				if (gGuest5GSupport) {
+					guestData[uciGuestFile][KEY_NAME].push(uciGuest5G);
+				}
+				$.query(guestData, function(result){
+					if (ENONE == result[ERR_CODE]) {
+						if (result[uciGuestFile][uciGuest][uciGuestEnable] == 1) {
+							guestOpen = true;
+						} else if (gGuest5GSupport && result[uciGuestFile][uciGuest5G][uciGuestEnable] == 1) {
+							guestOpen = true;
+						} else {
+							guestOpen = false;
+						}
+					}
+					onSaveBasic();
+				});
+			} else {
+				onSaveBasic();
+			}
+		}
+
+		function disableWifiBSSet(disabled)
+		{
+			disableInput("wifiUniteOn", disabled);
+			disableInput("wifiUniteOff", disabled);
+			disableInput("wifiSwitchOn", disabled);
+			disableInput("wifiSwitchOff", disabled);
+			disableInput("ssid", disabled);
+			disableInput("wlanPwd", disabled);
+			id("ssidBrd").disabled = disabled;
+			if (gAuthSupport || gAuthSupport2g || gAuthSupport5g) {
+				id("auth").disable(disabled);
+			}
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+				id("cipher").disable(disabled);
+			}
+			if (!disabled)
+			{
+				if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+					/* 在11n或SAE3下，加密算法仍然保持AES */
+					if (uciWireless.dynOptValue.mode.m_11n == $("#wlanMode").val() ||
+						uciWireless.dynOptValue.auth.psk2_sae3 == $("#auth").val() ||
+						uciWireless.dynOptValue.auth.sae3 == $("#auth").val())
+					{
+						id("cipher").disable(true);
+					}
+				}
+			}
+			disableBtn("saveBasic", disabled);
+			id("saveBasic").onclick = disabled ? null : onSaveBasic;
+		}
+
+		function disable2GWifiSet(disabled)
+		{
+			id("channel").disable(disabled);
+			id("wlanMode").disable(disabled);
+			id("wlanWidth").disable(disabled);
+			disableInput("TWTSwitchOn", disabled);
+			disableInput("TWTSwitchOff", disabled);
+			disableInput("MUMimoSwitchOn", disabled);
+			disableInput("MUMimoSwitchOff", disabled);
+			disableInput("OFDMASwitchOn", disabled);
+			disableInput("OFDMASwitchOff", disabled);
+			if (!disabled)
+			{
+				if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+					if (uciWireless.dynOptValue.mode.m_11n == $("#wlanMode").val())
+					{
+						id("cipher").disable(true);
+					}
+				}
+				/* 在11b,11g,11bg下，带宽选项仍然保持禁用 */
+				if (uciWireless.dynOptValue.mode.m_11bg == $("#wlanMode").val() ||
+					uciWireless.dynOptValue.mode.m_11b == $("#wlanMode").val() ||
+					uciWireless.dynOptValue.mode.m_11g == $("#wlanMode").val())
+				{
+					id("wlanWidth").disable(true);
+				}
+			}
+			disableBtn("saveAdvanced2g", disabled);
+			id("saveAdvanced2g").onclick = disabled ? null : onSaveAdvanced;
+		}
+
+		function disable5GWifiSet(disabled)
+		{
+			id("channel5g").disable(disabled);
+			id("wlanMode5g").disable(disabled);
+			id("wlanWidth5g").disable(disabled);
+			disableInput("TWTSwitchOn5g", disabled);
+			disableInput("TWTSwitchOff5g", disabled);
+			disableInput("OFDMASwitchOn5g", disabled);
+			disableInput("OFDMASwitchOff5g", disabled);
+			if (muMimoAvailable5g)
+			{
+				disableInput("MUMimoSwitchOn5g", disabled);
+				disableInput("MUMimoSwitchOff5g", disabled);
+			}
+			if (!disabled)
+			{
+				if (165 == parseInt(id("channel5g").value))
+				{
+					id("wlanWidth5g").disable(true);
+				}
+			}
+			disableBtn("saveAdvanced5g", disabled);
+			id("saveAdvanced5g").onclick = disabled ? null : onSaveAdvanced;
+		}
+
+		function disableWpsSet(disabled)
+		{
+			disableInput("wpsRouterPinOn", disabled);
+			disableInput("wpsRouterPinOff", disabled);
+			disableBtn("genVendorPin", disabled);
+			id("genVendorPin").onclick = disabled ? null : onGenPinCode;
+			disableBtn("saveWpsRouterPin", disabled);
+			id("saveWpsRouterPin").onclick = disabled ? null : onSaveWpsRouterPin;
+			disableInput("wpsMethodButton", disabled);
+			disableInput("wpsMethodPin", disabled);
+			disableInput("wpsTerminalPinCode", disabled);
+			disableBtn("wpsConnect", disabled);
+			id("wpsConnect").onclick = disabled ? null : onWpsConnect;
+		}
+
+		function initChannel(moduleSpecChannel)
+		{
+			var channelOpt = [];
+			var len = moduleSpecChannel.length;
+			for (var i = 0; i < len; i++)
+			{
+				if ("auto" == moduleSpecChannel[i])
+				{
+					channelOpt[i] = {str:label.wirelessAuto, value:"0"};
+				}
+				else
+				{
+					channelOpt[i] = {str:moduleSpecChannel[i], value:moduleSpecChannel[i]};
+				}
+			}
+
+			return channelOpt;
+		}
+
+		function initAuthType(moduleSpecAuthType)
+		{
+			var authOpt = [];
+			if (moduleSpecAuthType == undefined) {
+				authOpt = authOptDefault;
+			} else {
+				for (var i = 0; i < moduleSpecAuthType.length; ++i) {
+					var val = moduleSpecAuthType[i];
+					authOpt[i] = {str:authOptStr[val], value: val};
+				}
+			}
+
+			return authOpt;
+		}
+
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+
+			switch(errNo)
+			{
+				case ENONE:
+					return false;
+				case EINVSSIDLEN:
+					showStr = errStr.wlanSsidLenErr;
+					break;
+				case EINVSSIDBLANK:
+					showStr = errStr.wlanSsidBlank;
+					break;
+				case EINVPSKLEN:
+					showStr = errStr.wlanPwdLenValid;
+					break;
+				case EWLANPWDBLANK:
+					showStr = errStr.wlanPwdNull;
+					break;
+				case EINVSSIDEMPTY:
+					showStr = errStr.wlanSsidErr;
+					break;
+				case EINVWLANPWD:
+					showStr = errStr.wlanPwdInvalid;
+					break;
+				case ESYSBUSY:
+					showStr = errStr.invRequestFailTrylater;
+					break;
+				case EINVCHNAMODEBAND:
+					showStr = gSysModeSupport ? errStr.wlanInvOptionsWithWDSOn1 : errStr.wlanInvOptionsWithWDSOn;
+					break;
+				default:
+					showStr = errStr.invRequestFail;
+					break;
+			}
+
+			showAlert(showStr, objOrId);
+			return true
+		}
+
+		function channelSelectHandler5g(channelVal)
+		{
+			var modeVal = parseInt(id("wlanMode5g").value);
+			var isBandChange = false, lastWlanWidth5gValue;
+
+			if (gWlanHost5gSupport160MBandWidth)
+			{
+				if ((channelVal >= 149 && lastChan5gValue < 149) 
+			    ||(channelVal < 149 && lastChan5gValue >= 149))
+				{
+					isBandChange = true;
+				}
+
+				/* 只有非11an才需要注意是否要修改160MHz */
+				if (isBandChange && modeVal != uciWireless.dynOptValue.mode.m_11an)
+				{
+					lastWlanWidth5gValue = parseInt(wlanWidth5g.value);
+
+					if (channelVal >= 149)
+					{
+						wlanWidth5g.resetOptions(bandWidthOpt5g_ax_band4, uciWireless.dynOptValue.bandwidth.bw80);
+					}
+					else
+					{
+						wlanWidth5g.resetOptions(bandWidthOpt5g_160M, uciWireless.dynOptValue.bandwidth.auto);
+					}
+
+					if (lastWlanWidth5gValue == 0 && channelVal >= 149)
+					{
+						wlanWidth5g.changeSel(uciWireless.dynOptValue.bandwidth.bw80);
+					}
+					else
+					{
+						wlanWidth5g.changeSel(lastWlanWidth5gValue);
+					}
+				}
+			}
+
+			if(165 == parseInt(channelVal))
+			{
+				wlanWidth5g.changeSel(uciWireless.dynOptValue.bandwidth.bw20);
+				wlanWidth5g.disable(true);
+			}
+			else
+			{
+				wlanWidth5g.disable(false);
+			}
+
+			if (gMeshSupport && channelVal >= 52 && channelVal <= 64) {
+				id ("channel5gTips").style.display = "block";
+			} else {
+				id ("channel5gTips").style.display = "none";
+			}
+
+			lastChan5gValue = channelVal;
+		}
+
+		/* set bandwidth if choose special mode */
+		function modeSelectHandler(modeVal)
+		{
+			if(uciWireless.dynOptValue.mode.m_11b == modeVal ||
+				uciWireless.dynOptValue.mode.m_11g == modeVal ||
+				uciWireless.dynOptValue.mode.m_11bg == modeVal)
+			{
+				wlanWidth.changeSel(uciWireless.dynOptValue.bandwidth.bw20);
+				wlanWidth.disable(true);
+			}
+			else
+			{
+				wlanWidth.changeSel(uciWireless.dynOptValue.bandwidth.auto);
+				wlanWidth.disable(false);
+			}
+
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+				/* 认证类型为WPA3-SAE3或无线模式为11n时，加密算法只能是AES */
+				if ((gAuthSupport || gAuthSupport2g || gAuthSupport5g) &&
+					(uciWireless.dynOptValue.auth.psk2_sae3 == $("#auth").val() || uciWireless.dynOptValue.auth.psk2_sae3 == $("#auth").val()))
+				{
+					id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes);
+					id("cipher").disable(true);
+				}
+				else if (uciWireless.dynOptValue.mode.m_11n == modeVal)
+				{
+					id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes);
+					id("cipher").disable(true);
+				}
+				else
+				{
+					id("cipher").changeSel(oldBsInfo[uciWireless.dynOptName.cipher]);
+					id("cipher").disable(false);
+				}
+			}
+
+			if (g11AxSupport["wlan2g"])
+			{
+				$("#wlanModeAxTips2G").css("display", (uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none");
+				$("#TWTSel").css("display", (twtAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none");
+				$("#MUMimoSel").css("display", (muMimoAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none");
+				$("#OFDMASel").css("display", (ofdmaAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none");
+			}
+		}
+
+		function modeSelectHandler5g(modeVal)
+		{
+			var wlanWidth5gValue;
+
+			if(uciWireless.dynOptValue.mode.m_11an == modeVal)
+			{
+				wlanWidth5g.resetOptions(bandWidthOpt5g, uciWireless.dynOptValue.bandwidth.auto);
+				$("#MUMimoSel5g").css("display", "none");
+			}
+			else
+			{
+				if (BW_160M_SUPPORT)
+				{
+					wlanWidth5g.resetOptions(bandWidthOpt5gSpecial, uciWireless.dynOptValue.bandwidth.auto);
+				}
+				else
+				{
+					if (gWlanHost5gSupport160MBandWidth)
+					{
+						wlanWidth5g.resetOptions(bandWidthOpt5g_160M, uciWireless.dynOptValue.bandwidth.auto);
+					}
+					else
+					{
+						wlanWidth5g.resetOptions(bandWidthOpt5gExt, uciWireless.dynOptValue.bandwidth.auto);
+					}
+				}
+				$("#MUMimoSel5g").css("display", muMimoAvailable5g ? "block" : "none");
+			}
+
+			var chan5gVal = parseInt(id("channel5g").value);
+
+			/* 刚进页面时, channel5g下拉框尚未初始化。会导致parseInt(id("channel5g").value)的值为NaN */
+			if (id("channel5g").value == undefined)
+			{
+				chan5gVal = parseInt(lastChan5gValue);
+			}
+
+			if (gWlanHost5gSupport160MBandWidth)
+			{
+				if (uciWireless.dynOptValue.mode.m_11an != modeVal && 149 <= chan5gVal)
+				{
+					/* 若为band4，不支持160MHz */
+					wlanWidth5g.resetOptions(bandWidthOpt5g_ax_band4, uciWireless.dynOptValue.bandwidth.bw80);
+				}
+			}
+
+			if(165 == chan5gVal)
+			{
+				wlanWidth5g.changeSel(uciWireless.dynOptValue.bandwidth.bw20);
+				wlanWidth5g.disable(true);
+			}
+			else
+			{
+				if (gWlanHost5gSupport160MBandWidth)
+				{
+					if (uciWireless.dynOptValue.mode.m_11an != modeVal && 149 <= chan5gVal)
+					{
+						wlanWidth5gValue = uciWireless.dynOptValue.bandwidth.bw80;
+					}
+					else
+					{
+						wlanWidth5gValue = uciWireless.dynOptValue.bandwidth.auto;
+					}
+
+					wlanWidth5g.changeSel(wlanWidth5gValue);
+				}
+				else
+				{
+					wlanWidth5g.changeSel(uciWireless.dynOptValue.bandwidth.auto);
+				}
+
+				wlanWidth5g.disable(false);
+			}
+
+			if (g11AxSupport["wlan5g"])
+			{
+				$("#wlanModeAxTips5G").css("display", (uciWireless.dynOptValue.mode.m_11ac_ax == modeVal) ? "block" : "none");
+				$("#OFDMASel5g").css("display", (ofdmaAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal) ? "block" : "none");
+				$("#TWTSel5g").css("display", (twtAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal) ? "block" : "none");
+			}
+		}
+
+		function authSelectHandler(authVal)
+		{
+			if (authVal == uciWireless.dynOptValue.auth.psk2_sae3) {
+				id("authTips").style.display="block";
+			} else {
+				id("authTips").style.display="none";
+			}
+
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g)
+			{
+				/* 认证类型为WPA3-SAE3或无线模式为11n时，加密算法只能是AES */
+				if (uciWireless.dynOptValue.auth.psk2_sae3 == authVal ||
+					uciWireless.dynOptValue.auth.sae3 == authVal ||
+					uciWireless.dynOptValue.mode.m_11n == $("#wlanMode").val())
+				{
+					id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes);
+					id("cipher").disable(true);
+				}
+				else
+				{
+					id("cipher").changeSel(oldWlanInfo[uciWireless.dynOptName.cipher]);
+					id("cipher").disable(false);
+				}
+			}
+		}
+
+		function checkCfgChged(oldCfg, newCfg, uciOpts)
+		{
+			for (var idx in uciOpts)
+			{
+				if (newCfg[uciOpts[idx]] != undefined && oldCfg[uciOpts[idx]] != newCfg[uciOpts[idx]])
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function checkCfgChgedBasic(oldCfg, newCfg)
+		{
+			var uciOpts = [uciWireless.dynOptName.ssid,
+				uciWireless.dynOptName.key,
+				uciWireless.dynOptName.ssidbrd,
+				uciWireless.dynOptName.encryption,
+				uciWireless.optName.bsEnable,
+				uciWireless.optName.wifiEnable];
+
+			if (gAuthSupport || gAuthSupport2g || gAuthSupport5g) {
+				uciOpts.push(uciWireless.dynOptName.auth);
+			}
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+				uciOpts.push(uciWireless.dynOptName.cipher);
+			}
+
+			return checkCfgChged(oldCfg, newCfg, uciOpts);
+		}
+
+		function checkCfgChgedAdvanced(oldCfg, newCfg, band)
+		{
+			var uciOpts = [uciWireless.dynOptName.channel,
+				uciWireless.dynOptName.mode,
+				uciWireless.dynOptName.bandwidth];
+
+			var modeVal = $("#wlanMode").val();
+			var modeVal5g = $("#wlanMode5g").val();
+
+			if ((band == "2g" && twtAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ||
+				(band == "5g" && twtAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g))
+			{
+				uciOpts.push(uciWireless.dynOptName.twt);
+			}
+
+			if ((band == "2g" && ofdmaAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ||
+				(band == "5g" && ofdmaAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g))
+			{
+				uciOpts.push(uciWireless.dynOptName.ofdma);
+			}
+
+			if ((band == "2g" && muMimoAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ||
+				(band == "5g" && muMimoAvailable5g && (uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g || uciWireless.dynOptValue.mode.m_11ac == modeVal5g)))
+			{
+				uciOpts.push(uciWireless.dynOptName.muMIMO);
+			}
+
+			return checkCfgChged(oldCfg, newCfg, uciOpts);
+		}
+
+		function checkSwitchCfgChged(oldSec, newSec)
+		{
+			var uciOpts = [uciWireless.dynOptName.enable];
+			if (gWifiSwitchSplit) {
+				uciOpts.push(uciWireless.dynOptName.enable_2g);
+				uciOpts.push(uciWireless.dynOptName.enable_5g);
+			}
+
+			for (var idx in uciOpts)
+			{
+				if (oldSec[uciOpts[idx]] != newSec[uciOpts[idx]])
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function getWDSInfo(callBack)
+		{
+			var queryData = {};
+			queryData[uciWireless.fileName] = {};
+			queryData[uciWireless.fileName][KEY_NAME] = [wdsSecName, wdsSecName5g];
+
+			$.query(queryData, function(data){
+				if(ENONE == data[ERR_CODE]){
+					callBack(data[uciWireless.fileName]);
+				}
+				else{
+					errHandle(data[ERR_CODE]);
+				}
+			});
+		}
+
+		function makeWifiSwitchSendData()
+		{
+			var data = {};
+			if (gWifiSwitchSplit) {
+				if (id("wifiSwitchOnAll2g").checked)
+				{
+					data[uciWireless.dynOptName.enable_2g] = "on";
+					data[uciWireless.dynOptName.enable] = "on";
+				}
+				else
+				{
+					data[uciWireless.dynOptName.enable_2g] = "off";
+				}
+				if (id("wifiSwitchOnAll5g").checked)
+				{
+					data[uciWireless.dynOptName.enable_5g] = "on";
+					data[uciWireless.dynOptName.enable] = "on";
+				}
+				else
+				{
+					data[uciWireless.dynOptName.enable_5g] = "off";
+				}
+			} else {
+				if (id("wifiSwitchOnAll").checked)
+				{
+					data[uciWireless.dynOptName.enable] = "on";
+				}
+				else
+				{
+					data[uciWireless.dynOptName.enable] = "off";
+				}
+			}
+
+			return data;
+		}
+
+		function makeSendDataBasic()
+		{
+			var keySsid = uciWireless.dynOptName.ssid;
+			var keyKey = uciWireless.dynOptName.key;
+			var keySSidbrd = uciWireless.dynOptName.ssidbrd;
+			var keyEncry = uciWireless.dynOptName.encryption;
+			var keyAuth = uciWireless.dynOptName.auth;
+			var keyCipher = uciWireless.dynOptName.cipher;
+
+			function makeData(argMap)
+			{
+				var data = {}
+
+				for (var key in argMap)
+				{
+					var obj = argMap[key];
+
+					switch(key)
+					{
+						case uciWireless.optName.wifiEnable:
+							data[key] = obj.checked == true ? 1 : 0;
+							break;
+
+						case keySsid:
+						case keyKey:
+						case keyAuth:
+						case keyCipher:
+							data[key] = obj.val();
+							break;
+
+						case keySSidbrd:
+							if (obj.checked)
+							{
+								data[key] = uciWireless.dynOptValue.ssidbrd.on;
+							}
+							else
+							{
+								data[key] = uciWireless.dynOptValue.ssidbrd.off;
+							}
+							break;
+
+						case keyEncry:
+							if ("" == obj.val())
+							{
+								data[key] = 0;
+							}
+							else
+							{
+								data[key] = 1;
+							}
+							break;
+
+						default:
+							break;
+					}
+				}
+
+				return data;
+			}
+
+			var data = {};
+
+			var mapBs = {};
+			mapBs[uciWireless.optName.wifiEnable] = id("wifiSwitchOn");
+			mapBs[keySsid] = $("#ssid");
+			mapBs[keyKey] = $("#wlanPwd");
+			mapBs[keySSidbrd] = id("ssidBrd");
+			mapBs[keyEncry] = $("#wlanPwd");
+			if (gAuthSupport || gAuthSupport2g || gAuthSupport5g) {
+				mapBs[keyAuth] = $("#auth");
+			}
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+				mapBs[keyCipher] = $("#cipher");
+			}
+
+			data[uciFunction.optName.wlanBS] = makeData(mapBs);
+
+			data[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable] = ENABLE;
+
+			return data;
+		}
+
+		function makeSendDataAdvanced(saveId)
+		{
+			var keyChannel = uciWireless.dynOptName.channel;
+			var keyMode = uciWireless.dynOptName.mode;
+			var keyBandwidth = uciWireless.dynOptName.bandwidth;
+			var keyMimo = uciWireless.dynOptName.muMIMO;
+			var keyTWT = uciWireless.dynOptName.twt;
+			var keyOFDMA = uciWireless.dynOptName.ofdma;
+			var data = {};
+
+			if (saveId == "saveAdvanced2g")
+			{
+				data[hostSecName] = {};
+				data[hostSecName][keyChannel] = parseInt($("#channel").val());
+				data[hostSecName][keyMode] = parseInt($("#wlanMode").val());
+				data[hostSecName][keyBandwidth] = parseInt($("#wlanWidth").val());
+
+				var modeVal = $("#wlanMode").val();
+
+				if (twtAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal)
+				{
+					data[hostSecName][keyTWT] = $("#TWTSwitchOn")[0].checked == true ? 1 : 0;
+				}
+
+				if (ofdmaAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal)
+				{
+					data[hostSecName][keyOFDMA] = $("#OFDMASwitchOn")[0].checked == true ? 1 : 0;
+				}
+
+				if (muMimoAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal)
+				{
+					data[hostSecName][keyMimo] = $("#MUMimoSwitchOn")[0].checked == true ? 1 : 0;
+				}
+			}
+			else
+			{
+				data[hostSecName5g] = {};
+				data[hostSecName5g][keyChannel] = parseInt($("#channel5g").val());
+				data[hostSecName5g][keyMode] = parseInt($("#wlanMode5g").val());
+				data[hostSecName5g][keyBandwidth] = parseInt($("#wlanWidth5g").val());
+
+				var modeVal5g = $("#wlanMode5g").val();
+
+				if (twtAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g)
+				{
+					data[hostSecName5g][keyTWT] = $("#TWTSwitchOn5g")[0].checked == true ? 1 : 0;
+				}
+
+				if (ofdmaAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g)
+				{
+					data[hostSecName5g][keyOFDMA] = $("#OFDMASwitchOn5g")[0].checked == true ? 1 : 0;
+				}
+
+				if (muMimoAvailable5g && (uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g || uciWireless.dynOptValue.mode.m_11ac == modeVal5g))
+				{
+					data[hostSecName5g][keyMimo] = $("#MUMimoSwitchOn5g")[0].checked == true ? 1 : 0;
+				}
+			}
+
+			return data;
+		}
+
+		function sendData(data)
+		{
+			var wrapData = {}
+			wrapData[uciWireless.fileName] = data;
+
+			hsLoading(true);
+			$.modify(wrapData, function(ret){
+				var timeout = 0;
+				if(ENONE == ret[ERR_CODE])
+				{
+					if (ret["dfs_wait_time"] && ret["dfs_wait_time"] != 0)
+					{
+						showDFSPopUpWindow(function () {
+							getCfg(showCfg);
+						}, parseInt(ret["dfs_wait_time"]));
+					}
+					else
+					{
+						getCfg(showCfg);
+					}
+					timeout = APPLY_WIRELESS_SECONDS;
+				}
+				else
+				{
+					errHandle(ret[ERR_CODE]);
+				}
+
+				$.setTimeout(function(){
+					hsLoading(false);
+					disableBtn("saveBasic", false);
+					disableBtn("saveAdvanced2g", false);
+					disableBtn("saveAdvanced5g", false);
+				}, timeout);
+			});
+		}
+
+		function sendSwitchData(data, secName)
+		{
+			var wrapData = {}
+			var fileName = "";
+			if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+				fileName = "wireless";
+			} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+				fileName = "custom_wireless";
+			}
+			wrapData[fileName] = {};
+			wrapData[fileName][secName] = data;
+
+			setLoadingId("saveAll");
+			disableBtn("saveBasic", true);
+			disableBtn("saveAdvanced2g", true);
+			disableBtn("saveAdvanced5g", true);
+
+			hsLoading(true);
+			$.modify(wrapData, function(ret){
+				var timeout = 0;
+				if(ENONE == ret[ERR_CODE])
+				{
+					if (ret["dfs_wait_time"] && ret["dfs_wait_time"] != 0)
+					{
+						showDFSPopUpWindow(function () {
+							getCfg(showCfg);
+						}, parseInt(ret["dfs_wait_time"]));
+					}
+					else
+					{
+						getCfg(showCfg);
+					}
+					timeout = APPLY_WIRELESS_SECONDS;
+				}
+				else
+				{
+					errHandle(ret[ERR_CODE]);
+				}
+
+				if (gWifiSwitchSplit) {
+					var wifiSwitchAllOn2G = id("wifiSwitchOnAll2g").checked;
+					var wifiSwitchAllOn5G = id("wifiSwitchOnAll5g").checked;
+
+					disable2GWifiSet(!wifiSwitchAllOn2G);
+					disable5GWifiSet(!wifiSwitchAllOn5G);
+
+					if (wifiSwitchAllOn2G || wifiSwitchAllOn5G)
+					{
+						disableWifiBSSet(false);
+						if (gPinWpsSupport) {
+							disableWpsSet(false);
+						}
+					}
+					else
+					{
+						disableWifiBSSet(true);
+						if (gPinWpsSupport) {
+							disableWpsSet(true);
+						}
+					}
+				} else {
+					if (id("wifiSwitchOnAll").checked)
+					{
+						disable2GWifiSet(false);
+						disable5GWifiSet(false);
+						id("wifiSwitchOffTip").style.display = "none"
+						disableWifiBSSet(false);
+
+						if (gPinWpsSupport) {
+							disableWpsSet(false);
+						}
+					}
+					else
+					{
+						disable2GWifiSet(true);
+						disable5GWifiSet(true);
+						disableWifiBSSet(true);
+						id("wifiSwitchOffTip").style.display = "block"
+
+						if (gPinWpsSupport) {
+							disableWpsSet(true);
+						}
+					}
+				}
+
+				$.setTimeout(function(){
+					hsLoading(false);
+					disableBtn("saveBasic", false);
+					disableBtn("saveAdvanced2g", false);
+					disableBtn("saveAdvanced5g", false);
+				}, timeout);
+			});
+		}
+
+		function pwdCheckMixChars(str)
+		{
+			var hasNum = false;
+			var hasLetter = false;
+			var hasSymbol = false;
+
+			hasNum = /\d/g.test(str);
+			hasLetter = /[a-zA-Z]/g.test(str);
+			hasSymbol = /[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(str);
+
+			return (hasNum && hasSymbol && hasLetter);
+		}
+
+		function checkTWTStatus(secName)
+		{
+			if (secName == hostSecName)
+			{
+				if ($("#TWTSwitchOn")[0].checked == true)
+				{
+					id("TWTCompatibilityTip2g").style.display = "block";
+					id("compatibilityNote2g").style.visibility = "visible";
+				}
+				else
+				{
+					id("TWTCompatibilityTip2g").style.display = "none";
+					id("compatibilityNote2g").style.visibility = "hidden";
+				}
+			}
+			else if (secName == hostSecName5g)
+			{
+				if ($("#TWTSwitchOn5g")[0].checked == true)
+				{
+					id("TWTCompatibilityTip5g").style.display = "block";
+					id("compatibilityNote5g").style.visibility = "visible";
+				}
+				else
+				{
+					id("TWTCompatibilityTip5g").style.display = "none";
+					id("compatibilityNote5g").style.visibility = "hidden";
+				}
+			}
+		}
+
+		function checkWlanPwdDep()
+		{
+			var width = 24, tip = "";
+			var lgPwdlessTip = "none";
+			var pwdValue;
+			pwdValue = replaceUnicodeBlank(wlanPwd);
+
+			var len = pwdValue.length;
+			var lgPwdNoteVi = "visible";
+			var iClass = "warn";
+
+			if (len >= 0 && len < 8)
+			{
+				lgPwdNoteVi = "hidden";
+				lgPwdlessTip = "inline-block";
+			}
+			else if (/^\d+$/.test(pwdValue) ||
+				/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(pwdValue) ||
+				/^[a-zA-Z]+$/.test(pwdValue))
+			{
+				if (len <= 12)
+				{
+					tip = label.weak;
+					width = width;
+				}
+				else
+				{
+					tip = label.media;
+					width = width*2;
+				}
+			}
+			else if (true == pwdCheckMixChars(pwdValue))
+			{
+				tip = label.strong;
+				iClass = "correct";
+				width = width*3;
+			}
+			else
+			{
+				if (len <= 12)
+				{
+					tip = label.media;
+					width = width*2;
+				}
+				else
+				{
+					tip = label.strong;
+					iClass = "correct";
+					width = width*3;
+				}
+			}
+
+			id("pwdDepNote2G").style.visibility = lgPwdNoteVi;
+			id("pwdDep2G").innerHTML = tip;
+			id("chgPwdDep2G").style.width = width + "px";
+			id("pwdDepI").className = iClass;
+		}
+
+		function reset2gPhyConfig()
+		{
+			channel.resetOptions(channelOpt2g, oldWlanInfo[uciWireless.dynOptName.channel]);
+			wlanWidth.resetOptions(bandWidthOpt2g, oldWlanInfo[uciWireless.dynOptName.bandwidth]);
+			mode.resetOptions(modeOpt2g, oldWlanInfo[uciWireless.dynOptName.mode]);
+			wlanWidth.disable(false);
+		}
+
+		function reset5gPhyConfig()
+		{
+			channel5g.resetOptions(channelOpt5g, oldWlanInfo5g[uciWireless.dynOptName.channel]);
+			wlanWidth5g.resetOptions(bandWidthOpt5g, oldWlanInfo5g[uciWireless.dynOptName.bandwidth]);
+			mode5g.resetOptions(modeOpt5g);
+			wlanWidth5g.disable(false);
+			mode5g.changeSel(oldWlanInfo5g[uciWireless.dynOptName.mode]);
+		}
+
+		function wlan2gPhyConfigChanged()
+		{
+			if ((oldWlanInfo[uciWireless.dynOptName.bandwidth]) != parseInt($("#wlanWidth").val()) ||
+				(oldWlanInfo[uciWireless.dynOptName.mode]) != parseInt($("#wlanMode").val()) ||
+				(oldWlanInfo[uciWireless.dynOptName.channel]) != parseInt($("#channel").val()))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		function wlan5gPhyConfigChanged()
+		{
+			if ((oldWlanInfo5g[uciWireless.dynOptName.bandwidth]) != parseInt($("#wlanWidth5g").val()) ||
+				(oldWlanInfo5g[uciWireless.dynOptName.mode]) != parseInt($("#wlanMode5g").val()) ||
+				(oldWlanInfo5g[uciWireless.dynOptName.channel]) != parseInt($("#channel5g").val()))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		/* 保存基本设置 */
+		function onSaveBasic()
+		{
+			var ssidObj = id("ssid");
+			if (errHandle(checkSsid(ssidObj.value), ssidObj))
+			{
+				return;
+			}
+
+			var pwdVal = replaceUnicodeBlank(wlanPwd);
+			if (errHandle(checkWlanPwd(pwdVal), wlanPwd))
+			{
+				return;
+			}
+
+			var newWlanCfg = makeSendDataBasic();
+			var switchVal = newWlanCfg[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable];
+
+			/* 数据未改变，则直接返回 */
+			if (!checkCfgChgedBasic(oldBsInfo, newWlanCfg[uciFunction.optName.wlanBS]))
+			{
+				return;
+			}
+
+			getWDSInfo(function(wdsInfo){
+				if ((0 == switchVal) &&
+					(oldBsInfo[uciWireless.optName.wifiEnable] != switchVal) &&
+					((uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName][uciWireless.dynOptName.enable]) ||
+						(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName5g][uciWireless.dynOptName.enable])))
+				{
+					/* 弹出确认框 */
+					var tips = gSysModeSupport ? label.wirelessSwitchTipForWDS1 : label.wirelessSwitchTipForWDS;
+					showConfirm(tips, function(result){
+							if (true == result)
+							{
+								onSaveSendBasic(newWlanCfg);
+							}
+							else
+							{
+								id("wifiSwitchOn").checked = true;
+							}
+						}
+					);
+				}
+				else
+				{
+					onSaveSendBasic(newWlanCfg);
+				}
+			});
+		}
+
+		function onSaveAdvanced()
+		{
+			var that = this;
+			var newWlanCfg = makeSendDataAdvanced(that.id);
+
+			/* 数据未改变，则直接返回 */
+			if (that.id == "saveAdvanced2g" && !checkCfgChgedAdvanced(oldWlanInfo, newWlanCfg[hostSecName], "2g") ||
+				that.id == "saveAdvanced5g" && !checkCfgChgedAdvanced(oldWlanInfo5g, newWlanCfg[hostSecName5g], "5g"))
+			{
+				return;
+			}
+
+			if ($("#TWTSwitchOn")[0].checked == true)
+			{
+				id("TWTCompatibilityTip2g").style.display = "block";
+				id("compatibilityNote2g").style.visibility = "visible";
+			}
+			else
+			{
+				id("TWTCompatibilityTip2g").style.display = "none";
+				id("compatibilityNote2g").style.visibility = "hidden";
+			}
+
+			if ($("#TWTSwitchOn5g")[0].checked == true)
+			{
+				id("TWTCompatibilityTip5g").style.display = "block";
+				id("compatibilityNote5g").style.visibility = "visible";
+			}
+			else
+			{
+				id("TWTCompatibilityTip5g").style.display = "none";
+				id("compatibilityNote5g").style.visibility = "hidden";
+			}
+
+			function toSave(){
+				getWDSInfo(function(wdsInfo){
+
+					if (that.id == "saveAdvanced2g" && wlan2gPhyConfigChanged() &&
+						(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName][uciWireless.dynOptName.enable]))
+					{
+						/* WDS开启时，不允许修改信道 */
+						var str = gSysModeSupport ? errStr.wlanInvOptionsWithWDSOn1 : errStr.wlanInvOptionsWithWDSOn;
+						showAlert(str);
+						reset2gPhyConfig();
+						return;
+					}
+					else if (that.id == "saveAdvanced5g" && wlan5gPhyConfigChanged() &&
+						(uciWireless.dynOptValue.enable.on == wdsInfo[wdsSecName5g][uciWireless.dynOptName.enable]))
+					{
+						/* WDS开启时，不允许修改信道 */
+						var str = gSysModeSupport ? errStr.wlanInvOptionsWithWDSOn1 : errStr.wlanInvOptionsWithWDSOn;
+						showAlert(str);
+						reset5gPhyConfig();
+						return;
+					}
+					else
+					{
+						onSaveSendAdvanced(newWlanCfg, that.id);
+					}
+				});
+			}
+
+			if (that.id == "saveAdvanced5g")
+			{
+				if (gMeshSupport && (oldWlanInfo5g.channel != newWlanCfg[hostSecName5g].channel) &&
+					(newWlanCfg[hostSecName5g].channel >= 52 && newWlanCfg[hostSecName5g].channel <= 64)) {
+					showConfirm(label.band2CompatibilityTips1, function(result) {
+						if (result) {
+							if (uciWireless.dynOptValue.bandwidth.bw20 == parseInt($("#wlanWidth5g").val())) {
+								showConfirm(label.bw20Tips, function(result){
+									if (true == result)
+									{
+										toSave();
+									}
+								});
+							} else {
+								toSave();
+							}
+						}
+					});
+				} else if (uciWireless.dynOptValue.bandwidth.bw20 == parseInt($("#wlanWidth5g").val())) {
+					showConfirm(label.bw20Tips, function(result){
+						if (true == result)
+						{
+							toSave();
+						}
+					});
+				} else {
+					toSave();
+				}
+			}
+			else if (that.id == "saveAdvanced2g" && $("#wlanMode").val() == uciWireless.dynOptValue.mode.m_11n)
+			{
+				if (gCipherSupport || gCipherSupport2g || gCipherSupport5g)
+				{
+					newWlanCfg[hostSecName][uciWireless.dynOptName.cipher] = uciWireless.dynOptValue.cipher.aes;
+					if (oldBsInfo[uciWireless.dynOptName.cipher] == uciWireless.dynOptValue.cipher.tkip)
+					{
+						newWlanCfg[uciFunction.optName.wlanBS] = {};
+						newWlanCfg[uciFunction.optName.wlanBS][uciWireless.dynOptName.cipher] = uciWireless.dynOptValue.cipher.aes;
+					}
+				}
+				toSave();
+			}
+			else
+			{
+				toSave();
+			}
+		}
+
+		/* 发送无线高级数据 */
+		function onSaveSendAdvanced(newWlanCfg, saveId)
+		{
+			setLoadingId(saveId);
+			if (saveId == "saveAdvanced2g")
+			{
+				disableBtn("saveAdvanced5g", true);
+				disableBtn("saveBasic", true);
+			}
+			else
+			{
+				disableBtn("saveAdvanced2g", true);
+				disableBtn("saveBasic", true);
+			}
+
+			if (!newWlanCfg[uciFunction.optName.wlanBS])
+			{
+				newWlanCfg[uciFunction.optName.wlanBS] = {};
+			}
+			newWlanCfg[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable] = id("wifiUniteOn").checked ? ENABLE : DISABLE;
+			sendData(newWlanCfg);
+		}
+
+		function showDisconnectConfirm(newWlanCfg)
+		{
+			var switchChange = false;
+			var wifiDevChange = false;
+
+			/* 无线设备连接时，如果关闭所连频段的无线，则弹出确认提示 */
+			if ((oldBsInfo[uciWireless.optName.wifiEnable] != newWlanCfg[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable])
+				&& (newWlanCfg[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable] == DISABLE))
+			{
+				switchChange = true;
+			}
+
+			if (switchChange)
+			{
+				var reqData = {"hosts_info":{"table": "host_info"}};
+				$.query(reqData, function(result){
+					var epStaList = formatTableData(result["hosts_info"]["host_info"]);
+					var len = epStaList.length
+
+					for (var index = 0; index < len; index++)
+					{
+						var item = epStaList[index];
+						if (item["is_cur_host"] == IS_CURRENT_HOST)
+						{
+							/* 无线主人网络设备 */
+							if (item["type"] == HOST_TYPE_WIRELESS)
+							{
+
+								wifiDevChange = true;
+							}
+							else
+							{
+								/* 有线连接 */
+								setLoadingId("saveBasic");
+								disableBtn("saveAdvanced2g", true);
+								disableBtn("saveAdvanced5g", true);
+								sendData(newWlanCfg);
+							}
+
+							break;
+						}
+					}
+
+					/* 无线设备连接时，如果关闭所连频段的无线，则弹出确认提示 */
+					if (wifiDevChange)
+					{
+						showConfirm(label.wirelessSwitchTip, function(result){
+								if (true == result){
+									setLoadingId("saveBasic");
+									disableBtn("saveAdvanced2g", true);
+									disableBtn("saveAdvanced5g", true);
+									sendData(newWlanCfg);
+								}
+								else{
+									id("wifiSwitchOn").checked = true;
+								}
+							}
+						);
+					}
+				});
+			}
+			else
+			{
+				/* 无线开关未改变 */
+				setLoadingId("saveBasic");
+				disableBtn("saveAdvanced2g", true);
+				disableBtn("saveAdvanced5g", true);
+				sendData(newWlanCfg);
+			}
+		}
+
+		/* 发送无线基本数据 */
+		function onSaveSendBasic(newWlanCfg)
+		{
+			var confirmMsg;
+			if (newWlanCfg[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable] == 0) {
+				if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+					if (guestOpen) {
+						confirmMsg = "关闭该网络后，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？";
+					} else {
+						confirmMsg = label.closeHostPassive;
+					}
+
+					showConfirm(confirmMsg, function(result) {
+						if (true == result) {
+							setLoadingId("saveBasic");
+							disableBtn("saveAdvanced2g", true);
+							disableBtn("saveAdvanced5g", true);
+							sendData(newWlanCfg);
+						} else {
+							id("wifiSwitchOn").checked = true;
+						}
+					});
+				} else {
+					showDisconnectConfirm(newWlanCfg);
+				}
+			} else {
+				setLoadingId("saveBasic");
+				disableBtn("saveAdvanced2g", true);
+				disableBtn("saveAdvanced5g", true);
+				sendData(newWlanCfg);
+			}
+		}
+
+		function onSaveAll()
+		{
+			function doOnSaveAll()
+			{
+				var newSwitchCfgOff = false;
+				if (gWifiSwitchSplit) {
+					newSwitchCfgOff = newSwitchCfg[uciWireless.dynOptName.enable_2g] == "off" || newSwitchCfg[uciWireless.dynOptName.enable_5g] == "off";
+				} else {
+					newSwitchCfgOff = newSwitchCfg[uciWireless.dynOptName.enable] == "off";
+				}
+				if (newSwitchCfgOff)
+				{
+					showConfirm(label.closeDirect,function(result){
+						if (true == result){
+							onSaveSwitchSendData(newSwitchCfg, uciCustomWireless.dynData.wifi_switch);
+						}
+						else{
+							id("wifiSwitchOnAll").checked = true;
+							id("wifiSwitchOffAll").checked = false;
+						}
+					});
+				}
+				else
+				{
+					onSaveSwitchSendData(newSwitchCfg, uciWireless.dynData.wifi_switch);
+				}
+			}
+
+			var newSwitchCfg = makeWifiSwitchSendData();
+
+			/* 数据未改变，则直接返回 */
+			if (!checkSwitchCfgChged(oldSwitchInfo, newSwitchCfg))
+			{
+				return;
+			}
+
+			function isSaveAll()
+			{
+				getWDSInfo(doOnSaveAll);
+			}
+			isSaveAll();
+		}
+
+		function onSaveSwitchSendData(newSwitchCfg, secSwitch)
+		{
+			sendSwitchData(newSwitchCfg, secSwitch);
+		}
+
+		function onGenPinCode()
+		{
+			var data = {};
+			data[uciCustomWireless.fileName] = {};
+			data[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin] = null;
+
+			$.action(data,function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					$("#wpsRouterPinCode").val(result[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin][uciCustomWireless.optName.vendorPin]);
+				}
+			});
+		}
+
+		function onSaveWpsRouterPin()
+		{
+			/* 当前页面路由器PIN码开关状态 */
+			var wpsRouterPinEnable = id("wpsRouterPinOn").checked ? "on" : "off";
+			/* 当前PIN码值 */
+			var wpsRouterPinCode = $("#wpsRouterPinCode").val();
+
+			if(id("wpsRouterPinOn").checked && errHandle(checkPin(wpsRouterPinCode), id("genVendorPin")))
+			{
+				return;
+			}
+
+			/* 路由器PIN码设置没有改变，直接返回 */
+			if (wpsRouterPinEnable == oldWpsConfig[uciCustomWireless.optName.pinEnable]
+					&& wpsRouterPinCode == oldWpsConfig[uciCustomWireless.optName.pinCode])
+			{
+				return;
+			}
+
+			var data = {};
+			data[uciCustomWireless.fileName] = {};
+			data[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig] = {};
+			data[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable] = wpsRouterPinEnable;
+			data[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode] = wpsRouterPinCode;
+
+			setLoadingId("saveWpsRouterPin");
+			hsLoading(true);
+
+			$.modify(data, function(ret) {
+				var timeout = 1;
+				if(ENONE == ret[ERR_CODE])
+				{
+					oldWpsConfig = data[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig];
+				}
+				else
+				{
+					errHandle(ret[ERR_CODE], id("saveWpsRouterPin"));
+				}
+
+				$.setTimeout(function() {
+					hsLoading(false);
+				}, timeout);
+			});
+		}
+
+		function onWpsConnect()
+		{
+			var data = {};
+			data[uciCustomWireless.fileName] = {};
+			data[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink] = {};
+			data[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.linkType] = id("wpsMethodButton").checked ? uciCustomWireless.optValue.linkType.button : uciCustomWireless.optValue.linkType.pin;
+			data[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.band] = "all";
+
+			if (id("wpsMethodPin").checked)
+			{
+				var wpsTerminalPinCode = $("#wpsTerminalPinCode").val();
+				if(errHandle(checkPin(wpsTerminalPinCode), id("wpsTerminalPinCode")))
+				{
+					return;
+				}
+				data[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.terminalPinCode] = wpsTerminalPinCode;
+			}
+
+			setLoadingId("wpsConnect");
+			hsLoading(true);
+
+			$.action(data,function(result){
+				hsLoading(false);
+				if (ENONE != result[ERR_CODE])
+				{
+					errHandle(result[ERR_CODE], id("wpsConnect"));
+				}
+			});
+		}
+
+		function getWpsPinCfg(cb)
+		{
+			var args = {};
+			args[uciCustomWireless.fileName] = {};
+			args[uciCustomWireless.fileName][KEY_NAME] = uciCustomWireless.secName.wpsConfig;
+
+			$.query(args, function(result) {
+				if(ENONE == result[ERR_CODE])
+				{
+					oldWpsConfig = result[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig];
+					if (cb)
+					{
+						cb(result);
+					}
+				}
+			}, true);
+		}
+
+		function getCfg(funcCbk)
+		{
+			var args = {};
+
+			args[uciWireless.fileName] = {};
+			args[uciWireless.fileName][KEY_NAME] = [uciWireless.dynData.host_2g,
+				uciWireless.dynData.wds_2g,
+				uciWireless.dynData.host_5g,
+				uciWireless.dynData.wds_5g,
+				uciFunction.optName.wlanBS];
+			args[uciFunction.fileName] = {};
+			args[uciFunction.fileName][KEY_NAME] = [uciFunction.secName.newModuleSpec];
+			if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+				args[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wifi_switch);
+			} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+				args[uciCustomWireless.fileName] = {};
+				args[uciCustomWireless.fileName][KEY_NAME] = [uciCustomWireless.dynData.wifi_switch];
+			}
+
+			$.query(args,
+				function(data)
+				{
+					if (gWifiSwitchSupport && gWifiSwitchUseWireless) {
+						oldSwitchInfo = data[uciWireless.fileName][uciWireless.dynData.wifi_switch];
+					} else if (gCustomWifiSwitchSupport || (gWifiSwitchSupport && !gWifiSwitchUseWireless)) {
+						oldSwitchInfo = data[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch];
+					}
+					oldWlanInfo = data[uciWireless.fileName][uciWireless.dynData.host_2g];
+					wdsInfo = data[uciWireless.fileName][uciWireless.dynData.wds_2g];
+					oldWlanInfo5g = data[uciWireless.fileName][uciWireless.dynData.host_5g];
+					wdsInfo5g = data[uciWireless.fileName][uciWireless.dynData.wds_5g];
+					oldBsInfo = data[uciWireless.fileName][uciFunction.optName.wlanBS];
+
+						if (gMultiSSIDSupport) {
+							getMultiSSIDStatus(data);
+						}
+
+						if (funcCbk)
+						{
+							funcCbk(data);
+						}
+					}, true);
+		}
+
+		function showHideElement(idStr, doShow)
+		{
+			id(idStr).style.display = doShow ? "block" : "none";
+		}
+
+		function showWpsCfg(cfgData)
+		{
+			/* 路由器PIN码功能开关 */
+			var wpsRouterPinEnable = cfgData[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable];
+			/* 路由器PIN码 */
+			var wpsRouterPinCode = cfgData[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode];
+
+			/* 设置PIN码输入框不可操作 */
+			disableInput("wpsRouterPinCode", true);
+
+			id("wpsRouterPinOn").checked = wpsRouterPinEnable == "on" ? true : false;
+			id("wpsRouterPinOff").checked = wpsRouterPinEnable == "off" ? true : false;
+			if (id("wpsRouterPinOn").checked)
+			{
+				showHideElement("wpsRouterPinCodeUl", true);
+			}
+			else if (id("wpsRouterPinOff").checked)
+			{
+				showHideElement("wpsRouterPinCodeUl", false);
+			}
+			$("#wpsRouterPinCode").val(wpsRouterPinCode);
+
+			/* WPS连接方式默认 - 按键连接 */
+			id("wpsMethodButton").checked = true;
+			if (id("wpsMethodButton").checked)
+			{
+				showHideElement("wpsMethodPinUl", false);
+			}
+			else if (id("wpsMethodPin").checked)
+			{
+				showHideElement("wpsMethodPinUl", true);
+			}
+		}
+
+		function showCfg(cfgData)
+		{
+			var moduleSpecInfo = cfgData[uciFunction.fileName][uciFunction.secName.newModuleSpec];
+
+			var wlanServiceAttr2g = uciFunction.optName.wlanServiceAttr2g;
+			var support_field2g = moduleSpecInfo[wlanServiceAttr2g] || "0";
+			var wlanServiceAttr5g = uciFunction.optName.wlanServiceAttr5g;
+			var support_field5g = moduleSpecInfo[wlanServiceAttr5g] || "0";
+
+			function stringSearch(arr, str)
+			{
+				var index = arr.length;
+				for (var i = 0; i < arr.length; i++)
+				{
+					if (arr[i] === str)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
+			/* 检测2g频段是否支持TWT */
+			twtAvailable2g = stringSearch(support_field2g, 'twt');
+
+			/* 检测5g频段是否支持TWT */
+			twtAvailable5g = stringSearch(support_field5g, 'twt');
+
+			/* 检测2g频段是否支持OFDMA */
+			ofdmaAvailable2g = stringSearch(support_field2g, 'ofdma');
+
+			/* 检测5g频段是否支持OFDMA */
+			ofdmaAvailable5g = stringSearch(support_field5g, 'ofdma');
+
+			/* 检测是否2G支持MU-MIMO */
+			var mumimo = moduleSpecInfo["wireless2g_vhtmubfer"] || "0";
+			muMimoAvailable2g = (1 == parseInt(mumimo, 10));
+
+			/* BS页面参数初始化 */
+			var wlanInfo = cfgData[uciWireless.fileName][uciFunction.optName.wlanBS];
+
+			var wifiState = parseInt(wlanInfo[uciWireless.optName.wifiEnable]);
+			id("wifiSwitchOn").checked = wifiState;
+			id("wifiSwitchOff").checked = !wifiState;
+
+			$("#ssid").val(wlanInfo[uciWireless.dynOptName.ssid]);
+			$("#wlanPwd").val(wlanInfo[uciWireless.dynOptName.key]);
+
+			id("ssidBrd").checked = (parseInt(wlanInfo[uciWireless.dynOptName.ssidbrd]) == uciWireless.dynOptValue.ssidbrd.on);
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g)
+			{
+				selectInit("cipher", cipherOpt2g, wlanInfo[uciWireless.dynOptName.cipher]);
+			}
+			if (gAuthSupport || gAuthSupport2g || gAuthSupport5g)
+			{
+				var moduleSpecAuthType2g = moduleSpecInfo[uciFunction.optName.supportWlanAuthType2g];
+				var authOpt2g = initAuthType(moduleSpecAuthType2g);
+				var moduleSpecAuthType5g = moduleSpecInfo[uciFunction.optName.supportWlanAuthType5g];
+				var authOpt5g = initAuthType(moduleSpecAuthType5g);
+				for (var i = 0; i < authOpt2g.length; i++){
+					for (var j = 0; j < authOpt5g.length; j++){
+						if (authOpt5g[j]['str'] === authOpt2g[i]['str'] || authOpt5g[j]['value'] === authOpt2g[i]['value']){
+							authOpt5g.splice(j, 1);
+						}
+					}
+				}
+
+				var authOpt = authOpt2g.concat(authOpt5g);
+				// authOpt.sort(function(a, b){return a - b});
+
+				var valueConTmp = $("#auth span.value");
+				var valueConWidth = parseInt(valueConTmp.css("width"));
+				selectInit("auth", authOpt, wlanInfo[uciWireless.dynOptName.auth], authSelectHandler, valueConWidth);
+				id("auth").changeSel(wlanInfo[uciWireless.dynOptName.auth]);
+			}
+
+			/* 2.4G页面参数初始化 */
+			wlanInfo = cfgData[uciWireless.fileName][uciWireless.dynData.host_2g];
+			var TWTdefault2g = parseInt(wlanInfo[uciWireless.dynOptName.twt]);
+			var OFDMAdefault2g = parseInt(wlanInfo[uciWireless.dynOptName.ofdma]);
+			var MUMIMOdefault2g = parseInt(wlanInfo[uciWireless.dynOptName.muMIMO]);
+			id("TWTSwitchOn").checked = TWTdefault2g;
+			id("TWTSwitchOff").checked = !TWTdefault2g;
+			id("OFDMASwitchOn").checked = OFDMAdefault2g;
+			id("OFDMASwitchOff").checked = !OFDMAdefault2g;
+			id("MUMimoSwitchOn").checked = MUMIMOdefault2g;
+			id("MUMimoSwitchOff").checked = !MUMIMOdefault2g;
+			var moduleSpecChannel2g = moduleSpecInfo[uciFunction.optName.channel2g] || label.wlanChannels;
+			channelOpt2g = initChannel(moduleSpecChannel2g);
+			selectInit("wlanWidth", bandWidthOpt2g, wlanInfo[uciWireless.dynOptName.bandwidth]);
+
+			selectInit("wlanMode", modeOpt2g, wlanInfo[uciWireless.dynOptName.mode], modeSelectHandler);
+			modeSelectHandler(wlanInfo[uciWireless.dynOptName.mode]);
+			wlanWidth.changeSel(wlanInfo[uciWireless.dynOptName.bandwidth]);
+
+			selectInit("channel", channelOpt2g, wlanInfo[uciWireless.dynOptName.channel]);
+
+			/* 检查是否支持带宽80+80MHZ*/
+			var availableBandWidth = moduleSpecInfo[uciFunction.optName.bandWidth5g];
+			if (availableBandWidth)
+			{
+				for (var idx = 0; idx < availableBandWidth.length; idx++)
+				{
+					if (BW_160M_DISCONNECTED == decodeURIComponent(availableBandWidth[idx]))
+					{
+						BW_160M_SUPPORT = true;
+						break;
+					}
+				}
+			}
+
+			/* 检查是否支持MU-MIMO */
+			var vhtmubfer = moduleSpecInfo["wireless5g_vhtmubfer"] || "0";
+			muMimoAvailable5g = (1 == parseInt(vhtmubfer, 10));
+
+			/* 5G页面参数初始化 */
+			wlanInfo = cfgData[uciWireless.fileName][uciWireless.dynData.host_5g];
+			var TWTdefault5g = parseInt(wlanInfo[uciWireless.dynOptName.twt]);
+			var OFDMAdefault5g = parseInt(wlanInfo[uciWireless.dynOptName.ofdma]);
+			var MUMIMOdefault5g = parseInt(wlanInfo[uciWireless.dynOptName.muMIMO]);
+			id("TWTSwitchOn5g").checked = TWTdefault5g;
+			id("TWTSwitchOff5g").checked = !TWTdefault5g;
+			id("OFDMASwitchOn5g").checked = OFDMAdefault5g;
+			id("OFDMASwitchOff5g").checked = !OFDMAdefault5g;
+			id("MUMimoSwitchOn5g").checked = MUMIMOdefault5g;
+			id("MUMimoSwitchOff5g").checked = !MUMIMOdefault5g;
+			var moduleSpecChannel5g = moduleSpecInfo[uciFunction.optName.channel5g] || label.wlanChannels5g;
+			channelOpt5g = initChannel(moduleSpecChannel5g);
+			lastChan5gValue = wlanInfo[uciWireless.dynOptName.channel];
+			tmpBandWidthOpt5g = BW_160M_SUPPORT ? bandWidthOpt5gSpecial : bandWidthOpt5g;
+			selectInit("wlanWidth5g", tmpBandWidthOpt5g, wlanInfo[uciWireless.dynOptName.bandwidth], undefined, 20);
+			/* 检查是否支持MU-MIMO */
+			var vhtmubfer = moduleSpecInfo["wireless5g_vhtmubfer"] || "0";
+			muMimoAvailable5g = (1 == parseInt(vhtmubfer, 10));
+
+			/* 2.4G无线设置帮助信息确定 */
+			var helpBtn2g = id("wlanHelp");
+			var help2GIdArrayStr = "wlanNetworkHelpAdvanced";
+			if(twtAvailable2g){
+				help2GIdArrayStr += " wlanTWTHelp";
+			}
+			if(muMimoAvailable2g){
+				help2GIdArrayStr += " wlanMUMIMOHelp";
+			}
+			if(ofdmaAvailable2g){
+				help2GIdArrayStr += " wlanOFDMAHelp";
+			}
+			helpBind(helpBtn2g,help2GIdArrayStr);
+
+			/* 5G无线设置帮助信息确定 */
+			var helpBtn5g = id("wlanHelp5G");
+			var help5GIdArrayStr = "wlanNetworkHelpAdvanced";
+			if(twtAvailable5g){
+				help5GIdArrayStr += " wlanTWTHelp";
+			}
+			if(muMimoAvailable5g){
+				help5GIdArrayStr += " wlanMUMIMOHelp";
+			}
+			if(ofdmaAvailable5g){
+				help5GIdArrayStr += " wlanOFDMAHelp";
+			}
+			helpBind(helpBtn5g,help5GIdArrayStr);
+
+			selectInit("wlanMode5g", modeOpt5g, wlanInfo[uciWireless.dynOptName.mode], modeSelectHandler5g);
+			modeSelectHandler5g(wlanInfo[uciWireless.dynOptName.mode]);
+
+			selectInit("channel5g", channelOpt5g, wlanInfo[uciWireless.dynOptName.channel], channelSelectHandler5g);
+			channelSelectHandler5g(wlanInfo[uciWireless.dynOptName.channel]);
+
+			wlanWidth5g.changeSel(wlanInfo[uciWireless.dynOptName.bandwidth]);
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+				/* 无线总开关 */
+				var switchInfo;
+				var switchAll;
+				if (gWifiSwitchUseWireless) {
+					switchInfo = cfgData[uciWireless.fileName][uciWireless.dynData.wifi_switch];
+					switchAll = switchInfo[uciWireless.dynOptName.enable] == "on";
+				} else {
+					switchInfo = cfgData[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch]
+					switchAll = switchInfo[uciCustomWireless.dynOptName.enable] == "on";
+				}
+
+				if (gWifiSwitchSplit) {
+					var switch2g = switchAll && (switchInfo[uciCustomWireless.dynOptName.enable_2g] == "on");
+					var switch5g = switchAll && (switchInfo[uciCustomWireless.dynOptName.enable_5g] == "on");
+					id("wifiSwitchOnAll2g").checked = switch2g;
+					id("wifiSwitchOnAll5g").checked = switch5g;
+					id("wifiSwitchOffAll2g").checked = !(switch2g);
+					id("wifiSwitchOffAll5g").checked = !(switch5g);
+
+					disable2GWifiSet(!switch2g);
+					disable5GWifiSet(!switch5g);
+
+					if (switch2g || switch5g)
+					{
+						disableWifiBSSet(false);
+						if (gPinWpsSupport) {
+							disableWpsSet(false);
+						}
+					}
+					else
+					{
+						disableWifiBSSet(true);
+						if (gPinWpsSupport) {
+							disableWpsSet(true);
+						}
+					}
+				} else {
+					id("wifiSwitchOnAll").checked = switchAll;
+					id("wifiSwitchOffAll").checked = !(switchAll);
+					id("wifiSwitchOffTip").style.display = switchAll? "none": "block";
+
+					if (id("wifiSwitchOffAll").checked) {
+						disable2GWifiSet(true);
+						disable5GWifiSet(true);
+						disableWifiBSSet(true);
+						if (gPinWpsSupport) {
+							disableWpsSet(true);
+						}
+					}
+				}
+			}
+			if (gCipherSupport || gCipherSupport2g || gCipherSupport5g) {
+				if (uciWireless.dynOptValue.mode.m_11n == wlanInfo[uciWireless.dynOptName.mode])
+				{
+					id("cipher").disable(true);
+				}
+			}
 
 
+			id("TWTCompatibilityTip2g").style.display = id("TWTSwitchOn").checked ? "block":"none";
+			id("compatibilityNote2g").style.visibility = id("TWTSwitchOn").checked ? "visible":"hidden";
+			id("TWTCompatibilityTip5g").style.display = id("TWTSwitchOn5g").checked ? "block":"none";
+			id("compatibilityNote5g").style.visibility = id("TWTSwitchOn5g").checked ? "visible":"hidden";
+
+			var modeVal = parseInt(id("wlanMode").value);
+			var modeVal5g = parseInt(id("wlanMode5g").value);
+			id("TWTSel").style.display = (twtAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none";
+			id("MUMimoSel").style.display = (muMimoAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none";
+			id("OFDMASel").style.display = (ofdmaAvailable2g && uciWireless.dynOptValue.mode.m_11bgn_ax == modeVal) ? "block" : "none";
+			id("OFDMASel5g").style.display = (ofdmaAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g) ? "block" : "none";
+			id("TWTSel5g").style.display = (twtAvailable5g && uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g) ? "block" : "none";
+			id("MUMimoSel5g").style.display = (muMimoAvailable5g && (uciWireless.dynOptValue.mode.m_11ac_ax == modeVal5g || uciWireless.dynOptValue.mode.m_11ac == modeVal5g)) ? "block" : "none";
+		}
+
+		function multiSSIDInit(list)
+		{
+			if (firstLoadDataGrid)
+			{
+				firstLoadDataGrid = false;
+				dataGridLs = new DataGrid();
+				dataGridLs.init({
+					id:"SSIDTable",									// table ID
+					data:list,											// 数据源
+					hasSelBox:false,
+					edit:false,
+					head:[{field:label.multiSSIDIndex, width:90},				// 表头选项
+						{field:label.wirelessName, width:160},
+						{field:label.wirelessPwd, width:118},
+						{field:label.multiSSIDBand, width:90},
+						{field:label.multiSSIDStatus, width:90},
+						{field:label.multiSSIDSetUp, width:90}],
+					list:[{edit:false, name:"multiSSIDIndex", type:"str"},
+						{edit:false, name:"wirelessName", type:"str"},
+						{edit:false, name:"wirelessPwd", type:"str"},
+						{edit:false, name:"multiSSIDBand", type:"str"},
+						{edit:false, name:"multiSSIDStatus", type:"str"},
+						{edit:false, name:"multiSSIDSetUp", type:"str", className:"setUp"}]/*,
+					 niceScroll:gBasicRouteSetRNiceScroll*/
+				});
+
+			}
+			else
+			{
+				dataGridLs.setDataSource(list);
+				dataGridLs.refresh();
+			}
+
+			var $setUpButtons = $(".setUp");
+			$setUpButtons.attr("title", "");
+			var srcArr = ["../web-static/images/multi_ssid_host_2g.png", "../web-static/images/multi_ssid_guest_2g.png",
+				"../web-static/images/multi_ssid_cmcc.png", "../web-static/images/multi_ssid_cmcc.png",
+				"../web-static/images/multi_ssid_host_5g.png", "../web-static/images/multi_ssid_guest_5g.png",
+				"../web-static/images/multi_ssid_cmcc.png", "../web-static/images/multi_ssid_cmcc.png"];
+
+			if (gElinkSupport)
+			{
+				srcArr[2] = srcArr[3] = srcArr[6] = srcArr[7] = "../web-static/images/multi_ssid_ctcc.png";
+			}
+
+			for (var i = 0; i < list.length; i++)
+			{
+				(function(num) {
+					var img = new Image();
+					img.src = srcArr[num];
+					img.onload = function() {
+						var imgOffsetX = img.width - 82;	//82为单元格宽度和图片尖尖部分的偏移。
+						var imgOffsetY = 26;
+
+						$setUpButtons.eq(num).mouseover(function(event) {
+							var scrollbarWidth = 0;
+							// 判断是否有滚动条，有滚动条时需要算上滚动条的宽度。
+							if (document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight))
+							{
+								var scrollDiv = document.createElement("div");
+								scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
+								document.body.appendChild(scrollDiv);
+								scrollbarWidth = (scrollDiv.offsetWidth - scrollDiv.clientWidth) / 2;
+								document.body.removeChild(scrollDiv);
+							}
+							// 获取滚动条位置！！！！已知问题：360浏览器极速模式无法成功获取！！！！
+							var scrollX = (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft;
+							var scrollY = (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == 'number' ? t : document.body).scrollTop;
+
+							var toast = $('<div class="showTips"></div>').append(img);
+							$('body').append(toast);
+							var target = event.srcElement || event.target;
+							var clientRect = target.getBoundingClientRect();
+
+							$('.showTips').css({
+								position: "absolute",
+								top: clientRect.top + imgOffsetY + scrollY + "px",
+								left: clientRect.left - imgOffsetX + scrollX - scrollbarWidth + "px",
+								zIndex: 1001
+							});
+						});
+						$setUpButtons.eq(num).mouseleave(function() {
+							$('.showTips').remove();
+						});
+
+					}
+
+				})(i);
+			}
+		}
+
+		function getMultiSSIDStatus(data)
+		{
+			var args = {};
+			args[uciMultiSsid.fileName] = {};
+			args[uciMultiSsid.fileName][KEY_NAME] = [uciMultiSsid.secName.wlan_multi_ssid_2g_1,
+				uciMultiSsid.secName.wlan_multi_ssid_2g_2,
+				uciMultiSsid.secName.wlan_multi_ssid_5g_1,
+				uciMultiSsid.secName.wlan_multi_ssid_5g_2];
+			args[uciGuestNet.fileName] = {};
+			args[uciGuestNet.fileName][KEY_NAME] = [uciGuestNet.secName.wireless2G,
+				uciGuestNet.secName.wireless5G];
+			$.query(args, function(res) {
+				var switchInfo = data[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch];
+				var switchAll = switchInfo[uciCustomWireless.dynOptName.enable] == "on";
+				var switch2g = switchAll && switchInfo[uciCustomWireless.dynOptName.enable_2g] == "on";
+				var switch5g = switchAll && switchInfo[uciCustomWireless.dynOptName.enable_5g] == "on";
+				var dataList = [];
+				var dataIndex = {};
+				//构建数据
+				var host_5g_4 = res[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_2];
+				var host_5g_3 = res[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_1];
+				var guest_5g = res[uciGuestNet.fileName][uciGuestNet.secName.wireless5G];
+				var host_5g = data[uciWireless.fileName][uciWireless.dynData.host_5g];
+				var host_2g_4 = res[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_2];
+				var host_2g_3 = res[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_1];
+				var guest_2g = res[uciGuestNet.fileName][uciGuestNet.secName.wireless2G];
+				var host_2g = data[uciWireless.fileName][uciWireless.dynData.host_2g];
+
+				if (gSupportBS && data[uciWireless.fileName][uciWireless.secName.wlanBS] != undefined &&
+				data[uciWireless.fileName][uciWireless.secName.wlanBS][uciWireless.optName.bsEnable] == uciWireless.optValue.bsEnable.enable)
+				{
+					for (key in data[uciWireless.fileName][uciWireless.secName.wlanBS])
+					{
+						host_2g[key] = data[uciWireless.fileName][uciWireless.secName.wlanBS][key];
+						host_5g[key] = data[uciWireless.fileName][uciWireless.secName.wlanBS][key];
+					}
+					host_2g[uciWireless.optName.enable] = host_2g[uciWireless.optName.wifiEnable];
+					host_5g[uciWireless.optName.enable] = host_5g[uciWireless.optName.wifiEnable];
+				}
+
+				var dataObjs = [[host_5g_4, uciMultiSsid.optName.encryption, uciMultiSsid.optName.key],
+					[host_5g_3, uciMultiSsid.optName.encryption, uciMultiSsid.optName.key],
+					[guest_5g, uciGuestNet.optName.encrypt, uciGuestNet.optName.key],
+					[host_5g, uciWireless.optName.keyType, uciWireless.optName.key],
+					[host_2g_4, uciMultiSsid.optName.encryption, uciMultiSsid.optName.key],
+					[host_2g_3, uciMultiSsid.optName.encryption, uciMultiSsid.optName.key],
+					[guest_2g, uciGuestNet.optName.encrypt, uciGuestNet.optName.key],
+					[host_2g, uciWireless.optName.keyType, uciWireless.optName.key]];
+
+				for (var i = 0; i < dataObjs.length; i++)
+				{
+					dataIndex = {};
+					var dataObj = dataObjs[i];
+					dataIndex.multiSSIDIndex = "SSID-" + (8-i);
+					dataIndex.wirelessName = dataObj[0]["ssid"];
+					dataIndex.wirelessPwd = (0 == parseInt(dataObj[0][dataObj[1]])) ? "无加密" : dataObj[0][dataObj[2]];
+					dataIndex.multiSSIDBand = i < 4 ? "5GHz" : "2.4GHz";
+					switchAll = i < 4 ? switch5g : switch2g;
+					dataIndex.multiSSIDStatus = (switchAll && (parseInt(dataObj[0]["enable"]) || dataObj[0]["enable"] == "on")) ? "开启" : "关闭";
+					dataIndex.multiSSIDSetUp = "设置方法";
+					dataList[i] = dataIndex;
+				}
+
+				multiSSIDInit(dataList);
+			});
+		}
+
+		if (gMultiSSIDSupport)
+		{
+			// 帮助信息默认为移动定制的多SSID功能帮助信息，判断如果是电信定制机型则修改其中的平台信息
+			if (gElinkSupport)
+			{
+				$("#multiSSIDHelp .ispName").text(label.chinaTelecom);
+				$("#multiSSIDHelp .ispPlatformName").text(label.chinaTelecomPlatform);
+			}
+
+			$("#multiSSIDDiv").removeClass("disNone");
+		}
+
+		if (gPinWpsSupport) {
+			$("#wpsDiv").removeClass("disNone");
+			getWpsPinCfg(showWpsCfg);
+		}
+
+		if (gWifiSwitchSupport || gCustomWifiSwitchSupport) {
+			$("#wifiSwitchDiv").removeClass("disNone");
+			if (gWifiSwitchSplit) {
+				$("#wifiSwitchSplit").removeClass("disNone");
+			} else {
+				$("#wifiSwitchUnity").removeClass("disNone");
+			}
+		}
+		(gAuthSupport || gAuthSupport2g || gAuthSupport5g) && $("#authDiv").removeClass("disNone");
+		(gCipherSupport || gCipherSupport2g || gCipherSupport5g) && $("#cipherDiv").removeClass("disNone");
+		getCfg(showCfg);
+		wlanPwd.onkeyup = function(){checkWlanPwdDep();};
+
+		id("TWTSwitchOn").onclick = function(){checkTWTStatus(hostSecName);};
+		id("TWTSwitchOff").onclick = function(){checkTWTStatus(hostSecName);};
+		id("TWTSwitchOn5g").onclick = function(){checkTWTStatus(hostSecName5g);};
+		id("TWTSwitchOff5g").onclick = function(){checkTWTStatus(hostSecName5g);};
+
+		$("#saveBasic").click(onPreSave);
+		$("#saveAdvanced2g").click(onSaveAdvanced);
+		$("#saveAdvanced5g").click(onSaveAdvanced);
+		$("#saveAll").click(onSaveAll);
+
+		/* PIN WPS */
+		$("#genVendorPin").click(onGenPinCode);
+		$("#saveWpsRouterPin").click(onSaveWpsRouterPin);
+		$("#wpsConnect").click(onWpsConnect);
+		$("#wpsRouterPinOn").click(function(){showHideElement("wpsRouterPinCodeUl", true);});
+		$("#wpsRouterPinOff").click(function(){showHideElement("wpsRouterPinCodeUl", false);});
+		$("#wpsMethodButton").click(function(){showHideElement("wpsMethodPinUl", false);});
+		$("#wpsMethodPin").click(function(){showHideElement("wpsMethodPinUl", true);});
+
+		$('input[name="wifiUnite"]').on("click", function(){
+			bsSelectChange(this.id == "wifiUniteOn" ? ENABLE : DISABLE);
+		});
+
+		id("wifiUniteOn").checked  = true;
+		id("wifiUniteOff").checked = false;
+	}
+	init();
+</script>
+<style type="text/css">
+	#compatibilityNote2g,#compatibilityNote5g {
+		visibility: visible;
+	}
+    input.wlanBroadCase{
+        margin-left:12px;
+    }
+    input.wlanSecEnable{
+        margin-left:12px;
+    }
+    label.desLblWU{
+        width:296px;
+        font-size:16px;
+        font-weight:bold;
+    }
+    ul.gridLineBS{
+        margin-top: 50px;
+    }
+	ul.gridLineTips{
+		margin-top:8px !important;
+		height:auto;
+		display:none;
+	}
+	ul.gridLineTips span{
+		width:225px;
+		margin-left:261px;
+		color:#FFFFFF;
+		line-height:18px;
+		font-size:12px;
+		display: block;
+	}
+	li{
+		list-style: none;
+		text-align: left;
+	}
+	div.display{
+		margin-top: 10px;
+		margin-left: 260px;
+	}
+	span.warnText{
+		color:#FFFFFF;
+		font-size:12px;
+		width: 210px;
+	}
+	ul.gridLineB2{
+		margin-top: 10px;
+	}
+	div.warnCon {
+		width: 16px;
+		height: 16px;
+		overflow: hidden;
+		display: inline-block;
+		vertical-align: top;
+	}
+	div.warnCon img {
+		margin-top: -187px;
+		margin-left: -467px;
+	}
+</style>
 <div id="hcCo" class="hcCo">
     <div id="wifiSwitchDiv" class="disNone">
         <div class="title">
@@ -310,76 +2446,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">function init(){function v(a){disableInput("wifiUniteOn",a);disableInput("wifiUniteOff",a);disableInput("wifiSwitchOn",a);disableInput("wifiSwitchOff",a);disableInput("ssid",a);disableInput("wlanPwd",a);id("ssidBrd").disabled=a;(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&id("auth").disable(a);(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&id("cipher").disable(a);!a&&(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&(uciWireless.dynOptValue.mode.m_11n!=$("#wlanMode").val()&&uciWireless.dynOptValue.auth.psk2_sae3!=
-$("#auth").val()&&uciWireless.dynOptValue.auth.sae3!=$("#auth").val()||id("cipher").disable(!0));disableBtn("saveBasic",a);id("saveBasic").onclick=a?null:Q}function G(a){id("channel").disable(a);id("wlanMode").disable(a);id("wlanWidth").disable(a);disableInput("TWTSwitchOn",a);disableInput("TWTSwitchOff",a);disableInput("MUMimoSwitchOn",a);disableInput("MUMimoSwitchOff",a);disableInput("OFDMASwitchOn",a);disableInput("OFDMASwitchOff",a);a||((gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&uciWireless.dynOptValue.mode.m_11n==
-$("#wlanMode").val()&&id("cipher").disable(!0),uciWireless.dynOptValue.mode.m_11bg!=$("#wlanMode").val()&&uciWireless.dynOptValue.mode.m_11b!=$("#wlanMode").val()&&uciWireless.dynOptValue.mode.m_11g!=$("#wlanMode").val()||id("wlanWidth").disable(!0));disableBtn("saveAdvanced2g",a);id("saveAdvanced2g").onclick=a?null:M}function H(a){id("channel5g").disable(a);id("wlanMode5g").disable(a);id("wlanWidth5g").disable(a);disableInput("TWTSwitchOn5g",a);disableInput("TWTSwitchOff5g",a);disableInput("OFDMASwitchOn5g",
-a);disableInput("OFDMASwitchOff5g",a);r&&(disableInput("MUMimoSwitchOn5g",a),disableInput("MUMimoSwitchOff5g",a));a||165==parseInt(id("channel5g").value)&&id("wlanWidth5g").disable(!0);disableBtn("saveAdvanced5g",a);id("saveAdvanced5g").onclick=a?null:M}function w(a){disableInput("wpsRouterPinOn",a);disableInput("wpsRouterPinOff",a);disableBtn("genVendorPin",a);id("genVendorPin").onclick=a?null:ba;disableBtn("saveWpsRouterPin",a);id("saveWpsRouterPin").onclick=a?null:ca;disableInput("wpsMethodButton",
-a);disableInput("wpsMethodPin",a);disableInput("wpsTerminalPinCode",a);disableBtn("wpsConnect",a);id("wpsConnect").onclick=a?null:da}function ea(a){for(var c=[],b=a.length,e=0;e<b;e++)c[e]="auto"==a[e]?{str:label.wirelessAuto,value:"0"}:{str:a[e],value:a[e]};return c}function fa(a){var c=[];if(void 0==a)c=xa;else for(var b=0;b<a.length;++b){var e=a[b];c[b]={str:ya[e],value:e}}return c}function p(a,c){var b="";switch(a){case ENONE:return!1;case EINVSSIDLEN:b=errStr.wlanSsidLenErr;break;case EINVSSIDBLANK:b=
-errStr.wlanSsidBlank;break;case EINVPSKLEN:b=errStr.wlanPwdLenValid;break;case EWLANPWDBLANK:b=errStr.wlanPwdNull;break;case EINVSSIDEMPTY:b=errStr.wlanSsidErr;break;case EINVWLANPWD:b=errStr.wlanPwdInvalid;break;case ESYSBUSY:b=errStr.invRequestFailTrylater;break;case EINVCHNAMODEBAND:b=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn;break;default:b=errStr.invRequestFail}showAlert(b,c);return!0}function ga(a){var c=parseInt(id("wlanMode5g").value),b=!1;if(gWlanHost5gSupport160MBandWidth){if(149<=
-a&&149>I||149>a&&149<=I)b=!0;b&&c!=uciWireless.dynOptValue.mode.m_11an&&(c=parseInt(g.value),149<=a?g.resetOptions(ha,uciWireless.dynOptValue.bandwidth.bw80):g.resetOptions(ia,uciWireless.dynOptValue.bandwidth.auto),0==c&&149<=a?g.changeSel(uciWireless.dynOptValue.bandwidth.bw80):g.changeSel(c))}165==parseInt(a)?(g.changeSel(uciWireless.dynOptValue.bandwidth.bw20),g.disable(!0)):g.disable(!1);gMeshSupport&&52<=a&&64>=a?id("channel5gTips").style.display="block":id("channel5gTips").style.display="none";
-I=a}function ja(a){uciWireless.dynOptValue.mode.m_11b==a||uciWireless.dynOptValue.mode.m_11g==a||uciWireless.dynOptValue.mode.m_11bg==a?(x.changeSel(uciWireless.dynOptValue.bandwidth.bw20),x.disable(!0)):(x.changeSel(uciWireless.dynOptValue.bandwidth.auto),x.disable(!1));if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)!(gAuthSupport||gAuthSupport2g||gAuthSupport5g)||uciWireless.dynOptValue.auth.psk2_sae3!=$("#auth").val()&&uciWireless.dynOptValue.auth.psk2_sae3!=$("#auth").val()?uciWireless.dynOptValue.mode.m_11n==
-a?(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0)):(id("cipher").changeSel(y[uciWireless.dynOptName.cipher]),id("cipher").disable(!1)):(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0));g11AxSupport.wlan2g&&($("#wlanModeAxTips2G").css("display",uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"),$("#TWTSel").css("display",z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"),$("#MUMimoSel").css("display",A&&uciWireless.dynOptValue.mode.m_11bgn_ax==
-a?"block":"none"),$("#OFDMASel").css("display",B&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"))}function ka(a){var c;uciWireless.dynOptValue.mode.m_11an==a?(g.resetOptions(R,uciWireless.dynOptValue.bandwidth.auto),$("#MUMimoSel5g").css("display","none")):(S?g.resetOptions(la,uciWireless.dynOptValue.bandwidth.auto):gWlanHost5gSupport160MBandWidth?g.resetOptions(ia,uciWireless.dynOptValue.bandwidth.auto):g.resetOptions(za,uciWireless.dynOptValue.bandwidth.auto),$("#MUMimoSel5g").css("display",
-r?"block":"none"));c=parseInt(id("channel5g").value);void 0==id("channel5g").value&&(c=parseInt(I));gWlanHost5gSupport160MBandWidth&&uciWireless.dynOptValue.mode.m_11an!=a&&149<=c&&g.resetOptions(ha,uciWireless.dynOptValue.bandwidth.bw80);165==c?(g.changeSel(uciWireless.dynOptValue.bandwidth.bw20),g.disable(!0)):(gWlanHost5gSupport160MBandWidth?(c=uciWireless.dynOptValue.mode.m_11an!=a&&149<=c?uciWireless.dynOptValue.bandwidth.bw80:uciWireless.dynOptValue.bandwidth.auto,g.changeSel(c)):g.changeSel(uciWireless.dynOptValue.bandwidth.auto),
-g.disable(!1));g11AxSupport.wlan5g&&($("#wlanModeAxTips5G").css("display",uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"),$("#OFDMASel5g").css("display",C&&uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"),$("#TWTSel5g").css("display",D&&uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"))}function Aa(a){a==uciWireless.dynOptValue.auth.psk2_sae3?id("authTips").style.display="block":id("authTips").style.display="none";if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)uciWireless.dynOptValue.auth.psk2_sae3==
-a||uciWireless.dynOptValue.auth.sae3==a||uciWireless.dynOptValue.mode.m_11n==$("#wlanMode").val()?(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0)):(id("cipher").changeSel(m[uciWireless.dynOptName.cipher]),id("cipher").disable(!1))}function ma(a,c,b){for(var e in b)if(void 0!=c[b[e]]&&a[b[e]]!=c[b[e]])return!0;return!1}function Ba(a,c){var b=[uciWireless.dynOptName.ssid,uciWireless.dynOptName.key,uciWireless.dynOptName.ssidbrd,uciWireless.dynOptName.encryption,
-uciWireless.optName.bsEnable,uciWireless.optName.wifiEnable];(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&b.push(uciWireless.dynOptName.auth);(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&b.push(uciWireless.dynOptName.cipher);return ma(a,c,b)}function na(a,c,b){var e=[uciWireless.dynOptName.channel,uciWireless.dynOptName.mode,uciWireless.dynOptName.bandwidth],d=$("#wlanMode").val(),h=$("#wlanMode5g").val();("2g"==b&&z&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&D&&uciWireless.dynOptValue.mode.m_11ac_ax==
-h)&&e.push(uciWireless.dynOptName.twt);("2g"==b&&B&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&C&&uciWireless.dynOptValue.mode.m_11ac_ax==h)&&e.push(uciWireless.dynOptName.ofdma);("2g"==b&&A&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&r&&(uciWireless.dynOptValue.mode.m_11ac_ax==h||uciWireless.dynOptValue.mode.m_11ac==h))&&e.push(uciWireless.dynOptName.muMIMO);return ma(a,c,e)}function Ca(a,c){var b=[uciWireless.dynOptName.enable];gWifiSwitchSplit&&(b.push(uciWireless.dynOptName.enable_2g),
-b.push(uciWireless.dynOptName.enable_5g));for(var e in b)if(a[b[e]]!=c[b[e]])return!0;return!1}function T(a){var c={};c[uciWireless.fileName]={};c[uciWireless.fileName][KEY_NAME]=[U,V];$.query(c,function(b){ENONE==b[ERR_CODE]?a(b[uciWireless.fileName]):p(b[ERR_CODE])})}function Da(){var a={};gWifiSwitchSplit?(id("wifiSwitchOnAll2g").checked?(a[uciWireless.dynOptName.enable_2g]="on",a[uciWireless.dynOptName.enable]="on"):a[uciWireless.dynOptName.enable_2g]="off",id("wifiSwitchOnAll5g").checked?(a[uciWireless.dynOptName.enable_5g]=
-"on",a[uciWireless.dynOptName.enable]="on"):a[uciWireless.dynOptName.enable_5g]="off"):id("wifiSwitchOnAll").checked?a[uciWireless.dynOptName.enable]="on":a[uciWireless.dynOptName.enable]="off";return a}function Ea(){var a=uciWireless.dynOptName.ssid,c=uciWireless.dynOptName.key,b=uciWireless.dynOptName.ssidbrd,e=uciWireless.dynOptName.encryption,d=uciWireless.dynOptName.auth,h=uciWireless.dynOptName.cipher,l={},f={};f[uciWireless.optName.wifiEnable]=id("wifiSwitchOn");f[a]=$("#ssid");f[c]=$("#wlanPwd");
-f[b]=id("ssidBrd");f[e]=$("#wlanPwd");if(gAuthSupport||gAuthSupport2g||gAuthSupport5g)f[d]=$("#auth");if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)f[h]=$("#cipher");var g=uciFunction.optName.wlanBS,E={},s;for(s in f){var k=f[s];switch(s){case uciWireless.optName.wifiEnable:E[s]=!0==k.checked?1:0;break;case a:case c:case d:case h:E[s]=k.val();break;case b:E[s]=k.checked?uciWireless.dynOptValue.ssidbrd.on:uciWireless.dynOptValue.ssidbrd.off;break;case e:""==k.val()?E[s]=0:E[s]=1}}l[g]=E;l[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable]=
-ENABLE;return l}function Fa(a){var c=uciWireless.dynOptName.channel,b=uciWireless.dynOptName.mode,e=uciWireless.dynOptName.bandwidth,d=uciWireless.dynOptName.muMIMO,h=uciWireless.dynOptName.twt,l=uciWireless.dynOptName.ofdma,f={};"saveAdvanced2g"==a?(f[n]={},f[n][c]=parseInt($("#channel").val()),f[n][b]=parseInt($("#wlanMode").val()),f[n][e]=parseInt($("#wlanWidth").val()),a=$("#wlanMode").val(),z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a&&(f[n][h]=!0==$("#TWTSwitchOn")[0].checked?1:0),B&&uciWireless.dynOptValue.mode.m_11bgn_ax==
-a&&(f[n][l]=!0==$("#OFDMASwitchOn")[0].checked?1:0),A&&uciWireless.dynOptValue.mode.m_11bgn_ax==a&&(f[n][d]=!0==$("#MUMimoSwitchOn")[0].checked?1:0)):(f[k]={},f[k][c]=parseInt($("#channel5g").val()),f[k][b]=parseInt($("#wlanMode5g").val()),f[k][e]=parseInt($("#wlanWidth5g").val()),a=$("#wlanMode5g").val(),D&&uciWireless.dynOptValue.mode.m_11ac_ax==a&&(f[k][h]=!0==$("#TWTSwitchOn5g")[0].checked?1:0),C&&uciWireless.dynOptValue.mode.m_11ac_ax==a&&(f[k][l]=!0==$("#OFDMASwitchOn5g")[0].checked?1:0),!r||
-uciWireless.dynOptValue.mode.m_11ac_ax!=a&&uciWireless.dynOptValue.mode.m_11ac!=a||(f[k][d]=!0==$("#MUMimoSwitchOn5g")[0].checked?1:0));return f}function F(a){var c={};c[uciWireless.fileName]=a;hsLoading(!0);$.modify(c,function(a){var c=0;ENONE==a[ERR_CODE]?(a.dfs_wait_time&&0!=a.dfs_wait_time?showDFSPopUpWindow(function(){J(K)},parseInt(a.dfs_wait_time)):J(K),c=APPLY_WIRELESS_SECONDS):p(a[ERR_CODE]);$.setTimeout(function(){hsLoading(!1);disableBtn("saveBasic",!1);disableBtn("saveAdvanced2g",!1);
-disableBtn("saveAdvanced5g",!1)},c)})}function oa(a,c){var b={},e="";if(gWifiSwitchSupport&&gWifiSwitchUseWireless)e="wireless";else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)e="custom_wireless";b[e]={};b[e][c]=a;setLoadingId("saveAll");disableBtn("saveBasic",!0);disableBtn("saveAdvanced2g",!0);disableBtn("saveAdvanced5g",!0);hsLoading(!0);$.modify(b,function(a){var b=0;ENONE==a[ERR_CODE]?(a.dfs_wait_time&&0!=a.dfs_wait_time?showDFSPopUpWindow(function(){J(K)},parseInt(a.dfs_wait_time)):
-J(K),b=APPLY_WIRELESS_SECONDS):p(a[ERR_CODE]);if(gWifiSwitchSplit){a=id("wifiSwitchOnAll2g").checked;var c=id("wifiSwitchOnAll5g").checked;G(!a);H(!c);a||c?(v(!1),gPinWpsSupport&&w(!1)):(v(!0),gPinWpsSupport&&w(!0))}else id("wifiSwitchOnAll").checked?(G(!1),H(!1),id("wifiSwitchOffTip").style.display="none",v(!1),gPinWpsSupport&&w(!1)):(G(!0),H(!0),v(!0),id("wifiSwitchOffTip").style.display="block",gPinWpsSupport&&w(!0));$.setTimeout(function(){hsLoading(!1);disableBtn("saveBasic",!1);disableBtn("saveAdvanced2g",
-!1);disableBtn("saveAdvanced5g",!1)},b)})}function N(a){a==n?!0==$("#TWTSwitchOn")[0].checked?(id("TWTCompatibilityTip2g").style.display="block",id("compatibilityNote2g").style.visibility="visible"):(id("TWTCompatibilityTip2g").style.display="none",id("compatibilityNote2g").style.visibility="hidden"):a==k&&(!0==$("#TWTSwitchOn5g")[0].checked?(id("TWTCompatibilityTip5g").style.display="block",id("compatibilityNote5g").style.visibility="visible"):(id("TWTCompatibilityTip5g").style.display="none",id("compatibilityNote5g").style.visibility=
-"hidden"))}function Q(){var a=id("ssid");if(!p(checkSsid(a.value),a)&&(a=replaceUnicodeBlank(O),!p(checkWlanPwd(a),O))){var c=Ea(),b=c[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable];Ba(y,c[uciFunction.optName.wlanBS])&&T(function(a){0!=b||y[uciWireless.optName.wifiEnable]==b||uciWireless.dynOptValue.enable.on!=a[U][uciWireless.dynOptName.enable]&&uciWireless.dynOptValue.enable.on!=a[V][uciWireless.dynOptName.enable]?pa(c):showConfirm(gSysModeSupport?label.wirelessSwitchTipForWDS1:label.wirelessSwitchTipForWDS,
-function(a){!0==a?pa(c):id("wifiSwitchOn").checked=!0})})}}function M(){function a(){T(function(a){var d;if(d="saveAdvanced2g"==c.id)d=m[uciWireless.dynOptName.bandwidth]!=parseInt($("#wlanWidth").val())||m[uciWireless.dynOptName.mode]!=parseInt($("#wlanMode").val())||m[uciWireless.dynOptName.channel]!=parseInt($("#channel").val())?!0:!1,d=d&&uciWireless.dynOptValue.enable.on==a[U][uciWireless.dynOptName.enable];if(d)a=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn,
-showAlert(a),Ga.resetOptions(W,m[uciWireless.dynOptName.channel]),x.resetOptions(qa,m[uciWireless.dynOptName.bandwidth]),Ha.resetOptions(X,m[uciWireless.dynOptName.mode]),x.disable(!1);else{if(d="saveAdvanced5g"==c.id)d=q[uciWireless.dynOptName.bandwidth]!=parseInt($("#wlanWidth5g").val())||q[uciWireless.dynOptName.mode]!=parseInt($("#wlanMode5g").val())||q[uciWireless.dynOptName.channel]!=parseInt($("#channel5g").val())?!0:!1,d=d&&uciWireless.dynOptValue.enable.on==a[V][uciWireless.dynOptName.enable];
-d?(a=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn,showAlert(a),Ia.resetOptions(Y,q[uciWireless.dynOptName.channel]),g.resetOptions(R,q[uciWireless.dynOptName.bandwidth]),ra.resetOptions(Z),g.disable(!1),ra.changeSel(q[uciWireless.dynOptName.mode])):(a=b,d=c.id,setLoadingId(d),"saveAdvanced2g"==d?disableBtn("saveAdvanced5g",!0):disableBtn("saveAdvanced2g",!0),disableBtn("saveBasic",!0),a[uciFunction.optName.wlanBS]||(a[uciFunction.optName.wlanBS]={}),a[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable]=
-id("wifiUniteOn").checked?ENABLE:DISABLE,F(a))}})}var c=this,b=Fa(c.id);"saveAdvanced2g"==c.id&&!na(m,b[n],"2g")||"saveAdvanced5g"==c.id&&!na(q,b[k],"5g")||(!0==$("#TWTSwitchOn")[0].checked?(id("TWTCompatibilityTip2g").style.display="block",id("compatibilityNote2g").style.visibility="visible"):(id("TWTCompatibilityTip2g").style.display="none",id("compatibilityNote2g").style.visibility="hidden"),!0==$("#TWTSwitchOn5g")[0].checked?(id("TWTCompatibilityTip5g").style.display="block",id("compatibilityNote5g").style.visibility=
-"visible"):(id("TWTCompatibilityTip5g").style.display="none",id("compatibilityNote5g").style.visibility="hidden"),"saveAdvanced5g"==c.id?gMeshSupport&&q.channel!=b[k].channel&&52<=b[k].channel&&64>=b[k].channel?showConfirm(label.band2CompatibilityTips1,function(b){b&&(uciWireless.dynOptValue.bandwidth.bw20==parseInt($("#wlanWidth5g").val())?showConfirm(label.bw20Tips,function(b){!0==b&&a()}):a())}):uciWireless.dynOptValue.bandwidth.bw20==parseInt($("#wlanWidth5g").val())?showConfirm(label.bw20Tips,
-function(b){!0==b&&a()}):a():("saveAdvanced2g"==c.id&&$("#wlanMode").val()==uciWireless.dynOptValue.mode.m_11n&&(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&(b[n][uciWireless.dynOptName.cipher]=uciWireless.dynOptValue.cipher.aes,y[uciWireless.dynOptName.cipher]==uciWireless.dynOptValue.cipher.tkip&&(b[uciFunction.optName.wlanBS]={},b[uciFunction.optName.wlanBS][uciWireless.dynOptName.cipher]=uciWireless.dynOptValue.cipher.aes)),a()))}function Ja(a){var c=!1,b=!1;y[uciWireless.optName.wifiEnable]!=
-a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]&&a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]==DISABLE&&(c=!0);c?$.query({hosts_info:{table:"host_info"}},function(c){c=formatTableData(c.hosts_info.host_info);for(var d=c.length,h=0;h<d;h++){var l=c[h];if(l.is_cur_host==Ka){l.type==La?b=!0:(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a));break}}b&&showConfirm(label.wirelessSwitchTip,function(b){!0==b?(setLoadingId("saveBasic"),
-disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a)):id("wifiSwitchOn").checked=!0})}):(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a))}function pa(a){var c;0==a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]?gWifiSwitchSupport||gCustomWifiSwitchSupport?(c=sa?"关闭该网络后，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":label.closeHostPassive,showConfirm(c,function(b){!0==b?(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",
-!0),F(a)):id("wifiSwitchOn").checked=!0})):Ja(a):(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a))}function ba(){var a={};a[uciCustomWireless.fileName]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin]=null;$.action(a,function(a){ENONE==a[ERR_CODE]&&$("#wpsRouterPinCode").val(a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin][uciCustomWireless.optName.vendorPin])})}function ca(){var a=id("wpsRouterPinOn").checked?
-"on":"off",c=$("#wpsRouterPinCode").val();if(!id("wpsRouterPinOn").checked||!p(checkPin(c),id("genVendorPin")))if(a!=oldWpsConfig[uciCustomWireless.optName.pinEnable]||c!=oldWpsConfig[uciCustomWireless.optName.pinCode]){var b={};b[uciCustomWireless.fileName]={};b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig]={};b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable]=a;b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode]=
-c;setLoadingId("saveWpsRouterPin");hsLoading(!0);$.modify(b,function(a){ENONE==a[ERR_CODE]?oldWpsConfig=b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig]:p(a[ERR_CODE],id("saveWpsRouterPin"));$.setTimeout(function(){hsLoading(!1)},1)})}}function da(){var a={};a[uciCustomWireless.fileName]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.linkType]=id("wpsMethodButton").checked?
-uciCustomWireless.optValue.linkType.button:uciCustomWireless.optValue.linkType.pin;a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.band]="all";if(id("wpsMethodPin").checked){var c=$("#wpsTerminalPinCode").val();if(p(checkPin(c),id("wpsTerminalPinCode")))return;a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.terminalPinCode]=c}setLoadingId("wpsConnect");hsLoading(!0);$.action(a,function(a){hsLoading(!1);ENONE!=
-a[ERR_CODE]&&p(a[ERR_CODE],id("wpsConnect"))})}function Ma(a){var c={};c[uciCustomWireless.fileName]={};c[uciCustomWireless.fileName][KEY_NAME]=uciCustomWireless.secName.wpsConfig;$.query(c,function(b){ENONE==b[ERR_CODE]&&(oldWpsConfig=b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig],a&&a(b))},!0)}function J(a){var c={};c[uciWireless.fileName]={};c[uciWireless.fileName][KEY_NAME]=[uciWireless.dynData.host_2g,uciWireless.dynData.wds_2g,uciWireless.dynData.host_5g,uciWireless.dynData.wds_5g,
-uciFunction.optName.wlanBS];c[uciFunction.fileName]={};c[uciFunction.fileName][KEY_NAME]=[uciFunction.secName.newModuleSpec];if(gWifiSwitchSupport&&gWifiSwitchUseWireless)c[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wifi_switch);else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)c[uciCustomWireless.fileName]={},c[uciCustomWireless.fileName][KEY_NAME]=[uciCustomWireless.dynData.wifi_switch];$.query(c,function(b){if(gWifiSwitchSupport&&gWifiSwitchUseWireless)aa=
-b[uciWireless.fileName][uciWireless.dynData.wifi_switch];else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)aa=b[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch];m=b[uciWireless.fileName][uciWireless.dynData.host_2g];q=b[uciWireless.fileName][uciWireless.dynData.host_5g];y=b[uciWireless.fileName][uciFunction.optName.wlanBS];gMultiSSIDSupport&&Na(b);a&&a(b)},!0)}function u(a,c){id(a).style.display=c?"block":"none"}function Oa(a){var c=a[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable];
-a=a[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode];disableInput("wpsRouterPinCode",!0);id("wpsRouterPinOn").checked="on"==c?!0:!1;id("wpsRouterPinOff").checked="off"==c?!0:!1;id("wpsRouterPinOn").checked?u("wpsRouterPinCodeUl",!0):id("wpsRouterPinOff").checked&&u("wpsRouterPinCodeUl",!1);$("#wpsRouterPinCode").val(a);id("wpsMethodButton").checked=!0;id("wpsMethodButton").checked?u("wpsMethodPinUl",!1):id("wpsMethodPin").checked&&u("wpsMethodPinUl",
-!0)}function K(a){function c(a,b){for(var c=0;c<a.length;c++)if(a[c]===b)return!0;return!1}var b=a[uciFunction.fileName][uciFunction.secName.newModuleSpec],e=b[uciFunction.optName.wlanServiceAttr2g]||"0",d=b[uciFunction.optName.wlanServiceAttr5g]||"0";z=c(e,"twt");D=c(d,"twt");B=c(e,"ofdma");C=c(d,"ofdma");A=1==parseInt(b.wireless2g_vhtmubfer||"0",10);e=a[uciWireless.fileName][uciFunction.optName.wlanBS];d=parseInt(e[uciWireless.optName.wifiEnable]);id("wifiSwitchOn").checked=d;id("wifiSwitchOff").checked=
-!d;$("#ssid").val(e[uciWireless.dynOptName.ssid]);$("#wlanPwd").val(e[uciWireless.dynOptName.key]);id("ssidBrd").checked=parseInt(e[uciWireless.dynOptName.ssidbrd])==uciWireless.dynOptValue.ssidbrd.on;(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&selectInit("cipher",Pa,e[uciWireless.dynOptName.cipher]);if(gAuthSupport||gAuthSupport2g||gAuthSupport5g){for(var d=fa(b[uciFunction.optName.supportWlanAuthType2g]),h=fa(b[uciFunction.optName.supportWlanAuthType5g]),l=0;l<d.length;l++)for(var f=0;f<
-h.length;f++)h[f].str!==d[l].str&&h[f].value!==d[l].value||h.splice(f,1);d=d.concat(h);h=$("#auth span.value");h=parseInt(h.css("width"));selectInit("auth",d,e[uciWireless.dynOptName.auth],Aa,h);id("auth").changeSel(e[uciWireless.dynOptName.auth])}e=a[uciWireless.fileName][uciWireless.dynData.host_2g];d=parseInt(e[uciWireless.dynOptName.twt]);h=parseInt(e[uciWireless.dynOptName.ofdma]);l=parseInt(e[uciWireless.dynOptName.muMIMO]);id("TWTSwitchOn").checked=d;id("TWTSwitchOff").checked=!d;id("OFDMASwitchOn").checked=
-h;id("OFDMASwitchOff").checked=!h;id("MUMimoSwitchOn").checked=l;id("MUMimoSwitchOff").checked=!l;W=ea(b[uciFunction.optName.channel2g]||label.wlanChannels);selectInit("wlanWidth",qa,e[uciWireless.dynOptName.bandwidth]);selectInit("wlanMode",X,e[uciWireless.dynOptName.mode],ja);ja(e[uciWireless.dynOptName.mode]);x.changeSel(e[uciWireless.dynOptName.bandwidth]);selectInit("channel",W,e[uciWireless.dynOptName.channel]);if(e=b[uciFunction.optName.bandWidth5g])for(d=0;d<e.length;d++)if(Qa==decodeURIComponent(e[d])){S=
-!0;break}d=b.wireless5g_vhtmubfer||"0";r=1==parseInt(d,10);e=a[uciWireless.fileName][uciWireless.dynData.host_5g];d=parseInt(e[uciWireless.dynOptName.twt]);h=parseInt(e[uciWireless.dynOptName.ofdma]);l=parseInt(e[uciWireless.dynOptName.muMIMO]);id("TWTSwitchOn5g").checked=d;id("TWTSwitchOff5g").checked=!d;id("OFDMASwitchOn5g").checked=h;id("OFDMASwitchOff5g").checked=!h;id("MUMimoSwitchOn5g").checked=l;id("MUMimoSwitchOff5g").checked=!l;Y=ea(b[uciFunction.optName.channel5g]||label.wlanChannels5g);
-I=e[uciWireless.dynOptName.channel];tmpBandWidthOpt5g=S?la:R;selectInit("wlanWidth5g",tmpBandWidthOpt5g,e[uciWireless.dynOptName.bandwidth],void 0,20);d=b.wireless5g_vhtmubfer||"0";r=1==parseInt(d,10);b=id("wlanHelp");d="wlanNetworkHelpAdvanced";z&&(d+=" wlanTWTHelp");A&&(d+=" wlanMUMIMOHelp");B&&(d+=" wlanOFDMAHelp");helpBind(b,d);b=id("wlanHelp5G");d="wlanNetworkHelpAdvanced";D&&(d+=" wlanTWTHelp");r&&(d+=" wlanMUMIMOHelp");C&&(d+=" wlanOFDMAHelp");helpBind(b,d);selectInit("wlanMode5g",Z,e[uciWireless.dynOptName.mode],
-ka);ka(e[uciWireless.dynOptName.mode]);selectInit("channel5g",Y,e[uciWireless.dynOptName.channel],ga);ga(e[uciWireless.dynOptName.channel]);g.changeSel(e[uciWireless.dynOptName.bandwidth]);if(gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchUseWireless?(b=a[uciWireless.fileName][uciWireless.dynData.wifi_switch],d="on"==b[uciWireless.dynOptName.enable]):(b=a[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch],d="on"==b[uciCustomWireless.dynOptName.enable]),gWifiSwitchSplit?(a=
-d&&"on"==b[uciCustomWireless.dynOptName.enable_2g],b=d&&"on"==b[uciCustomWireless.dynOptName.enable_5g],id("wifiSwitchOnAll2g").checked=a,id("wifiSwitchOnAll5g").checked=b,id("wifiSwitchOffAll2g").checked=!a,id("wifiSwitchOffAll5g").checked=!b,G(!a),H(!b),a||b?(v(!1),gPinWpsSupport&&w(!1)):(v(!0),gPinWpsSupport&&w(!0))):(id("wifiSwitchOnAll").checked=d,id("wifiSwitchOffAll").checked=!d,id("wifiSwitchOffTip").style.display=d?"none":"block",id("wifiSwitchOffAll").checked&&(G(!0),H(!0),v(!0),gPinWpsSupport&&
-w(!0)));(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&uciWireless.dynOptValue.mode.m_11n==e[uciWireless.dynOptName.mode]&&id("cipher").disable(!0);id("TWTCompatibilityTip2g").style.display=id("TWTSwitchOn").checked?"block":"none";id("compatibilityNote2g").style.visibility=id("TWTSwitchOn").checked?"visible":"hidden";id("TWTCompatibilityTip5g").style.display=id("TWTSwitchOn5g").checked?"block":"none";id("compatibilityNote5g").style.visibility=id("TWTSwitchOn5g").checked?"visible":"hidden";
-a=parseInt(id("wlanMode").value);e=parseInt(id("wlanMode5g").value);id("TWTSel").style.display=z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("MUMimoSel").style.display=A&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("OFDMASel").style.display=B&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("OFDMASel5g").style.display=C&&uciWireless.dynOptValue.mode.m_11ac_ax==e?"block":"none";id("TWTSel5g").style.display=D&&uciWireless.dynOptValue.mode.m_11ac_ax==e?
-"block":"none";id("MUMimoSel5g").style.display=!r||uciWireless.dynOptValue.mode.m_11ac_ax!=e&&uciWireless.dynOptValue.mode.m_11ac!=e?"none":"block"}function Ra(a){ta?(ta=!1,P=new DataGrid,P.init({id:"SSIDTable",data:a,hasSelBox:!1,edit:!1,head:[{field:label.multiSSIDIndex,width:90},{field:label.wirelessName,width:160},{field:label.wirelessPwd,width:118},{field:label.multiSSIDBand,width:90},{field:label.multiSSIDStatus,width:90},{field:label.multiSSIDSetUp,width:90}],list:[{edit:!1,name:"multiSSIDIndex",
-type:"str"},{edit:!1,name:"wirelessName",type:"str"},{edit:!1,name:"wirelessPwd",type:"str"},{edit:!1,name:"multiSSIDBand",type:"str"},{edit:!1,name:"multiSSIDStatus",type:"str"},{edit:!1,name:"multiSSIDSetUp",type:"str",className:"setUp"}]})):(P.setDataSource(a),P.refresh());var c=$(".setUp");c.attr("title","");var b="../web-static/images/multi_ssid_host_2g.png ../web-static/images/multi_ssid_guest_2g.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_host_5g.png ../web-static/images/multi_ssid_guest_5g.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_cmcc.png".split(" ");
-gElinkSupport&&(b[2]=b[3]=b[6]=b[7]="../web-static/images/multi_ssid_ctcc.png");for(var e=0;e<a.length;e++)(function(a){var e=new Image;e.src=b[a];e.onload=function(){var b=e.width-82;c.eq(a).mouseover(function(a){var c=0;if(document.body.scrollHeight>(window.innerHeight||document.documentElement.clientHeight)){var d=document.createElement("div");d.style.cssText="width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;";document.body.appendChild(d);c=(d.offsetWidth-d.clientWidth)/
-2;document.body.removeChild(d)}var d=(((t=document.documentElement)||(t=document.body.parentNode))&&"number"==typeof t.scrollLeft?t:document.body).scrollLeft,g=(((t=document.documentElement)||(t=document.body.parentNode))&&"number"==typeof t.scrollTop?t:document.body).scrollTop,k=$('<div class="showTips"></div>').append(e);$("body").append(k);a=(a.srcElement||a.target).getBoundingClientRect();$(".showTips").css({position:"absolute",top:a.top+26+g+"px",left:a.left-b+d-c+"px",zIndex:1001})});c.eq(a).mouseleave(function(){$(".showTips").remove()})}})(e)}
-function Na(a){var c={};c[uciMultiSsid.fileName]={};c[uciMultiSsid.fileName][KEY_NAME]=[uciMultiSsid.secName.wlan_multi_ssid_2g_1,uciMultiSsid.secName.wlan_multi_ssid_2g_2,uciMultiSsid.secName.wlan_multi_ssid_5g_1,uciMultiSsid.secName.wlan_multi_ssid_5g_2];c[uciGuestNet.fileName]={};c[uciGuestNet.fileName][KEY_NAME]=[uciGuestNet.secName.wireless2G,uciGuestNet.secName.wireless5G];$.query(c,function(b){var c=a[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch],d="on"==c[uciCustomWireless.dynOptName.enable],
-h=d&&"on"==c[uciCustomWireless.dynOptName.enable_2g],c=d&&"on"==c[uciCustomWireless.dynOptName.enable_5g],l=[],f={},d=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_2],f=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_1],g=b[uciGuestNet.fileName][uciGuestNet.secName.wireless5G],k=a[uciWireless.fileName][uciWireless.dynData.host_5g],n=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_2],p=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_1];
-b=b[uciGuestNet.fileName][uciGuestNet.secName.wireless2G];var m=a[uciWireless.fileName][uciWireless.dynData.host_2g];if(gSupportBS&&void 0!=a[uciWireless.fileName][uciWireless.secName.wlanBS]&&a[uciWireless.fileName][uciWireless.secName.wlanBS][uciWireless.optName.bsEnable]==uciWireless.optValue.bsEnable.enable){for(key in a[uciWireless.fileName][uciWireless.secName.wlanBS])m[key]=a[uciWireless.fileName][uciWireless.secName.wlanBS][key],k[key]=a[uciWireless.fileName][uciWireless.secName.wlanBS][key];
-m[uciWireless.optName.enable]=m[uciWireless.optName.wifiEnable];k[uciWireless.optName.enable]=k[uciWireless.optName.wifiEnable]}b=[[d,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[f,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[g,uciGuestNet.optName.encrypt,uciGuestNet.optName.key],[k,uciWireless.optName.keyType,uciWireless.optName.key],[n,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[p,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[b,uciGuestNet.optName.encrypt,
-uciGuestNet.optName.key],[m,uciWireless.optName.keyType,uciWireless.optName.key]];for(g=0;g<b.length;g++)f={},k=b[g],f.multiSSIDIndex="SSID-"+(8-g),f.wirelessName=k[0].ssid,f.wirelessPwd=0==parseInt(k[0][k[1]])?"无加密":k[0][k[2]],f.multiSSIDBand=4>g?"5GHz":"2.4GHz",d=4>g?c:h,f.multiSSIDStatus=d&&(parseInt(k[0].enable)||"on"==k[0].enable)?"开启":"关闭",f.multiSSIDSetUp="设置方法",l[g]=f;Ra(l)})}var La=uciHostsInfo.optValue.linkType.hostWireless,Ka=1,x=id("wlanWidth"),g=id("wlanWidth5g"),Ga=id("channel"),Ia=
-id("channel5g"),Ha=id("wlanMode"),ra=id("wlanMode5g"),n=uciWireless.dynData.host_2g,U=uciWireless.dynData.wds_2g,k=uciWireless.dynData.host_5g,V=uciWireless.dynData.wds_5g,S=!1,Qa="80MHz+80MHz",A=!1,r=!1,z=!1,D=!1,B=!1,C=!1,O=id("wlanPwd"),ta=!0,P,y={},m={},aa={},q={},I,sa=!1,W=[],Y=[],qa=[{str:label.wirelessAuto40M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20}],xa=[{str:label.wpaPskSel,value:uciWireless.dynOptValue.auth.psk},{str:label.wpa2PskSel,
-value:uciWireless.dynOptValue.auth.psk2},{str:label.wirelessPsk,value:uciWireless.dynOptValue.auth.pskMixed}],Pa=[{str:label.aes,value:uciWireless.dynOptValue.cipher.aes},{str:label.tkip,value:uciWireless.dynOptValue.cipher.tkip}],X;X=g11AxSupport.wlan2g?[{str:label.hwmode11bgn_ax,value:uciWireless.dynOptValue.mode.m_11bgn_ax},{str:label.hwmode11bgn,value:uciWireless.dynOptValue.mode.m_11bgn},{str:label.hwmode11bg,value:uciWireless.dynOptValue.mode.m_11bg},{str:label.hwmode11n,value:uciWireless.dynOptValue.mode.m_11n},
-{str:label.hwmode11g,value:uciWireless.dynOptValue.mode.m_11g},{str:label.hwmode11b,value:uciWireless.dynOptValue.mode.m_11b}]:[{str:label.hwmode11bgn,value:uciWireless.dynOptValue.mode.m_11bgn},{str:label.hwmode11bg,value:uciWireless.dynOptValue.mode.m_11bg},{str:label.hwmode11n,value:uciWireless.dynOptValue.mode.m_11n},{str:label.hwmode11g,value:uciWireless.dynOptValue.mode.m_11g},{str:label.hwmode11b,value:uciWireless.dynOptValue.mode.m_11b}];var R=[{str:label.wirelessAuto40M,value:uciWireless.dynOptValue.bandwidth.auto},
-{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20}],za=[{str:label.wirelessAuto80M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40}],la=[{str:label.wirelessAuto,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80Add80,
-value:uciWireless.dynOptValue.bandwidth.bw80Add80}],ia=[{str:label.wirelessAuto160M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80,value:uciWireless.dynOptValue.bandwidth.bw80}],ha=[{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80,value:uciWireless.dynOptValue.bandwidth.bw80}],
-ya=[label.wirelessPsk,label.wpaPskSel,label.wpa2PskSel,label.wirelessWpa2PskWpa3Sae,label.wirelessWpa3Sae],Z;Z=g11AxSupport.wlan5g?[{str:label.hwmode11ac_ax,value:uciWireless.dynOptValue.mode.m_11ac_ax},{str:label.hwmode11ac,value:uciWireless.dynOptValue.mode.m_11ac},{str:label.hwmode11an,value:uciWireless.dynOptValue.mode.m_11an}]:[{str:label.hwmode11ac,value:uciWireless.dynOptValue.mode.m_11ac},{str:label.hwmode11an,value:uciWireless.dynOptValue.mode.m_11an}];var L=uciGuestNet.fileName,ua=uciGuestNet.secName.wireless2G,
-va=uciGuestNet.secName.wireless5G,wa=uciGuestNet.optName.enable;gMultiSSIDSupport&&(gElinkSupport&&($("#multiSSIDHelp .ispName").text(label.chinaTelecom),$("#multiSSIDHelp .ispPlatformName").text(label.chinaTelecomPlatform)),$("#multiSSIDDiv").removeClass("disNone"));gPinWpsSupport&&($("#wpsDiv").removeClass("disNone"),Ma(Oa));if(gWifiSwitchSupport||gCustomWifiSwitchSupport)$("#wifiSwitchDiv").removeClass("disNone"),gWifiSwitchSplit?$("#wifiSwitchSplit").removeClass("disNone"):$("#wifiSwitchUnity").removeClass("disNone");
-(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&$("#authDiv").removeClass("disNone");(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&$("#cipherDiv").removeClass("disNone");J(K);O.onkeyup=function(){var a=24,c="",b;b=replaceUnicodeBlank(O);var e=b.length,d="visible",h="warn";if(0<=e&&8>e)d="hidden";else if(/^\d+$/.test(b)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(b)||/^[a-zA-Z]+$/.test(b))12>=e?c=label.weak:(c=label.media,a*=2);else{var g=c=!1,f=!1,c=/\d/g.test(b),g=/[a-zA-Z]/g.test(b),
-f=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(b);!0==(c&&f&&g)?(c=label.strong,h="correct",a*=3):12>=e?(c=label.media,a*=2):(c=label.strong,h="correct",a*=3)}id("pwdDepNote2G").style.visibility=d;id("pwdDep2G").innerHTML=c;id("chgPwdDep2G").style.width=a+"px";id("pwdDepI").className=h};id("TWTSwitchOn").onclick=function(){N(n)};id("TWTSwitchOff").onclick=function(){N(n)};id("TWTSwitchOn5g").onclick=function(){N(k)};id("TWTSwitchOff5g").onclick=function(){N(k)};$("#saveBasic").click(function(){if(gWifiSwitchSupport||
-gCustomWifiSwitchSupport){var a={};a[L]={};a[L][KEY_NAME]=[ua];gGuest5GSupport&&a[L][KEY_NAME].push(va);$.query(a,function(a){ENONE==a[ERR_CODE]&&(sa=1==a[L][ua][wa]?!0:gGuest5GSupport&&1==a[L][va][wa]?!0:!1);Q()})}else Q()});$("#saveAdvanced2g").click(M);$("#saveAdvanced5g").click(M);$("#saveAll").click(function(){function a(){var a=!1;(a=gWifiSwitchSplit?"off"==c[uciWireless.dynOptName.enable_2g]||"off"==c[uciWireless.dynOptName.enable_5g]:"off"==c[uciWireless.dynOptName.enable])?showConfirm(label.closeDirect,
-function(a){!0==a?oa(c,uciCustomWireless.dynData.wifi_switch):(id("wifiSwitchOnAll").checked=!0,id("wifiSwitchOffAll").checked=!1)}):oa(c,uciWireless.dynData.wifi_switch)}var c=Da();Ca(aa,c)&&T(a)});$("#genVendorPin").click(ba);$("#saveWpsRouterPin").click(ca);$("#wpsConnect").click(da);$("#wpsRouterPinOn").click(function(){u("wpsRouterPinCodeUl",!0)});$("#wpsRouterPinOff").click(function(){u("wpsRouterPinCodeUl",!1)});$("#wpsMethodButton").click(function(){u("wpsMethodPinUl",!1)});$("#wpsMethodPin").click(function(){u("wpsMethodPinUl",
-!0)});$('input[name="wifiUnite"]').on("click",function(){bsSelectChange("wifiUniteOn"==this.id?ENABLE:DISABLE)});id("wifiUniteOn").checked=!0;id("wifiUniteOff").checked=!1}init();
-</script><style type="text/css">#compatibilityNote2g,#compatibilityNote5g{visibility:visible}input.wlanBroadCase{margin-left:12px}input.wlanSecEnable{margin-left:12px}label.desLblWU{width:296px;font-size:16px;font-weight:bold}ul.gridLineBS{margin-top:50px}ul.gridLineTips{margin-top:8px!important;height:auto;display:none}ul.gridLineTips span{width:225px;margin-left:261px;color:#fff;line-height:18px;font-size:12px;display:block}li{list-style:none;text-align:left}div.display{margin-top:10px;margin-left:260px}span.warnText{color:#fff;font-size:12px;width:210px}ul.gridLineB2{margin-top:10px}div.warnCon{width:16px;height:16px;overflow:hidden;display:inline-block;vertical-align:top}div.warnCon img{margin-top:-187px;margin-left:-467px}</style>

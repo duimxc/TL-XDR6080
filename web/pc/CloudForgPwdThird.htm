@@ -1,5 +1,102 @@
+<style type="text/css">
+	i.cloudForgPwdRelt{
+		display:inline-block;
+		height:101px;
+		width:100px;
+	}
+	div.cloudForgPwdThirdCon{
+		text-align:center;
+	}
+	p.cloudForgReltTip{
+		font-size:24px;
+		font-weight:bold;
+		color:#FFFFFF;
+		margin-top:50px;
+	}
+	p.cloudForgReltTipS{
+		font-size:14px;
+		color:#FFFFFF;
+		margin-top:17px;
+	}
+	p.cloudForgReltTipSS{
+		margin-top:6px !important;
+	}
+	p.cloudForgReltTipS span{
+		font-size:24px;
+		font-weight:bold;
+	}
+	p.cloudForgReltTipS a{
+		color:#184283;
+		font-weight:bold;
+	}
+	#cloudForgFuncCon{
+		margin-top:30px;
+	}
+	#cloudForgFuncCon input{
+		font-size:14px !important;
+		padding:7px 25px;
+		*padding:4.5px 15px 3px;
+		margin:0 5px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var redirectWaitTime = 5;
+		var redirectTimeout = 1000;
+		var pageRedirectHD;
 
+		function pageRedirect()
+		{
+			if (0 == redirectWaitTime)
+			{
+				cloudGoBack();
+				return;
+			}
 
+			id("periodLast").innerHTML = redirectWaitTime--;
+			pageRedirectHD = $.setTimeout(pageRedirect, redirectTimeout);
+		}
+
+		function pageSet()
+		{
+			if (true == gCloudAccount["success"])
+			{
+				$("i.cloudForgPwdRelt").css("background", "url(../web-static/images/greenCoWhite.png) no-repeat");
+				id("cloudForgSuccess").style.display = "block";
+				id("return").style.display = "none";
+				pageRedirect();
+			}
+			else
+			{
+				$("i.cloudForgPwdRelt").css("background", "url(../web-static/images/wzdWarn.png) no-repeat");
+				id("cloudForgFail").style.display = "block";
+				id("cloudForgFuncCon").style.display = "block";
+				id("return").style.display = "block";
+			}
+		}
+
+		pageSet();
+		id("retry").onclick = function(){
+			gResetCloudAccountPwd(pageSet, pageSet, cloudAccountQueryStop);
+		}
+		$("ul.cloudNav li").each(function(index){
+			if (2 == index)
+			{
+				this.className = "select";
+			}
+			else
+			{
+				this.className = "";
+			}
+		});
+		$("p.cloudForgReltTipSS a").bind("click", function(){
+			clearTimeout(pageRedirectHD);
+			cloudGoBack();
+		});
+	}
+	init();
+</script>
 <div class="cloudForgPwdThirdCon">
 	<i class="cloudForgPwdRelt"></i>
 	<div id="cloudForgSuccess" class="disNone">
@@ -19,6 +116,3 @@
 		<input id="retry" type="button" class="subBtn" value="{%btn.retry%}" />
 	</div>
 </div>
-<script type="text/javascript">function init(){function b(){0==c?cloudGoBack():(id("periodLast").innerHTML=c--,d=$.setTimeout(b,e))}function a(){!0==gCloudAccount.success?($("i.cloudForgPwdRelt").css("background","url(../web-static/images/greenCoWhite.png) no-repeat"),id("cloudForgSuccess").style.display="block",id("return").style.display="none",b()):($("i.cloudForgPwdRelt").css("background","url(../web-static/images/wzdWarn.png) no-repeat"),id("cloudForgFail").style.display="block",id("cloudForgFuncCon").style.display="block",
-id("return").style.display="block")}var c=5,e=1E3,d;a();id("retry").onclick=function(){gResetCloudAccountPwd(a,a,cloudAccountQueryStop)};$("ul.cloudNav li").each(function(a){this.className=2==a?"select":""});$("p.cloudForgReltTipSS a").bind("click",function(){clearTimeout(d);cloudGoBack()})}init();
-</script><style type="text/css">i.cloudForgPwdRelt{display:inline-block;height:101px;width:100px}div.cloudForgPwdThirdCon{text-align:center}p.cloudForgReltTip{font-size:24px;font-weight:bold;color:#fff;margin-top:50px}p.cloudForgReltTipS{font-size:14px;color:#fff;margin-top:17px}p.cloudForgReltTipSS{margin-top:6px!important}p.cloudForgReltTipS span{font-size:24px;font-weight:bold}p.cloudForgReltTipS a{color:#184283;font-weight:bold}#cloudForgFuncCon{margin-top:30px}#cloudForgFuncCon input{font-size:14px!important;padding:7px 25px;*padding:4.5px 15px 3px;margin:0 5px}</style>

@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/u_packages/mpstat
 Section: MTK Properties
 Architecture: ipq
-Installed-Size: 23146
+Installed-Size: 23148
 Description:  mpstat

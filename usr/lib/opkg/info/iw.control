@@ -6,5 +6,5 @@ License: GPL-2.0
 Section: net
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Architecture: ipq
-Installed-Size: 68356
+Installed-Size: 68355
 Description:  cfg80211 interface configuration utility

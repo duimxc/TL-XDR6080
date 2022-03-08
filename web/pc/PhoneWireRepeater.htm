@@ -1,5 +1,221 @@
+<script type="text/javascript">
+	function init()
+	{
+		var getApStatusHd = null;
+		var retryCount;
 
+		function lanIpModeHandle(callback)
+		{
+			if ("manual" == gLanIPMode) {
+				showPhConfirm("当前路由器的LAN口IP为手动设置，使用AP（有线中继）将更改为自动，确定更改LAN口IP设置？", function(choose) {
+					if (true == choose) {
+						gLanIPMode = "dynamic";
+						$.modify({"network":{"lan":{"ip_mode":"dynamic"}}}, null, true);
+						callback();
+					}
+				});
+			}
+			else {
+				callback();
+			}
+		}
 
+		function onSave()
+		{
+			var cfg = {};
+			cfg.system = {"sys_mode":{"mode": uciSystem.optValue.sysMode.apMode}};
+			switch (gBandNum) {
+				case BAND_1:
+					cfg.wireless = {"wlan_wds_2g":{"enable":"0"}};
+					break;
+				case BAND_2:
+					cfg.wireless = {"wlan_wds_2g":{"enable":"0"},"wlan_wds_5g":{"enable":"0"}};
+					break;
+				case BAND_3:
+					cfg.wireless = {"wlan_wds_2g":{"enable":"0"},"wlan_wds_5g_1":{"enable":"0"},"wlan_wds_5g_4":{"enable":"0"}};
+					break;
+			}
+
+			$.modify(cfg, function(result) {
+				if (false == errHandle(result[ERR_CODE])) {
+					gSysMode = uciSystem.optValue.sysMode.apMode;
+					retryCount = 0;
+					$(".configing").show();
+					$(".phoneTitle").hide();
+					$(".wireRepeaterCfg").hide();
+					$(".topoImg").hide();
+					getApStatus();
+				}
+			});
+		}
+
+		function apFailed()
+		{
+			$(".apFail").show();
+			$(".phoneTitle").hide();
+			$(".configing").hide();
+			$(".wireRepeaterCfg").hide();
+			$(".topoImg").hide();
+		}
+
+        function getApStatus()
+        {
+			clearTimeout(getApStatusHd);
+			if (retryCount > 20) {
+				closeLoading();
+				apFailed();
+				return;
+			}
+
+            $.query({"wired_extender":{"name":"status"}}, function(resp){
+                if (false == errHandle(resp[ERR_CODE]))
+                {
+                    var ip = resp.wired_extender.status.ip;
+					if (ip == "0.0.0.0") {
+						retryCount++;
+						getApStatusHd = $.setTimeout(getApStatus, 1000);
+					} else {
+						gLanIP = resp.wired_extender.status.ip;
+
+						if (gOldLanIP != gLanIP) {
+							gIsLanIpChanged = true;
+						} else {
+							gIsLanIpChanged = false;
+						}
+
+						loadPage('WizardWirelessCfg.htm', "phCon");
+					}
+				}
+				else
+				{
+					$(".disNone").hide();
+					$(".phoneTitle").show();
+					$(".wireRepeaterCfg").show();
+					$(".topoImg").show();
+				}
+            });
+        }
+
+		function errHandle(errNo, labelFor, noteId)
+        {
+            switch(errNo)
+            {
+            case ENONE:
+				return false;
+			case EINVSSIDEMPTY:
+				// 无线名称为空
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidErr);
+				break;
+			case EINVSSIDBLANK:
+				// 无线名称全为空格
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidBlank);
+				break;
+			case EINVSSIDLEN:
+				// 无线名称长度错误
+				showPhoneNote(labelFor, noteId, errStr.wlanSsidLenErr);
+				break;
+			case EINVWLANPWD:
+				// 密码非法字符
+				showPhoneNote(labelFor, noteId, errStr.wlanPwdInvalid);
+				break;
+			case EINVPSKLEN:
+				// 密码长度错误
+				showPhoneNote(labelFor, noteId, errStr.wlanPwdLenValid);
+				break;
+            default:
+                showPhWzdAlert(errStr.invRequestFail);
+                break;
+            }
+
+            return true;
+		}
+
+		id("sub").onclick = function() {
+			lanIpModeHandle(onSave);
+		};
+		id("retry").onclick = function() {
+			$(".configing").show();
+			$(".apFail").hide();
+			$(".phoneTitle").hide();
+			$(".wireRepeaterCfg").hide();
+			lanIpModeHandle(onSave);
+		}
+		id("next").onclick = function() {
+			loadPage('WizardWirelessCfg.htm', "phCon");
+		}
+
+		loadPage("PhoneSelectNetworkType.htm", "selectNetTypeCon");
+		// 手动选择上网方式
+		$(".chooseOther a").click(function(e) {
+			showCover();
+			$(".selectNetType").show();
+		});
+
+		if(bWzdWanTypeDetected) {
+			$(".notDetected").hide();
+			$(".detected").show();
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	.textCenter{
+		text-align:center;
+	}
+	img.configGif{
+		height:30px;
+		margin:120px auto 40px;
+		width:30px;
+	}
+	.textCenter p{
+		font-size:14px;
+		color:#FFFFFF;
+	}
+	div.phoneCon{
+		padding-bottom: 114px;
+	}
+	p.chooseOther{
+		position:absolute;
+		bottom:72px;
+		width:100%;
+		text-align:center;
+	}
+	p a{
+		color:#FEEB1A;
+		font-size:14px;
+	}
+	.phInputUl p{
+		color:#ffffff;
+		font-size:14px;
+		text-align:left;
+	}
+	.phInputUl .titleTip{
+		font-size:14px;
+		margin-bottom:8px;
+	}
+	.ib{
+		display: inline-block;
+	}
+	.bold{
+		font-weight:bold;
+	}
+	div.textCenter{
+		margin-top:120px;
+		padding:0 36px;
+		text-align:center;
+	}
+	img.failed{
+		height:80px;
+		margin:20px auto 20px;
+		width:83px;
+	}
+	p.failTip{
+		color:#ffffff;
+		font-size:15px;
+		text-align:center;
+		margin-bottom:20px;
+	}
+</style>
 <h1 class="phoneTitle">{%label.netSet%}</h1>
 <div class="textCenter topoImg" style="margin-top:20px;">
 	<img class="detected disNone" src="../web-static/images/connect_success.png" />
@@ -33,9 +249,3 @@
 	<p class="chooseOther"><a href="javascript:void(0)">{%label.selectNetType%}</a></p>
 	<div id="selectNetTypeCon"></div>
 </div>
-<script type="text/javascript">function init(){function e(a){"manual"==gLanIPMode?showPhConfirm("当前路由器的LAN口IP为手动设置，使用AP（有线中继）将更改为自动，确定更改LAN口IP设置？",function(b){!0==b&&(gLanIPMode="dynamic",$.modify({network:{lan:{ip_mode:"dynamic"}}},null,!0),a())}):a()}function f(){var a={};a.system={sys_mode:{mode:uciSystem.optValue.sysMode.apMode}};switch(gBandNum){case BAND_1:a.wireless={wlan_wds_2g:{enable:"0"}};break;case BAND_2:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g:{enable:"0"}};break;case BAND_3:a.wireless={wlan_wds_2g:{enable:"0"},
-wlan_wds_5g_1:{enable:"0"},wlan_wds_5g_4:{enable:"0"}}}$.modify(a,function(a){!1==g(a[ERR_CODE])&&(gSysMode=uciSystem.optValue.sysMode.apMode,d=0,$(".configing").show(),$(".phoneTitle").hide(),$(".wireRepeaterCfg").hide(),$(".topoImg").hide(),h())})}function h(){clearTimeout(k);20<d?(closeLoading(),$(".apFail").show(),$(".phoneTitle").hide(),$(".configing").hide(),$(".wireRepeaterCfg").hide(),$(".topoImg").hide()):$.query({wired_extender:{name:"status"}},function(a){!1==g(a[ERR_CODE])?"0.0.0.0"==
-a.wired_extender.status.ip?(d++,k=$.setTimeout(h,1E3)):(gLanIP=a.wired_extender.status.ip,gIsLanIpChanged=gOldLanIP!=gLanIP?!0:!1,loadPage("WizardWirelessCfg.htm","phCon")):($(".disNone").hide(),$(".phoneTitle").show(),$(".wireRepeaterCfg").show(),$(".topoImg").show())})}function g(a,b,c){switch(a){case ENONE:return!1;case EINVSSIDEMPTY:showPhoneNote(b,c,errStr.wlanSsidErr);break;case EINVSSIDBLANK:showPhoneNote(b,c,errStr.wlanSsidBlank);break;case EINVSSIDLEN:showPhoneNote(b,c,errStr.wlanSsidLenErr);
-break;case EINVWLANPWD:showPhoneNote(b,c,errStr.wlanPwdInvalid);break;case EINVPSKLEN:showPhoneNote(b,c,errStr.wlanPwdLenValid);break;default:showPhWzdAlert(errStr.invRequestFail)}return!0}var k=null,d;id("sub").onclick=function(){e(f)};id("retry").onclick=function(){$(".configing").show();$(".apFail").hide();$(".phoneTitle").hide();$(".wireRepeaterCfg").hide();e(f)};id("next").onclick=function(){loadPage("WizardWirelessCfg.htm","phCon")};loadPage("PhoneSelectNetworkType.htm","selectNetTypeCon");
-$(".chooseOther a").click(function(a){showCover();$(".selectNetType").show()});bWzdWanTypeDetected&&($(".notDetected").hide(),$(".detected").show())}init();
-</script><style type="text/css">.textCenter{text-align:center}img.configGif{height:30px;margin:120px auto 40px;width:30px}.textCenter p{font-size:14px;color:#fff}div.phoneCon{padding-bottom:114px}p.chooseOther{position:absolute;bottom:72px;width:100%;text-align:center}p a{color:#feeb1a;font-size:14px}.phInputUl p{color:#fff;font-size:14px;text-align:left}.phInputUl .titleTip{font-size:14px;margin-bottom:8px}.ib{display:inline-block}.bold{font-weight:bold}div.textCenter{margin-top:120px;padding:0 36px;text-align:center}img.failed{height:80px;margin:20px auto 20px;width:83px}p.failTip{color:#fff;font-size:15px;text-align:center;margin-bottom:20px}</style>

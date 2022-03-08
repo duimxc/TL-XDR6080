@@ -1,5 +1,643 @@
+<script type="text/javascript">
+	var wdsTargetIndex = [];
+
+	function init()
+	{
+		var MAX_AP_ENTRY, LOAD = 64;
+		var getScanResultHd = null;
+		var wdsGrid = new DataGrid();
+		var scanRetryCounts = 1;
+		var selectedFreq = {};
+
+		selectedFreq[FREQ_2G] = false;
+		selectedFreq[FREQ_5G] = false;
+		selectedFreq[FREQ_5G1] = false;
+		selectedFreq[FREQ_5G4] = false;
+		tableNiceScroll = new NiceScroll("scrollCon");
+		// tableNiceScroll.scrollTipOpacity(1);
+		// tableNiceScroll.scrollTipSet({"background":"#34A9DA"});
+		// 隐藏滚动条
+		tableNiceScroll.scrollTipSet({"display":"none"});
+		tableNiceScroll.init();
 
 
+		/* 需要扫描的无线频段列表 */
+		var scanWiFiList = [];
+		scanWiFiList[FREQ_2G ] = false;
+		scanWiFiList[FREQ_5G ] = false;
+		scanWiFiList[FREQ_5G1] = false;
+		scanWiFiList[FREQ_5G4] = false;
+
+		switch(gBandNum)
+		{
+		case BAND_3:
+			MAX_AP_ENTRY = LOAD*3;
+			break;
+		case BAND_2:
+			MAX_AP_ENTRY = LOAD*2;
+			break;
+		case BAND_1:
+		default:
+			MAX_AP_ENTRY = LOAD;
+			break;
+		}
+
+		function signalLevel(rssi)
+		{
+			if (rssi >= 20) {
+				if (rssi >= 30) {
+					return 4;
+					// if (rssi >= 50) {
+					// 	return 5;		/* rssi∈[50, 100) */
+					// }
+					// else {
+					// 	return 4;		/* rssi∈[30, 50) */
+					// }
+				}
+				else {
+					return 3;			/* rssi∈[20, 30) */
+				}
+			}
+			else {
+				if (rssi >= 10) {
+					return 2;			/* rssi∈[10, 20) */
+				}
+				else {
+					return 1;			/* rssi∈[0, 10) */
+				}
+			}
+		}
+
+		function fmtApList(apList, freq)
+		{
+			var len = apList.length;
+			var prefix = "ap_";
+			var ftmList = [];
+
+			for(var i = 0; i < len; i++)
+			{
+				var idx = i + 1;
+
+				ftmList[i] = {};
+				ftmList[i]["freq"] = freq;
+				ftmList[i]["freqArr"] = [freq];
+				ftmList[i]["freqInfo"] = gFreqInfo[freq];
+				ftmList[i]["ssid"] = apList[i][prefix + idx]["ssid"];
+				ftmList[i]["encryption"] = apList[i][prefix + idx]["encryption"];
+				ftmList[i]["rssi"] = apList[i][prefix + idx]["rssi"];
+				ftmList[i]["signal"] = signalLevel(apList[i][prefix + idx]["rssi"]);
+			}
+
+			return ftmList;
+		}
+
+		/* 格式化扫描到的Root AP列表 */
+		function getScanApList(data)
+		{
+			var apList = [], name; tmpApList = {};
+			for (var freq in scanWiFiList)
+			{
+				if (scanWiFiList[freq])
+				{
+					name = gWDSModel[freq].wlan_scan;
+					tmpApList[freq] = fmtApList(data.wireless[name], freq);
+
+					for (var i = 0; i < tmpApList[freq].length; ++i) {
+						var found = false;
+						for (var j = 0; j < apList.length; ++j) {
+							//SSID相同且加密方式相同的合并
+							if (apList[j].ssid == tmpApList[freq][i].ssid &&
+								apList[j].encryption == tmpApList[freq][i].encryption) {
+								found = true;
+								apList[j].rssi = Math.max(apList[j].rssi, tmpApList[freq][i].rssi);
+								apList[j].signal = Math.max(apList[j].signal, tmpApList[freq][i].signal);
+
+								// 解决出现 2.4G & 5G & 5G，这种情况
+								if ($.inArray(tmpApList[freq][i].freq, apList[j].freqArr) == -1) {
+									apList[j].freqArr.push(tmpApList[freq][i].freq);
+									apList[j].freqInfo = apList[j].freqInfo + ' & ' + tmpApList[freq][i].freqInfo;
+									apList[j].freq = FREQ_BS;
+								}
+								break;
+							}
+						}
+						if (!found) {
+							apList.push(tmpApList[freq][i]);
+						}
+					}
+				}
+			}
+
+			return apList;
+		}
+
+		function wdsTargetSelHandler(index, params)
+		{
+			closeAlertC();
+			var freq = scanList[index].freq;
+			var freqArr = scanList[index].freqArr;
+			var checked = params.obj.className == 'checkboxBtn' ? true : false;
+
+			if (checked)
+			{
+				var encryption = scanList[index].encryption;
+
+				if (freq == FREQ_BS) {
+					for (var i = 0; i < freqArr.length; i++) {
+						selectedFreq[freqArr[i]] = true;
+					}
+				} else {
+					selectedFreq[freq] = true;
+				}
+
+				if (encryption != uciWireless.encryptionType.none && encryption != uciWireless.encryptionType.psk2_psk &&
+					encryption != uciWireless.encryptionType.psk2_sae3 && encryption != uciWireless.encryptionType.sae3 &&
+					encryption != uciWireless.encryptionType.wpa3)
+				{
+					showPhWzdAlert("所选的路由器加密方式过旧，请将该路由器的加密方式更改为WPA/WPA2-PSK AES或WPA2-PSK/WPA3-SAE后重新连接。");
+					params.obj.className = "checkboxBtnUn";	/* 取消选择 */
+					return;
+				}
+				for (var i = 0; i < scanList.length; i++) {
+					//已勾选的跳过
+					if (i == index || $("#WDSTbl input")[scanList.length - 1 - i].className == 'checkboxBtn') continue;
+
+					if (scanList[i].freq == FREQ_BS) {
+						for (var j = 0; j < scanList[i].freqArr.length; j++) {
+							if (selectedFreq[scanList[i].freqArr[j]]) {
+								$("#WDSTbl input")[scanList.length - 1 - i].className = 'checkboxBtnDis';
+								break;
+							}
+						}
+					} else {
+						if (selectedFreq[scanList[i].freq]) {
+							$("#WDSTbl input")[scanList.length - 1 - i].className = 'checkboxBtnDis';
+						}
+					}
+				}
+
+				wdsTargetIndex.push(index);
+
+				//勾选的项为合并项
+				if (freq == FREQ_BS) {
+					for (var i = 0; i < freqArr.length; ++i) {
+						wdsTargetSelFreq[freqArr[i]] = {"selected": true, "bs": true};
+						gRootAPInfo[freqArr[i]].ssid = scanList[index].ssid;
+						gRootAPInfo[freqArr[i]].key = "";
+						gRootAPInfo[freqArr[i]].encryption = parseInt(encryption) ? 1 : 0;
+					}
+				} else {
+					wdsTargetSelFreq[freq] = {"selected": true, "bs": false};
+					gRootAPInfo[freq].ssid = scanList[index].ssid;
+					gRootAPInfo[freq].key = "";
+					gRootAPInfo[freq].encryption = parseInt(encryption) ? 1 : 0;
+				}
+			} else {
+				if (freq == FREQ_BS) {
+					for (var i = 0; i < freqArr.length; i++) {
+						selectedFreq[freqArr[i]] = false;
+					}
+				} else {
+					selectedFreq[freq] = false;
+				}
+
+				//取消勾选的项为合并项
+				if (freq == FREQ_BS) {
+					for (var i = 0; i < freqArr.length; ++i) {
+						wdsTargetSelFreq[i] = {"selected": false, "bs": false};
+					}
+				} else {
+					wdsTargetSelFreq[freq] = {"selected": false, "bs": false};
+				}
+				wdsTargetIndex.splice($.inArray(index, wdsTargetIndex),1);
+				if (wdsTargetIndex.length == 0) {
+					$("#WDSTbl input.checkboxBtnDis").attr("class", 'checkboxBtnUn');
+				} else {
+					//与勾选项频段相同的解禁
+					for (var i = 0; i < scanList.length; i++) {
+						if (scanList[i].freq == FREQ_BS) {
+							var unSelect = true;
+							for (var j = 0; j < scanList[i].freqArr.length; j++) {
+								if (selectedFreq[scanList[i].freqArr[j]]) {
+									unSelect = false;
+									break;
+								}
+							}
+
+							if (unSelect) {
+								$("#WDSTbl input")[scanList.length - 1 - i].className = 'checkboxBtnUn';
+							}
+						} else {
+							if (!selectedFreq[scanList[i].freq]) {
+								$("#WDSTbl input")[scanList.length - 1 - i].className = 'checkboxBtnUn';
+							}
+						}
+					}
+				}
+			}
+		}
+
+		function wdsScanTableInit()
+		{
+			wdsGrid.init({
+				id:"WDSTbl",
+				data:scanList,
+				classCol:{gridClassName:"dataGrid", ListSpanClassName:"ListSpan"},
+				head:[{field:label.select, width:24},
+					  {field:label.wirelessNa, width:130},
+					  {field:"频段信息", width:100},
+					  {field:label.sigDep, width:24}],
+				list:[{className:"checkboxBtn", classNameUn:"checkboxBtnUn", classNameDis:"checkboxBtnDis",
+					  type:"btn", subType:"checkbox", click:wdsTargetSelHandler},
+					  {name:"ssid", maxSize: 22},
+					  {name:"freqInfo", maxSize: 20},
+					  {name:"signal", type:"phSignal"}],
+				checkIndex:1,
+				paging:{num:10000, page:1},
+				hasSelBox:false,
+				max:MAX_AP_ENTRY,
+				edit:false,
+				niceScroll: tableNiceScroll
+			});
+		}
+
+		// function wdsManualHandler()
+		// {
+		// 	loadPage("PhoneWlanWDSCfgManual.htm", "phCon");
+		// }
+
+		function wdsScanStop()
+		{
+			$("#detecting").css("display", "none");
+			$(".disNone").css("display", "block");
+			scanList = [];
+			wdsGrid.setDataSource(scanList);
+			wdsGrid.refresh(1);
+		}
+
+		function loadScanResult()
+		{
+			var arg = {"wireless":{"table": []}};
+			for (var freq in scanWiFiList)
+			{
+				if (scanWiFiList[freq])
+				{
+					arg.wireless.table.push(gWDSModel[freq].wlan_scan);
+				}
+			}
+
+			$.query(arg, function(data) {
+				closeLoading();
+				clearTimeout(getScanResultHd);
+				wdsScanStop();
+
+				if(ENONE == data[ERR_CODE]) {
+					scanList = getScanApList(data);
+					scanList.sort(function(pre, next){
+						var preRssi = parseInt(pre.rssi);
+						var nextRssi = parseInt(next.rssi);
+						if (preRssi > nextRssi) {
+							return 1;
+						}
+						else if (preRssi == nextRssi) {
+							return 0;
+						}
+						else {
+							return -1;
+						}
+					});
+
+					scanList = scanList.slice(-MAX_AP_ENTRY);
+					if (0 == scanList.length) {
+						$("#WDSScanFail").css("display", "block");
+						$("#refresh").css("display", "block");
+						$(".blockTable").css("display", "none");
+						$("#next").css("display", "none");
+					}
+					else {
+						$("#WDSScanFail").css("display", "none");
+						$("#refresh").css("display", "none");
+						$(".blockTable").css("display", "block");
+						$("#next").css("display", "block");
+					}
+
+					wdsTargetIndex = [];
+					wdsTargetSelFreq = {};
+				}
+				else {
+					scanList = [];
+					scanList.length = 0;
+					$("#WDSScanFail").css("display", "block");
+					$("#refresh").css("display", "block");
+					$(".blockTable").css("display", "none");
+					$("#next").css("display", "none");
+					errHandle(data[ERR_CODE]);
+				}
+
+				wdsGrid.setDataSource(scanList);
+				wdsGrid.refresh(1);
+			});
+		}
+
+		function getScanResult()
+		{
+			if (scanRetryCounts >= 6) {
+				loadScanResult();
+				return;
+			}
+
+			var arg = {"wireless":{"name": []}};
+			for (var freq in scanWiFiList)
+			{
+				if (scanWiFiList[freq])
+				{
+					arg.wireless.name.push(gWDSModel[freq].wlan_scan_status);
+				}
+			}
+
+			$.query(arg, function(ret) {
+				var bFinsh = true;
+				var SCAN_FINSH = 1;
+				for (var name in ret.wireless)
+				{
+					if (SCAN_FINSH != ret.wireless[name].status)
+					{
+						bFinsh = false;
+					}
+				}
+
+				if (true == bFinsh) {
+					loadScanResult();
+				}
+				else {
+					scanRetryCounts++;
+					getScanResultHd = $.setTimeout(getScanResult, 2000);
+				}
+			});
+		}
+
+		function refreshScanList()
+		{
+			selectedFreq[FREQ_2G] = false;
+			selectedFreq[FREQ_5G] = false;
+			selectedFreq[FREQ_5G1] = false;
+			selectedFreq[FREQ_5G4] = false;
+			$("#detecting").show();
+			$("#scanList").show();
+			$(".disNone").hide();
+
+			for (var freq in scanWiFiList)
+			{
+				if (scanWiFiList[freq])
+				{
+					/* 发送开始扫描动作 */
+					$.action(gWDSModel[freq].scan_start);
+				}
+			}
+
+			scanRetryCounts = 1;
+			getScanResultHd = $.setTimeout(getScanResult, 3000);
+		}
+
+		function nextStep()
+		{
+			if (wdsTargetIndex.length == 0)
+			{
+				showPhWzdAlert(errStr.WDSNOHostErr);
+			}
+			else
+			{
+				loadPage("PhoneWlanWDSCfgSecond.htm", "phCon");
+			}
+		}
+
+		function preNextStep() {
+			backFromNextPage = false;
+
+			if (gWifiSwitchSupport || gCustomWifiSwitchSupport){
+				checkWifiSwitchOff(nextStep);
+			} else {
+				nextStep();
+			}
+		}
+
+		// 初始化需要扫描的频段列表
+		if (gSupportBS && "1" == gLocalAPInfo[FREQ_BS].bs_enable)
+		{
+			if ("1" == gLocalAPInfo[FREQ_BS].wifi_enable)
+			{
+				for (var freq in gKeyNames[gBandNum].wlan_wds)
+				{
+					if (null != gKeyNames[gBandNum].wlan_wds[freq])
+					{
+						scanWiFiList[freq] = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			for (var freq in gLocalAPInfo)
+			{
+				if (FREQ_BS != freq)
+				{
+					scanWiFiList[freq] = ("1" == gLocalAPInfo[freq].enable);
+				}
+			}
+		}
+
+		bInWizard = true;
+
+		$("#refreshBtn").click(refreshScanList);
+		$("#refresh").click(refreshScanList);
+		$("#reDetect").click(function() {
+			loadPage("PhoneNetwork.htm", "phCon");
+		});
+		$("#next").click(preNextStep);
+		// 暂不实现手动添加
+		// $("p.WDSAddHandle").click(wdsManualHandler);
+
+		wdsScanTableInit();
+		refreshScanList();
+	}
+	init();
+</script>
+<style type="text/css">
+	img.detectingGif{
+		height:32px;
+		margin:80px auto 40px;
+		width:32px;
+	}
+	p.detectTip{
+		color:#ffffff;
+		font-size:15px;
+		text-align:center;
+	}
+	.textCenter{
+		text-align:center;
+		display: none;
+	}
+	#WDSScanFail{
+		margin-top:80px;
+		color:#FFFFFF;
+		text-align:center;
+		font-size:14px;
+	}
+	/* div.WDSAddHandleCon{
+		text-align:left;
+	}
+	p.WDSAddHandle{
+		margin-left:13px;
+		text-align:left;
+		cursor:pointer;
+		width:140px;
+	}
+	p.WDSAddHandle span{
+		color:#FFFFFF;
+		font-size:12px;
+		font-weight:bold;
+		display:inline-block;
+		text-decoration:underline;
+	}
+	p.WDSAddHandle i{
+		line-height:0px;
+		border-style:solid;
+		vertical-align:middle;
+		display:inline-block;
+		*display:inline;
+		*zoom:1;
+	} */
+	i.signalCon{
+		width:24px;
+		height:24px;
+		display:inline-block;
+		text-align:left;
+		vertical-align:middle;
+	}
+	i.signalCon i.signal1{
+		height:100%;
+		width: 100%;
+		display:inline-block;
+		background:url(../web-static/images/wifi_signal_one@1x.png) no-repeat;
+	}
+	i.signalCon i.signal2{
+		height:100%;
+		width: 100%;
+		display:inline-block;
+		background:url(../web-static/images/wifi_signal_two@1x.png) no-repeat;
+	}
+	i.signalCon i.signal3{
+		height:100%;
+		width: 100%;
+		display:inline-block;
+		background:url(../web-static/images/wifi_signal_three@1x.png) no-repeat;
+	}
+	i.signalCon i.signal4{
+		height:100%;
+		width: 100%;
+		display:inline-block;
+		background:url(../web-static/images/wifi_signal_four@1x.png) no-repeat;
+	}
+	i.signalCon i.lock{
+		width:14px;
+		height:14px;
+		display:inline-block;
+		margin-left:-14px;
+		background:url(../web-static/images/wifi_lock@1x.png) no-repeat;
+	}
+	p.WDSTitle{
+		color:#FFFFFF;
+		font-size:14px;
+		font-weight:bold;
+		line-height:24px;
+		text-align:left !important;
+		margin-left:36px;
+	}
+	a.reDetectNet{
+		color:#feeb1a;
+		font-size:14px;
+		display:block;
+		width:112px;
+		text-align:center;
+		margin:37px auto 0;
+	}
+	.dataGrid_header_tr{
+		display:none !important;
+	}
+	.dataGrid{
+		font-size:14px;
+		color:#ffffff;
+	}
+	input.checkboxBtn{
+		height:24px;
+		width:24px;
+		border:0px;
+		font-size:0px;
+		cursor:pointer;
+		outline:none;
+		vertical-align:middle;
+        background:url(../web-static/images/CheckBox_checked@1x.png) no-repeat;
+	}
+	input.checkboxBtnUn{
+		height:24px;
+		width:24px;
+		border:0px;
+		font-size:0px;
+		cursor:pointer;
+		outline:none;
+		vertical-align:middle;
+        background:url(../web-static/images/CheckBox_unchecked@1x.png) no-repeat;
+	}
+	input.checkboxBtnDis{
+        height:24px;
+		width:24px;
+		border:0px;
+		font-size:0px;
+		cursor:pointer;
+		outline:none;
+		vertical-align:middle;
+        background:url(../web-static/images/CheckBox_unchecked_disable@1x.png) no-repeat;
+	}
+	#scrollCon{
+		max-height:280px;
+		padding: 0 36px;
+	}
+	table.dataGrid{
+		border:0;
+	}
+	table.dataGrid tr{
+		background:#4CB1D9;
+		border-bottom:solid 1px rgba(255, 255, 255, 0.4);
+		height:44px;
+	}
+	table.dataGrid td:nth-child(2){
+		text-align:left;
+	}
+	table.dataGrid td:nth-child(3){
+		text-align:right;
+		font-size: 12px;
+	}
+	table.dataGrid td{
+		border:0;
+	}
+	label#refreshBtn{
+		float:right;
+		margin-right:36px;
+		font-size:12px;
+		line-height:24px;
+		color: #FFFFFF;
+	}
+	i.refresh{
+		background:url(../web-static/images/refresh_normal@1x.png) no-repeat;
+		width:24px;
+		height:24px;
+		display:inline-block;
+		vertical-align:top;
+	}
+	#refresh{
+		display:none;
+	}
+</style>
 <h1 class="phoneTitle">{%label.phWDSTitle%}</h1>
 <div class="textCenter" id="detecting">
 	<img class="detectingGif" src="../web-static/images/wzdDetecting.gif" />
@@ -27,17 +665,4 @@
 		<label id="refresh" class="phOneBtn">刷新</label>
 	</div>
 	<a id="reDetect" class="reDetectNet" href="javascript:void(0);">{%label.phReDetectNetType%}</a>
-</div><script type="text/javascript">var wdsTargetIndex=[];
-function init(){function x(q){var d=[],a;tmpApList={};for(var e in f)if(f[e]){a=gWDSModel[e].wlan_scan;var g=tmpApList,b=e;a=q.wireless[a];for(var c=e,k=a.length,l=[],h=0;h<k;h++){var m=h+1;l[h]={};l[h].freq=c;l[h].freqArr=[c];l[h].freqInfo=gFreqInfo[c];l[h].ssid=a[h]["ap_"+m].ssid;l[h].encryption=a[h]["ap_"+m].encryption;l[h].rssi=a[h]["ap_"+m].rssi;l[h].signal=20<=a[h]["ap_"+m].rssi?30<=a[h]["ap_"+m].rssi?4:3:10<=a[h]["ap_"+m].rssi?2:1}g[b]=l;for(g=0;g<tmpApList[e].length;++g){b=!1;for(a=0;a<d.length;++a)if(d[a].ssid==
-tmpApList[e][g].ssid&&d[a].encryption==tmpApList[e][g].encryption){b=!0;d[a].rssi=Math.max(d[a].rssi,tmpApList[e][g].rssi);d[a].signal=Math.max(d[a].signal,tmpApList[e][g].signal);-1==$.inArray(tmpApList[e][g].freq,d[a].freqArr)&&(d[a].freqArr.push(tmpApList[e][g].freq),d[a].freqInfo=d[a].freqInfo+" & "+tmpApList[e][g].freqInfo,d[a].freq=FREQ_BS);break}b||d.push(tmpApList[e][g])}}return d}function u(){var c={wireless:{table:[]}},d;for(d in f)f[d]&&c.wireless.table.push(gWDSModel[d].wlan_scan);$.query(c,
-function(a){closeLoading();clearTimeout(r);$("#detecting").css("display","none");$(".disNone").css("display","block");scanList=[];n.setDataSource(scanList);n.refresh(1);ENONE==a[ERR_CODE]?(scanList=x(a),scanList.sort(function(a,d){var b=parseInt(a.rssi),c=parseInt(d.rssi);return b>c?1:b==c?0:-1}),scanList=scanList.slice(-p),0==scanList.length?($("#WDSScanFail").css("display","block"),$("#refresh").css("display","block"),$(".blockTable").css("display","none"),$("#next").css("display","none")):($("#WDSScanFail").css("display",
-"none"),$("#refresh").css("display","none"),$(".blockTable").css("display","block"),$("#next").css("display","block")),wdsTargetIndex=[],wdsTargetSelFreq={}):(scanList=[],scanList.length=0,$("#WDSScanFail").css("display","block"),$("#refresh").css("display","block"),$(".blockTable").css("display","none"),$("#next").css("display","none"),errHandle(a[ERR_CODE]));n.setDataSource(scanList);n.refresh(1)})}function v(){if(6<=s)u();else{var c={wireless:{name:[]}},d;for(d in f)f[d]&&c.wireless.name.push(gWDSModel[d].wlan_scan_status);
-$.query(c,function(a){var c=!0,d;for(d in a.wireless)1!=a.wireless[d].status&&(c=!1);!0==c?u():(s++,r=$.setTimeout(v,2E3))})}}function t(){c[FREQ_2G]=!1;c[FREQ_5G]=!1;c[FREQ_5G1]=!1;c[FREQ_5G4]=!1;$("#detecting").show();$("#scanList").show();$(".disNone").hide();for(var q in f)f[q]&&$.action(gWDSModel[q].scan_start);s=1;r=$.setTimeout(v,3E3)}function w(){0==wdsTargetIndex.length?showPhWzdAlert(errStr.WDSNOHostErr):loadPage("PhoneWlanWDSCfgSecond.htm","phCon")}var p,r=null,n=new DataGrid,s=1,c={};
-c[FREQ_2G]=!1;c[FREQ_5G]=!1;c[FREQ_5G1]=!1;c[FREQ_5G4]=!1;tableNiceScroll=new NiceScroll("scrollCon");tableNiceScroll.scrollTipSet({display:"none"});tableNiceScroll.init();var f=[];f[FREQ_2G]=!1;f[FREQ_5G]=!1;f[FREQ_5G1]=!1;f[FREQ_5G4]=!1;switch(gBandNum){case BAND_3:p=192;break;case BAND_2:p=128;break;default:p=64}if(gSupportBS&&"1"==gLocalAPInfo[FREQ_BS].bs_enable){if("1"==gLocalAPInfo[FREQ_BS].wifi_enable)for(var k in gKeyNames[gBandNum].wlan_wds)null!=gKeyNames[gBandNum].wlan_wds[k]&&(f[k]=!0)}else for(k in gLocalAPInfo)FREQ_BS!=
-k&&(f[k]="1"==gLocalAPInfo[k].enable);bInWizard=!0;$("#refreshBtn").click(t);$("#refresh").click(t);$("#reDetect").click(function(){loadPage("PhoneNetwork.htm","phCon")});$("#next").click(function(){backFromNextPage=!1;gWifiSwitchSupport||gCustomWifiSwitchSupport?checkWifiSwitchOff(w):w()});n.init({id:"WDSTbl",data:scanList,classCol:{gridClassName:"dataGrid",ListSpanClassName:"ListSpan"},head:[{field:label.select,width:24},{field:label.wirelessNa,width:130},{field:"频段信息",width:100},{field:label.sigDep,
-width:24}],list:[{className:"checkboxBtn",classNameUn:"checkboxBtnUn",classNameDis:"checkboxBtnDis",type:"btn",subType:"checkbox",click:function(f,d){closeAlertC();var a=scanList[f].freq,e=scanList[f].freqArr;if("checkboxBtn"==d.obj.className){var g=scanList[f].encryption;if(a==FREQ_BS)for(var b=0;b<e.length;b++)c[e[b]]=!0;else c[a]=!0;if(g!=uciWireless.encryptionType.none&&g!=uciWireless.encryptionType.psk2_psk&&g!=uciWireless.encryptionType.psk2_sae3&&g!=uciWireless.encryptionType.sae3&&g!=uciWireless.encryptionType.wpa3)showPhWzdAlert("所选的路由器加密方式过旧，请将该路由器的加密方式更改为WPA/WPA2-PSK AES或WPA2-PSK/WPA3-SAE后重新连接。"),
-d.obj.className="checkboxBtnUn";else{for(b=0;b<scanList.length;b++)if(b!=f&&"checkboxBtn"!=$("#WDSTbl input")[scanList.length-1-b].className)if(scanList[b].freq==FREQ_BS)for(var k=0;k<scanList[b].freqArr.length;k++){if(c[scanList[b].freqArr[k]]){$("#WDSTbl input")[scanList.length-1-b].className="checkboxBtnDis";break}}else c[scanList[b].freq]&&($("#WDSTbl input")[scanList.length-1-b].className="checkboxBtnDis");wdsTargetIndex.push(f);if(a==FREQ_BS)for(b=0;b<e.length;++b)wdsTargetSelFreq[e[b]]={selected:!0,
-bs:!0},gRootAPInfo[e[b]].ssid=scanList[f].ssid,gRootAPInfo[e[b]].key="",gRootAPInfo[e[b]].encryption=parseInt(g)?1:0;else wdsTargetSelFreq[a]={selected:!0,bs:!1},gRootAPInfo[a].ssid=scanList[f].ssid,gRootAPInfo[a].key="",gRootAPInfo[a].encryption=parseInt(g)?1:0}}else{if(a==FREQ_BS)for(b=0;b<e.length;b++)c[e[b]]=!1;else c[a]=!1;if(a==FREQ_BS)for(b=0;b<e.length;++b)wdsTargetSelFreq[b]={selected:!1,bs:!1};else wdsTargetSelFreq[a]={selected:!1,bs:!1};wdsTargetIndex.splice($.inArray(f,wdsTargetIndex),
-1);if(0==wdsTargetIndex.length)$("#WDSTbl input.checkboxBtnDis").attr("class","checkboxBtnUn");else for(b=0;b<scanList.length;b++)if(scanList[b].freq==FREQ_BS){a=!0;for(k=0;k<scanList[b].freqArr.length;k++)if(c[scanList[b].freqArr[k]]){a=!1;break}a&&($("#WDSTbl input")[scanList.length-1-b].className="checkboxBtnUn")}else c[scanList[b].freq]||($("#WDSTbl input")[scanList.length-1-b].className="checkboxBtnUn")}}},{name:"ssid",maxSize:22},{name:"freqInfo",maxSize:20},{name:"signal",type:"phSignal"}],
-checkIndex:1,paging:{num:1E4,page:1},hasSelBox:!1,max:p,edit:!1,niceScroll:tableNiceScroll});t()}init();
-</script><style type="text/css">img.detectingGif{height:32px;margin:80px auto 40px;width:32px}p.detectTip{color:#fff;font-size:15px;text-align:center}.textCenter{text-align:center;display:none}#WDSScanFail{margin-top:80px;color:#fff;text-align:center;font-size:14px}i.signalCon{width:24px;height:24px;display:inline-block;text-align:left;vertical-align:middle}i.signalCon i.signal1{height:100%;width:100%;display:inline-block;background:url(../web-static/images/wifi_signal_one@1x.png) no-repeat}i.signalCon i.signal2{height:100%;width:100%;display:inline-block;background:url(../web-static/images/wifi_signal_two@1x.png) no-repeat}i.signalCon i.signal3{height:100%;width:100%;display:inline-block;background:url(../web-static/images/wifi_signal_three@1x.png) no-repeat}i.signalCon i.signal4{height:100%;width:100%;display:inline-block;background:url(../web-static/images/wifi_signal_four@1x.png) no-repeat}i.signalCon i.lock{width:14px;height:14px;display:inline-block;margin-left:-14px;background:url(../web-static/images/wifi_lock@1x.png) no-repeat}p.WDSTitle{color:#fff;font-size:14px;font-weight:bold;line-height:24px;text-align:left!important;margin-left:36px}a.reDetectNet{color:#feeb1a;font-size:14px;display:block;width:112px;text-align:center;margin:37px auto 0}.dataGrid_header_tr{display:none!important}.dataGrid{font-size:14px;color:#fff}input.checkboxBtn{height:24px;width:24px;border:0;font-size:0;cursor:pointer;outline:0;vertical-align:middle;background:url(../web-static/images/CheckBox_checked@1x.png) no-repeat}input.checkboxBtnUn{height:24px;width:24px;border:0;font-size:0;cursor:pointer;outline:0;vertical-align:middle;background:url(../web-static/images/CheckBox_unchecked@1x.png) no-repeat}input.checkboxBtnDis{height:24px;width:24px;border:0;font-size:0;cursor:pointer;outline:0;vertical-align:middle;background:url(../web-static/images/CheckBox_unchecked_disable@1x.png) no-repeat}#scrollCon{max-height:280px;padding:0 36px}table.dataGrid{border:0}table.dataGrid tr{background:#4cb1d9;border-bottom:solid 1px rgba(255,255,255,0.4);height:44px}table.dataGrid td:nth-child(2){text-align:left}table.dataGrid td:nth-child(3){text-align:right;font-size:12px}table.dataGrid td{border:0}label#refreshBtn{float:right;margin-right:36px;font-size:12px;line-height:24px;color:#fff}i.refresh{background:url(../web-static/images/refresh_normal@1x.png) no-repeat;width:24px;height:24px;display:inline-block;vertical-align:top}#refresh{display:none}</style>
+</div>

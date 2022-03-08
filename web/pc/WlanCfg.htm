@@ -1,6 +1,112 @@
+<script type="text/javascript">
+	var WIFI_FILE = uciWireless.fileName;
+	var SECN_WLAN_BS = uciWireless.secName.wlanBS;
+	var OPT_BS_ENBALE = uciWireless.optName.bsEnable;
+	var OPT_WIFI_ENABLE = uciWireless.optName.wifiEnable;
+	var ENABLE = "1";
+	var DISABLE = "0";
+	var enbaleOptions = [{str:label.wlanOn, value:ENABLE},
+					  {str:label.wlanOff, value:DISABLE}];
 
-<script type="text/javascript">var WIFI_FILE=uciWireless.fileName,SECN_WLAN_BS=uciWireless.secName.wlanBS,OPT_BS_ENBALE=uciWireless.optName.bsEnable,OPT_WIFI_ENABLE=uciWireless.optName.wifiEnable,ENABLE="1",DISABLE="0",enbaleOptions=[{str:label.wlanOn,value:ENABLE},{str:label.wlanOff,value:DISABLE}],gEnableJumpPage="WlanNetwork3BandBS.htm",gDisableJumpPage="WlanNetwork3Band.htm";
-function bsSelectChange(a){""==a.toString()&&(a=DISABLE);a==DISABLE?loadPage(gDisableJumpPage,"routeSetRCon"):loadPage(gEnableJumpPage,"routeSetRCon")}function closeBs(a){var b={};b[OPT_BS_ENBALE]=DISABLE;modifyBs(b,a)}function modifyBs(a,b){var c={};c[WIFI_FILE]={};c[WIFI_FILE][SECN_WLAN_BS]=a;$.modify(c,function(a){b&&b(a)})}
-function init(){(function(){BAND_3==gBandNum?(gEnableJumpPage="WlanNetwork3BandBS.htm",gDisableJumpPage="WlanNetwork3Band.htm"):BAND_2==gBandNum?(gEnableJumpPage="WlanNetwork2BandBS.htm",gDisableJumpPage="WlanNetwork2Band.htm"):gDisableJumpPage=gEnableJumpPage="WlanNetwork.htm";if(gSupportBS){var a={};a[WIFI_FILE]={};a[WIFI_FILE][KEY_NAME]=[SECN_WLAN_BS];$.query(a,function(a){var c=gDisableJumpPage;ENABLE==a[WIFI_FILE][SECN_WLAN_BS][OPT_BS_ENBALE]?loadPage(gEnableJumpPage,"routeSetRCon"):loadPage(c,
-"routeSetRCon")})}else loadPage(gDisableJumpPage,"routeSetRCon")})()}init();
+	/*
+		全局变量，当前路由器支持的无线频段，分别为单频、双频和三频
+		初始化页面：WlanCfg.htm
+		使用页面：WlanCfg.htm
+	*/
+	var gEnableJumpPage = "WlanNetwork3BandBS.htm";
+	var gDisableJumpPage = "WlanNetwork3Band.htm";
+
+	function bsSelectChange(value)
+	{
+		if ("" == value.toString())
+		{
+			value = DISABLE;
+		}
+
+		if (value == DISABLE)
+		{
+			loadPage(gDisableJumpPage, "routeSetRCon");
+		}
+		else
+		{
+			loadPage(gEnableJumpPage, "routeSetRCon");
+		}
+	}
+
+	function closeBs(callback)
+	{
+		var args = {};
+		args[OPT_BS_ENBALE] = DISABLE;
+
+		modifyBs(args, callback);
+	}
+
+	function modifyBs(args, callback)
+	{
+		var sendData = {};
+		sendData[WIFI_FILE] = {};
+		sendData[WIFI_FILE][SECN_WLAN_BS] = args;
+
+		$.modify(sendData, function(ret){
+			callback && callback(ret);
+		});
+	}
+
+	function init()
+	{
+		function getWlanBSCb(data, pageEnable, pageDisable)
+		{
+			var enable = data[OPT_BS_ENBALE];
+
+			if (ENABLE == enable)
+			{
+				loadPage(pageEnable, "routeSetRCon");
+			}
+			else
+			{
+				loadPage(pageDisable, "routeSetRCon");
+			}
+		}
+
+		function pageLoad()
+		{
+			/* 根据不同频段，设置不同的跳转页面 */
+			if (BAND_3 == gBandNum)
+			{
+				/* 三频页面 */
+				gEnableJumpPage = "WlanNetwork3BandBS.htm";
+				gDisableJumpPage = "WlanNetwork3Band.htm";
+			}
+			else if (BAND_2 == gBandNum)
+			{
+				/* 双频页面 */
+				gEnableJumpPage = "WlanNetwork2BandBS.htm";
+				gDisableJumpPage = "WlanNetwork2Band.htm";
+			}
+			else
+			{
+				/* TODO: 单频页面 */
+				gEnableJumpPage = "WlanNetwork.htm";
+				gDisableJumpPage = "WlanNetwork.htm";
+			}
+
+			if (gSupportBS)
+			{
+				var queryBsData = {};
+				queryBsData[WIFI_FILE] = {};
+				queryBsData[WIFI_FILE][KEY_NAME] = [SECN_WLAN_BS];
+
+				$.query(queryBsData, function(ret){
+					getWlanBSCb(ret[WIFI_FILE][SECN_WLAN_BS], gEnableJumpPage, gDisableJumpPage);
+				});
+			}
+			else
+			{
+				loadPage(gDisableJumpPage, "routeSetRCon");
+			}
+		}
+
+		pageLoad();
+	}
+	init();
 </script>

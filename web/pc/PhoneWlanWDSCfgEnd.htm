@@ -1,5 +1,134 @@
+<script type="text/javascript">
+	function init()
+	{
+		// initEndPage;
+		(function(){
+			var bands = ["2G", "5G", "5G1", "5G2"];
+			var band2 = [FREQ_2G, FREQ_5G];
+			var band3 = [FREQ_2G, FREQ_5G1, FREQ_5G4];
+			var pLanIP;
+			var jumpPageHd;
 
+			if("1" == gLocalAPInfo[FREQ_BS].bs_enable)
+			{
+				var pSSid = document.createElement("p");
+				var pPwd = document.createElement("p");
 
+				pSSid.className = "ssid";
+				pPwd.className = "pwd";
+				pSSid.innerHTML = label.wirelessName + "： " + gLocalAPInfo[FREQ_BS].ssid;
+				pPwd.innerHTML = label.wirelessPwd + "： " +
+					("1" == gLocalAPInfo[FREQ_BS].encryption ? gLocalAPInfo[FREQ_BS].key : label.wirelessNoSecurity);
+				$(".ssidInfo").append(pSSid);
+				$(".ssidInfo").append(pPwd);
+			}
+			else
+			{
+				var freqs = gBandNum == BAND_3 ? band3 : band2;
+				for (var i = 0; i < freqs.length; i++) {
+					var freq = freqs[i];
+					var pSSid = document.createElement("p");
+					var pPwd = document.createElement("p");
+
+					pSSid.className = "ssid";
+					pSSid.style.marginTop = "20px";
+					pPwd.className = "pwd";
+					pSSid.innerHTML = label["wirelessName" + bands[freq]]  + "： " + gLocalAPInfo[freq].ssid;
+					pPwd.innerHTML = label["wirelessPwd" + bands[freq]] + "： " +
+						("1" == gLocalAPInfo[freq].encryption ? gLocalAPInfo[freq].key : label.wirelessNoSecurity);
+					$(".ssidInfo").append(pSSid);
+					$(".ssidInfo").append(pPwd);
+				}
+			}
+
+			wzdDone();
+
+			pLanIP = document.createElement("p");
+			pLanIP.innerHTML = label.ipAddr + "： " + gLanIP;
+			pLanIP.style.marginTop = "20px";
+			$(".ssidInfo").append(pLanIP);
+
+			$.action({"network":{"apply_lan_config":null},"wireless":{"wds_finish":null}}, null, true);
+			jumpPageHd = $.setTimeout(function() {
+				window.location.href = "http://" + gLanIP;
+			}, 60000);
+
+			$.changeDomain(gLanIP);
+			$.setTimeout(function() {
+				lanDetecting(function() {
+					window.location.href = "http://" + gLanIP;
+				});
+			}, 4000);
+		})();
+	}
+	init();
+</script>
+<style type="text/css">
+	div.WDSFiBlock{
+		margin:13px 0 11px 0;
+		padding-bottom:35px;
+		border:1px solid #CBCBCB;
+		background:#FCFCFC;
+		overflow:hidden;
+	}
+	p.WDSFiTitle{
+		font-size:14px;
+		font-weight:bold;
+		margin:20px 0 12px 51px;
+		text-align:left;
+	}
+	p.WDSFiDetail{
+		line-height:21px;
+		margin-left:51px;
+		text-align:left;
+		white-space:pre;
+	}
+	p.WDSFiLine{
+		font-size:0px;
+		padding:0px;
+		line-height:0px;
+		margin:13px 43px 0 43px;
+		border-bottom:1px solid #CCCCCC;
+	}
+	p.WDSFiLineS{
+		margin-top:21px !important;
+	}
+	ul.wdsGridLine{
+		padding-left:260px;
+		margin-top:0px !important;
+	}
+	ul.gridLine label span{
+		display:inline-block;
+	}
+	ul.gridLine label span pre{
+		overflow:hidden;
+		text-overflow:ellipsis;
+		vertical-align:middle;
+		width:300px;
+		display:inline-block;
+		*display:inline;
+		*zoom:1;
+	}
+	img.configGif{
+		height:30px;
+		margin:120px auto 40px;
+		width:30px;
+	}
+	.textCenter{
+		text-align:center;
+	}
+	.block p{
+		color:#FFFFFF;
+		font-size:14px;
+		text-align:center;
+	}
+	.ssidInfo{
+		display:inline-block;
+	}
+	.ssidInfo p{
+		text-align:left;
+	}
+</style>
 <div class="textCenter">
 	<img class="configGif" src="../web-static/images/wzdDetecting.gif" />
 </div>
@@ -45,7 +174,4 @@
 <!-- <div class="blockFuncA">
 	<input id="pre" type="button" value="更改桥接" class="btnA subBtn" />
 	<input id="save" type="button" value="保存" class="btnA subBtn" />
-</div> --><script type="text/javascript">function init(){(function(){var c=["2G","5G","5G1","5G2"],a=[FREQ_2G,FREQ_5G],b=[FREQ_2G,FREQ_5G1,FREQ_5G4];if("1"==gLocalAPInfo[FREQ_BS].bs_enable)a=document.createElement("p"),b=document.createElement("p"),a.className="ssid",b.className="pwd",a.innerHTML=label.wirelessName+"： "+gLocalAPInfo[FREQ_BS].ssid,b.innerHTML=label.wirelessPwd+"： "+("1"==gLocalAPInfo[FREQ_BS].encryption?gLocalAPInfo[FREQ_BS].key:label.wirelessNoSecurity),$(".ssidInfo").append(a),$(".ssidInfo").append(b);else for(var f=gBandNum==
-BAND_3?b:a,e=0;e<f.length;e++){var d=f[e],a=document.createElement("p"),b=document.createElement("p");a.className="ssid";a.style.marginTop="20px";b.className="pwd";a.innerHTML=label["wirelessName"+c[d]]+"： "+gLocalAPInfo[d].ssid;b.innerHTML=label["wirelessPwd"+c[d]]+"： "+("1"==gLocalAPInfo[d].encryption?gLocalAPInfo[d].key:label.wirelessNoSecurity);$(".ssidInfo").append(a);$(".ssidInfo").append(b)}wzdDone();c=document.createElement("p");c.innerHTML=label.ipAddr+"： "+gLanIP;c.style.marginTop="20px";
-$(".ssidInfo").append(c);$.action({network:{apply_lan_config:null},wireless:{wds_finish:null}},null,!0);$.setTimeout(function(){window.location.href="http://"+gLanIP},6E4);$.changeDomain(gLanIP);$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},4E3)})()}init();
-</script><style type="text/css">div.WDSFiBlock{margin:13px 0 11px 0;padding-bottom:35px;border:1px solid #cbcbcb;background:#fcfcfc;overflow:hidden}p.WDSFiTitle{font-size:14px;font-weight:bold;margin:20px 0 12px 51px;text-align:left}p.WDSFiDetail{line-height:21px;margin-left:51px;text-align:left;white-space:pre}p.WDSFiLine{font-size:0;padding:0;line-height:0;margin:13px 43px 0 43px;border-bottom:1px solid #ccc}p.WDSFiLineS{margin-top:21px!important}ul.wdsGridLine{padding-left:260px;margin-top:0!important}ul.gridLine label span{display:inline-block}ul.gridLine label span pre{overflow:hidden;text-overflow:ellipsis;vertical-align:middle;width:300px;display:inline-block;*display:inline;*zoom:1}img.configGif{height:30px;margin:120px auto 40px;width:30px}.textCenter{text-align:center}.block p{color:#fff;font-size:14px;text-align:center}.ssidInfo{display:inline-block}.ssidInfo p{text-align:left}</style>
+</div> -->

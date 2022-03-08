@@ -1,5 +1,187 @@
+<script type="text/javascript">
+	function init()
+	{
+		function errHandle(errNo)
+		{
+			id("wzdIpNoteP").className = "";
 
+			switch (errNo)
+			{
+			case ENONE:
+				return false;
+			case EINVIPFMT:
+				id("wzdIpNoteP").className = "twoLine";
+				showNote("wzdIpNote", errStr.ipAddrFmtNoteErr);
+				break;
+			case EINVLOOPIP:
+				showNote("wzdIpNote", errStr.ipAddrLoopErr);
+				break;
+			case EINVGROUPIP:
+				showNote("wzdIpNote", errStr.ipAddrGroupErr);
+				break;
+			case EINVNET:
+				showNote("wzdIpNote", errStr.wzdStcIpNetErr);
+				break;
+			case EINVIP:
+				showNote("wzdIpNote", errStr.wzdStcIpErr);
+				break;
+			case EINVTYPE:
+				showNote("wzdIpNote", errStr.acIpTypeErr);
+				break;
+			case EINVMASK:
+				showNote("wzdMaskNote", errStr.wzdStcMaskErr);
+				break;
+			case EINVNETID:
+			case EINVHOSTID:
+			case EINVIPMASKPAIR:
+				showNote("wzdIpNote", errStr.wzdStcIpMaskNotMatch);
+				break;
+			case ECOMFLICTNET:
+				showNote("wzdIpNote", errStr.wzdStcIpLanConflict);
+				break;
+			case EINVGTW:
+				showNote("wzdGatewayNote", errStr.wzdStcGatewayErr);
+				break;
+			case EINVFDNSVR:
+				showNote("wzdPrimDnsNote", errStr.wzdPrimDnsErr);
+				break;
+			case EINVSDNSVR:
+				showNote("wzdSeDnsNote", errStr.wzdSeDnsErr);
+				break;
+			case ECONFLICTGATEWAY:
+				showNote("wzdGatewayNote", errStr.wzdIpAddrLanGatewayConflict);
+				break;
+			case ECONFLICTFDNS:
+				showNote("wzdPrimDnsNote", errStr.wzdIpAddrLanFDNSConflict);
+				break;
+			case ECONFLICTSDNS:
+				showNote("wzdSeDnsNote", errStr.wzdIpAddrLanSDNSConflict);
+				break;
+			default:
+				break;
+			}
 
+			return true;
+		}
+
+		function checkGateway(value)
+		{
+			return ENONE != checkIp(value) ? EINVGTW : ENONE;
+		}
+
+		function checkPrimDns(value)
+		{
+			if (gNetworkCfg["lanIp"] == value)
+			{
+				return EINVFDNSVR;
+			}
+
+			return ENONE != checkIp(value) ? EINVFDNSVR : ENONE;
+		}
+
+		function checkSeDns(value)
+		{
+			if ("" == value || "0.0.0.0" == value)
+			{
+				id("dns1In").value = "0.0.0.0";
+				return ENONE;
+			}
+
+			if (gNetworkCfg["lanIp"] == value)
+			{
+				return EINVSDNSVR;
+			}
+
+			return ENONE != checkIp(value) ? EINVSDNSVR : ENONE;
+		}
+
+		/* 去掉IP地址中的前导0 */
+		function fmtIpAddr(idStr)
+		{
+			var fmtVal = hideLeadingZeros(id(idStr).value)
+			id(idStr).value = fmtVal;
+			return fmtVal;
+		}
+
+		function onSave()
+		{
+			var ipVal = id("ipAddrIn").value;
+			var maskVal = id("netMaskIn").value;
+			var gatewayVal = id("gatewayIn").value;
+			var primDnsVal = id("dns0In").value;
+			var seDnsVal = id("dns1In").value;
+
+			closeNote("wzdIpNote");
+			closeNote("wzdMaskNote");
+			closeNote("wzdGatewayNote");
+			closeNote("wzdPrimDnsNote");
+			closeNote("wzdSeDnsNote");
+
+			/* 检查合法性 */
+			if (errHandle(checkIp(ipVal)) ||
+				errHandle(checkMask(maskVal)) ||
+				errHandle(checkIpMask(ipVal, maskVal)) ||
+				errHandle(checkGateway(gatewayVal)) ||
+				errHandle(checkPrimDns(primDnsVal)) ||
+				errHandle(checkSeDns(seDnsVal)))
+			{
+				return;
+			}
+
+			/* 去掉IP地址中的前导0 */
+			ipVal = fmtIpAddr("ipAddrIn");
+			maskVal = fmtIpAddr("netMaskIn");
+			gatewayVal = fmtIpAddr("gatewayIn");
+			primDnsVal = fmtIpAddr("dns0In");
+			seDnsVal = fmtIpAddr("dns1In");
+
+			saveNetworkCfg(uciProto.optValue.proto.staticIp, function(result){
+				if (errHandle(parseInt(result[ERR_CODE])))
+				{
+					return;
+				}
+
+				loadPage('WizardWirelessCfg.htm', "wizardCon");
+			});
+		}
+
+		/* 设置导航栏颜色 */
+		wzdNavSet(1);
+		wzdConSet({"height":"730px"});
+		id("sub").onclick = onSave;
+		id("ipAddrIn").focus();
+
+		if (true == bWzdWanTypeDetected)
+		{
+			$("i.connect").css("display","block");
+		}
+		else
+		{
+			$("i.disConnect").css("display","block");
+		}
+
+		showNetworkCfg(uciProto.optValue.proto.staticIp);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			$("#wanPortSelDiv").removeClass("disNone");
+			wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+
+		if (gSysModeSupport) {
+			$("#wzdAp").removeClass("disNone");
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	p.tipsP {
+		font-size: 12px;
+		color: #FFF;
+		margin-left: 347px;
+		margin-bottom: 16px;
+	}
+</style>
 <ul class="wzdConTitleUl">
 	<p class="wzdConTitle">{%label.netSet%}</p>
 </ul>
@@ -54,10 +236,4 @@
     <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_DHCP)">{%label.dhcp%} ></a>
     <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_PPPOE)">{%label.pppoe%} ></a>
     <a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)" class="disNone" id="wzdAp">{%label.wiredRepeater%} ></a>
-</div><script type="text/javascript">function init(){function b(a){id("wzdIpNoteP").className="";switch(a){case ENONE:return!1;case EINVIPFMT:id("wzdIpNoteP").className="twoLine";showNote("wzdIpNote",errStr.ipAddrFmtNoteErr);break;case EINVLOOPIP:showNote("wzdIpNote",errStr.ipAddrLoopErr);break;case EINVGROUPIP:showNote("wzdIpNote",errStr.ipAddrGroupErr);break;case EINVNET:showNote("wzdIpNote",errStr.wzdStcIpNetErr);break;case EINVIP:showNote("wzdIpNote",errStr.wzdStcIpErr);break;case EINVTYPE:showNote("wzdIpNote",errStr.acIpTypeErr);
-break;case EINVMASK:showNote("wzdMaskNote",errStr.wzdStcMaskErr);break;case EINVNETID:case EINVHOSTID:case EINVIPMASKPAIR:showNote("wzdIpNote",errStr.wzdStcIpMaskNotMatch);break;case ECOMFLICTNET:showNote("wzdIpNote",errStr.wzdStcIpLanConflict);break;case EINVGTW:showNote("wzdGatewayNote",errStr.wzdStcGatewayErr);break;case EINVFDNSVR:showNote("wzdPrimDnsNote",errStr.wzdPrimDnsErr);break;case EINVSDNSVR:showNote("wzdSeDnsNote",errStr.wzdSeDnsErr);break;case ECONFLICTGATEWAY:showNote("wzdGatewayNote",
-errStr.wzdIpAddrLanGatewayConflict);break;case ECONFLICTFDNS:showNote("wzdPrimDnsNote",errStr.wzdIpAddrLanFDNSConflict);break;case ECONFLICTSDNS:showNote("wzdSeDnsNote",errStr.wzdIpAddrLanSDNSConflict)}return!0}function k(a){return""==a||"0.0.0.0"==a?(id("dns1In").value="0.0.0.0",ENONE):gNetworkCfg.lanIp==a?EINVSDNSVR:ENONE!=checkIp(a)?EINVSDNSVR:ENONE}function c(a){var b=hideLeadingZeros(id(a).value);return id(a).value=b}wzdNavSet(1);wzdConSet({height:"730px"});id("sub").onclick=function(){var a=
-id("ipAddrIn").value,g=id("netMaskIn").value,d=id("gatewayIn").value,e=id("dns0In").value,h=id("dns1In").value;closeNote("wzdIpNote");closeNote("wzdMaskNote");closeNote("wzdGatewayNote");closeNote("wzdPrimDnsNote");closeNote("wzdSeDnsNote");var f;(f=b(checkIp(a)))||(f=b(checkMask(g)))||((a=b(checkIpMask(a,g)))||((d=b(ENONE!=checkIp(d)?EINVGTW:ENONE))||(e=gNetworkCfg.lanIp==e?EINVFDNSVR:ENONE!=checkIp(e)?EINVFDNSVR:ENONE,d=b(e)||b(k(h))),a=d),f=a);f||(a=c("ipAddrIn"),g=c("netMaskIn"),d=c("gatewayIn"),
-e=c("dns0In"),h=c("dns1In"),saveNetworkCfg(uciProto.optValue.proto.staticIp,function(a){b(parseInt(a[ERR_CODE]))||loadPage("WizardWirelessCfg.htm","wizardCon")}))};id("ipAddrIn").focus();!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");showNetworkCfg(uciProto.optValue.proto.staticIp);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),
-$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));gSysModeSupport&&$("#wzdAp").removeClass("disNone")}init();
-</script><style type="text/css">p.tipsP{font-size:12px;color:#FFF;margin-left:347px;margin-bottom:16px}</style>
+</div>

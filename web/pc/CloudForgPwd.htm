@@ -1,5 +1,195 @@
+<style type="text/css">
+	body{
+		background:#5e85c0 !important;
+		fontSize:12px;
+		height:100%;
+	}
+	ul.cloudNav{
+		list-style-type:none;
+	}
+	ul.cloudNav li {
+		display:inline-block;
+		*display:inline;
+		*zoom:1;
+		width:135px;
+		color:#FFFFFF;
+		font-size:0;
+	}
+	ul.cloudNav li p{
+		font-weight:bold;
+		font-size:12px;
+		color:#FFFFFF;
+		margin-bottom:2px;
+	}
+	ul.cloudNav li.select p{
+		color:#D8FF68;
+	}
+	ul.cloudNav li span{
+		width:123px;
+		height:6px;
+		line-height:6px;
+		display:inline-block;
+		background-color:#FFFFFF;
+		vertical-align:middle;
+	}
+	ul.cloudNav li.select span{
+		background-color:#D8FF68;
+	}
+	ul.cloudNav li i{
+		display:inline-block;
+		border-style:solid;
+		overflow:hidden;
+		font-size:0;
+		height:0;
+		line-height:0;
+		vertical-align:middle;
+		width:0;
+	}
+	ul.cloudNav li i.edgeItem {
+		border-width:3px;
+		border-color:#FFFFFF;
+	}
+	ul.cloudNav li.select i {
+		border-color:#D8FF68;
+	}
+	ul.cloudNav li i.showLeft{
+		border-width:3px 3px;
+		border-color:#FFFFFF #FFFFFF #5E85C0 #5E85C0;
+	}
+	ul.cloudNav li.select i.showLeft{
+		border-color:#D8FF68 #D8FF68 #5E85C0 #5E85C0;
+	}
+	ul.cloudNav li i.showRight{
+		border-width:3px 3px;
+		border-color:#5E85C0 #5E85C0 #FFFFFF #FFFFFF;
+	}
+	ul.cloudNav li.select i.showRight{
+		border-color:#5E85C0 #5E85C0 #D8FF68 #D8FF68;
+	}
+	#cloudForgDetial{
+		margin-top:75px;
+	}
+	h1.cloudForgH1{
+		color:#FFFFFF;
+		font-weight:bold;
+		font-size:24px;
+		margin-left:395px;
+	}
+	input.returnBtn{
+		background:#335C9C;
+		border-radius:3px;
+		border:none;
+		color:#FFFFFF;
+		cursor:pointer;
+		width:60px;
+		height:25px;
+		position:absolute;
+		top:-10px;
+		right:0px;
+	}
+	label.proName{
+		right:16px;
+		font-size:12px;
+		color:#FFFFFF;
+		margin-top:18px;
+		margin-left:20px;
+		text-align:left;
+		position:absolute;
+	}
+</style>
+<script type="text/javascript">
+	var gCloudAccount = {
+		account:"",
+		pwd:"",
+		CAPTCHAR:"",
+		accountType:"",
+		success:false
+	};
 
+	function gResetCloudAccountErrHandle(errNo, objOrId)
+	{
+		var showStr = "";
+		var cloudErrRel;
 
+		switch (parseInt(errNo))
+		{
+		case ENONE:
+			return true;
+		case EINVACCOUNTRESETPWDCAPTCHAERR:
+		case EINVVERICODEFORMAT:
+			showStr = appendErrCode(errStr.CAPTCHAErrorTip, errNo);
+			break;
+		case EINVACCOUNTNOTEXIST:
+			showStr = appendErrCode(errStr.invCloudAccountNotExist, errNo);
+			break;
+		case EINVMAILFMT:
+		case EINVMAILLEN:
+		case EINVACCOUNTEMAILFMT:
+		case EINVACCOUNTPHONENUMFMT:
+			showStr = appendErrCode(errStr.invCloudAccountFmtErr, errNo);
+			break;
+		case EINVPASSWORDFMT:
+		case EINVACCOUNTPWDFMT:
+			showStr = appendErrCode(errStr.pwdInvalid, errNo);
+			break;
+		case EINDEVICEALREADYBOUND:
+		case EINVACCOUNTBINDED:
+            showStr = label.cloudAccountBindFailAndCallSupport;
+			break;
+		case EINVACCOUNTLENGTH:
+			showStr = appendErrCode(errStr.invCloudAccountLen, errNo);
+			break;
+		case EINVACCOUNTTYPEERR:
+			showStr = appendErrCode(errStr.invCloudAccountType, errNo);
+			break;
+		case EINVCLOUDERRORCAPTCHAINVAL:
+			showStr = appendErrCode(errStr.invCloudCAPTCHAInval, errNo);
+			break;
+		default:
+			cloudErrRel = cloudErrHandle(errNo);
+			if (cloudErrRel.result == false)
+			{
+				showStr = cloudErrRel.tip;
+			}
+			else
+			{
+				showStr = appendErrCode(errStr.invRequestFail, errNo);
+			}
+			break;
+		}
+
+		showAlert(showStr, objOrId);
+		return false;
+	}
+
+	function gResetCloudAccountPwd(callBack, timeoutCallBack, closeHandle)
+	{
+		showLoading(label.cloudResetPwdWaiting, closeHandle, undefined, false);
+		cloudAccountRstPwd(gCloudAccount["account"], gCloudAccount["pwd"], gCloudAccount["CAPTCHAR"], gCloudAccount["accountType"], function(code){
+			closeLoading();
+			if (true == gResetCloudAccountErrHandle(code))
+			{
+				gCloudAccount["success"] = true;
+				typeof callBack == "function" && callBack();
+			}
+		}, function(){
+			gCloudAccount["success"] = false;
+			typeof timeoutCallBack == "function" && timeoutCallBack();
+		});
+	}
+
+	function init()
+	{
+		id("productName").innerHTML = label.productName + proName;
+		cloudPageSetNodes(true);
+		id("softVersionCloud").innerHTML += (gCloudAccountBR["softVersion"].split(" "))[0];
+		id("return").onclick = function(){
+			cloudGoBack();
+		};
+		loadPage("CloudForgPwdFirst.htm", "cloudForgDetial", undefined, {bClearPageTickArray:false});
+	}
+	init();
+</script>
 <div class="cloudAccountLogo">
 	<label class="proName" id="productName">{%label.productName%}</label>
 </div>
@@ -26,9 +216,4 @@
 			<li class="netAddrTel"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}400-8863-400</label></li>
 		</ul>
 	</div>
-</div><script type="text/javascript">var gCloudAccount={account:"",pwd:"",CAPTCHAR:"",accountType:"",success:!1};
-function gResetCloudAccountErrHandle(b,c){var a="";switch(parseInt(b)){case ENONE:return!0;case EINVACCOUNTRESETPWDCAPTCHAERR:case EINVVERICODEFORMAT:a=appendErrCode(errStr.CAPTCHAErrorTip,b);break;case EINVACCOUNTNOTEXIST:a=appendErrCode(errStr.invCloudAccountNotExist,b);break;case EINVMAILFMT:case EINVMAILLEN:case EINVACCOUNTEMAILFMT:case EINVACCOUNTPHONENUMFMT:a=appendErrCode(errStr.invCloudAccountFmtErr,b);break;case EINVPASSWORDFMT:case EINVACCOUNTPWDFMT:a=appendErrCode(errStr.pwdInvalid,b);
-break;case EINDEVICEALREADYBOUND:case EINVACCOUNTBINDED:a=label.cloudAccountBindFailAndCallSupport;break;case EINVACCOUNTLENGTH:a=appendErrCode(errStr.invCloudAccountLen,b);break;case EINVACCOUNTTYPEERR:a=appendErrCode(errStr.invCloudAccountType,b);break;case EINVCLOUDERRORCAPTCHAINVAL:a=appendErrCode(errStr.invCloudCAPTCHAInval,b);break;default:a=cloudErrHandle(b),a=!1==a.result?a.tip:appendErrCode(errStr.invRequestFail,b)}showAlert(a,c);return!1}
-function gResetCloudAccountPwd(b,c,a){showLoading(label.cloudResetPwdWaiting,a,void 0,!1);cloudAccountRstPwd(gCloudAccount.account,gCloudAccount.pwd,gCloudAccount.CAPTCHAR,gCloudAccount.accountType,function(a){closeLoading();!0==gResetCloudAccountErrHandle(a)&&(gCloudAccount.success=!0,"function"==typeof b&&b())},function(){gCloudAccount.success=!1;"function"==typeof c&&c()})}
-function init(){id("productName").innerHTML=label.productName+proName;cloudPageSetNodes(!0);id("softVersionCloud").innerHTML+=gCloudAccountBR.softVersion.split(" ")[0];id("return").onclick=function(){cloudGoBack()};loadPage("CloudForgPwdFirst.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1})}init();
-</script><style type="text/css">body{background:#5e85c0!important;fontSize:12px;height:100%}ul.cloudNav{list-style-type:none}ul.cloudNav li{display:inline-block;*display:inline;*zoom:1;width:135px;color:#fff;font-size:0}ul.cloudNav li p{font-weight:bold;font-size:12px;color:#fff;margin-bottom:2px}ul.cloudNav li.select p{color:#d8ff68}ul.cloudNav li span{width:123px;height:6px;line-height:6px;display:inline-block;background-color:#fff;vertical-align:middle}ul.cloudNav li.select span{background-color:#d8ff68}ul.cloudNav li i{display:inline-block;border-style:solid;overflow:hidden;font-size:0;height:0;line-height:0;vertical-align:middle;width:0}ul.cloudNav li i.edgeItem{border-width:3px;border-color:#fff}ul.cloudNav li.select i{border-color:#d8ff68}ul.cloudNav li i.showLeft{border-width:3px 3px;border-color:#fff #FFFFFf #5e85c0 #5E85C0}ul.cloudNav li.select i.showLeft{border-color:#d8ff68 #D8FF68 #5e85c0 #5E85C0}ul.cloudNav li i.showRight{border-width:3px 3px;border-color:#5e85c0 #5E85C0 #fff #FFFFFF}ul.cloudNav li.select i.showRight{border-color:#5e85c0 #5E85C0 #d8ff68 #D8FF68}#cloudForgDetial{margin-top:75px}h1.cloudForgH1{color:#fff;font-weight:bold;font-size:24px;margin-left:395px}input.returnBtn{background:#335c9c;border-radius:3px;border:0;color:#fff;cursor:pointer;width:60px;height:25px;position:absolute;top:-10px;right:0}label.proName{right:16px;font-size:12px;color:#fff;margin-top:18px;margin-left:20px;text-align:left;position:absolute}</style>
+</div>

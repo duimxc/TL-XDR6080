@@ -1,5 +1,283 @@
+<style type="text/css">
+	div.phoneCon{
+		padding-bottom: 114px;
+	}
+	li.phInputLi label{
+		width:110px !important;
+	}
+	span.phSelect span.staticIp{
+		width:115px !important;
+	}
+	li.phInputLi input{
+		width:120px !important;
+	}
+	div.staticIpFunc{
+		margin-top:40px !important;
+	}
+	#phWanLoadingCover{
+		position:absolute;
+		top:-9999px;
+		visibility:hidden;
+		width:100%;
+		z-index:1011;
+	}
+	div.phLoadingCon{
+		background:#ffffff;
+		margin:0 auto;
+		text-align:center;
+		width:300px;
+	}
+	img.loading{
+		height:85px;
+		width:85px;
+		margin:25px auto;
+	}
+	div.phLoadingCon p{
+		color: #3c4e43;
+		font-size: 16px;
+		padding-bottom: 50px;
+		line-height: 16px;
+		height: 16px;
+	}
+	li.phInputLi label.wanPortSel{
+		width: 91px !important;
+	}
+	li.phInputLi span.phSelect span.wanPortSel{
+		width: 118px !important;
+	}
+	li.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+	}
+	li.wanPortSelTips label{
+		text-align:right;
+		display:inline-block;
+		vertical-align:middle;
+		height:20px;
+		line-height:20px;
+		width: 105px;
+	}
+	li.wanPortSelTips span.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+		width: 118px;
+		color:#FFF;
+		font-size:14px;
+	}
+	ul.wanPortSel{
+		margin-bottom:10px;
+	}
+	ul.wanPortSelTips{
+		margin-bottom:16px;
+	}
+	p.chooseOther{
+		position:absolute;
+		bottom:72px;
+		width:100%;
+		text-align:center;
+	}
+	p a{
+		color:#FEEB1A;
+		font-size:14px;
+	}
+	p.detectTip{
+		color:#ffffff;
+		font-size:15px;
+		text-align:center;
+		margin-bottom:20px;
+	}
+	div.textCenter{
+		text-align:center;
+	}
+	img.detected{
+		margin:20px auto 20px;
+	}
+	li.phErrTip i.error{
+		background:url(../web-static/images/error@2x.png) no-repeat;
+		width:16px;
+		height:16px;
+		top:0;
+		background-size:cover;
+	}
+	li.phErrTip span.errDes {
+		line-height:16px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		function errHandle(errNo)
+		{
+			switch (errNo)
+			{
+			case ENONE:
+				return false;
+			case EINVIPFMT:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.ipAddrFmtNoteErr);
+				break;
+			case EINVLOOPIP:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.ipAddrLoopErr);
+				break;
+			case EINVGROUPIP:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.ipAddrGroupErr);
+				break;
+			case EINVNET:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.wzdStcIpNetErr);
+				break;
+			case EINVIP:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.wzdStcIpErr);
+				break;
+			case EINVTYPE:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.acIpTypeErr);
+				break;
+			case EINVMASK:
+				showPhoneNote("netMaskIn", "wzdMaskNote", errStr.wzdStcMaskErr);
+				break;
+			case EINVNETID:
+			case EINVHOSTID:
+			case EINVIPMASKPAIR:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.wzdStcIpMaskNotMatch);
+				break;
+			case ECOMFLICTNET:
+				showPhoneNote("ipAddrIn", "wzdIpNote", errStr.wzdStcIpLanConflict);
+				break;
+			case EINVGTW:
+				showPhoneNote("gatewayIn", "wzdGatewayNote", errStr.wzdStcGatewayErr);
+				break;
+			case EINVFDNSVR:
+				showPhoneNote("dns0In", "wzdPrimDnsNote", errStr.wzdPrimDnsErr);
+				break;
+			case EINVSDNSVR:
+				showPhoneNote("dns1In", "wzdSeDnsNote", errStr.wzdSeDnsErr);
+				break;
+			case ECONFLICTGATEWAY:
+				showPhoneNote("gatewayIn", "wzdGatewayNote", errStr.wzdIpAddrLanGatewayConflict);
+				break;
+			case ECONFLICTFDNS:
+				showPhoneNote("wzdPrimDnsNote", errStr.wzdIpAddrLanFDNSConflict);
+				break;
+			case ECONFLICTSDNS:
+				showPhoneNote("dns0In", "wzdSeDnsNote", errStr.wzdIpAddrLanSDNSConflict);
+				break;
+			default:
+				break;
+			}
 
+			return true;
+		}
 
+		function checkGateway(value)
+		{
+			return ENONE != checkIp(value) ? EINVGTW : ENONE;
+		}
+
+		function checkPrimDns(value)
+		{
+			if (gNetworkCfg["lanIp"] == value)
+			{
+				return EINVFDNSVR;
+			}
+
+			return ENONE != checkIp(value) ? EINVFDNSVR : ENONE;
+		}
+
+		function checkSeDns(value)
+		{
+			if ("" == value || "0.0.0.0" == value)
+			{
+				id("dns1In").value = "0.0.0.0";
+				return ENONE;
+			}
+
+			if (gNetworkCfg["lanIp"] == value)
+			{
+				return EINVSDNSVR;
+			}
+
+			return ENONE != checkIp(value) ? EINVSDNSVR : ENONE;
+		}
+
+		/* 去掉IP地址中的前导0 */
+		function fmtIpAddr(idStr)
+		{
+			var fmtVal = hideLeadingZeros(id(idStr).value)
+			id(idStr).value = fmtVal;
+			return fmtVal;
+		}
+
+		function onSave()
+		{
+			var ipVal = id("ipAddrIn").value;
+			var maskVal = id("netMaskIn").value;
+			var gatewayVal = id("gatewayIn").value;
+			var primDnsVal = id("dns0In").value;
+			var seDnsVal = id("dns1In").value;
+
+			closePhoneNote("ipAddrIn", "wzdIpNote");
+			closePhoneNote("netMaskIn", "wzdMaskNote");
+			closePhoneNote("dns0In", "wzdPrimDnsNote");
+			closePhoneNote("gatewayIn", "wzdGatewayNote");
+			closePhoneNote("dns1In", "wzdSeDnsNote");
+
+			/* 检查合法性 */
+			if (errHandle(checkIp(ipVal)) ||
+				errHandle(checkMask(maskVal)) ||
+				errHandle(checkIpMask(ipVal, maskVal)) ||
+				errHandle(checkGateway(gatewayVal)) ||
+				errHandle(checkPrimDns(primDnsVal)) ||
+				errHandle(checkSeDns(seDnsVal)))
+			{
+				return;
+			}
+
+			/* 去掉IP地址中的前导0 */
+			ipVal = fmtIpAddr("ipAddrIn");
+			maskVal = fmtIpAddr("netMaskIn");
+			gatewayVal = fmtIpAddr("gatewayIn");
+			primDnsVal = fmtIpAddr("dns0In");
+			seDnsVal = fmtIpAddr("dns1In");
+
+			saveNetworkCfg(uciProto.optValue.proto.staticIp, function(result){
+				if (errHandle(parseInt(result[ERR_CODE])))
+				{
+					return;
+				}
+
+				loadPage("WizardWirelessCfg.htm", "phCon");
+			});
+		}
+
+		// wzdSelectInit("netModeSel", wzOptions, WAN_TYPE_STATIC, wzdNetWorkModeChange);
+		id("sub").onclick = onSave;
+
+		/* 修复IOS系统CNA浏览器默认使用第三方输入法无法输入的问题 */
+		adaptCNABrowserInput("ipAddrIn");
+		adaptCNABrowserInput("netMaskIn");
+		adaptCNABrowserInput("gatewayIn");
+		adaptCNABrowserInput("dns0In");
+		adaptCNABrowserInput("dns1In");
+
+		showNetworkCfg(uciProto.optValue.proto.staticIp);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+
+		loadPage("PhoneSelectNetworkType.htm", "selectNetTypeCon");
+		// 手动选择上网方式
+		$(".chooseOther a").click(function(e) {
+			showCover();
+			$(".selectNetType").show();
+		});
+
+		if(bWzdWanTypeDetected) {
+			$(".notDetected").hide();
+			$(".detected").show();
+		}
+	}
+	init();
+</script>
 <h1 class="phoneTitle">{%label.netSet%}</h1>
 <div class="textCenter">
 	<img class="detected disNone" src="../web-static/images/connect_success.png" />
@@ -94,10 +372,4 @@
 	</div>
 </div>
 <p class="chooseOther"><a href="javascript:void(0)">{%label.selectNetType%}</a></p>
-<div id="selectNetTypeCon"></div><script type="text/javascript">function init(){function b(a){switch(a){case ENONE:return!1;case EINVIPFMT:showPhoneNote("ipAddrIn","wzdIpNote",errStr.ipAddrFmtNoteErr);break;case EINVLOOPIP:showPhoneNote("ipAddrIn","wzdIpNote",errStr.ipAddrLoopErr);break;case EINVGROUPIP:showPhoneNote("ipAddrIn","wzdIpNote",errStr.ipAddrGroupErr);break;case EINVNET:showPhoneNote("ipAddrIn","wzdIpNote",errStr.wzdStcIpNetErr);break;case EINVIP:showPhoneNote("ipAddrIn","wzdIpNote",errStr.wzdStcIpErr);break;case EINVTYPE:showPhoneNote("ipAddrIn","wzdIpNote",
-errStr.acIpTypeErr);break;case EINVMASK:showPhoneNote("netMaskIn","wzdMaskNote",errStr.wzdStcMaskErr);break;case EINVNETID:case EINVHOSTID:case EINVIPMASKPAIR:showPhoneNote("ipAddrIn","wzdIpNote",errStr.wzdStcIpMaskNotMatch);break;case ECOMFLICTNET:showPhoneNote("ipAddrIn","wzdIpNote",errStr.wzdStcIpLanConflict);break;case EINVGTW:showPhoneNote("gatewayIn","wzdGatewayNote",errStr.wzdStcGatewayErr);break;case EINVFDNSVR:showPhoneNote("dns0In","wzdPrimDnsNote",errStr.wzdPrimDnsErr);break;case EINVSDNSVR:showPhoneNote("dns1In",
-"wzdSeDnsNote",errStr.wzdSeDnsErr);break;case ECONFLICTGATEWAY:showPhoneNote("gatewayIn","wzdGatewayNote",errStr.wzdIpAddrLanGatewayConflict);break;case ECONFLICTFDNS:showPhoneNote("wzdPrimDnsNote",errStr.wzdIpAddrLanFDNSConflict);break;case ECONFLICTSDNS:showPhoneNote("dns0In","wzdSeDnsNote",errStr.wzdIpAddrLanSDNSConflict)}return!0}function k(a){return""==a||"0.0.0.0"==a?(id("dns1In").value="0.0.0.0",ENONE):gNetworkCfg.lanIp==a?EINVSDNSVR:ENONE!=checkIp(a)?EINVSDNSVR:ENONE}function c(a){var b=hideLeadingZeros(id(a).value);
-return id(a).value=b}id("sub").onclick=function(){var a=id("ipAddrIn").value,g=id("netMaskIn").value,d=id("gatewayIn").value,e=id("dns0In").value,h=id("dns1In").value;closePhoneNote("ipAddrIn","wzdIpNote");closePhoneNote("netMaskIn","wzdMaskNote");closePhoneNote("dns0In","wzdPrimDnsNote");closePhoneNote("gatewayIn","wzdGatewayNote");closePhoneNote("dns1In","wzdSeDnsNote");var f;(f=b(checkIp(a)))||(f=b(checkMask(g)))||((a=b(checkIpMask(a,g)))||((d=b(ENONE!=checkIp(d)?EINVGTW:ENONE))||(e=gNetworkCfg.lanIp==
-e?EINVFDNSVR:ENONE!=checkIp(e)?EINVFDNSVR:ENONE,d=b(e)||b(k(h))),a=d),f=a);f||(a=c("ipAddrIn"),g=c("netMaskIn"),d=c("gatewayIn"),e=c("dns0In"),h=c("dns1In"),saveNetworkCfg(uciProto.optValue.proto.staticIp,function(a){b(parseInt(a[ERR_CODE]))||loadPage("WizardWirelessCfg.htm","phCon")}))};adaptCNABrowserInput("ipAddrIn");adaptCNABrowserInput("netMaskIn");adaptCNABrowserInput("gatewayIn");adaptCNABrowserInput("dns0In");adaptCNABrowserInput("dns1In");showNetworkCfg(uciProto.optValue.proto.staticIp);
-gSupportWanPortSwap&&!gWanPortDetectSupport&&(wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));loadPage("PhoneSelectNetworkType.htm","selectNetTypeCon");$(".chooseOther a").click(function(a){showCover();$(".selectNetType").show()});bWzdWanTypeDetected&&($(".notDetected").hide(),$(".detected").show())}init();
-</script><style type="text/css">div.phoneCon{padding-bottom:114px}li.phInputLi label{width:110px!important}span.phSelect span.staticIp{width:115px!important}li.phInputLi input{width:120px!important}div.staticIpFunc{margin-top:40px!important}#phWanLoadingCover{position:absolute;top:-9999px;visibility:hidden;width:100%;z-index:1011}div.phLoadingCon{background:#fff;margin:0 auto;text-align:center;width:300px}img.loading{height:85px;width:85px;margin:25px auto}div.phLoadingCon p{color:#3c4e43;font-size:16px;padding-bottom:50px;line-height:16px;height:16px}li.phInputLi label.wanPortSel{width:91px!important}li.phInputLi span.phSelect span.wanPortSel{width:118px!important}li.wanPortSelTips{height:20px;line-height:20px}li.wanPortSelTips label{text-align:right;display:inline-block;vertical-align:middle;height:20px;line-height:20px;width:105px}li.wanPortSelTips span.wanPortSelTips{height:20px;line-height:20px;width:118px;color:#FFF;font-size:14px}ul.wanPortSel{margin-bottom:10px}ul.wanPortSelTips{margin-bottom:16px}p.chooseOther{position:absolute;bottom:72px;width:100%;text-align:center}p a{color:#feeb1a;font-size:14px}p.detectTip{color:#fff;font-size:15px;text-align:center;margin-bottom:20px}div.textCenter{text-align:center}img.detected{margin:20px auto 20px}li.phErrTip i.error{background:url(../web-static/images/error@2x.png) no-repeat;width:16px;height:16px;top:0;background-size:cover}li.phErrTip span.errDes{line-height:16px}</style>
+<div id="selectNetTypeCon"></div>

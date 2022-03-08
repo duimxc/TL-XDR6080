@@ -1,4 +1,8 @@
-
+<style type="text/css">
+	ul.dnsInput{
+		display: none;
+	}
+</style>
 <div class="block">
 	<ul class="gridLine gridLineA">
 		<label class="desLblA">{%label.netMode%}</label>
@@ -80,19 +84,527 @@
 		<input id="saveHighSet" type="button" value="{%btn.save%}" class="btnA subBtn" />
 	</div>
 </div>
-<script type="text/javascript">function init(e){function n(b,d){var a="";switch(b){case ENONE:return!1;case EIPV6INVFDNSVR:a=errStr.primDnsErr;break;case EIPV6INVSDNSVR:a=errStr.seDnsErr;break;case ENOLINK:a=errStr.wanLinkDown;break;case EIPV6LINKLOCAL:a=errStr.ipv6LinkLoaclErr;break;case ECONFLICTLANMAC:a=errStr.lanWanMacConflict;break;case ECONFLICTWANMAC:a=errStr.mulWanMacConflict;break;default:a=errStr.invRequestFail}showAlert(a,d);return!0}function v(b){wanCheckWDS(function(){var d={},a={},c={};d[f]=a;1==b||"undefined"==typeof b?
-a[WAN_NAME]=c:a[WAN_NAME+"_"+b]=c;c[w]=DHCP_NAME;disableBtn("saveHighSet",!0);disableBtn("connect",!0);setLoadingId("save");hsLoading(!0);$.modify(d,function(a){g=DHCP_NAME;l==PD_MODE_PREFIX?(lanPrefixChange(!0),preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);preDelgOnFlag=!1},2E3);hsLoading(!1,function(){disableBtn("saveHighSet",!1);disableBtn("connect",!1)})});refreshWanStatus(b)})}function x(b){wanCheckWDS(function(){var d={},a={},c={},e={};d[f]=a;1==b||"undefined"==typeof b?(a[s]=
-e,a[DHCP_NAME]=c):(a[s+"_"+b]=e,a[DHCP_NAME+"_"+b]=c);var m,p,h,k,q,r,a=id("PtlAuto").checked?IP_CONFIG_AUTO:id("PtlDHCPv6").checked?IP_CONFIG_DHCPV6:IP_CONFIG_SLAAC;m=id("PreDelgOn").checked?PD_MODE_PREFIX:PD_MODE_NON_TEMP;p=id("dnsAuto").checked?DNS_MODE_DYN:DNS_MODE_MAN;h=id("pri_dns_input").value;k=id("snd_dns_input").value;q=id("wanMac");r=q.value;if(!wanMacErrHandle(checkMac(r),q)){c[y]=a;c[z]=m;c[A]=p;if(p==DNS_MODE_MAN){if(n(checkPriDnsV6(h),"pri_dns_input")||n(checkSeDnsV6(k),"snd_dns_input"))return;
-h=h.replace(/：/g,":");$("#pri_dns_input").val(h);k=k.replace(/：/g,":");$("#snd_dns_input").val(k);c[B]=h;c[C]=k}e[D]=r;updateTimerHandle&&clearTimeout(updateTimerHandle);disableBtn("save",!0);disableBtn("connect",!0);setLoadingId("saveHighSet");hsLoading(!0);$.modify(d,function(a){g==DHCP_NAME&&(m==PD_MODE_PREFIX?(lanPrefixChange(!0),preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);preDelgOnFlag=!1},2E3));t(b);hsLoading(!1,function(){disableBtn("save",!1);disableBtn("connect",!1)});l=m;
-updateTimerHandle=$.setTimeout(function(){refreshWanStatus(b)},0);return n(a[ERR_CODE])})}})}function E(b){wanCheckWDS(function(){data=1==b||"undefined"==typeof b?{network:{change_wanv6_status:{proto:"dhcpcv6",operate:"renew"}}}:{network:{change_wanv6_status:{proto:"dhcpcv6_"+b,operate:"renew"}}};disableBtn("save",!0);disableBtn("saveHighSet",!0);setLoadingId("connect");hsLoading(!0);hsStatSet("link",linkStatus[LINKING_UP]);$.action(data,function(b){hsLoading(!1,function(){disableBtn("save",!1);disableBtn("saveHighSet",
-!1)})})})}function t(b){var d={};d[f]={};1==b||"undefined"==typeof b?(d[f][KEY_NAME]=[WAN_NAME,DHCP_NAME,"wan"],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=[WAN_STATUS_NAME,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]):(d[f][KEY_NAME]=[WAN_NAME+"_"+b,DHCP_NAME+"_"+b,"wan_"+b],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=[WAN_STATUS_NAME+"_"+b,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]);$.query(d,function(a){var c=a[f];2<=b&&"undefined"!=typeof b?(c=c[DHCP_NAME+
-"_"+b],g=a[uciNetwork.fileName][WAN_STATUS_NAME+"_"+b].proto):(c=c[DHCP_NAME],g=a[uciNetwork.fileName][WAN_STATUS_NAME].proto);id("PtlAuto").checked=c.ip_config==IP_CONFIG_AUTO?1:0;id("PtlDHCPv6").checked=c.ip_config==IP_CONFIG_DHCPV6?1:0;id("PtlSLAAC").checked=c.ip_config==IP_CONFIG_SLAAC?1:0;l=c.pd_mode;"undefined"!=typeof b?(l=PD_MODE_NON_TEMP,id("PreDelgOff").checked=1,lanPrefixChange(!1),preDelgOnFlag=!1,disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0)):(curSysMode==uciSystem.optValue.sysMode.routerMode&&
-(disableBtn("PreDelgOn",!1),disableBtn("PreDelgOff",!1)),c.pd_mode==PD_MODE_NON_TEMP?(id("PreDelgOff").checked=1,g==DHCP_NAME&&(lanPrefixChange(!1),preDelgOnFlag=!1)):(id("PreDelgOn").checked=1,g==DHCP_NAME&&(lanPrefixChange(!0),preDelgOnFlag=!0)));c.dns_mode==DNS_MODE_DYN?id("dnsAuto").click():(id("pri_dns_input").value=c.pri_dns||"::",id("snd_dns_input").value=c.snd_dns,id("dnsManual").click());setMacInfo(a,b);u(a,b)})}function u(b,d){var a;a=1==d||"undefined"==typeof d?b[uciNetwork.fileName][WAN_STATUS_NAME]:
-b[uciNetwork.fileName][WAN_STATUS_NAME+"_"+d];var c;if(a.proto!=DHCP_NAME)clearTimeout(updateTimerHandle);else switch(parseInt(a.link_status)){case LINK_DOWN:id("ip").innerHTML="::/64";id("gateway").innerHTML="::";id("pri_dns").innerHTML="::";id("snd_dns").innerHTML="::";curSysMode==uciSystem.optValue.sysMode.routerMode&&disableBtn("connect",!1);c=a[uciNetwork.optName.code];if(LINK_CODE_MANUAL!=c&&LINK_CODE_NORMAL!=c&&LINK_CODE_INET_ERR!=c){hsStatSet("error",linkStatus[LINK_DOWN]+label.lBrackets+
-linkCode[c]+label.rBrackets);break}hsStatSet("error",linkStatus[LINK_DOWN]);break;case LINK_UP:id("ip").innerHTML=(a.ip6addr||"::")+"/64";id("gateway").innerHTML=a.ip6gw||"::";id("pri_dns").innerHTML=a.pri_dns||"::";id("snd_dns").innerHTML=a.snd_dns||"::";curSysMode==uciSystem.optValue.sysMode.routerMode&&disableBtn("connect",!1);hsStatSet("correct",linkStatus[LINK_UP]);break;case LINKING_DOWN:hsStatSet("link",linkStatus[LINKING_DOWN]);id("ip").innerHTML="::/64";id("gateway").innerHTML="::";id("pri_dns").innerHTML=
-"::";id("snd_dns").innerHTML="::";curSysMode==uciSystem.optValue.sysMode.routerMode&&disableBtn("connect",!1);break;case LINKING_UP:c=a[uciNetwork.optName.code];if(c==LINK_CODE_INET_ERR){hsStatSet("link",linkStatus[LINKING_UP]+label.lBrackets+linkCode[LINK_CODE_NOECHO]+label.rBrackets);id("ip").innerHTML=(a.ip6addr||"::")+"/64";id("gateway").innerHTML=a.ip6gw||"::";id("pri_dns").innerHTML=a.pri_dns||"::";id("snd_dns").innerHTML=a.snd_dns||"::";curSysMode==uciSystem.optValue.sysMode.routerMode&&disableBtn("connect",
-!1);break}else hsStatSet("link",linkStatus[LINKING_UP]);id("ip").innerHTML="::/64";id("gateway").innerHTML="::";id("pri_dns").innerHTML="::";id("snd_dns").innerHTML="::";curSysMode==uciSystem.optValue.sysMode.routerMode&&disableBtn("connect",!1)}}var f="protocol",s="wan",w=uciProto.optName.type,B="pri_dns",C="snd_dns",z="pd_mode",y="ip_config",A="dns_mode",D=uciProto.optName.macaddr,l,g;refreshWanStatus=function(b){var d={};d[uciNetwork.fileName]={};d[uciNetwork.fileName][KEY_NAME]=2<=b&&"undefined"!=
-typeof b?WAN_STATUS_NAME+"_"+b:WAN_STATUS_NAME;updateTimerHandle&&clearTimeout(updateTimerHandle);$.query(d,function(a){u(a,b);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(b)},2E3)})};$("[name=ipv6DnsSwitch]").change(function(b){"dnsAuto"==this.id?$("ul.dnsInput").css("display","none"):$("ul.dnsInput").css("display","block")});if("undefined"==typeof e)selectInit("wanSel",wanOptions,LINK_TYPE_DHCP,wanSelectChange);else{var F=wanOptions.slice(0,wanOptions.length-1);selectInit("wanSel",
-F,LINK_TYPE_DHCP,wanSelectChange)}disableBtn("connect",!0);curSysMode!=uciSystem.optValue.sysMode.routerMode&&(id("wanSel").disable(!0),disableBtn("save",!0),disableBtn("saveHighSet",!0),disableInput("PtlAuto",!0),disableInput("PtlDHCPv6",!0),disableInput("PtlSLAAC",!0),disableInput("wanMac",!0),disableInput("pri_dns_input",!0),disableInput("snd_dns_input",!0),disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0),disableBtn("dnsAuto",!0),disableBtn("dnsManual",!0));id("saveHighSet").onclick=function(){x(e)};
-id("connect").onclick=function(){E(e)};id("save").onclick=function(){v(e)};t(e);refreshWanStatus(e);refreshLanStatus(e)}function initWanPortSel(){if($("#dualWanIpv6Wrapper").is(":hidden"))init();else{var e=$("#dualWanIpv6Wrapper").find("label.selected").index()+1;init(e)}}initWanPortSel();
-</script><style type="text/css">ul.dnsInput{display:none}</style>
+<script type="text/javascript">
+	function init(currentWanPortIdx)
+	{
+		var uciFile = "protocol";
+		var uciWan = "wan";
+		var uciWanType = uciProto.optName.type;
+		var uciPriDns = "pri_dns";
+		var uciSndDns = "snd_dns";
+		var uciPdMode = "pd_mode";
+		var uciIpConfig = "ip_config";
+		var uciDnsMode = "dns_mode";
+		var uciWanMac = uciProto.optName.macaddr;
+
+		var dnsSwitchAutoFlag = false, currentPreDelgVal, currentProto;
+
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+
+			switch (errNo)
+			{
+			case ENONE:
+				return false;
+			case EIPV6INVFDNSVR:
+				showStr = errStr.primDnsErr;
+				break;
+			case EIPV6INVSDNSVR:
+				showStr = errStr.seDnsErr;
+				break;
+				break;
+			case ENOLINK:
+				showStr = errStr.wanLinkDown;
+				break;
+			case EIPV6LINKLOCAL:
+				showStr = errStr.ipv6LinkLoaclErr;
+				break;
+			/*
+			case ECONFLICTGATEWAY:
+				showStr = errStr.ipAddrLanGatewayConflict;
+				break;
+			case ECONFLICTFDNS:
+				showStr = errStr.ipAddrLanFDNSConflict;
+				break;
+			case ECONFLICTSDNS:
+				showStr = errStr.ipAddrLanSDNSConflict;
+				break;
+			*/
+			case ECONFLICTLANMAC:
+				showStr = errStr.lanWanMacConflict;
+				break;
+			case ECONFLICTWANMAC:
+				showStr = errStr.mulWanMacConflict;
+				break;
+			default:
+				showStr = errStr.invRequestFail;
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return true;
+		}
+
+		function onSave(currentWanPortIdx)
+		{
+			wanCheckWDS(function(){
+				var cfg = {}, cfgProto = {}, cfgWan = {};
+
+
+				cfg[uciFile] = cfgProto;
+				if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+					cfgProto[WAN_NAME] = cfgWan;
+				}else{
+					cfgProto[WAN_NAME + "_" + currentWanPortIdx] = cfgWan;
+				}
+				cfgWan[uciWanType] = DHCP_NAME;
+
+				disableBtn("saveHighSet", true);
+				disableBtn("connect", true);
+				setLoadingId("save");
+				hsLoading(true);
+
+				$.modify(cfg, function(result){
+					currentProto = DHCP_NAME;
+					if (currentPreDelgVal == PD_MODE_PREFIX)
+					{
+						lanPrefixChange(true);
+						preDelgOnFlag = true;
+					}
+					else
+					{
+						setTimeout(function(){
+							lanPrefixChange(false);
+							preDelgOnFlag = false;
+						}, 2000);
+					}
+
+					hsLoading(false, function(){
+						disableBtn("saveHighSet", false);
+						disableBtn("connect", false);
+					});
+				});
+
+				refreshWanStatus(currentWanPortIdx);
+			});
+		}
+
+		function saveHighSet(currentWanPortIdx)
+		{
+			wanCheckWDS(function(){
+				var cfg = {}, cfgProto = {}, cfgDhcp = {}, cfgWan = {}, cfgWanv6 = {};
+				cfg[uciFile] = cfgProto;
+				if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+					cfgProto[uciWan] = cfgWan;
+					cfgProto[DHCP_NAME] = cfgDhcp;
+				}else{
+					cfgProto[uciWan + "_" + currentWanPortIdx] = cfgWan;
+					cfgProto[DHCP_NAME + "_" + currentWanPortIdx] = cfgDhcp;
+				}
+
+				var ipconfigVal, pdmodeVal, dnsmodeVal, dns0Val, dns1Val, wanMac, wanMacVal;
+
+				ipconfigVal = id("PtlAuto").checked ? IP_CONFIG_AUTO : id("PtlDHCPv6").checked ? IP_CONFIG_DHCPV6 : IP_CONFIG_SLAAC;
+				pdmodeVal = id("PreDelgOn").checked ? PD_MODE_PREFIX : PD_MODE_NON_TEMP;
+				dnsmodeVal = id("dnsAuto").checked ? DNS_MODE_DYN : DNS_MODE_MAN;
+
+				dns0Val = id("pri_dns_input").value;
+				dns1Val = id("snd_dns_input").value;
+
+				wanMac = id("wanMac");
+				wanMacVal = wanMac.value;
+
+				if (wanMacErrHandle(checkMac(wanMacVal), wanMac))
+				{
+					return;
+				}
+
+				/* protocol.dhcpcv6 */
+				cfgDhcp[uciIpConfig] = ipconfigVal;
+				cfgDhcp[uciPdMode] = pdmodeVal;
+				cfgDhcp[uciDnsMode] = dnsmodeVal;
+
+				if (dnsmodeVal == DNS_MODE_MAN)
+				{
+					if (errHandle(checkPriDnsV6(dns0Val), "pri_dns_input") ||
+						errHandle(checkSeDnsV6(dns1Val), "snd_dns_input"))
+					{
+						return;
+					}
+
+					/* 不需要去掉前导0，但要替换中文冒号 */
+					dns0Val = dns0Val.replace(/：/g, ":");
+					$("#pri_dns_input").val(dns0Val);
+					dns1Val = dns1Val.replace(/：/g, ":");
+					$("#snd_dns_input").val(dns1Val);
+
+					cfgDhcp[uciPriDns] = dns0Val;
+					cfgDhcp[uciSndDns] = dns1Val;
+				}
+
+				/* protocol.wan */
+				cfgWan[uciWanMac] = wanMacVal;
+
+				if (updateTimerHandle)
+				{
+					clearTimeout(updateTimerHandle);
+				}
+
+				disableBtn("save", true);
+				disableBtn("connect", true);
+				setLoadingId("saveHighSet");
+				hsLoading(true);
+				$.modify(cfg, function(result){
+					if (currentProto == DHCP_NAME)
+					{
+						if (pdmodeVal == PD_MODE_PREFIX)
+						{
+							lanPrefixChange(true);
+							preDelgOnFlag = true;
+
+						}
+						else
+						{
+							setTimeout(function(){
+								lanPrefixChange(false);
+								preDelgOnFlag = false;
+							}, 2000);
+						}
+					}
+					getDynIpData(currentWanPortIdx);
+					hsLoading(false, function(){
+							disableBtn("save", false);
+							disableBtn("connect", false);
+						}
+					);
+
+					currentPreDelgVal = pdmodeVal;
+
+					updateTimerHandle = $.setTimeout(function(){
+						refreshWanStatus(currentWanPortIdx);
+					}, 0);
+					return errHandle(result[ERR_CODE]);
+				});
+			});
+		}
+
+		function renewDhcpLease(currentWanPortIdx)
+		{
+			wanCheckWDS(function(){
+				if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+					data = {"network":{"change_wanv6_status":{"proto":"dhcpcv6", "operate":"renew"}}};
+				}else{
+					data = {"network":{"change_wanv6_status":{"proto":"dhcpcv6_" + currentWanPortIdx,"operate":"renew"}}};
+				}
+
+				disableBtn("save", true);
+				disableBtn("saveHighSet", true);
+				setLoadingId("connect");
+				hsLoading(true);
+				hsStatSet("link", linkStatus[LINKING_UP]);
+
+				$.action(data, function(result){
+					hsLoading(false, function(){
+						disableBtn("save", false);
+						disableBtn("saveHighSet", false);
+					});
+				});
+			});
+		}
+
+		function setDynIpCfg(ALL_DATA,currentWanPortIdx)
+		{
+			var data = ALL_DATA[uciFile];
+			var wanCfg,dhcpCfg;
+			if(currentWanPortIdx >= 2 && typeof currentWanPortIdx != "undefined"){
+				wanCfg = data[WAN_NAME + "_" + currentWanPortIdx];
+				dhcpCfg = data[DHCP_NAME + "_" + currentWanPortIdx];
+				currentProto = ALL_DATA[uciNetwork.fileName][WAN_STATUS_NAME + "_" + currentWanPortIdx]["proto"];
+			}else{
+				wanCfg = data[WAN_NAME];
+				dhcpCfg = data[DHCP_NAME];
+				currentProto = ALL_DATA[uciNetwork.fileName][WAN_STATUS_NAME]["proto"];
+			}
+
+			/* 地址获取协议 */
+			id("PtlAuto").checked = dhcpCfg.ip_config == IP_CONFIG_AUTO ? 1 : 0;
+			id("PtlDHCPv6").checked = dhcpCfg.ip_config == IP_CONFIG_DHCPV6 ? 1 : 0;
+			id("PtlSLAAC").checked = dhcpCfg.ip_config == IP_CONFIG_SLAAC ? 1 : 0;
+
+			/* 前缀授权 */
+			currentPreDelgVal = dhcpCfg.pd_mode;
+			if(typeof currentWanPortIdx != "undefined"){
+				currentPreDelgVal = PD_MODE_NON_TEMP;
+				id("PreDelgOff").checked = 1;
+				lanPrefixChange(false);
+				preDelgOnFlag = false;
+				disableBtn("PreDelgOn",true);
+				disableBtn("PreDelgOff",true);
+			}else{
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("PreDelgOn",false);
+					disableBtn("PreDelgOff",false);
+				}
+				
+				if (dhcpCfg.pd_mode == PD_MODE_NON_TEMP)
+				{
+					id("PreDelgOff").checked = 1;
+
+					if (currentProto == DHCP_NAME)
+					{
+						lanPrefixChange(false);
+						preDelgOnFlag = false;
+					}
+				}
+				else
+				{
+					id("PreDelgOn").checked = 1;
+
+					if (currentProto == DHCP_NAME)
+					{
+						lanPrefixChange(true);
+						preDelgOnFlag = true;
+					}
+				}
+			}
+
+			/* DNS服务器 */
+			if (dhcpCfg.dns_mode == DNS_MODE_DYN)
+			{
+				id("dnsAuto").click();
+				dnsSwitchAutoFlag = true;
+			}
+			else
+			{
+				id("pri_dns_input").value = dhcpCfg["pri_dns"] || "::";
+				id("snd_dns_input").value = dhcpCfg["snd_dns"];
+
+				id("dnsManual").click();
+			}
+
+			setMacInfo(ALL_DATA,currentWanPortIdx);
+
+			/* 设置WAN口状态 */
+			setDynIpWanStatus(ALL_DATA,currentWanPortIdx);
+		}
+
+		function getDynIpData(currentWanPortIdx)
+		{
+			var data = {};
+			data[uciFile] = {};
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				// 单WAN或WAN1口数据
+				data[uciFile][KEY_NAME] = [WAN_NAME, DHCP_NAME,"wan"];
+				data[uciNetwork.fileName] = {};
+				data[uciNetwork.fileName][KEY_NAME] = [WAN_STATUS_NAME, uciNetwork.dynData.ifaceMac, uciNetwork.secName.lan];
+			}else{
+				data[uciFile][KEY_NAME] = [WAN_NAME + "_" + currentWanPortIdx, DHCP_NAME + "_" + currentWanPortIdx,"wan_"+ currentWanPortIdx];
+				data[uciNetwork.fileName] = {};
+				data[uciNetwork.fileName][KEY_NAME] = [WAN_STATUS_NAME + "_" + currentWanPortIdx, uciNetwork.dynData.ifaceMac, uciNetwork.secName.lan];
+			}
+
+			$.query(data, function (res){
+				setDynIpCfg(res,currentWanPortIdx);
+			});
+		}
+
+		function setDynIpWanStatus(data,currentWanPortIdx)
+		{
+			var wanStatus;
+			if(currentWanPortIdx == 1 || typeof currentWanPortIdx == "undefined"){
+				wanStatus = data[uciNetwork.fileName][WAN_STATUS_NAME];
+			}else{
+				wanStatus = data[uciNetwork.fileName][WAN_STATUS_NAME + "_" + currentWanPortIdx];
+			}
+			var errCode;
+
+			if (wanStatus["proto"] != DHCP_NAME)
+			{
+				clearTimeout(updateTimerHandle);
+				return;
+			}
+
+			switch(parseInt(wanStatus["link_status"]))
+			{
+			case LINK_DOWN:
+				id("ip").innerHTML = "::/64";
+				id("gateway").innerHTML = "::";
+				id("pri_dns").innerHTML = "::";
+				id("snd_dns").innerHTML = "::";
+
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("connect", false);
+				}
+				errCode = wanStatus[uciNetwork.optName.code];
+
+				/* 异常断开连接的，加注错误提示 */
+				if ((LINK_CODE_MANUAL != errCode) &&
+					(LINK_CODE_NORMAL != errCode) &&
+					(LINK_CODE_INET_ERR != errCode))
+				{
+					hsStatSet("error", linkStatus[LINK_DOWN] + label.lBrackets + linkCode[errCode] + label.rBrackets);
+					break;
+				}
+
+				hsStatSet("error", linkStatus[LINK_DOWN]);
+				break;
+			case LINK_UP:
+				id("ip").innerHTML = (wanStatus["ip6addr"] || "::") + "/64";
+				id("gateway").innerHTML = wanStatus["ip6gw"] || "::";
+				id("pri_dns").innerHTML = wanStatus["pri_dns"] || "::";
+				id("snd_dns").innerHTML = wanStatus["snd_dns"] || "::";
+
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("connect", false);
+				}
+				hsStatSet("correct", linkStatus[LINK_UP]);
+				break;
+			case LINKING_DOWN:
+				hsStatSet("link", linkStatus[LINKING_DOWN]);
+				id("ip").innerHTML = "::/64";
+				id("gateway").innerHTML = "::";
+				id("pri_dns").innerHTML = "::";
+				id("snd_dns").innerHTML = "::";
+
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("connect", false);
+				}
+				break;
+			case LINKING_UP:
+				errCode = wanStatus[uciNetwork.optName.code];
+
+				if (errCode == LINK_CODE_INET_ERR) //可以连上网关但无法连接外网（双宽带开启）
+				{
+					hsStatSet("link", linkStatus[LINKING_UP] + label.lBrackets + linkCode[LINK_CODE_NOECHO] + label.rBrackets);
+
+					//需将获取到的IP等信息显示出来
+					id("ip").innerHTML = (wanStatus["ip6addr"] || "::") + "/64";
+					id("gateway").innerHTML = wanStatus["ip6gw"] || "::";
+					id("pri_dns").innerHTML = wanStatus["pri_dns"] || "::";
+					id("snd_dns").innerHTML = wanStatus["snd_dns"] || "::";
+
+					if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+						disableBtn("connect", false);
+					}
+					break;
+				}
+				else
+				{
+					hsStatSet("link", linkStatus[LINKING_UP]);
+				}
+
+				id("ip").innerHTML = "::/64";
+				id("gateway").innerHTML = "::";
+				id("pri_dns").innerHTML = "::";
+				id("snd_dns").innerHTML = "::";
+				if (curSysMode == uciSystem.optValue.sysMode.routerMode) {
+					disableBtn("connect", false);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+
+		refreshWanStatus = function(currentWanPortIdx)
+		{
+			var data = {};
+			data[uciNetwork.fileName] = {};
+			if(currentWanPortIdx >= 2 && typeof currentWanPortIdx != "undefined"){
+				data[uciNetwork.fileName][KEY_NAME] = WAN_STATUS_NAME + "_" + currentWanPortIdx;
+			}else{
+				data[uciNetwork.fileName][KEY_NAME] = WAN_STATUS_NAME;
+			}
+
+			if (updateTimerHandle)
+			{
+				clearTimeout(updateTimerHandle);
+			}
+
+			$.query(data, function(res){
+				setDynIpWanStatus(res,currentWanPortIdx);
+				updateTimerHandle = $.setTimeout(function(){
+					refreshWanStatus(currentWanPortIdx);
+				}, 2000);
+			});
+		}
+
+		/*
+		$("[name=ipv6PreDelgSwitch]").change(function(){
+			if (this.id == "PreDelgOn")
+			{
+				lanPrefixChange(true);
+				preDelgOnFlag = true;
+			}
+			else
+			{
+				lanPrefixChange(false);
+				preDelgOnFlag = false;
+			}
+		});
+		*/
+
+		$("[name=ipv6DnsSwitch]").change(function(event){
+			if (this.id == "dnsAuto")
+			{
+				$("ul.dnsInput").css("display", "none");
+				dnsSwitchAutoFlag = true;
+			}
+			else
+			{
+				$("ul.dnsInput").css("display", "block");
+				dnsSwitchAutoFlag = false;
+			}
+		});
+
+		if(typeof currentWanPortIdx == "undefined"){
+			selectInit("wanSel", wanOptions, LINK_TYPE_DHCP, wanSelectChange);
+		}else{
+			// 多WAN开启时不支持桥模式选择
+			var wanNewOptions = wanOptions.slice(0,wanOptions.length - 1);
+			selectInit("wanSel", wanNewOptions, LINK_TYPE_DHCP, wanSelectChange);
+		}
+		disableBtn("connect", true);
+		if (curSysMode != uciSystem.optValue.sysMode.routerMode) {
+			id("wanSel").disable(true);
+			disableBtn("save",true);
+			disableBtn("saveHighSet",true);
+			disableInput("PtlAuto",true);
+			disableInput("PtlDHCPv6",true);
+			disableInput("PtlSLAAC",true);
+			disableInput("wanMac",true);
+			disableInput("pri_dns_input",true);
+			disableInput("snd_dns_input",true);
+			disableBtn("PreDelgOn",true);
+			disableBtn("PreDelgOff",true);
+			disableBtn("dnsAuto",true);
+			disableBtn("dnsManual",true);
+		}
+
+		id("saveHighSet").onclick = function(){
+			saveHighSet(currentWanPortIdx);
+		};
+		id("connect").onclick = function(){
+			renewDhcpLease(currentWanPortIdx);
+		}
+		id("save").onclick = function(){
+			onSave(currentWanPortIdx);
+		}
+
+		getDynIpData(currentWanPortIdx);
+		refreshWanStatus(currentWanPortIdx);
+		refreshLanStatus(currentWanPortIdx);
+	}
+	function initWanPortSel(){
+		if($("#dualWanIpv6Wrapper").is(":hidden")){
+			// 多WAN未开启
+			init();
+		}else{
+			var currentSelPort = $("#dualWanIpv6Wrapper").find("label.selected").index();
+			var currentWanPortIdx = currentSelPort + 1;
+			init(currentWanPortIdx);
+		}
+	}
+	initWanPortSel();
+</script>

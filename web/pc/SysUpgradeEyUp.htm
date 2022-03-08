@@ -1,5 +1,1418 @@
+<style type="text/css">
+	table.dataGrid td{
+		height:39px;
+		border: 1px solid #1E96D4;
+	}
+	div.sysUpBlock{
+		color:#FFFFFF;
+		font-size:14px;
+		text-align:left;
+		margin-bottom: 30px;
+	}
+	p.upgradeTip {
+		margin-top: 30px;
+	}
+	.tblBtn{
+		height:25px;
+		margin:auto 3px;
+	}
+	div.eptCon{
+		background-color:#FFFFFF;
+		margin:0 auto;
+		overflow:hidden;
+		position:relative;
+		width:510px;
+		padding: 30px 70px 50px;
+	}
+	p.upVersion{
+		color:#343434;
+		text-align:left;
+		margin:32px 0 0 0px;
+		font-size:12px;
+	}
+	p.upDes{
+		color:#343434;
+		text-align:left;
+		margin:24px 0 0 0px;
+		font-size:12px;
+	}
+	h1.localUpgrade{
+		color:#333333;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	span.softPos{
+		margin-left:30px;
+	}
+	div.fileDiv{
+		width:327px;
+		height:34px;
+		margin:10px 0 0 0px;
+		overflow:hidden;
+		position:relative;
+		vertical-align:middle;
+	}
+	input.file{
+		font-size:110px;
+		top:-5px;
+		right:-5px;
+		opacity:0;
+		filter:alpha(opacity:0);
+		cursor:pointer;
+		position:absolute;
+		vertical-align:top;
+	}
+	input.fileTxt{
+		width:226px;
+		height:30px;
+		line-height:30px;
+		color:#333333;
+		font-size:12px;
+		border:1px solid #1e96d4;
+		border-radius:4px;
+		padding:0 2px 0 4px;
+		vertical-align:middle;
+	}
+	input.fileBrowse{
+		padding:3px 18px;
+		*padding:2px 12px 0px;
+		font-size:14px;
+		width:80px;
+		height:30px;
+		margin-left:12px;
+		vertical-align:middle;
+	}
+	#sysUpgrade{
+		vertical-align:middle;
+		width:90px !important;
+		font-size:14px;
+		height:30px;
+		margin:30px 0 55px 61px;
+	}
+	#sysUpgradeCancel{
+		vertical-align:middle;
+		font-size:14px;
+		width:80px;
+		height:30px;
+		margin:30px 0 55px 12px;
+	}
+	#nativeTbl, #onlineTbl{
+		font-size: 12px;
+	}
+	#upFileForm {
+		height: 100px;
+	}
 
+	div.blockOlUpgradeBtn{
+		margin-top:34px;
+		margin-bottom: 15px;
+	}
+	div.blockOlUpgradeBtn input{
+		font-size: 14px;
+		margin-right: 24px;
+		padding-top: 3px;
+		padding-bottom: 3px;
+		padding-left: 8px;
+		padding-right: 8px;
+		border: 1px solid #FBEB1A;
+	}
+	div.blockOlUpgradeBtn input.subBtnDis{
+		border: 1px solid #FFFFFF;
+		padding-top: 3px !important;
+		padding-bottom: 3px !important;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		function errHandleCheckUpgradeInfo(errNo)
+		{
+			var showStr = "";
+			var cloudErrRel;
 
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				return true;
+			case EINVSENDREQMSGFAILED:
+				showStr = errStr.invSendReqMsgFailed;
+				break;
+			case ESYSBUSY:
+			case EINVLASTOPTIONISNOTFINISHED:
+				showStr = errStr.invLastOptionIsNotFinished;
+				break;
+			case ESYSTEM:
+				showStr = errStr.invRequestFail;
+				break;
+			case ENOMEMORY:
+				showStr = errStr.invMemoryOut;
+				break;
+			case EINVGETDATAFAILED:
+				showStr = errStr.invGetDataFailed;
+				break;
+			case EINVPARAMETER:
+				showStr = errStr.invParameter;
+				break;
+			case EINVREQUESTTIMEOUT:
+				showStr = errStr.invRequestTimeout;
+				break;
+			case EINVDEVICEIDNOTEXIST:
+			case EINVERRORDEVICEIDFORMATERROR:
+			case EINVILLEGALDEVICE:
+				showStr = label.cloudDeviceInfoExpt;
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(errNo)
+				if (cloudErrRel.result == false)
+				{
+					showStr = cloudErrRel.tip;
+				}
+				else
+				{
+					showStr = errStr.invRequestFail;
+				}
+				break;
+			}
+
+			closeLoading();
+			showAlert(showStr);
+
+			return false;
+		}
+
+		function errHandle(errNo)
+		{
+			switch (errNo)
+			{
+			case ENONE:
+				return true;
+			case EFWEXCEPTION:
+			case EFWNOTSUPPORTED:
+			case EFILETOOBIG:
+				showAlert(errStr.fwFmtErr);
+				break;
+			case EFWNOTINFLANDBL:
+			case EFWNEWEST:
+				showAlert(errStr.fwNotSupported);
+				break;
+			case ESYSBUSY:
+				showAlert(errStr.invLastOptionIsNotFinished);
+				break;
+			case EINVMEMORYOUT:
+			case EINVDOWNLOADFWFAILED:
+			case EINVSENDREQMSGFAILED:
+			case EINVREQUESTTIMEOUT:
+			case EINVCONNECTTINGCLOUDSERVER:
+			case EINVLASTOPTIONISNOTFINISHED:
+				showAlert(errStr.fwDownLoadFailed);
+				break;
+			case EINVFMT:
+			case EFWRSAFAIL:
+			case EFWHWIDNOTMATCH:
+			case EFWZONECODENOTMATCH:
+			case EFWVENDORIDNOTMATCH:
+			case EINVUPGRADEFWFAILED:
+			default:
+				showAlert(errStr.fwUpgradeFailed);
+				break;
+			}
+
+			return false;
+		}
+
+		function checkFile()
+		{
+			var fileName = id("fileName").value;
+
+			if (fileName == "")
+			{
+				showAlert(label.upWarn);
+				return false;
+			}
+			else if (fileName.search(/\.bin$/) == -1 && fileName.search(/\.w$/) == -1)
+			{
+				showAlert(errStr.fileFmttErr);
+				return false;
+			}
+
+			return true;
+		}
+
+		function upLoadCallBack(code, dataObj)
+		{
+			if (true == upgradeTimeoutTag)
+			{
+				return;
+			}
+
+			clearTimeout(upgradeTimeoutHd);
+			upgradeTimeoutHd = null;
+			closeLoading();
+
+			if (ENONE == code)
+			{
+				var waitTime = dataObj["wait_time"]
+							 ? parseInt(dataObj["wait_time"])*1000
+							 : SYSUPGRADE_SECONDS;
+				showProgBar(waitTime, label.upgrading, function(){
+					lanDetecting(function(){
+						window.location.reload();
+					});
+				}, true, statusStr.upgradeTip);
+			}
+			else
+			{
+				errHandle(code);
+			}
+		}
+
+		function upLoadExtCallBack(code, dataObj) {
+			if (true == upgradeTimeoutTag)
+			{
+				return;
+			}
+
+			clearTimeout(upgradeTimeoutHd);
+			upgradeTimeoutHd = null;
+			closeLoading();
+
+			if (ENONE == code)
+			{
+				var waitTime = dataObj["wait_time"]
+						? parseInt(dataObj["wait_time"])*1000
+						: SYSUPGRADE_SECONDS;
+				showProgBar(waitTime, label.upgrading, function(){
+					closeProgBar();
+					getBasicData(function(data){
+						olUpgradeGridData = $.extend(true, [], data);
+						refreshTable();
+					});
+				}, true, statusStr.upgradeChildRtTip);
+			}
+			else
+			{
+				errHandle(code);
+			}
+		}
+
+		/* 处理升级超时的情况 */
+		function upgradeTimeout()
+		{
+			upgradeTimeoutTag = true;
+			id("uploadIf").onload = null;
+			closeLoading();
+			closeProgBar();
+			clearTimeout(upgradeTimeoutHd);
+			showAlert(errStr.upGradeFail);
+			id("uploadIf").innerHTML = "";
+		}
+
+		window.addEventListener('message',function(event) {
+			var responseText = event.data;
+			var j, ret;
+			var errorno = ENONE;
+			if (/(<pre>)?(.+)(<\/pre>)+/.test(responseText) ||
+				/(<pre>)?(.+)/.test(responseText))
+			{
+				j = RegExp["$2"];
+			}
+
+			ret = JSON.parse(j);
+			errorno = ret[ERR_CODE];
+
+			/* 错误。直接退出 */
+			if (errorno != ENONE)
+			{
+				closeLoading();
+				closeProgBar();
+			}
+
+			upLoadExtCallBack(errorno, ret);
+		},false);
+
+		function uploadEventBind(isRouter, idx)
+		{
+			id("fileName").onchange = function (){
+				var tempStr = this.value;
+
+				/* 统一所有浏览器不显示完全的文件路径 */
+				tempStr = tempStr.substring(tempStr.lastIndexOf('\\') + 1);
+				id("textfield").value = tempStr;
+			};
+
+			id("sysUpgrade").onclick = function()
+			{
+				if (checkFile())
+				{
+					cancelNativeInput();
+					var reqData = {};
+
+					showLoading(label.fwUploadTip, undefined, undefined, false);
+					upgradeTimeoutHd = $.setTimeout(upgradeTimeout, 40000);
+
+					if (isRouter)
+					{
+						$("#uploadIf").one("load", function(){
+							iFrmOnload("uploadIf", upLoadCallBack);
+						});
+
+						reqData[uciSystem.fileName] = {};
+						reqData[uciSystem.fileName][uciSystem.actionName.firmUpgrade] = {"type": "0"};
+
+						$.action(reqData, function(data){
+							if (ENONE == data[ERR_CODE])
+							{
+								var formObj = document.forms[0];
+								formObj.action = $.orgURL(data["url"]);
+								formObj.submit();
+								formObj.reset();
+								upgradeTimeoutTag = false;
+							}
+							else
+							{
+								upgradeTimeout();
+							}
+						});
+					}
+					else
+					{
+						var extIP = "http://" + nativeTbl._ops.data[idx].ip;
+						if (typeof gUsernameSupport != "undefined" && gUsernameSupport)
+						{
+							var data = {"method":"do","login":{"username":$.usr,"password":$.pwd}};
+						}
+						else
+						{
+							var data = {"method":"do","login":{"password":$.pwd}};
+						}
+						var url,stok;
+						$.ajax({'url': extIP,
+							'data': data,
+							'type':"POST",
+							'async':true,
+							'postDataType':'json',
+							"dataType":"json",
+							'utf8Encode':true,
+							'success': function(result) {
+								if (result[ERR_CODE] == ENONE) {
+									stok = result.stok;
+									url = extIP + "/stok=" + stok + "/ds";
+									data = {};
+									data[uciSystem.fileName] = {};
+									data[uciSystem.fileName][uciSystem.actionName.firmUpgrade] = {"type": "0"};
+									data["method"] = "do";
+
+									$.ajax({'url': url,
+										'data': data,
+										'type':"POST",
+										'async':true,
+										'postDataType':'json',
+										"dataType":"json",
+										'utf8Encode':true,
+										'success': function(result) {
+											if (result[ERR_CODE] == ENONE) {
+												var formObj = document.forms[0];
+												formObj.action = extIP + "/stok=" + stok + result["url"];
+												formObj.submit();
+												formObj.reset();
+												upgradeTimeoutTag = false;
+											} else {
+												upgradeTimeout();
+											}
+										},
+										'error': function() {
+											closeLoading();
+											showAlert(errStr.invSendReqMsgFailedNetwork);
+											clearTimeout(upgradeTimeoutHd);
+										}
+									});
+								} else {
+									upgradeTimeout();
+								}
+							},
+							'error': function() {
+								closeLoading();
+								showAlert(errStr.invSendReqMsgFailedNetwork);
+								clearTimeout(upgradeTimeoutHd);
+							}
+						});
+					}
+				}
+			};
+		}
+
+		function cancelNativeInput()
+		{
+			var divCon = id("sysUpgradeNative");
+
+			hideCoverB(function(){
+				divCon.style.visibility = "hidden";
+				divCon.style.top = "-9999px";
+			});
+		}
+
+		/* 创建本地升级的显示框 */
+		function showNativeInput(idx, o)
+		{
+			var divCon = id("sysUpgradeNative");
+			var showHtmlStr = "";
+			var eptCon;
+			var fwVersion = nativeTbl._ops.data[idx].cur_fw_version_full != undefined ? nativeTbl._ops.data[idx].cur_fw_version_full : label.notFoundVersion;
+			var hwVersion = nativeTbl._ops.data[idx].hw_version != undefined ? nativeTbl._ops.data[idx].hw_version : label.notFoundVersion;
+
+			if (undefined != divCon)
+			{
+				emptyNodes(divCon);
+			}
+			else
+			{
+				divCon = document.createElement("div");
+				divCon.className = "VigNetControlCon";
+				divCon.id = "sysUpgradeNative";
+				document.body.appendChild(divCon);
+			}
+
+			eptCon = document.createElement("div");
+			eptCon.className = "eptCon";
+			eptCon.id = "eptCon";
+			divCon.appendChild(eptCon);
+
+			showHtmlStr += '<h1 class="localUpgrade">' + menuStr.localUpgrade + '</h1>';
+			showHtmlStr += '<div style="margin-left: 102px;">';
+			showHtmlStr += '<p class="upVersion">' +
+								'<span>' + label.upCurrHard + label.colon + '</span><span id="hardwareVerL">'+ hwVersion + '</span>' +
+							'</p>'+
+							'<p class="upVersion" style="margin-top:8px;">' +
+								'<span>' + label.upCurrSoft + label.colon + '</span><span id="softwareVerL">'+ fwVersion + '</span>' +
+							'</p>';
+			showHtmlStr += '<p class="upDes">' + label.upgradeTip + '</p>';
+			showHtmlStr += '<form enctype="multipart/form-data" id="upFileForm" method="post" target="uploadIf">' +
+								'<div class="fileDiv">' +
+									'<input type="file" class="file" name="fileName" id="fileName" />' +
+									'<input type="text" id="textfield" class="fileTxt" readonly="true" />' +
+									'<input type="button" value="' + btn.browse + '" class="subBtn fileBrowse" />' +
+									'<iframe id="uploadIf" name="uploadIf"></iframe>' +
+								'</div>' +
+								'<input id="sysUpgrade" type="button" value="' + btn.upgrade + '" class="btnA subBtn" />' +
+								'<input id="sysUpgradeCancel" type="button" value="' + btn.cancel + '" class="btnA cancelBtn"/>' +
+							'</form>';
+			showHtmlStr += '</div>';
+			
+			eptCon.innerHTML = showHtmlStr;
+			id("sysUpgradeCancel").onclick = cancelNativeInput;
+
+			showCoverB(function(){
+				divCon.style.visibility = "visible";
+				divCon.style.top = "150px";
+			});
+
+			if (nativeTbl._ops.data[idx].isCap)
+			{
+				uploadEventBind(true, idx);
+			}
+			else
+			{
+				uploadEventBind(false, idx);
+			}
+		}
+
+		function workingStateSet(isWorking, isAutoRefreshing)
+		{
+			var checkboxArray = getOlCheckboxArray();
+
+			if (isWorking)
+			{
+				setDisableAllCheckBox(true);
+				disableBtn("easyUpgrade", true);
+				disableBtn("checkVer", true);
+
+				$(id("nativeTbl").rows).find("input").each(function(){
+					disableBtn(this, true);
+				});
+			}
+			else
+			{
+				setDisableAllCheckBox(false);
+				disableBtn("checkVer", false);
+				$(checkboxArray).on("click", checkboxHandle);
+
+				$(id("nativeTbl").rows).find("input").each(function(){
+					disableBtn(this, false);
+				});
+			}
+
+			for (var i = 0; i < olUpgradeGridData.length; i++)
+			{
+				if (olUpgradeGridData[i].isCheckState == true)
+				{
+					checkboxArray[i].checked = true;
+				}
+
+				/* trigger head_checkbox */
+				onlineTbl._singelSelHandle(checkboxArray[i], onlineTbl);
+			}
+
+			upgradeBtnRenew(checkboxArray);
+		}
+
+		function checkVerBtnHandle()
+		{
+			var dataObj = {};
+			var checkboxArray = getOlCheckboxArray();
+
+			dataObj[uciPlc.fileName] = {};
+			dataObj[uciPlc.fileName][uciPlc.secName.checkAllFwVerStart] = null;
+
+			isWorking = true;
+			for (var i = 0; i < checkboxArray.length; i++)
+			{
+				olUpgradeGridData[i].isCheckState = false;
+			}
+
+			$(checkboxArray).each(function(){
+				this.checked = false;
+				onlineTbl._singelSelHandle(this, onlineTbl);
+			});
+			workingStateSet(isWorking);
+
+			$.action(dataObj, function(result){
+				if (errHandle(result[ERR_CODE]))
+				{
+					checkVerStatusQuery();
+				}
+				else
+				{
+					isWorking = false;
+					workingStateSet(isWorking);
+				}
+			});
+		}
+
+		function olUpgradeBtnHandle()
+		{
+			var dataObj = {}, args = [];
+			var checkboxArray = getOlCheckboxArray();
+
+			dataObj[uciPlc.fileName] = {};
+			dataObj[uciPlc.fileName][uciPlc.secName.upgradeDev] = {};
+			dataObj[uciPlc.fileName][uciPlc.secName.upgradeDev][uciPlc.optName.mac] = args;
+
+			for (var i = 0; i < checkboxArray.length; i++)
+			{
+				olUpgradeGridData[i].isCheckState = false;
+			}
+
+			for (i = 0; i < checkboxArray.length; i++)
+			{
+				if (checkboxArray[i].checked == true)
+				{
+					if (olUpgradeGridData[i].isUpgradable != true)
+					{
+						checkboxArray[i].checked = false;
+					}
+					else
+					{
+						olUpgradeGridData[i].isCheckState = true;
+						args.push(olUpgradeGridData[i].mac.toUpperCase());
+					}
+				}
+			}
+
+			isWorking = true;
+			workingStateSet(isWorking);
+			$.action(dataObj, function(result){
+				if (errHandle(result[ERR_CODE]))
+				{
+					upgradeStatusQuery();
+				}
+				else
+				{
+					isWorking = false;
+					workingStateSet(isWorking);
+				}
+			});
+		}
+
+		function upgradeBtnRenew(checkboxArray)
+		{
+			var checkState, upgradeState, hasUpgradable = false;
+
+			if (!isWorking)
+			{
+				for (var i = 0; i < checkboxArray.length; i++)
+				{
+					checkState = checkboxArray[i].checked;
+					upgradeState = olUpgradeGridData[i].isUpgradable;
+
+					if (checkState && upgradeState)
+					{
+						hasUpgradable = true;
+					}
+				}
+
+				disableBtn("easyUpgrade", hasUpgradable ? false : true);
+			}
+		}
+
+		function checkboxHandle(event)
+		{
+			var checkboxArray = getOlCheckboxArray();
+
+			if (!isWorking)
+			{
+				for (var i = 0; i < checkboxArray.length; i++)
+				{
+					olUpgradeGridData[i].isCheckState = checkboxArray[i].checked;
+				}
+				upgradeBtnRenew(checkboxArray);
+			}
+		}
+
+		function setDisableAllCheckBox(disbale)
+		{
+			var checkboxArray = $(id("onlineTbl")).find("[type='checkbox']");
+
+			checkboxArray.attr("disabled", disbale);
+		}
+
+		function getOlCheckboxArray()
+		{
+			/*
+			 * 1. turn HTMLCollection-TYPE To Array-TYPE
+			 * 2. remove head rows
+			 * 3. reverse
+			 */
+
+			var tableRows = Array.prototype.slice.call(id("onlineTbl").rows);
+			var childRows = tableRows.slice().reverse();
+			var result = [];
+
+			for (var i = 0; i < olUpgradeGridData.length; i++)
+			{
+				result[i] = childRows[i].cells[0].childNodes[0];
+			}
+
+			return result;
+		}
+
+		function findItemByMac(array, mac)
+		{
+			for (var i = 0; i < array.length; i++)
+			{
+				if (mac.toUpperCase() == array[i].mac.toUpperCase())
+				{
+					return {item: array[i], idx: i};
+				}
+			}
+
+			return null;
+		}
+
+		function upgradeStatusQuery()
+		{
+			getUpgradeStatus(function(array, ifNoWork){
+				var upgradingItem = mixDataWithUpgradeStatus(array);
+
+				if (upgradingItem == IS_CAP_UPGRADING)
+				{
+					isWorking = false;
+					refreshTable(true);
+
+					/* 主路由升级流程 */
+					onlineUpgradeProgress(capUpgradeTime);
+				}
+				else
+				{
+					if (!ifNoWork)
+					{
+						refreshTable(true);
+						$.setTimeout(upgradeStatusQuery, 1 * 1000);
+					}
+					else
+					{
+						//只更新升级成功的条目
+						getBasicData(function(result){
+							var newestObj, basicObj, newestItem, basicItem;
+
+							for (var i = 0; i < array.length; i++)
+							{
+								newestObj = findItemByMac(result, array[i].mac);
+								basicObj = findItemByMac(olUpgradeGridData, array[i].mac);
+
+								if (basicObj != null && newestObj != null)
+								{
+									newestItem = newestObj.item;
+									basicItem = basicObj.item;
+
+									basicItem.cur_fw_version = newestItem.cur_fw_version;
+									basicItem.newest_fw_version = newestItem.newest_fw_version;
+									basicItem.isUpgradable = newestItem.isUpgradable;
+
+									if (basicItem.upgradeStatus != uciPlc.optValue.upgradeStatus.downloadTimeout
+									&& basicItem.upgradeStatus != uciPlc.optValue.upgradeStatus.downloadFail
+									&& basicItem.upgradeStatus != uciPlc.optValue.upgradeStatus.upgradeFail)
+									{
+										basicItem.status = newestItem.status;
+									}
+								}
+
+								if (newestObj == null && basicObj != null)
+								{
+									olUpgradeGridData.splice(basicObj.idx, 1);
+								}
+							}
+
+							isWorking = false;
+
+							for (i = 0; i < olUpgradeGridData.length; i++)
+							{
+								olUpgradeGridData[i].isCheckState = false;
+							}
+							refreshTable();
+						});
+					}
+				}
+			});
+		}
+
+		function checkVerStatusQuery()
+		{
+			getCheckVerStatus(function(array, ifNoWork){
+				mixDataWithCheckVerStatus(array);
+
+				if (!ifNoWork)
+				{
+					refreshTable(true);
+					$.setTimeout(checkVerStatusQuery, 1000);
+				}
+				else
+				{
+					//只更新检测成功的条目
+					getBasicData(function(result){
+						var obj, item;
+
+						for (var i = 0; i < olUpgradeGridData.length; i++)
+						{
+							if (olUpgradeGridData[i].checkFwVerStatus != uciPlc.optValue.checkAllFwVerStatus.fail)
+							{
+								obj = findItemByMac(result, olUpgradeGridData[i].mac);
+
+								if (obj != null)
+								{
+									item = obj.item;
+
+									olUpgradeGridData[i].cur_fw_version = item.cur_fw_version;
+									olUpgradeGridData[i].newest_fw_version = item.newest_fw_version;
+									olUpgradeGridData[i].isUpgradable = item.isUpgradable;
+									olUpgradeGridData[i].status = item.status;
+
+									if (item.isUpgradable)
+									{
+										olUpgradeGridData[i].isCheckState = true;
+									}
+								}
+								else
+								{
+									/* 若无法找到该条目，则沿用之前的状态 */
+									olUpgradeGridData[i].status = olUpgradeGridData[i].isUpgradable ? transToStatus(label.isUpgradable)  : label.isAreadyNewVer;
+								}
+							}
+						}
+
+						isWorking = false;
+						refreshTable(true);
+					});
+				}
+			});
+		}
+
+		function autoRefreshHandle()
+		{
+			if (!isWorking)
+			{
+				autoRefreshGrid(function(){
+					$.setTimeout(autoRefreshHandle, 3000);
+				});
+			}
+			else
+			{
+				$.setTimeout(autoRefreshHandle, 3000);
+			}
+		}
+
+		function autoRefreshGrid(callback)
+		{
+			var newDiffArray = [], oldDiffArray = [], item;
+			getBasicData(function(newData){
+				$.each(newData, function(index, value){
+					if (null == findItemByMac(olUpgradeGridData, value.mac))
+					{
+						newDiffArray.push(value);
+					}
+				});
+				$.each(olUpgradeGridData, function(index, value){
+					if (null == findItemByMac(newData, value.mac))
+					{
+						oldDiffArray.push(value);
+					}
+				});
+
+				/* Remove disconnect item first, then add new-connect item */
+				for(var i = 0 ; i < oldDiffArray.length; i++)
+				{
+					item = findItemByMac(olUpgradeGridData, oldDiffArray[i].mac);
+					olUpgradeGridData.splice(item.idx, 1);
+				}
+				for(i = 0; i < newDiffArray.length; i++)
+				{
+					olUpgradeGridData.unshift(newDiffArray[i]);
+				}
+
+				refreshTable(false, true);
+
+				typeof callback == "function" && callback();
+			});
+		}
+
+		// combine data with upgrade_status
+		function mixDataWithUpgradeStatus(data)
+		{
+			var obj, item, str, workingItem = [];
+
+			isCapWillUpgrade = false;
+			isReReadyToUpgrade = false;
+
+			for (var i = 0; i < data.length; i++)
+			{
+				if (data[i].status != uciPlc.optValue.upgradeStatus.idle)
+				{
+					obj = findItemByMac(olUpgradeGridData, data[i].mac);
+
+					if (capMac.toUpperCase() == data[i].mac)
+					{
+						isCapWillUpgrade = true;
+					}
+
+					if (obj != null)
+					{
+						item = obj.item;
+
+						if (item.isCap && (data[i].status == uciPlc.optValue.upgradeStatus.downloading ||
+							data[i].status == uciPlc.optValue.upgradeStatus.downloadTimeout ||
+							data[i].status == uciPlc.optValue.upgradeStatus.downloadFail ||
+							data[i].status == uciPlc.optValue.upgradeStatus.waitForUpgrade ||
+							data[i].status == uciPlc.optValue.upgradeStatus.upgrading ||
+							data[i].status == uciPlc.optValue.upgradeStatus.upgradeFail ||
+							data[i].status == uciPlc.optValue.upgradeStatus.upgradeSuccess))
+						{
+							capUpgradeTime = data[i].wait_time * 1000;
+							return IS_CAP_UPGRADING;
+						}
+						else if (item.isCap != true && item[uciPlc.optName.supportEyUp] == "1")
+						{
+							if (data[i].status == uciPlc.optValue.upgradeStatus.waitForUpgrade ||
+							 data[i].status == uciPlc.optValue.upgradeStatus.upgrading)
+							{
+								isReReadyToUpgrade = true;
+							}
+						}
+						else if (item.isCap != true && item[uciPlc.optName.supportEyUp] == "0")
+						{
+							(data[i].status == uciPlc.optValue.upgradeStatus.downloading ||
+							 data[i].status == uciPlc.optValue.upgradeStatus.waitForUpgrade ||
+							 data[i].status == uciPlc.optValue.upgradeStatus.upgrading)
+							{
+								isReReadyToUpgrade = true;
+							}
+						}
+
+						workingItem.push(obj.idx);
+
+						if (data[i].status == uciPlc.optValue.upgradeStatus.waiting)
+						{
+							str = label.waiting;
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.downloading)
+						{
+							if (data[i].download_progress != "-1")
+							{
+								str = label.downloadingFw + data[i].download_progress + "%";
+							}
+							else
+							{
+								str = label.downloadingFw;
+							}
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.downloadTimeout)
+						{
+							str = transToStatus(label.downloadTimeout);
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.downloadFail)
+						{
+							str = transToStatus(label.downloadFail);
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.waitForUpgrade)
+						{
+							str = label.waitingForUpgrade;
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.upgrading)
+						{
+							if (data[i].upgrade_progress != "-1")
+							{
+								str = label.upgradeing + data[i].upgrade_progress + "%";
+							}
+							else
+							{
+								str = label.upgradeing;
+							}
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.upgradeFail)
+						{
+							str = transToStatus(label.upgradeFail);
+						}
+						else if (data[i].status == uciPlc.optValue.upgradeStatus.upgradeSuccess)
+						{
+							str = transToStatus(label.upgradeSuccess);
+						}
+
+						item.status = str;
+						item.upgradeStatus = data[i].status;
+					}
+				}
+
+				if (data[i].mac.toUpperCase() == curDutMac.toUpperCase() && isConnectedRe)
+				{
+					curDutWaitTime = data[i].wait_time;
+				}
+			}
+
+			return workingItem;
+		}
+
+		// combine data with check_ver_status
+		function mixDataWithCheckVerStatus(data)
+		{
+			var obj, item, str, workingItem = [];
+
+			for (var i = 0; i < data.length; i++)
+			{
+				obj = findItemByMac(olUpgradeGridData, data[i].mac);
+
+				if (obj != null)
+				{
+					item = obj.item;
+					workingItem.push(obj.idx);
+
+					if (data[i].status == uciPlc.optValue.checkAllFwVerStatus.checking)
+					{
+						str = label.isChecking;
+					}
+					else if (data[i].status == uciPlc.optValue.checkAllFwVerStatus.idleOrFinish)
+					{
+						str = transToStatus(label.isChecked);
+					}
+					else if (data[i].status == uciPlc.optValue.checkAllFwVerStatus.fail)
+					{
+						str = transToStatus(label.isCheckFail);
+					}
+
+					item.status = str;
+					item.checkFwVerStatus = data[i].status;
+				}
+			}
+
+			return workingItem;
+		}
+
+		// get upgradeStatus data
+		function getUpgradeStatus(callback)
+		{
+			var dfdUpgrade = $.Deferred(), dfdHostInfo = $.Deferred();
+			var upgradeDataObj = {}, hostinfoDataObj = {};
+
+			upgradeDataObj[uciPlc.fileName] = {};
+			upgradeDataObj[uciPlc.fileName][KEY_TABLE] = uciPlc.secName.upgradeDevStatus;
+			$.query(upgradeDataObj, function(result){
+				dfdUpgrade.resolve(result);
+			});
+
+			hostinfoDataObj[uciHostsInfo.fileName] = {};
+			hostinfoDataObj[uciHostsInfo.fileName][KEY_TABLE] = uciHostsInfo.dynData.online_host;
+			$.query(hostinfoDataObj, function(result){
+				dfdHostInfo.resolve(result);
+			});
+
+			upgradeQueryTimeoutHandle = $.setTimeout(function(){
+				upgradeQueryTimeoutHandle = null;
+
+				upgradeQueryTimeoutCount ++;
+				if (upgradeQueryTimeoutCount >= 3)
+				{
+					upgradeQueryTimeoutCount = 0;
+
+					if (isReReadyToUpgrade && !isPopedReUpgradeProgress)
+					{
+						showProgBar(curDutWaitTime * 1000, label.upgradePopsWindowTips, function(){
+							if (isCapWillUpgrade)
+							{
+								//若主路由也在待升级列表中，则升级完成后应进行页面跳转
+								lanDetecting(function(){
+									window.location.reload();
+								});
+							}
+							else
+							{
+								lanDetecting(function(){
+									// TODO: 此处先跳回首页，后续需确认后台请求upgradeDevStatus返回-40101的原因。
+									//closeProgBar();
+									//isPopedReUpgradeProgress = false;
+									//getUpgradeStatus(callback);
+									window.location.reload();
+								});
+							}
+						}, true, (isCapWillUpgrade ? statusStr.upgradeTip : statusStr.upgradeTipsForEasyRe));
+						isPopedReUpgradeProgress = true;
+					}
+				}
+				else
+				{
+					getUpgradeStatus(callback);
+				}
+			}, 2 * 1000);
+
+			$.when(dfdUpgrade, dfdHostInfo).done(function(res1, res2){
+				var array, ifNoWork = true;
+
+				if (isPopedReUpgradeProgress) {
+					return;
+				}
+
+				if (upgradeQueryTimeoutHandle != null)
+				{
+					clearTimeout(upgradeQueryTimeoutHandle);
+					upgradeQueryTimeoutCount = 0;
+				}
+
+				var hostList = formatTableData(res2[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);
+				for (var i = 0; i < hostList.length; i++)
+				{
+					if (hostList[i][uciHostsInfo.optName.mac].toUpperCase() == g_cur_host_mac.toUpperCase())
+					{
+						curDutMac = hostList[i][uciHostsInfo.optName.parentMac];
+					}
+				}
+
+				isConnectedRe = false;
+				if (curDutMac.toUpperCase() != capMac.toUpperCase())
+				{
+					isConnectedRe = true;
+				}
+
+				if (res1[ERR_CODE] != ENONE)
+				{
+					typeof callback == "function" && callback([], ifNoWork);
+				}
+				else
+				{
+					array = formatTableData(res1[uciPlc.fileName][uciPlc.secName.upgradeDevStatus]);
+					for (i = 0; i < array.length; i++)
+					{
+						if (array[i].status == uciPlc.optValue.upgradeStatus.waiting ||
+							array[i].status == uciPlc.optValue.upgradeStatus.downloading ||
+							array[i].status == uciPlc.optValue.upgradeStatus.waitForUpgrade ||
+							array[i].status == uciPlc.optValue.upgradeStatus.upgrading)
+						{
+							ifNoWork = false;
+							break;
+						}
+					}
+
+					typeof callback == "function" && callback(array, ifNoWork);
+				}
+			});
+		}
+
+		// get checkVerStatus data
+		function getCheckVerStatus(callback)
+		{
+			var dataObj = {};
+			dataObj[uciPlc.fileName] = {};
+			dataObj[uciPlc.fileName][KEY_TABLE] = uciPlc.secName.checkAllFwVer;
+
+			$.query(dataObj, function(result){
+				var array, ifNoWork = true;
+
+				if (result[ERR_CODE] != ENONE)
+				{
+					typeof callback == "function" && callback([], ifNoWork);
+				}
+				else
+				{
+					array = formatTableData(result[uciPlc.fileName][uciPlc.secName.checkAllFwVer]);
+					for (var i = 0; i < array.length; i++)
+					{
+						if (array[i].status == uciPlc.optValue.checkAllFwVerStatus.checking)
+						{
+							ifNoWork = false;
+							break;
+						}
+					}
+
+					typeof callback == "function" && callback(array, ifNoWork);
+				}
+			});
+		}
+
+		// get basic data
+		function getBasicData(callback)
+		{
+			var dataObj = {};
+			dataObj[uciCloudConfig.fileName] = {};
+			dataObj[uciCloudConfig.fileName][KEY_NAME] = [uciCloudConfig.secName.newFirmware, uciCloudConfig.secName.upgradeInfo];
+			dataObj[uciDeviceInfo.fileName] = {};
+			dataObj[uciDeviceInfo.fileName][KEY_NAME] = uciDeviceInfo.secName.info;
+			dataObj[uciProto.fileName] = {};
+			dataObj[uciProto.fileName][KEY_NAME] = uciProto.secName.dhcp;
+			dataObj[uciPlc.fileName] = {};
+			dataObj[uciPlc.fileName][KEY_TABLE]= uciPlc.secType.connectedExt;
+			dataObj[uciNetwork.fileName] = {};
+			dataObj[uciNetwork.fileName][KEY_NAME] = uciNetwork.secName.lan;
+
+			$.query(dataObj, function(result){
+				var info = result[uciDeviceInfo.fileName][uciDeviceInfo.secName.info];
+				var name = result[uciProto.fileName][uciProto.secName.dhcp][uciProto.optName.hostName];
+				var cloudDeviceInfo = result[uciCloudConfig.fileName][uciCloudConfig.secName.newFirmware];
+				var upgradeInfo = result[uciCloudConfig.fileName][uciCloudConfig.secName.upgradeInfo];
+				var lanInfo = result[uciNetwork.fileName][uciNetwork.secName.lan];
+				var router, cldList;
+
+				var fwVersion = info[uciDeviceInfo.optName.swVer] == undefined ? label.notFoundVersion : info[uciDeviceInfo.optName.swVer];
+				var fwNewNofify = cloudDeviceInfo[uciCloudConfig.optName.fwNewNotify];
+
+				fwNewNofify = checkNum(fwNewNofify) && parseInt(fwNewNofify) || uciCloudConfig.optValue.fwNewFalse;
+
+				/* CAP */
+				router = {};
+				router.name = name;
+				router.hw_version = info[uciDeviceInfo.optName.hwVer];
+				router.cur_fw_version_full = fwVersion;
+				router.cur_fw_version = fwVersion.split(" ")[0];
+				router.isUpgradable = (fwNewNofify == uciCloudConfig.optValue.fwNewTrue) && (upgradeInfo[uciCloudConfig.optName.version] != undefined);
+				router.newest_fw_version = router.isUpgradable ? (upgradeInfo[uciCloudConfig.optName.version]).split(" ")[0] : fwVersion.split(" ")[0];
+				router.status = router.isUpgradable ? transToStatus(label.isUpgradable) : label.isAreadyNewVer;
+				router.mac = lanInfo[uciNetwork.optName.mac];
+				router.isCap= true;
+				router.isCheckState = false;
+
+				capMac = lanInfo[uciNetwork.optName.mac].toUpperCase();
+
+				/* RE */
+				var cldList = formatTableData(result[uciPlc.fileName][uciPlc.secType.connectedExt]);
+
+				for (var i = 0, j = cldList.length; i < j; i++)
+				{
+					var cld = cldList[i];
+
+					if (cld[uciPlc.optName.supportOlUp] != uciPlc.optValue.supportOlUp.yes)
+					{
+						cld.name = cld.name || label.oldVersion;
+						cld.cur_fw_version = label.notFoundVersion;
+						cld.newest_fw_version = label.notFoundVersion;
+						cld.cur_fw_version_full = label.notFoundVersion;
+						cld.isUpgradable = false;
+						cld.status = label.isAreadyNewVer;
+					}
+					else
+					{
+						cld.name = cld.name == undefined ? label.notFoundVersion : cld.name;
+						cld.cur_fw_version_full = cld.cur_fw_version == undefined ? label.notFoundVersion : cld.cur_fw_version;
+						cld.cur_fw_version = cld.cur_fw_version == "" ? label.notFoundVersion : (cld.cur_fw_version.split(" ")[0] == "" ? label.notFoundVersion : cld.cur_fw_version.split(" ")[0]);
+						cld.newest_fw_version = cld.newest_fw_version == undefined ? cld.cur_fw_version : (cld.newest_fw_version.split(" ")[0] || cld.cur_fw_version);
+
+						if (cld.cur_fw_version == label.notFoundVersion || cld.newest_fw_version == label.notFoundVersion)
+						{
+							cld.isUpgradable = false;
+						}
+						else if (cld.newest_fw_version != cld.cur_fw_version)
+						{
+							cld.isUpgradable = true;
+						}
+						else
+						{
+							cld.isUpgradable = false;
+						}
+
+						cld.status = cld.isUpgradable ? transToStatus(label.isUpgradable)  : label.isAreadyNewVer;
+					}
+
+					cld.isCheckState = false;
+				}
+
+				var tblData = [router];
+				tblData = cldList.concat(tblData);
+
+				typeof callback == "function" && callback(tblData);
+			});
+		}
+
+		function transToStatus(str)
+		{
+			var result = {str: str};
+			switch (str)
+			{
+			case label.isUpgradable:
+				result.iconType = "tips";
+				break;
+			case label.isChecked:
+				result.iconType = "success";
+				break;
+			case label.isCheckFail:
+			case label.downloadTimeout:
+			case label.downloadFail:
+			case label.upgradeFail:
+				result.iconType = "error";
+				break;
+			default:
+				break;
+			}
+
+			return result;
+		}
+
+		function refreshTable(onlyOlTable, isAutoRefreshing)
+		{
+			onlineTbl.setDataSource(olUpgradeGridData);
+			onlineTbl.refresh();
+
+			workingStateSet(isWorking, isAutoRefreshing);
+
+			if (onlyOlTable)
+			{
+				return;
+			}
+
+			nativeTbl.setDataSource(olUpgradeGridData);
+			nativeTbl.refresh();
+		}
+
+		function pageInit()
+		{
+			onlineTbl = new DataGrid();
+			nativeTbl = new DataGrid();
+
+			onlineTbl.init({
+				id:"onlineTbl",
+				data:[],
+				IDWidth:"30px",
+				edit:false,
+				hasSelBox:true,
+				head:[{field:label.equipName, width:28},
+					  {field:label.upCurrSoft, width:10},
+					  {field:label.upNewSoft, width:10},
+					  {field:label.curStatus, width:16}],
+				list:[{edit:false, name:"name", type:"str", maxSize:40},
+					  {edit:false, name:"cur_fw_version", type:"str"},
+					  {edit:false, name:"newest_fw_version", type:"str"},
+					  {edit:false, name:"status", type:"iconWithStr"}
+					]
+			});
+			$(id("onlineTbl").rows[0].cells[0].childNodes[0]).on("click", checkboxHandle);
+
+			nativeTbl.init({
+				id:"nativeTbl",
+				data:[],
+				edit:false,
+				hasSelBox:false,
+				head:[{field:label.equipName, width:40},
+					  {field:label.upCurrSoft, width:18},
+					  {field:label.operation, width:18}],
+				list:[{edit:false, name:"name", type:"str", maxSize:40},
+					  {edit:false, name:"cur_fw_version", type:"str"},
+					  {value:btn.fwLocalUpgrade, type:"btn", click:showNativeInput, className:"subBtn tblBtn"}]
+			});
+
+			getBasicData(function(basicData){
+				olUpgradeGridData = $.extend(true, [], basicData);
+
+				getCheckVerStatus(function(result, ifNoWork){
+					var checkVerItem;
+
+					if (ifNoWork)
+					{
+						getUpgradeStatus(function(result, ifNoWork){
+							var upgradingItem;
+
+							if (ifNoWork)
+							{
+								isWorking = false;
+								refreshTable();
+
+								if (gOnlineUpgradeAuto)
+								{
+									gOnlineUpgradeAuto = false;
+									checkVerBtnHandle();
+								}
+								autoRefreshHandle();
+							}
+							else
+							{
+								upgradingItem = mixDataWithUpgradeStatus(result);
+
+								if (upgradingItem == IS_CAP_UPGRADING)
+								{
+									isWorking = false;
+									refreshTable();
+
+									onlineUpgradeProgress(capUpgradeTime);
+								}
+								else
+								{
+									for (var i = 0; i < upgradingItem.length; i++)
+									{
+										olUpgradeGridData[upgradingItem[i]].isCheckState = true;
+									}
+									isWorking = true;
+									refreshTable();
+									upgradeStatusQuery();
+								}
+
+								autoRefreshHandle();
+							}
+						});
+					}
+					else
+					{
+						checkVerItem = mixDataWithCheckVerStatus(result);
+						isWorking = true;
+						refreshTable();
+						checkVerStatusQuery();
+						autoRefreshHandle();
+					}
+				});
+			});
+		}
+
+		var nativeTbl;
+		var onlineTbl;
+		var upgradeTimeoutTag = false;
+
+		var olUpgradeGridData = null;
+		var selBoxArray = [];
+		var isWorking = false, isConnectedRe = false, isCapWillUpgrade = false, isReReadyToUpgrade = false;
+		var IS_CAP_UPGRADING = -1,
+			capUpgradeTime = SYSUPGRADE_SECONDS;
+		var capMac = "", curDutMac = "", curDutWaitTime = 0;
+		var upgradeQueryTimeoutCount = 0, upgradeQueryTimeoutHandle = null, isPopedReUpgradeProgress = false;
+
+		id("easyUpgrade").onclick = olUpgradeBtnHandle;
+		id("checkVer").onclick = checkVerBtnHandle;
+		disableBtn("easyUpgrade", true);
+		disableBtn("checkVer", true);
+
+		pageInit();
+	}
+	init();
+</script>
 <div id="hcCo" class="hcCo">
 	<div class="hsHelp"></div>
 	<div id="online">
@@ -25,36 +1438,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">function init(){function v(a){switch(a){case ENONE:return!0;case EFWEXCEPTION:case EFWNOTSUPPORTED:case EFILETOOBIG:showAlert(errStr.fwFmtErr);break;case EFWNOTINFLANDBL:case EFWNEWEST:showAlert(errStr.fwNotSupported);break;case ESYSBUSY:showAlert(errStr.invLastOptionIsNotFinished);break;case EINVMEMORYOUT:case EINVDOWNLOADFWFAILED:case EINVSENDREQMSGFAILED:case EINVREQUESTTIMEOUT:case EINVCONNECTTINGCLOUDSERVER:case EINVLASTOPTIONISNOTFINISHED:showAlert(errStr.fwDownLoadFailed);break;default:showAlert(errStr.fwUpgradeFailed)}return!1}
-function W(){var a=id("fileName").value;return""==a?(showAlert(label.upWarn),!1):-1==a.search(/\.bin$/)&&-1==a.search(/\.w$/)?(showAlert(errStr.fileFmttErr),!1):!0}function X(a,c){if(!0!=s)if(clearTimeout(upgradeTimeoutHd),upgradeTimeoutHd=null,closeLoading(),ENONE==a){var d=c.wait_time?1E3*parseInt(c.wait_time):SYSUPGRADE_SECONDS;showProgBar(d,label.upgrading,function(){lanDetecting(function(){window.location.reload()})},!0,statusStr.upgradeTip)}else v(a)}function Y(a,c){if(!0!=s)if(clearTimeout(upgradeTimeoutHd),
-upgradeTimeoutHd=null,closeLoading(),ENONE==a){var d=c.wait_time?1E3*parseInt(c.wait_time):SYSUPGRADE_SECONDS;showProgBar(d,label.upgrading,function(){closeProgBar();t(function(a){f=$.extend(!0,[],a);l()})},!0,statusStr.upgradeChildRtTip)}else v(a)}function w(){s=!0;id("uploadIf").onload=null;closeLoading();closeProgBar();clearTimeout(upgradeTimeoutHd);showAlert(errStr.upGradeFail);id("uploadIf").innerHTML=""}function M(a,c){id("fileName").onchange=function(){var a=this.value,a=a.substring(a.lastIndexOf("\\")+
-1);id("textfield").value=a};id("sysUpgrade").onclick=function(){if(W()){N();var d={};showLoading(label.fwUploadTip,void 0,void 0,!1);upgradeTimeoutHd=$.setTimeout(w,4E4);if(a)$("#uploadIf").one("load",function(){iFrmOnload("uploadIf",X)}),d[uciSystem.fileName]={},d[uciSystem.fileName][uciSystem.actionName.firmUpgrade]={type:"0"},$.action(d,function(a){if(ENONE==a[ERR_CODE]){var b=document.forms[0];b.action=$.orgURL(a.url);b.submit();b.reset();s=!1}else w()});else{var e="http://"+m._ops.data[c].ip,
-h="undefined"!=typeof gUsernameSupport&&gUsernameSupport?{method:"do",login:{username:$.usr,password:$.pwd}}:{method:"do",login:{password:$.pwd}},b,f;$.ajax({url:e,data:h,type:"POST",async:!0,postDataType:"json",dataType:"json",utf8Encode:!0,success:function(a){a[ERR_CODE]==ENONE?(f=a.stok,b=e+"/stok="+f+"/ds",h={},h[uciSystem.fileName]={},h[uciSystem.fileName][uciSystem.actionName.firmUpgrade]={type:"0"},h.method="do",$.ajax({url:b,data:h,type:"POST",async:!0,postDataType:"json",dataType:"json",
-utf8Encode:!0,success:function(a){if(a[ERR_CODE]==ENONE){var b=document.forms[0];b.action=e+"/stok="+f+a.url;b.submit();b.reset();s=!1}else w()},error:function(){closeLoading();showAlert(errStr.invSendReqMsgFailedNetwork);clearTimeout(upgradeTimeoutHd)}})):w()},error:function(){closeLoading();showAlert(errStr.invSendReqMsgFailedNetwork);clearTimeout(upgradeTimeoutHd)}})}}}}function N(){var a=id("sysUpgradeNative");hideCoverB(function(){a.style.visibility="hidden";a.style.top="-9999px"})}function Z(a,
-c){var d=id("sysUpgradeNative"),e="",h,b=void 0!=m._ops.data[a].cur_fw_version_full?m._ops.data[a].cur_fw_version_full:label.notFoundVersion,f=void 0!=m._ops.data[a].hw_version?m._ops.data[a].hw_version:label.notFoundVersion;void 0!=d?emptyNodes(d):(d=document.createElement("div"),d.className="VigNetControlCon",d.id="sysUpgradeNative",document.body.appendChild(d));h=document.createElement("div");h.className="eptCon";h.id="eptCon";d.appendChild(h);e+='<h1 class="localUpgrade">'+menuStr.localUpgrade+
-"</h1>";e=e+'<div style="margin-left: 102px;">'+('<p class="upVersion"><span>'+label.upCurrHard+label.colon+'</span><span id="hardwareVerL">'+f+'</span></p><p class="upVersion" style="margin-top:8px;"><span>'+label.upCurrSoft+label.colon+'</span><span id="softwareVerL">'+b+"</span></p>");e+='<p class="upDes">'+label.upgradeTip+"</p>";e+='<form enctype="multipart/form-data" id="upFileForm" method="post" target="uploadIf"><div class="fileDiv"><input type="file" class="file" name="fileName" id="fileName" /><input type="text" id="textfield" class="fileTxt" readonly="true" /><input type="button" value="'+
-btn.browse+'" class="subBtn fileBrowse" /><iframe id="uploadIf" name="uploadIf"></iframe></div><input id="sysUpgrade" type="button" value="'+btn.upgrade+'" class="btnA subBtn" /><input id="sysUpgradeCancel" type="button" value="'+btn.cancel+'" class="btnA cancelBtn"/></form>';e+="</div>";h.innerHTML=e;id("sysUpgradeCancel").onclick=N;showCoverB(function(){d.style.visibility="visible";d.style.top="150px"});m._ops.data[a].isCap?M(!0,a):M(!1,a)}function u(a,c){var d=x();a?(O(!0),disableBtn("easyUpgrade",
-!0),disableBtn("checkVer",!0),$(id("nativeTbl").rows).find("input").each(function(){disableBtn(this,!0)})):(O(!1),disableBtn("checkVer",!1),$(d).on("click",P),$(id("nativeTbl").rows).find("input").each(function(){disableBtn(this,!1)}));for(var e=0;e<f.length;e++)!0==f[e].isCheckState&&(d[e].checked=!0),q._singelSelHandle(d[e],q);Q(d)}function R(){var a={},c=x();a[uciPlc.fileName]={};a[uciPlc.fileName][uciPlc.secName.checkAllFwVerStart]=null;k=!0;for(var d=0;d<c.length;d++)f[d].isCheckState=!1;$(c).each(function(){this.checked=
-!1;q._singelSelHandle(this,q)});u(k);$.action(a,function(a){v(a[ERR_CODE])?C():(k=!1,u(k))})}function Q(a){var c,d,e=!1;if(!k){for(var h=0;h<a.length;h++)c=a[h].checked,d=f[h].isUpgradable,c&&d&&(e=!0);disableBtn("easyUpgrade",e?!1:!0)}}function P(a){a=x();if(!k){for(var c=0;c<a.length;c++)f[c].isCheckState=a[c].checked;Q(a)}}function O(a){$(id("onlineTbl")).find("[type='checkbox']").attr("disabled",a)}function x(){for(var a=Array.prototype.slice.call(id("onlineTbl").rows).slice().reverse(),c=[],
-d=0;d<f.length;d++)c[d]=a[d].cells[0].childNodes[0];return c}function r(a,c){for(var d=0;d<a.length;d++)if(c.toUpperCase()==a[d].mac.toUpperCase())return{item:a[d],idx:d};return null}function D(){E(function(a,c){S(a)==F?(k=!1,l(!0),onlineUpgradeProgress(G)):c?t(function(d){for(var e,c,b,p,g=0;g<a.length;g++)e=r(d,a[g].mac),c=r(f,a[g].mac),null!=c&&null!=e&&(b=e.item,p=c.item,p.cur_fw_version=b.cur_fw_version,p.newest_fw_version=b.newest_fw_version,p.isUpgradable=b.isUpgradable,p.upgradeStatus!=uciPlc.optValue.upgradeStatus.downloadTimeout&&
-p.upgradeStatus!=uciPlc.optValue.upgradeStatus.downloadFail&&p.upgradeStatus!=uciPlc.optValue.upgradeStatus.upgradeFail&&(p.status=b.status)),null==e&&null!=c&&f.splice(c.idx,1);k=!1;for(g=0;g<f.length;g++)f[g].isCheckState=!1;l()}):(l(!0),$.setTimeout(D,1E3))})}function C(){T(function(a,c){U(a);c?t(function(a){for(var e,c=0;c<f.length;c++)f[c].checkFwVerStatus!=uciPlc.optValue.checkAllFwVerStatus.fail&&(e=r(a,f[c].mac),null!=e?(e=e.item,f[c].cur_fw_version=e.cur_fw_version,f[c].newest_fw_version=
-e.newest_fw_version,f[c].isUpgradable=e.isUpgradable,f[c].status=e.status,e.isUpgradable&&(f[c].isCheckState=!0)):f[c].status=f[c].isUpgradable?n(label.isUpgradable):label.isAreadyNewVer);k=!1;l(!0)}):(l(!0),$.setTimeout(C,1E3))})}function y(){k?$.setTimeout(y,3E3):aa(function(){$.setTimeout(y,3E3)})}function aa(a){var c=[],d=[],e;t(function(h){$.each(h,function(a,b){null==r(f,b.mac)&&c.push(b)});$.each(f,function(a,b){null==r(h,b.mac)&&d.push(b)});for(var b=0;b<d.length;b++)e=r(f,d[b].mac),f.splice(e.idx,
-1);for(b=0;b<c.length;b++)f.unshift(c[b]);l(!1,!0);"function"==typeof a&&a()})}function S(a){var c,d,e,h=[];z=H=!1;for(var b=0;b<a.length;b++){if(a[b].status!=uciPlc.optValue.upgradeStatus.idle&&(c=r(f,a[b].mac),I.toUpperCase()==a[b].mac&&(H=!0),null!=c)){d=c.item;if(d.isCap&&(a[b].status==uciPlc.optValue.upgradeStatus.downloading||a[b].status==uciPlc.optValue.upgradeStatus.downloadTimeout||a[b].status==uciPlc.optValue.upgradeStatus.downloadFail||a[b].status==uciPlc.optValue.upgradeStatus.waitForUpgrade||
-a[b].status==uciPlc.optValue.upgradeStatus.upgrading||a[b].status==uciPlc.optValue.upgradeStatus.upgradeFail||a[b].status==uciPlc.optValue.upgradeStatus.upgradeSuccess))return G=1E3*a[b].wait_time,F;if(!0!=d.isCap&&"1"==d[uciPlc.optName.supportEyUp]){if(a[b].status==uciPlc.optValue.upgradeStatus.waitForUpgrade||a[b].status==uciPlc.optValue.upgradeStatus.upgrading)z=!0}else!0!=d.isCap&&"0"==d[uciPlc.optName.supportEyUp]&&(a[b].status==uciPlc.optValue.upgradeStatus.downloading||(a[b].status==uciPlc.optValue.upgradeStatus.waitForUpgrade||
-a[b].status==uciPlc.optValue.upgradeStatus.upgrading),z=!0);h.push(c.idx);a[b].status==uciPlc.optValue.upgradeStatus.waiting?e=label.waiting:a[b].status==uciPlc.optValue.upgradeStatus.downloading?e="-1"!=a[b].download_progress?label.downloadingFw+a[b].download_progress+"%":label.downloadingFw:a[b].status==uciPlc.optValue.upgradeStatus.downloadTimeout?e=n(label.downloadTimeout):a[b].status==uciPlc.optValue.upgradeStatus.downloadFail?e=n(label.downloadFail):a[b].status==uciPlc.optValue.upgradeStatus.waitForUpgrade?
-e=label.waitingForUpgrade:a[b].status==uciPlc.optValue.upgradeStatus.upgrading?e="-1"!=a[b].upgrade_progress?label.upgradeing+a[b].upgrade_progress+"%":label.upgradeing:a[b].status==uciPlc.optValue.upgradeStatus.upgradeFail?e=n(label.upgradeFail):a[b].status==uciPlc.optValue.upgradeStatus.upgradeSuccess&&(e=n(label.upgradeSuccess));d.status=e;d.upgradeStatus=a[b].status}a[b].mac.toUpperCase()==J.toUpperCase()&&K&&(V=a[b].wait_time)}return h}function U(a){for(var c,d,e,h=[],b=0;b<a.length;b++)c=r(f,
-a[b].mac),null!=c&&(d=c.item,h.push(c.idx),a[b].status==uciPlc.optValue.checkAllFwVerStatus.checking?e=label.isChecking:a[b].status==uciPlc.optValue.checkAllFwVerStatus.idleOrFinish?e=n(label.isChecked):a[b].status==uciPlc.optValue.checkAllFwVerStatus.fail&&(e=n(label.isCheckFail)),d.status=e,d.checkFwVerStatus=a[b].status);return h}function E(a){var c=$.Deferred(),d=$.Deferred(),e={},f={};e[uciPlc.fileName]={};e[uciPlc.fileName][KEY_TABLE]=uciPlc.secName.upgradeDevStatus;$.query(e,function(a){c.resolve(a)});
-f[uciHostsInfo.fileName]={};f[uciHostsInfo.fileName][KEY_TABLE]=uciHostsInfo.dynData.online_host;$.query(f,function(a){d.resolve(a)});A=$.setTimeout(function(){A=null;B++;3<=B?(B=0,z&&!L&&(showProgBar(1E3*V,label.upgradePopsWindowTips,function(){lanDetecting(function(){window.location.reload()})},!0,H?statusStr.upgradeTip:statusStr.upgradeTipsForEasyRe),L=!0)):E(a)},2E3);$.when(c,d).done(function(b,c){var d,e=!0;if(!L){null!=A&&(clearTimeout(A),B=0);d=formatTableData(c[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);
-for(var f=0;f<d.length;f++)d[f][uciHostsInfo.optName.mac].toUpperCase()==g_cur_host_mac.toUpperCase()&&(J=d[f][uciHostsInfo.optName.parentMac]);K=!1;J.toUpperCase()!=I.toUpperCase()&&(K=!0);if(b[ERR_CODE]!=ENONE)"function"==typeof a&&a([],e);else{d=formatTableData(b[uciPlc.fileName][uciPlc.secName.upgradeDevStatus]);for(f=0;f<d.length;f++)if(d[f].status==uciPlc.optValue.upgradeStatus.waiting||d[f].status==uciPlc.optValue.upgradeStatus.downloading||d[f].status==uciPlc.optValue.upgradeStatus.waitForUpgrade||
-d[f].status==uciPlc.optValue.upgradeStatus.upgrading){e=!1;break}"function"==typeof a&&a(d,e)}}})}function T(a){var c={};c[uciPlc.fileName]={};c[uciPlc.fileName][KEY_TABLE]=uciPlc.secName.checkAllFwVer;$.query(c,function(d){var c=!0;if(d[ERR_CODE]!=ENONE)"function"==typeof a&&a([],c);else{d=formatTableData(d[uciPlc.fileName][uciPlc.secName.checkAllFwVer]);for(var f=0;f<d.length;f++)if(d[f].status==uciPlc.optValue.checkAllFwVerStatus.checking){c=!1;break}"function"==typeof a&&a(d,c)}})}function t(a){var c=
-{};c[uciCloudConfig.fileName]={};c[uciCloudConfig.fileName][KEY_NAME]=[uciCloudConfig.secName.newFirmware,uciCloudConfig.secName.upgradeInfo];c[uciDeviceInfo.fileName]={};c[uciDeviceInfo.fileName][KEY_NAME]=uciDeviceInfo.secName.info;c[uciProto.fileName]={};c[uciProto.fileName][KEY_NAME]=uciProto.secName.dhcp;c[uciPlc.fileName]={};c[uciPlc.fileName][KEY_TABLE]=uciPlc.secType.connectedExt;c[uciNetwork.fileName]={};c[uciNetwork.fileName][KEY_NAME]=uciNetwork.secName.lan;$.query(c,function(d){var c=
-d[uciDeviceInfo.fileName][uciDeviceInfo.secName.info],f=d[uciProto.fileName][uciProto.secName.dhcp][uciProto.optName.hostName],b=d[uciCloudConfig.fileName][uciCloudConfig.secName.upgradeInfo],k=d[uciNetwork.fileName][uciNetwork.secName.lan],g,l=void 0==c[uciDeviceInfo.optName.swVer]?label.notFoundVersion:c[uciDeviceInfo.optName.swVer],m=d[uciCloudConfig.fileName][uciCloudConfig.secName.newFirmware][uciCloudConfig.optName.fwNewNotify],m=checkNum(m)&&parseInt(m)||uciCloudConfig.optValue.fwNewFalse;
-g={};g.name=f;g.hw_version=c[uciDeviceInfo.optName.hwVer];g.cur_fw_version_full=l;g.cur_fw_version=l.split(" ")[0];g.isUpgradable=m==uciCloudConfig.optValue.fwNewTrue&&void 0!=b[uciCloudConfig.optName.version];g.newest_fw_version=g.isUpgradable?b[uciCloudConfig.optName.version].split(" ")[0]:l.split(" ")[0];g.status=g.isUpgradable?n(label.isUpgradable):label.isAreadyNewVer;g.mac=k[uciNetwork.optName.mac];g.isCap=!0;g.isCheckState=!1;I=k[uciNetwork.optName.mac].toUpperCase();d=formatTableData(d[uciPlc.fileName][uciPlc.secType.connectedExt]);
-c=0;for(f=d.length;c<f;c++)b=d[c],b[uciPlc.optName.supportOlUp]!=uciPlc.optValue.supportOlUp.yes?(b.name=b.name||label.oldVersion,b.cur_fw_version=label.notFoundVersion,b.newest_fw_version=label.notFoundVersion,b.cur_fw_version_full=label.notFoundVersion,b.isUpgradable=!1,b.status=label.isAreadyNewVer):(b.name=void 0==b.name?label.notFoundVersion:b.name,b.cur_fw_version_full=void 0==b.cur_fw_version?label.notFoundVersion:b.cur_fw_version,b.cur_fw_version=""==b.cur_fw_version?label.notFoundVersion:
-""==b.cur_fw_version.split(" ")[0]?label.notFoundVersion:b.cur_fw_version.split(" ")[0],b.newest_fw_version=void 0==b.newest_fw_version?b.cur_fw_version:b.newest_fw_version.split(" ")[0]||b.cur_fw_version,b.isUpgradable=b.cur_fw_version==label.notFoundVersion||b.newest_fw_version==label.notFoundVersion?!1:b.newest_fw_version!=b.cur_fw_version?!0:!1,b.status=b.isUpgradable?n(label.isUpgradable):label.isAreadyNewVer),b.isCheckState=!1;g=[g];g=d.concat(g);"function"==typeof a&&a(g)})}function n(a){var c=
-{str:a};switch(a){case label.isUpgradable:c.iconType="tips";break;case label.isChecked:c.iconType="success";break;case label.isCheckFail:case label.downloadTimeout:case label.downloadFail:case label.upgradeFail:c.iconType="error"}return c}function l(a,c){q.setDataSource(f);q.refresh();u(k,c);a||(m.setDataSource(f),m.refresh())}window.addEventListener("message",function(a){var c=a.data,d;a=ENONE;if(/(<pre>)?(.+)(<\/pre>)+/.test(c)||/(<pre>)?(.+)/.test(c))d=RegExp.$2;d=JSON.parse(d);a=d[ERR_CODE];a!=
-ENONE&&(closeLoading(),closeProgBar());Y(a,d)},!1);var m,q,s=!1,f=null,k=!1,K=!1,H=!1,z=!1,F=-1,G=SYSUPGRADE_SECONDS,I="",J="",V=0,B=0,A=null,L=!1;id("easyUpgrade").onclick=function(){var a={},c=[],d=x();a[uciPlc.fileName]={};a[uciPlc.fileName][uciPlc.secName.upgradeDev]={};a[uciPlc.fileName][uciPlc.secName.upgradeDev][uciPlc.optName.mac]=c;for(var e=0;e<d.length;e++)f[e].isCheckState=!1;for(e=0;e<d.length;e++)!0==d[e].checked&&(!0!=f[e].isUpgradable?d[e].checked=!1:(f[e].isCheckState=!0,c.push(f[e].mac.toUpperCase())));
-k=!0;u(k);$.action(a,function(a){v(a[ERR_CODE])?D():(k=!1,u(k))})};id("checkVer").onclick=R;disableBtn("easyUpgrade",!0);disableBtn("checkVer",!0);(function(){q=new DataGrid;m=new DataGrid;q.init({id:"onlineTbl",data:[],IDWidth:"30px",edit:!1,hasSelBox:!0,head:[{field:label.equipName,width:28},{field:label.upCurrSoft,width:10},{field:label.upNewSoft,width:10},{field:label.curStatus,width:16}],list:[{edit:!1,name:"name",type:"str",maxSize:40},{edit:!1,name:"cur_fw_version",type:"str"},{edit:!1,name:"newest_fw_version",
-type:"str"},{edit:!1,name:"status",type:"iconWithStr"}]});$(id("onlineTbl").rows[0].cells[0].childNodes[0]).on("click",P);m.init({id:"nativeTbl",data:[],edit:!1,hasSelBox:!1,head:[{field:label.equipName,width:40},{field:label.upCurrSoft,width:18},{field:label.operation,width:18}],list:[{edit:!1,name:"name",type:"str",maxSize:40},{edit:!1,name:"cur_fw_version",type:"str"},{value:btn.fwLocalUpgrade,type:"btn",click:Z,className:"subBtn tblBtn"}]});t(function(a){f=$.extend(!0,[],a);T(function(a,d){d?
-E(function(a,c){var b;if(c)k=!1,l(),gOnlineUpgradeAuto&&(gOnlineUpgradeAuto=!1,R());else if(b=S(a),b==F)k=!1,l(),onlineUpgradeProgress(G);else{for(var d=0;d<b.length;d++)f[b[d]].isCheckState=!0;k=!0;l();D()}y()}):(U(a),k=!0,l(),C(),y())})})})()}init();
-</script><style type="text/css">table.dataGrid td{height:39px;border:1px solid #1e96d4}div.sysUpBlock{color:#fff;font-size:14px;text-align:left;margin-bottom:30px}p.upgradeTip{margin-top:30px}.tblBtn{height:25px;margin:auto 3px}div.eptCon{background-color:#fff;margin:0 auto;overflow:hidden;position:relative;width:510px;padding:30px 70px 50px}p.upVersion{color:#343434;text-align:left;margin:32px 0 0 0;font-size:12px}p.upDes{color:#343434;text-align:left;margin:24px 0 0 0;font-size:12px}h1.localUpgrade{color:#333;font-size:14px;font-weight:bold}span.softPos{margin-left:30px}div.fileDiv{width:327px;height:34px;margin:10px 0 0 0;overflow:hidden;position:relative;vertical-align:middle}input.file{font-size:110px;top:-5px;right:-5px;opacity:0;filter:alpha(opacity:0);cursor:pointer;position:absolute;vertical-align:top}input.fileTxt{width:226px;height:30px;line-height:30px;color:#333;font-size:12px;border:1px solid #1e96d4;border-radius:4px;padding:0 2px 0 4px;vertical-align:middle}input.fileBrowse{padding:3px 18px;*padding:2px 12px 0;font-size:14px;width:80px;height:30px;margin-left:12px;vertical-align:middle}#sysUpgrade{vertical-align:middle;width:90px!important;font-size:14px;height:30px;margin:30px 0 55px 61px}#sysUpgradeCancel{vertical-align:middle;font-size:14px;width:80px;height:30px;margin:30px 0 55px 12px}#nativeTbl,#onlineTbl{font-size:12px}#upFileForm{height:100px}div.blockOlUpgradeBtn{margin-top:34px;margin-bottom:15px}div.blockOlUpgradeBtn input{font-size:14px;margin-right:24px;padding-top:3px;padding-bottom:3px;padding-left:8px;padding-right:8px;border:1px solid #fbeb1a}div.blockOlUpgradeBtn input.subBtnDis{border:1px solid #fff;padding-top:3px!important;padding-bottom:3px!important}</style>

@@ -1,5 +1,276 @@
-﻿﻿
+﻿﻿<script type="text/javascript">
+	function init()
+	{
+		var countdown = 70;
+		var countdownHandle;
+		var isShowDfsTips = false;
 
+		var uciFile = uciWireless.fileName;
+		var uciSecWifi2G = uciWireless.dynData.host_2g;
+		var uciSecWifi5G = uciWireless.dynData.host_5g;
+		var uciSecWifiBs = uciWireless.secName.wlanBS;
+		var optSsid = uciWireless.dynOptName.ssid;
+		var optKey = uciWireless.dynOptName.key;
+		var optBsEnable = uciWireless.optName.bsEnable;
+		var ENABLE = uciWireless.optValue.bsEnable.enable;
+
+		function changeCountDownText(callback) {
+			countdownHandle = setInterval(function () {
+				countdown--;
+				id("DFScountdown").innerHTML = countdown + "s";
+				if (countdown <= 0) {
+					clearInterval(countdownHandle);
+					typeof callback != "undefined" && callback();
+					return;
+				}
+			}, 1000);
+		}
+
+		function wzdEndJumpHandle()
+		{
+			phoneSet["bPhoneWizardSet"] = true;
+			loadLgLessPage("PhoneApp.htm", "Con", undefined, {bRecordLoadPage:false});
+		}
+
+		wzdDone();
+
+		/* 如果无线配置更改，保存无线配置 */
+		if ((true == gIsWifiCfgChged) || (gSysModeSupport && gSysMode == uciSystem.optValue.sysMode.apMode))
+		{
+			$.modify(gWifiCfgToSave, function(result){
+				if (result[ERR_CODE] == ENONE)
+				{
+					if (result["dfs_wait_time"] && result["dfs_wait_time"] != 0)
+					{
+						countdown = parseInt(result["dfs_wait_time"]);
+						id("DFScountdown").innerHTML = countdown + "s";
+						isShowDfsTips = true;
+					}
+
+					displayInit();
+
+					if (gSysModeSupport && gSysMode == uciSystem.optValue.sysMode.apMode){
+						if (gIsLanIpChanged) {
+							$.action({"wired_extender": {"set_ip": null}});
+							var jumpPageHd = $.setTimeout(function() {
+								window.location.href = "http://" + gLanIP;
+							}, 60000);
+							$.changeDomain(gLanIP);
+							$.setTimeout(function() {
+								lanDetecting(function() {
+									window.location.href = "http://" + gLanIP;
+								});
+							}, 4000);
+						} else {
+							/** 修复Bug 528368：
+							 * 有线中继时，不插网线，点下一步，提示中继失败后，点下一步，然后插上网线，
+							 * 此时后台会从前端拿到IP，但是页面上gIsLanIpChanged为false，需要手动拿一次IP
+							*/
+							$.query({"wired_extender":{"name": "status"}}, function(result) {
+								var ip = '0.0.0.0';
+								if (ENONE == result.error_code) {
+									ip = result.wired_extender.status.ip;
+								}
+								if (ip != '0.0.0.0') {
+									gLanIP = ip;
+									$("#lanIPBs").text(label.lanIPAddr + "：" + gLanIP);
+									$("#lanIP").text(label.lanIPAddr + "：" + gLanIP);
+									$.action({"wired_extender": {"set_ip": null}});
+
+									$.changeDomain(gLanIP);
+									$.setTimeout(function() {
+										lanDetecting(function() {
+											window.location.href = "http://" + gLanIP;
+										});
+									}, 4000);
+								} else {
+									$.setTimeout(function(){
+										lanDetecting(function(){
+											wzdEndJumpHandle();
+										});
+									}, 4000);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+		else
+		{
+			displayInit();
+		}
+
+		id("downLoadApp").onclick = function(){
+			location.href = "https://wap.tplinkcloud.com.cn/appdown";
+		};
+		id("continuePCSet").onclick = function(){
+			phoneSet["bPhoneWizardSet"] = false;
+			loadPage("Content.htm", "Con");
+		};
+
+		function displayInit()
+		{
+			if (gIsWifiCfgChged || (gSysModeSupport && gIsLanIpChanged))
+			{
+				if (gSupportBS &&
+						gWifiCfgToSave[uciFile][uciSecWifiBs] &&
+						gWifiCfgToSave[uciFile][uciSecWifiBs][optBsEnable] == ENABLE)
+				{
+					$("#bsTip").css("display", "block");
+
+					var wifiPwdBs = gWifiCfgToSave[uciFile][uciSecWifiBs][optKey];
+					if ((undefined == wifiPwdBs) || (0 == wifiPwdBs.length))
+					{
+						$("#wifiPwdBs").css("display", "none");
+					}
+					else
+					{
+						$("#wifiPwdBs").text(label.wirelessPwd + label.colon + wifiPwdBs);
+						$("#wifiPwdBs").attr("title", label.wirelessPwd + label.colon + wifiPwdBs);
+					}
+
+					$("#wifiNameBs").text(label.wirelessName + label.colon + gWifiCfgToSave[uciFile][uciSecWifiBs][optSsid]);
+					$("#wifiNameBs").attr("title", label.wirelessName + label.colon + gWifiCfgToSave[uciFile][uciSecWifiBs][optSsid]);
+				}
+				else
+				{
+					$("#commonTip").css("display", "block");
+
+					var wifiPwdCfg = gWifiCfgToSave[uciFile][uciSecWifi2G][optKey];
+					var wifiPwdCfg5G = gWifiCfgToSave[uciFile][uciSecWifi5G][optKey];
+
+					$("#wifiName").text(label.wirelessName2G + label.colon + gWifiCfgToSave[uciFile][uciSecWifi2G][optSsid]);
+					$("#wifiName").attr("title", label.wirelessName2G + label.colon + gWifiCfgToSave[uciFile][uciSecWifi2G][optSsid]);
+					$("#wifiName5G").text(label.wirelessName5G + label.colon + gWifiCfgToSave[uciFile][uciSecWifi5G][optSsid]);
+					$("#wifiName5G").attr("title", label.wirelessName5G + label.colon + gWifiCfgToSave[uciFile][uciSecWifi5G][optSsid]);
+
+					if ((undefined == wifiPwdCfg) || (0 == wifiPwdCfg.length))
+					{
+						$("#wifiPwd").css("display", "none");
+					}
+					else
+					{
+						$("#wifiPwd").text(label.wirelessPwd2G + label.colon + wifiPwdCfg);
+						$("#wifiPwd").attr("title", label.wirelessPwd2G + label.colon + wifiPwdCfg);
+					}
+
+					if ((undefined == wifiPwdCfg5G) || (0 == wifiPwdCfg5G.length))
+					{
+						$("#wifiPwd5G").css("display", "none");
+					}
+					else
+					{
+						$("#wifiPwd5G").text(label.wirelessPwd5G + label.colon + wifiPwdCfg5G);
+						$("#wifiPwd5G").attr("title", label.wirelessPwd5G + label.colon + wifiPwdCfg5G);
+					}
+				}
+
+				if (gSysModeSupport && gIsLanIpChanged) {
+					$("#lanIP").text(label.lanIPAddr + "：" + gLanIP);
+					$("#lanIPBs").text(label.lanIPAddr + "：" + gLanIP);
+				}
+
+				/* 无线配置已更改，无线将会断开，显示重连提示页面 */
+				$("#dfsTips").css("display", isShowDfsTips ? "block" : "none");
+				$("#dfsTips2").css("display", isShowDfsTips ? "block" : "none");
+				$("#noneDfsTips").css("display", isShowDfsTips ? "none" : "block");
+				$("#detecting").css("display", "block");
+				$("#setOk").css("display", "none");
+
+				if (isShowDfsTips)
+				{
+					changeCountDownText();
+				}
+			}
+			else
+			{
+				/* 无线配置未更改，显示提示页面需区分是否Apple设备 */
+				$("#detecting").css("display", "none");
+				$("#setOk").css("display", "block");
+
+				if ("NO" != gBeInCNA)
+				{
+					$("#iPhone").css("display", "block");
+				}
+				else
+				{
+					$("#android").css("display", "block");
+				}
+			}
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	div.phEndCon{
+		margin:0 auto;
+		width:290px;
+	}
+	img.detectingGif{
+		height:30px;
+		margin:120px auto 0;
+		width:30px;
+	}
+	p.detectTip{
+		color:#ffffff;
+		font-size:14px;
+		text-align:center;
+		word-break:break-all;
+		word-wrap:break-word;
+	}
+	p.leftTip{
+		color:#ffffff;
+		font-size:14px;
+		text-align:left;
+		word-break:break-all;
+		word-wrap:break-word;
+	}
+	.textCenter{
+		text-align:center;
+	}
+	.bold{
+		font-size:15px !important;
+		font-weight:bold;
+	}
+	p.detecting{
+		margin-top:20px;
+	}
+	img.detectErr{
+		height:80px;
+		margin:120px auto 0;
+		width:83px;
+	}
+	label.appBtn{
+		background-color:#FEEB1A;
+		border:none;
+		border-radius:3px;
+		color:#3C3E43;
+		cursor:pointer;
+		display:inline-block;
+		font-size:14px;
+		margin-top:10px;
+		padding:8px 15px;
+	}
+	label.btnL{
+		margin-right:10px;
+	}
+	div.commonTip div{
+		overflow:hidden;
+		white-space:nowrap;
+		text-align:center;
+	}
+	div.bsTip div{
+		overflow:hidden;
+		white-space:nowrap;
+		text-align:center;
+	}
+	#DFScountdown {
+		font-size: 13px;
+		color: #FEEB1A;
+		font-weight: bold;
+	}
+</style>
 <div class="phEndCon textCenter disNones" id="detecting">
 	<img class="detectErr" src="../web-static/images/greenCoWhite.png" />
 	<p class="detectTip detecting bold">{%label.phoneWizardEnd%}</p>
@@ -31,11 +302,3 @@
 		<label id="continuePCSet" class="appBtn btnL">{%label.phoneEndBrowser%}</label><label id="downLoadApp" class="appBtn">{%label.phoneEndDownload%}</label>
 	</div>
 </div>
-<script type="text/javascript">function init(){function p(a){m=setInterval(function(){d--;id("DFScountdown").innerHTML=d+"s";0>=d&&(clearInterval(m),"undefined"!=typeof a&&a())},1E3)}function n(){if(gIsWifiCfgChged||gSysModeSupport&&gIsLanIpChanged){if(gSupportBS&&gWifiCfgToSave[b][e]&&gWifiCfgToSave[b][e][q]==r){$("#bsTip").css("display","block");var a=gWifiCfgToSave[b][e][h];void 0==a||0==a.length?$("#wifiPwdBs").css("display","none"):($("#wifiPwdBs").text(label.wirelessPwd+label.colon+a),$("#wifiPwdBs").attr("title",label.wirelessPwd+
-label.colon+a));$("#wifiNameBs").text(label.wirelessName+label.colon+gWifiCfgToSave[b][e][c]);$("#wifiNameBs").attr("title",label.wirelessName+label.colon+gWifiCfgToSave[b][e][c])}else{$("#commonTip").css("display","block");var a=gWifiCfgToSave[b][k][h],g=gWifiCfgToSave[b][l][h];$("#wifiName").text(label.wirelessName2G+label.colon+gWifiCfgToSave[b][k][c]);$("#wifiName").attr("title",label.wirelessName2G+label.colon+gWifiCfgToSave[b][k][c]);$("#wifiName5G").text(label.wirelessName5G+label.colon+gWifiCfgToSave[b][l][c]);
-$("#wifiName5G").attr("title",label.wirelessName5G+label.colon+gWifiCfgToSave[b][l][c]);void 0==a||0==a.length?$("#wifiPwd").css("display","none"):($("#wifiPwd").text(label.wirelessPwd2G+label.colon+a),$("#wifiPwd").attr("title",label.wirelessPwd2G+label.colon+a));void 0==g||0==g.length?$("#wifiPwd5G").css("display","none"):($("#wifiPwd5G").text(label.wirelessPwd5G+label.colon+g),$("#wifiPwd5G").attr("title",label.wirelessPwd5G+label.colon+g))}gSysModeSupport&&gIsLanIpChanged&&($("#lanIP").text(label.lanIPAddr+
-"："+gLanIP),$("#lanIPBs").text(label.lanIPAddr+"："+gLanIP));$("#dfsTips").css("display",f?"block":"none");$("#dfsTips2").css("display",f?"block":"none");$("#noneDfsTips").css("display",f?"none":"block");$("#detecting").css("display","block");$("#setOk").css("display","none");f&&p()}else $("#detecting").css("display","none"),$("#setOk").css("display","block"),"NO"!=gBeInCNA?$("#iPhone").css("display","block"):$("#android").css("display","block")}var d=70,m,f=!1,b=uciWireless.fileName,k=uciWireless.dynData.host_2g,
-l=uciWireless.dynData.host_5g,e=uciWireless.secName.wlanBS,c=uciWireless.dynOptName.ssid,h=uciWireless.dynOptName.key,q=uciWireless.optName.bsEnable,r=uciWireless.optValue.bsEnable.enable;wzdDone();!0==gIsWifiCfgChged||gSysModeSupport&&gSysMode==uciSystem.optValue.sysMode.apMode?$.modify(gWifiCfgToSave,function(a){a[ERR_CODE]==ENONE&&(a.dfs_wait_time&&0!=a.dfs_wait_time&&(d=parseInt(a.dfs_wait_time),id("DFScountdown").innerHTML=d+"s",f=!0),n(),gSysModeSupport&&gSysMode==uciSystem.optValue.sysMode.apMode&&
-(gIsLanIpChanged?($.action({wired_extender:{set_ip:null}}),$.setTimeout(function(){window.location.href="http://"+gLanIP},6E4),$.changeDomain(gLanIP),$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},4E3)):$.query({wired_extender:{name:"status"}},function(a){var b="0.0.0.0";ENONE==a.error_code&&(b=a.wired_extender.status.ip);"0.0.0.0"!=b?(gLanIP=b,$("#lanIPBs").text(label.lanIPAddr+"："+gLanIP),$("#lanIP").text(label.lanIPAddr+"："+gLanIP),$.action({wired_extender:{set_ip:null}}),
-$.changeDomain(gLanIP),$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},4E3)):$.setTimeout(function(){lanDetecting(function(){phoneSet.bPhoneWizardSet=!0;loadLgLessPage("PhoneApp.htm","Con",void 0,{bRecordLoadPage:!1})})},4E3)})))}):n();id("downLoadApp").onclick=function(){location.href="https://wap.tplinkcloud.com.cn/appdown"};id("continuePCSet").onclick=function(){phoneSet.bPhoneWizardSet=!1;loadPage("Content.htm","Con")}}init();
-</script><style type="text/css">div.phEndCon{margin:0 auto;width:290px}img.detectingGif{height:30px;margin:120px auto 0;width:30px}p.detectTip{color:#fff;font-size:14px;text-align:center;word-break:break-all;word-wrap:break-word}p.leftTip{color:#fff;font-size:14px;text-align:left;word-break:break-all;word-wrap:break-word}.textCenter{text-align:center}.bold{font-size:15px!important;font-weight:bold}p.detecting{margin-top:20px}img.detectErr{height:80px;margin:120px auto 0;width:83px}label.appBtn{background-color:#feeb1a;border:0;border-radius:3px;color:#3c3e43;cursor:pointer;display:inline-block;font-size:14px;margin-top:10px;padding:8px 15px}label.btnL{margin-right:10px}div.commonTip div{overflow:hidden;white-space:nowrap;text-align:center}div.bsTip div{overflow:hidden;white-space:nowrap;text-align:center}#DFScountdown{font-size:13px;color:#feeb1a;font-weight:bold}</style>

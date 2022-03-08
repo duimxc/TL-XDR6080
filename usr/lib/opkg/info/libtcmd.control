@@ -5,5 +5,5 @@ Source: tp_package/sys_packages/qca_util/qca_ftm/libtcmd
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 4742
+Installed-Size: 4746
 Description:  QCA libtcmd utils

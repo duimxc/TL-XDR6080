@@ -1,15 +1,749 @@
-function Basic(){this.w=window;this.routerAlive=!1;this.head=document.getElementsByTagName("head")[0];this.d=document;this.isIE=0<=navigator.userAgent.indexOf("IE");this.domainUrl="http://192.168.1.1";this.time=1E3;this.explorerTag=0;this.pwd=this.session=this.hostip="";this.httpTag="http://";this.ajaxAsyn=!0;this.ajaxSyn=!1;this._init=function(){this.local="undefined"!=typeof bWebUISimulator&&!0===bWebUISimulator?!0:"file:"==location.protocol};this.isArray=function(a){return"[object Array]"===Object.prototype.toString.call(a)};
-this.getExplorer=function(){var a=navigator.userAgent;0<a.indexOf("IE 6.0")?this.explorerTag=6:0<a.indexOf("IE 7.0")&&(this.explorerTag=7)};this.transText=function(a){if(0<a.length){a=a.substring(a.indexOf("\r\n")+2);try{return eval("("+a+")")}catch(b){return""}}};this.id=function(a){return document.getElementById(a)};this.changeDomain=function(a){var b=this.httpTag;this.domainUrl=0<=a.indexOf(b)?a:b+a};this.initUrl=function(){if(!this.local){var a=location.href,b=a.indexOf("?");0<b&&(a=a.substring(0,
-b));this.domainUrl=a}};this.objInitNull=function(a){for(var b in a)"object"==typeof a[b]?this.arguments.callee(a[b]):a[b]=""};this.objSet=function(a,b){if(this.isArray(b)){var d=0,c;for(c in a)a[c]=b[d++]}else for(c in a)a[c]=b};this.objCopy=function(a,b){var d,c;for(c in a)d=b[c],void 0!=d&&(a[c]=d)};this.encodePara=function(a){return a=encodeURL(a.toString())};this._init()}
-function WebAjax(){this.local="file:"==location.protocol;this.isIE=0<=navigator.userAgent.indexOf("IE");this.ajaxTimeout=2E3;this.sessionKey="stok";this.externDataParseFunc=new Function;this.result={errorno:0,data:"",timeout:!0};this.initResult=function(a){this.result.errorno=0;this.result.data="";this.result.timeout=!0};this.setDataParseFunc=function(a){this.externDataParseFunc=a};this.changeAsynTime=function(a){this.ajaxTimeout=a};this.getValueFromUrl=function(a,b){var d="",c;b+="=";c=a.indexOf(b);
-0<=c&&(d=a.substring(c+b.length),c=d.indexOf("&"),c=0<c?c:d.length,d=d.substring(0,c));return d};this.orgURL=function(a){var b;0!=$.session.length&&(b=a.indexOf(".."),0<=b&&(a=a.substring(b+2)),a="/stok="+encodeURIComponent($.session)+a);return a};this.createXHR=function(){var a;if(void 0!=window.ActiveXObject)try{a=!0==this.local?new ActiveXObject("Microsoft.XMLHTTP"):new XMLHttpRequest}catch(b){a=new ActiveXObject("Microsoft.XMLHTTP")}else a=new XMLHttpRequest;return a};this.request=function(a,
-b,d,c,f,e,h,k,n,p){function q(a){var b,c;try{c=JSON.parse(a,function(a,b){return"string"===typeof b?decodeURIComponent(b):b})}catch(d){c=null}null==c?b=ENONE:(b=c[ERR_CODE],a=c.data);return[b,a]}var g=this.createXHR(),m,l=this;this.initResult(l.result);g.onreadystatechange=function(){if(4==g.readyState&&(!0===$.local||100<=g.status)){l.result.timeout=!1;if(m=g.responseText)l.result.data=m;var a=q(m);l.result.errorno=a[0];l.result.data=a[1];void 0!=f&&f(l.result);return!0}};"undefined"!=typeof n&&
-(g.timeout=n,g.ontimeout=function(a){"undefined"!=typeof p&&p()});try{void 0!=h&&void 0!=k?g.open(d,a,c,h,k):g.open(d,a,c),!0==this.isIE&&!1==this.local&&g.setRequestHeader("If-Modified-Since","0"),void 0!=b?g.send(b):g.send(null)}catch(r){}}}
-function Load(){Basic.call(this);WebAjax.call(this);this.asyn=!0;this.syn=!1;this.detectTime=1E3;this.div=document.createElement("div");this.externResizefunc=new Function;this.externJSP=new Function;this.externLoading=new Function;this.externPageHandle=new Function;this.pageTickArray=[];this.scriptArray=[];this.unAuthCode=401;this.httpOK=200;this.setTimeout=function(a,b){var d=window.setTimeout(a,b);this.pageTickArray.push(d);return d};this.addScript=function(a){if(a&&/\S/.test(a)){var b=this.d.createElement("script");
-b.type="text/javascript";void 0===b.text?b.appendChild(this.d.createTextNode(a)):b.text=a;this.head.insertBefore(b,this.head.firstChild);this.head.removeChild(b)}};this.getNodeArray=function(a,b){for(var d=[],c=0,f=a.length;c<f;c++)d[c]=a[c];b(d)};this.addDomNode=function(a,b){var d=this;this.div.innerHTML="div"+b;this.div.removeChild(this.div.firstChild);this.getNodeArray(this.div.childNodes,function(b){var f=[];emptyNodes(a);for(var e=0,h=b.length;e<h;e++)1==b[e].nodeType&&"script"===b[e].nodeName.toLowerCase()?
-f.push(b[e]):a.appendChild(b[e]);e=0;for(h=f.length;e<h;e++)d.addScript(f[e].text||f[e].textContent||f[e].innerHTML||"")})};this.pageResize=function(){this.externResizefunc()};this.setPageResize=function(a){this.externResizefunc=a};this.setexternJSP=function(a){this.externJSP=a};this.setExternLoading=function(a){this.externLoading=a};this.setExternPageHandle=function(a){this.externPageHandle=a};this.append=function(a,b){a&&1==a.nodeType&&"string"===typeof b&&(this.addDomNode(a,b),this.pageResize())};
-this.detectWidthImg=function(a){var b=new Image;b.onload=function(){a()};b.src=this.domainUrl+detectPathStr+"?requence="+Math.random()};this.detect=function(a,b,d){this.request(this.domainUrl+detectPathStr+"?requence="+Math.random(),void 0,"get",this.asyn,a,void 0,void 0,void 0,b,d)};this.loadHand=function(a,b,d){str=this.externJSP(a.data);void 0!=str&&(a.data=str);if(this.unAuthCode!=a.errorno){if(!1!==d.bClearPageTickArray){d=0;for(var c=this.pageTickArray.length;d<c;d++)try{window.clearTimeout(this.pageTickArray[d])}catch(f){}}this.append(this.id(b),
-a.data);try{this.externPageHandle()}catch(e){}}};this.getLgResult=function(a){return/\r\n\x3c!--(\d{3})--\x3e\r\n/gi.test(a.data)&&RegExp.$1!=this.httpOK?(a.errorno=RegExp.$1,/var authInfo = new Array("([a-zA-Z])","(\d{1,})");/g.test(a.data)&&(a.data=RegExp.$1+" "+RegExp.$2),!0):!1};this.refreshSession=function(a,b){var d=this;this.request(a,void 0,"get",this.asyn,function(a){a.errorno==EUNAUTH&&d.parseAuthRlt(a.data);b()})};this.getUnAuthHandle=function(a,b,d){if(!0!=$.accountStatus.logoutHandle&&
-EUNAUTH==$.result.errorno)if($.authRltObj.authStatus=!1,$.parseAuthRlt($.result.data),"undefined"!=typeof gUsernameSupport&&gUsernameSupport&&(null==$.usr||0==$.usr.length)||null==$.pwd||0==$.pwd.length||ESYSRESET==$.authRltObj.code)window.setTimeout(function(){$.loginErrHandle()},0);else{var c=function(c){if(ENONE==c)if(!0==b)$.request($.orgURL(a),void 0,"get",b,function(a){ENONE!=a.errorno?($.authRltObj.authStatus=!1,$.parseAuthRlt(a.data),$.loginErrHandle()):($.authRltObj.authStatus=!0,d(a))});
-else return $.request($.orgURL(a),void 0,"get",b,void 0),ENONE!=$.result.errorno?($.authRltObj.authStatus=!1,$.parseAuthRlt($.result.data),$.loginErrHandle()):($.authRltObj.authStatus=!0,d($.result)),!0;else window.setTimeout(function(){$.authRltObj.authStatus=!1;$.loginErrHandle()},0)};"undefined"!=typeof gUsernameSupport&&gUsernameSupport?$.authUsrPwd($.usr,$.pwd,c):$.auth($.pwd,c)}};this.load=function(a,b,d,c,f){function e(a){"function"==typeof f&&f(a);h=a.timeout;h||(c=void 0==c?{}:c,k.loadHand(a,
-d,c));"function"==typeof b&&b(a)}var h=!1,k=this;this.local||void 0!=b?this.loadAsyn(a,this.ajaxTimeout,function(b){b.errorno==EUNAUTH?k.getUnAuthHandle(a,k.asyn,e):b.errorno==ENONE&&e(b)}):(this.request(this.orgURL(a),void 0,"get",this.syn),this.result.errorno==EUNAUTH?this.getUnAuthHandle(a,this.syn,e):this.result.errorno==ENONE&&e(this.result));return h};this.loadAsyn=function(a,b,d){this.request(this.orgURL(a),void 0,"get",this.asyn,d,b)}};
+function Basic()
+{
+	this.w = window;
+	this.routerAlive = false;
+	this.head = document.getElementsByTagName("head")[0];
+	this.d = document;
+	this.isIE = (navigator.userAgent.indexOf("IE") >= 0);
+	this.domainUrl = "http://192.168.1.1";
+	this.time = 1000;
+	this.explorerTag = 0;
+	this.hostip = "";
+	this.session = "";
+	this.pwd = "";
+	this.httpTag = "http://";
+	this.ajaxAsyn = true;
+	this.ajaxSyn = false;
+
+	this._init = function(){
+		/* 如果是simulator页面，则$.local强制为true */
+		if (typeof bWebUISimulator != "undefined" && bWebUISimulator === true)
+		{
+			this.local = true;
+		}
+		else
+		{
+			this.local = (location.protocol == "file:");
+		}
+	};
+
+	this.isArray = function(obj)
+	{
+		return Object.prototype.toString.call(obj) === '[object Array]';
+	};
+
+	this.getExplorer = function ()
+	{
+		var nv = navigator.userAgent;
+
+		if (nv.indexOf("IE 6.0") > 0)
+		{
+			this.explorerTag = 6;
+		}
+		else if (nv.indexOf("IE 7.0") > 0)
+		{
+			this.explorerTag = 7;
+		}
+	};
+
+	this.transText = function(text)
+	{
+		if (text.length > 0)
+		{
+			text = text.substring(text.indexOf("\r\n") + 2);
+			try
+			{
+				return eval("("+text+")");
+			}catch(ex){return ""}
+		}
+	};
+
+	this.id = function (idStr)
+	{
+		return document.getElementById(idStr);
+	};
+
+	this.changeDomain = function(domain)
+	{
+		var urlHeaderTag = this.httpTag;
+		this.domainUrl = domain.indexOf(urlHeaderTag) >= 0?(domain):(urlHeaderTag+domain);
+	};
+
+	this.initUrl = function ()
+	{
+		if (!this.local)
+		{
+			var url = location.href;
+			var pos = url.indexOf("?");
+
+			if (pos > 0)
+			{
+				url = url.substring(0, pos);
+			}
+
+			this.domainUrl = url;
+		}
+	};
+
+	this.objInitNull = function (obj)
+	{
+		for(var property in obj)
+		{
+			if (typeof obj[property] == "object")	//是对象
+			{
+				this.arguments.callee(obj[property]);
+			}
+			else	//不是对象,
+			{
+				obj[property] = "";
+			}
+		}
+	};
+
+	this.objSet = function(obj, val)
+	{
+		if (this.isArray(val))
+		{
+			var n = 0;
+			for(var property in obj)
+			{
+				obj[property] = val[n++];
+			}
+		}
+		else
+		{
+			for(var property in obj)
+			{
+				obj[property] = val;
+			}
+		}
+	};
+
+	this.objCopy = function(target, srcObj)
+	{
+		var temp;
+		for(var porperty in target)
+		{
+			temp = srcObj[porperty];
+			if (temp != undefined)
+			{
+				target[porperty] = temp;
+			}
+		}
+	};
+
+	this.encodePara = function(val)
+	{
+		val = encodeURL(val.toString());
+
+		return val;
+	};
+
+	this._init();
+}
+
+function WebAjax()
+{
+	this.local = (location.protocol == "file:");
+	this.isIE = (navigator.userAgent.indexOf("IE") >= 0);
+	this.ajaxTimeout = 2000;
+	this.sessionKey = "stok";
+	this.externDataParseFunc = new Function();
+
+	this.result =
+	{
+		errorno:0,
+		data:"",
+		timeout:true
+	};
+
+	this.initResult = function (result)
+	{
+		this.result.errorno = 0;
+		this.result.data = "";
+		this.result.timeout = true;
+	};
+
+	this.setDataParseFunc = function(func)
+	{
+		this.externDataParseFunc = func;
+	};
+
+	this.changeAsynTime = function(time)
+	{
+		this.ajaxTimeout = time;
+	};
+
+	this.getValueFromUrl = function(url, str)
+	{
+		var value = "", pos;
+
+		str += "=";
+		pos = url.indexOf(str);
+		if (pos >= 0)
+		{
+			var substr = url.substring(pos+str.length);
+			pos = substr.indexOf("&");
+			pos = pos > 0?pos:substr.length;
+			value = substr.substring(0, pos);
+		}
+
+		return value;
+	};
+
+	this.orgURL = function(url)
+	{
+		var index;
+
+		if ($.session.length != 0)
+		{
+			index = url.indexOf("..");
+			if (index >= 0)
+			{
+				url = url.substring(index + 2);
+			}
+
+			url = "/stok=" + encodeURIComponent($.session) + url;
+		}
+
+		return url;
+	};
+
+	this.createXHR = function(){
+		var xhr;
+
+		if (undefined != window.ActiveXObject)
+		{
+			try
+			{
+				if (true == this.local)
+				{
+					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				else
+				{
+					xhr = new XMLHttpRequest();
+				}
+			}
+			catch(ex)
+			{
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		}
+		else
+		{
+			xhr = new XMLHttpRequest();
+		}
+
+		return xhr;
+	};
+
+	/*this.initURL = function(url)
+	{
+		var tag = "";
+		var pos = url.indexOf("?");
+
+		if (this.session.length == 0)
+		{
+			return url;
+		}
+
+		url = this.hostip + "/" + this.sessionKey + "=" + this.session + url;
+		return url;
+	};*/
+
+	/*
+	 *	url: the location of the request
+	 *	data:
+	 *	method:
+	 *	asyn:
+	 *	callback:
+	 *	timeout
+	 *	name
+	 *	password
+	*/
+	this.request = function(url, data, method, asyn, callback, timeout, name, password, timeoutVal, timeoutCallBack)
+	{
+		var xhr = this.createXHR();
+		var responseText, setTime, asynTime, isAjaxTimeout = false;
+		var thisObj = this, response = false;
+
+		this.initResult(thisObj.result);
+
+		function getHandleCode(text)
+		{
+			var handleCode, data, obj;
+
+			try
+			{
+				obj = JSON.parse(text,
+					function(k, v){
+						if (typeof(v) === "string") {
+							return decodeURIComponent(v);
+						}
+						return v;
+					}
+				);
+			}
+			catch(ex)
+			{
+				obj = null;
+			}
+
+			if (obj == null)
+			{
+				handleCode = ENONE;
+				data = text;
+			}
+			else
+			{
+				handleCode = obj[ERR_CODE];
+				data = obj.data;
+			}
+
+			return [handleCode, data];
+		}
+
+		xhr.onreadystatechange = function ()
+		{
+			if (true == isAjaxTimeout)
+			{
+				return;
+			}
+
+			if ((xhr.readyState == 4) && (true === $.local || xhr.status >= 100))
+			{
+				response = true;
+				thisObj.result.timeout = false;
+				responseText = xhr.responseText;
+				if (responseText)
+				{
+					thisObj.result.data = responseText;
+				}
+
+				var relArr = getHandleCode(responseText);
+
+				thisObj.result.errorno = relArr[0];
+				thisObj.result.data = relArr[1];
+
+				/* 判断是否有回调函数 */
+				if (callback != undefined)
+				{
+					callback(thisObj.result);
+				}
+
+				return true;
+			}
+		};
+
+		if (typeof timeoutVal != "undefined")
+		{
+			xhr.timeout = timeoutVal;
+			xhr.ontimeout = function (event)
+			{
+				typeof timeoutCallBack != "undefined" && timeoutCallBack();
+			};
+		}
+
+		try
+		{
+			if ((name != undefined) && (password != undefined))
+			{
+				xhr.open(method, url, asyn, name, password);
+			}
+			else
+			{
+				xhr.open(method, url, asyn);
+			}
+
+			if (this.isIE == true && false == this.local)
+			{
+				xhr.setRequestHeader("If-Modified-Since","0");
+			}
+
+			if (data != undefined)
+			{
+				xhr.send(data);
+			}
+			else
+			{
+				xhr.send(null);
+			}
+
+			/*if (asyn == false)
+			{
+				ajaxWindowSleep();
+			}*/
+
+		}catch(ex){}
+	};
+}
+
+function Load()
+{
+	Basic.call(this);
+	WebAjax.call(this);
+	this.asyn = true;
+	this.syn = false;
+	this.detectTime = 1000;
+	this.div = document.createElement("div");
+	this.externResizefunc = new Function();
+	this.externJSP = new Function();
+	this.externLoading = new Function();
+	this.externPageHandle = new Function();
+	this.pageTickArray = [];
+	this.scriptArray = [];
+	this.unAuthCode = 401;
+	this.httpOK = 200;
+
+	this.setTimeout = function (func, time)
+	{
+		var handle = window.setTimeout(func, time);
+
+		this.pageTickArray.push(handle);
+
+		return handle;
+	};
+
+	this.addScript = function (text)
+	{
+		if (text && /\S/.test(text))
+		{
+			var script = this.d.createElement("script");
+			script.type = "text/javascript";
+
+			if (script.text === undefined)
+			{
+				script.appendChild(this.d.createTextNode(text));
+			}
+			else
+			{
+				script.text = text;
+			}
+			this.head.insertBefore(script, this.head.firstChild);
+			this.head.removeChild(script);
+		}
+	};
+
+	this.getNodeArray = function (nodes, callBack)
+	{
+		var pArray = [];
+		for (var i =0, j = nodes.length; i < j; i++)
+		{
+			pArray[i] = nodes[i];
+		}
+		callBack(pArray);
+	};
+
+	this.addDomNode = function(container, data)
+	{
+		var thisObj = this;
+		this.div.innerHTML = "div" + data;
+		this.div.removeChild(this.div.firstChild);
+		this.getNodeArray(this.div.childNodes,
+		function (nodeArray)
+		{
+			var scriptArray = [];
+
+			emptyNodes(container);
+
+			for(var i =0, j = nodeArray.length; i < j; i++)
+			{
+				if ((nodeArray[i].nodeType == 1)&&(nodeArray[i].nodeName.toLowerCase() === "script"))
+				{
+					scriptArray.push(nodeArray[i]);
+				}
+				else
+				{
+					container.appendChild(nodeArray[i]);
+				}
+			}
+
+			for(var i =0, j = scriptArray.length; i < j; i++)
+			{
+				thisObj.addScript(scriptArray[i].text || scriptArray[i].textContent || scriptArray[i].innerHTML || "");
+			}
+		});
+	};
+
+	this.pageResize = function()
+	{
+		this.externResizefunc();
+	};
+
+	this.setPageResize = function(func)
+	{
+		this.externResizefunc = func;
+	};
+
+	this.setexternJSP = function(func)
+	{
+		this.externJSP = func;
+	};
+
+	this.setExternLoading = function(func){
+		this.externLoading = func;
+	};
+
+	this.setExternPageHandle = function(func){
+		this.externPageHandle = func;
+	};
+
+	this.append = function (container, data)
+	{
+		if (container&&(container.nodeType == 1)&&(typeof data === "string"))
+		{
+			this.addDomNode(container, data);
+			this.pageResize();
+		}
+	};
+
+	this.detectWidthImg = function(callBack)
+	{
+		var img = new Image();
+
+		img.onload = function(){
+			callBack();
+		};
+
+		img.src = this.domainUrl + detectPathStr + "?requence=" + Math.random();
+	}
+
+	this.detect = function (detectHandler, timeoutVal, timeoutCallBack)
+	{
+		// if (true == isIETenLess)
+		// {
+		// 	this.detectWidthImg(detectHandler);
+		// }
+		// else
+		// {
+			this.request((this.domainUrl + detectPathStr + "?requence=" + Math.random()), undefined, "get", this.asyn, detectHandler, undefined, undefined, undefined, timeoutVal, timeoutCallBack);
+		// }
+	};
+
+	this.loadHand = function(result, id, options){
+		/* replace JSP str */
+		str = this.externJSP(result.data);
+		if (str != undefined)
+		{
+			result.data = str;
+		}
+
+		/* added by WuWeier 2013-12-26, when session is out of date, jump to login page.*/
+		if (this.unAuthCode == result.errorno)
+		{
+			return;
+		}
+
+		if (false !== options.bClearPageTickArray)
+		{
+			for(var i = 0, j = this.pageTickArray.length; i < j; i++)
+			{
+				try
+				{
+					window.clearTimeout(this.pageTickArray[i]);
+				}catch(ex){}
+			}
+		}
+
+		this.append(this.id(id), result.data);
+
+		/* 此处进行页面集中的扩展处理 */
+		try
+		{
+			this.externPageHandle();
+		}catch(ex){};
+	};
+
+	this.getLgResult = function(result){
+		var tagStr = result.data;
+
+		if (/\r\n<!--(\d{3})-->\r\n/gi.test(tagStr) && RegExp["$1"] != this.httpOK)
+		{
+			result.errorno = RegExp["$1"];
+			if (/var authInfo = new Array("([a-zA-Z])","(\d{1,})");/g.test(result.data))
+			{
+				result.data = RegExp["$1"] + " " + RegExp["$2"];
+			}
+
+			return true;
+		}
+
+		return false;
+	};
+
+	/* 刷新session */
+	this.refreshSession = function(url, callBack)
+	{
+		var objThis = this;
+
+		this.request(url, undefined, "get", this.asyn, function(result){
+			/* 处理未通过认证的情况 */
+			if (result.errorno == EUNAUTH)
+			{
+				objThis.parseAuthRlt(result.data);
+			}
+
+			callBack();
+		});
+	};
+
+	this.getUnAuthHandle = function(url, async, callBack)
+	{
+		if (true == $.accountStatus["logoutHandle"])
+		{
+			return;
+		}
+
+		if (EUNAUTH == $.result.errorno)
+		{
+			$.authRltObj["authStatus"] = false;
+			$.parseAuthRlt($.result.data);
+
+			/* 如果没有密码或者是回复出厂设置，则直接显示登录页面
+			 * 如果支持用户名则也需要检查用户名
+			 */
+			if ((typeof gUsernameSupport != "undefined" && gUsernameSupport && (null == $.usr || 0 == $.usr.length)) ||
+				null == $.pwd || 0 == $.pwd.length || ESYSRESET == $.authRltObj.code)
+			{
+				window.setTimeout(function()
+				{
+					$.loginErrHandle();
+				}, 0);
+
+				return;
+			}
+
+			function authHandle(err_code){
+				if (ENONE == err_code)
+				{
+					/* 续约成功后再次发送中断的请求 */
+					if (true == async)
+					{
+						$.request($.orgURL(url), undefined, "get", async, function(result){
+							if (ENONE != result.errorno)
+							{
+								$.authRltObj["authStatus"] = false;
+								$.parseAuthRlt(result.data);
+								$.loginErrHandle();
+							}
+							else
+							{
+								$.authRltObj["authStatus"] = true;
+								callBack(result);
+							}
+						});
+					}
+					else
+					{
+						$.request($.orgURL(url), undefined, "get", async, undefined);
+						if (ENONE != $.result.errorno)
+						{
+							$.authRltObj["authStatus"] = false;
+							$.parseAuthRlt($.result.data);
+							$.loginErrHandle();
+						}
+						else
+						{
+							$.authRltObj["authStatus"] = true;
+							callBack($.result);
+						}
+
+						return true;
+					}
+				}
+				else
+				{
+					/* 再次认证出错后，弹出认证框 */
+					window.setTimeout(function()
+					{
+						$.authRltObj["authStatus"] = false;
+						$.loginErrHandle();
+					}, 0);
+				}
+			}
+
+			if (typeof gUsernameSupport != "undefined" && gUsernameSupport)
+			{
+				$.authUsrPwd($.usr, $.pwd, authHandle);
+			}
+			else
+			{
+				$.auth($.pwd, authHandle);
+			}
+		}
+	};
+
+	/* 加载页面 */
+	this.load = function (url, callback, id, options, callBackPre)
+	{
+		var timeout = false;
+		var data, str;
+		var thisObj = this;
+
+		function handler(result)
+		{
+			if (typeof callBackPre == "function")
+			{
+				callBackPre(result);
+			}
+
+			timeout = result.timeout;
+			if (!timeout)
+			{
+				options = options == undefined ? {} : options;
+				thisObj.loadHand(result, id, options);
+			}
+
+			if (typeof callback == "function")
+			{
+				callback(result);
+			}
+		}
+
+		if (this.local || callback != undefined)
+		{
+			this.loadAsyn(url, this.ajaxTimeout, function(result){
+				/* 处理未通过认证的情况 */
+				if (result.errorno == EUNAUTH)
+				{
+					/* 设置上下文环境参数
+					setLoadPage(url, id);*/
+
+					/* 进入未认证错误处理流程 */
+					thisObj.getUnAuthHandle(url, thisObj.asyn, handler);
+				}
+				else if (result.errorno == ENONE)
+				{
+					handler(result);
+				}
+			});
+		}
+		else
+		{
+			this.request(this.orgURL(url), undefined, "get", this.syn);
+
+			/* 处理未通过认证的情况 */
+			/* 判断错误类型 */
+			if (this.result.errorno == EUNAUTH)
+			{
+				/* 设置上下文环境参数
+				setLoadPage(url, id);*/
+
+				/* 进入未认证错误处理流程 */
+				this.getUnAuthHandle(url, this.syn, handler);
+			}
+			else if (this.result.errorno == ENONE)
+			{
+				handler(this.result);
+			}
+		}
+
+		return timeout;
+	};
+
+	this.loadAsyn = function(url, timeoutPage, callback)
+	{
+		this.request(this.orgURL(url), undefined, "get", this.asyn, callback, timeoutPage);
+	};
+}

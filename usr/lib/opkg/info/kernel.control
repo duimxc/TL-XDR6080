@@ -1,5 +1,5 @@
 Package: kernel
-Version: 4.4.60-1-fe83b1a93c83d35c742e660320cc2840
+Version: 4.4.60-1-a506bed59bd9524e13e88ca7ae2a68df
 Depends: libc, libssp
 Source: package/kernel
 Section: sys

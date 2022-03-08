@@ -5,5 +5,5 @@ Source: tp_package/ethernet-driver/ipq-nss/libqcacommon
 Section: QCA
 Maintainer: Qualcomm Atheros, Inc.
 Architecture: ipq
-Installed-Size: 27498
+Installed-Size: 27497
 Description:  This Package contains the Hy-Fi Common Functionality Library

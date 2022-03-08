@@ -1,24 +1,564 @@
-<script type="text/javascript">var wanDetecting=!1,ROUTER_MAC="routerMac",CLONE_MAC="cloneMac",CUSTOM_MAC="customMac",wanOptions=[{str:label.pppoe,value:LINK_TYPE_PPPOE},{str:label.staticIp,value:LINK_TYPE_STATIC_IP},{str:label.dhcp,value:LINK_TYPE_DHCP}],rateOptions=[],rateChoice=[{str:label.dupAuto100M,value:"auto"},{str:label.dup10MF,value:"10F"},{str:label.dup10MH,value:"10H"},{str:label.dup100MF,value:"100F"},{str:label.dup100MH,value:"100H"},{str:label.dup1000MH,value:"1000H"},{str:label.dup1000MF,value:"1000F"}],wanMacOptions=
-[{str:label.routerMac,value:ROUTER_MAC},{str:label.cloneMac,value:CLONE_MAC},{str:label.customMac,value:CUSTOM_MAC}],wanProto=uciProto.optValue.proto,wanTypes=["DynamicIp.htm","StaticIp.htm","PPPoE.htm"],wanTypesToVal={},WAN=uciNetwork.optValue.ifname.wan,HOST=uciNetwork.optValue.ifname.host,FACTORY=uciNetwork.optValue.ifname.factory,wanMacVal,hostMacVal,factoryMacVal,mac={},wanTypeLast,wanPortSelTmp,wanPortIndexList,dualWanOpen=!1,currentSelectedWan=-1,currentSelectPos=[],currentSelectHardType=[],
-curSysMode=uciSystem.optValue.sysMode.routerMode;wanTypesToVal[wanProto.dynIp]=0;wanTypesToVal[wanProto.staticIp]=1;wanTypesToVal[wanProto.pppoe]=2;function wanMacErrHandle(a,c){var b="";switch(a){case ENONE:return!1;case EINVMACFMT:b=errStr.macFmtErr;break;case EINVMACZERO:b=errStr.macZeroErr;break;case EINVMACBROAD:b=errStr.macBroadErr;break;case EINVMACGROUP:b=errStr.macGroupErr;break;default:b=errStr.invRequestFail}showAlert(b,c);return!0}
-function wanSetImgOnClick(a){gSupportWanPortSwap&&!id("wanSetAuto").checked&&(id("sampleImg").src="../web-static/images/wanSetFixed"+a+".png",wanPortSelTmp=a)}function getWanRateOption(a){for(var c=0,b=rateOptions.length;c<b;c++)if(rateOptions[c].value==a)return a;return"auto"}function getBridgeStatus(){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,realSetMacInfo)}
-function brigeModelUiAdjust(){var a=isIESix||isIESeven?"inline":"inline-block",c=id("wanMac"),b=$("#macCloneUl li");c.value=b[1].innerHTML=factoryMacVal.toUpperCase();b[1].style.display=a;b[0].style.display="none";document.getElementById("wanMacSel").children[1].setAttribute("class","arrow arrowDis");document.getElementById("elinkWarn").style.width="177px";document.getElementById("elinkWarn").style.lineHeight="15px";document.getElementById("elinkWarn").style.marginLeft="10px";document.getElementById("elinkWarn").innerHTML=
-"设备处于桥模式，已恢复出厂MAC，且此模式下不允许更改MAC地址。";document.getElementById("wanMacSel").children[0].innerHTML="使用路由器的MAC地址";hiddenSaveButton()}
-function realSetMacInfo(a){for(var c,b=Object.keys(a.protocol),d=/wan/,e=0;e<b.length;e++)if(d.test(b[e])){c=b[e];break}b=id("wanMac");wanMacVal=a.protocol[c].macaddr;hostMacVal=mac[HOST];factoryMacVal=a.protocol[c].fac_macaddr;b.value=wanMacVal.toUpperCase();c=wanMacVal.toUpperCase()==factoryMacVal.toUpperCase()?ROUTER_MAC:wanMacVal.toUpperCase()==hostMacVal.toUpperCase()?CLONE_MAC:CUSTOM_MAC;gModeSwitchSupport&&1==parseInt(a.custom_network.bridge_status.enable)?brigeModelUiAdjust():(selectInit("wanMacSel",
-wanMacOptions,c,wanMacSelectChange),wanMacSelectChange(c))}function setMacInfo(a){mac=a[uciNetwork.fileName][uciNetwork.dynData.ifaceMac];gModeSwitchSupport?getBridgeStatus():realSetMacInfo(a)}
-function wanMacSelectChange(a){var c=isIESix||isIESeven?"inline":"inline-block",b=id("wanMac"),d=$("#macCloneUl li");switch(a){case ROUTER_MAC:b.value=d[1].innerHTML=factoryMacVal.toUpperCase();d[1].style.display=c;d[0].style.display="none";break;case CLONE_MAC:b.value=d[1].innerHTML=hostMacVal.toUpperCase();d[1].style.display=c;d[0].style.display="none";break;case CUSTOM_MAC:b.value=wanMacVal.toUpperCase(),d[0].style.display=c,d[1].style.display="none"}}
-function wanSelectChange(a){""==a.toString()&&(a=LINK_TYPE_PPPOE);loadPage(wanTypes[a],"routeSetRCon")}function getWanPortTipsText(a){var c="";$.each(wanPortDescList,function(b,d){a!=d&&(c=""==c?b:"、"+b)});return c}function wanPortSelectChange(a){$("#wanPortSelected").html(getWanPortTipsText(a))}
-function wanDetectResult(){if(!1!=wanDetecting){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;$.action(a,function(a){a=parseInt(a[uciNetwork.optName.proto]);switch(a){case WAN_IFACE_NOT_LINK:showAlert(errStr.wanLinkDown);wanDetectStop();closeLoading();return;case ERROR_INTERNEL_ERROR:case ERROR_INPUT_PARA_ERROR:wanDetectStop();closeLoading();return;case WAN_TYPE_DHCP:case WAN_TYPE_STATIC:case WAN_TYPE_PPPOE:break;default:$.setTimeout(wanDetectResult,1E3);
-return}wanDetectStop();closeLoading();wanSelectChange(a-1)})}}function wanDetectStop(){wanDetecting=!1}function wanDetect(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;$.action(a,function(a){switch(parseInt(a[uciNetwork.optName.proto])){case WAN_IFACE_NOT_LINK:showAlert(errStr.wanLinkDown);break;default:wanDetecting=!0,showLoading(label.checkingWait,wanDetectStop),$.setTimeout(wanDetectResult,2E3)}})}
-function wanCheckWDS(a){var c={};c[uciWireless.fileName]={};c[uciWireless.fileName][KEY_NAME]=[uciWireless.dynData.wds_2g,uciWireless.dynData.wds_5g];$.query(c,function(b){b[ERR_CODE]!=ENONE||b[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable]!=uciWireless.dynOptValue.enable.on&&b[uciWireless.fileName][uciWireless.dynData.wds_5g][uciWireless.dynOptName.enable]!=uciWireless.dynOptValue.enable.on?"function"==typeof a&&a():showAlert(label.wanWDSTip)})}
-function setRateOptions(a,c){var b;a.splice(0,a.length);b=c[uciFunction.optName.ethBandwidth];"100"==b?rateChoice[0].str=label.dupAuto100M:"1000"==b&&(rateChoice[0].str=label.dupAuto1000M);b=c[uciFunction.optName.wanRate];for(var d=0;d<b.length;d++)for(var e=0;e<rateChoice.length;e++)if(b[d]==rateChoice[e].value){a.push(rateChoice[e]);break}}
-function initDynamicPortRate(a,c){var b=Object.keys(wanPortRateList).length,d;d="left"==c?a:b-a-1;b=wanPortRateList[d];d=wanPortRateDescList[d];for(var e=[],f=0;f<b.length;f++)e.push({str:d[f],value:b[f]});return e}function checkIfWanRateShouldChange(a,c){for(var b=wanPortRateList[a],d=0;d<b.length;d++)if(b[d]==c)return!1;return!0}
-function initDualWanPort(){var a=$(".dualWanWrapper").find("label");a[0].onclick=function(){a[1].className="";a[0].className="selected";currentSelectedWan=1;initWanSet();gBasicRouteSetRNiceScroll.scrollTo(0)};a[1].onclick=function(){a[0].className="";a[1].className="selected";currentSelectedWan=2;initWanSet();gBasicRouteSetRNiceScroll.scrollTo(0)};1==currentSelectedWan||2==currentSelectedWan?a[currentSelectedWan-1].click():a[0].click()}
-function setWanOptions(a){wanOptions=[];wanTypes=[];for(var c=0;c<a.dial_mode.length;++c)switch(a.dial_mode[c]){case "dhcp":wanOptions.push({str:label.dhcp,value:LINK_TYPE_DHCP});wanTypes.push("DynamicIp.htm");break;case "staticip":wanOptions.push({str:label.staticIp,value:LINK_TYPE_STATIC_IP});wanTypes.push("StaticIp.htm");break;case "pppoe":wanOptions.push({str:label.pppoe,value:LINK_TYPE_PPPOE});wanTypes.push("PPPoE.htm");break;case "wired_relay":wanOptions.push({str:label.wiredRepeater,value:LINK_TYPE_WIRED_REPEATER});
-wanTypes[LINK_TYPE_WIRED_REPEATER]="WiredRepeater.htm";break;case "wds_relay":wanOptions.push({str:label.wirelessRepeater,value:LINK_TYPE_WIRELESS_REPEATER}),wanTypes[LINK_TYPE_WIRELESS_REPEATER]="WirelessRepeater.htm"}}
-function initWanSet(){var a=!1;dualWanOpen&&1!=currentSelectedWan&&(a=!0);var c={};c[uciProto.fileName]={};c[uciProto.fileName][KEY_NAME]=a?uciProto.secName.wan+"_"+currentSelectedWan:uciProto.secName.wan;c[uciFunction.fileName]={};c[uciFunction.fileName][KEY_NAME]=uciFunction.secName.newModuleSpec;gSysModeSupport&&!dualWanOpen&&(c[uciSystem.fileName]={},c[uciSystem.fileName][KEY_NAME]=uciSystem.secName.sysMode);$.query(c,function(b){var c={},c=b[uciFunction.fileName][uciFunction.secName.newModuleSpec];
-setRateOptions(rateOptions,c);setWanOptions(c);gSupportWanPortSwap&&gWanPortDetectSupport&&(wanPortIndexList=c[uciFunction.optName.wanPortIndexList]);!0==$.local?b=LINK_TYPE_PPPOE:gSysModeSupport&&!dualWanOpen?(curSysMode=b[uciSystem.fileName][uciSystem.secName.sysMode][uciSystem.optName.mode],b=curSysMode==uciSystem.optValue.sysMode.apMode?LINK_TYPE_WIRED_REPEATER:curSysMode==uciSystem.optValue.sysMode.wdsMode?LINK_TYPE_WIRELESS_REPEATER:a?wanTypesToVal[b[uciProto.fileName][uciProto.secName.wan+
-"_"+currentSelectedWan][uciProto.optName.type]]:wanTypesToVal[b[uciProto.fileName][uciProto.secName.wan][uciProto.optName.type]]):b=a?wanTypesToVal[b[uciProto.fileName][uciProto.secName.wan+"_"+currentSelectedWan][uciProto.optName.type]]:wanTypesToVal[b[uciProto.fileName][uciProto.secName.wan][uciProto.optName.type]];wanSelectChange(b)})}var WANNUM=2,arg={network:{name:"lan"}};gSysModeSupport&&(arg.system={name:"sys_mode"});
-$.query(arg,function(a){var c=a.network.lan.macaddr.toUpperCase(),b=uciSystem.optValue.sysMode.routerMode;gSysModeSupport&&(b=a.system.sys_mode.mode);gMulWanSupport&&b==uciSystem.optValue.sysMode.routerMode?$.query({port_manage:{table:"dev_info"}},function(a){var b=a.port_manage.dev_info,f,g;for(a=0;a<b.length;a++)1==b[a].cap&&b[a].mac.toUpperCase()==c&&(g=a,f=b[a].phy_num);$.query({port_manage:{table:"mwan"}},function(a){dualWanOpen=!0;for(var c=0,d=0;d<WANNUM;d++)0==a.port_manage.mwan[d]["mwan_"+
-(d+1)].enable&&(dualWanOpen=!1);for(d=0;d<f;d++)currentSelectHardType[d]="SFP"==b[g].phy_info[d].type.toUpperCase(),"WAN"==b[g].phy_info[d].role.slice(0,3).toUpperCase()&&(c++,"WAN1"==b[g].phy_info[d].role.toUpperCase()?currentSelectPos[0]=d:currentSelectPos[1]=d);dualWanOpen&&c==WANNUM?($("#dualWanWrapper").show(),initDualWanPort()):($("#dualWanWrapper").hide(),initWanSet())})}):($("#dualWanWrapper").hide(),initWanSet())});
+<script type="text/javascript">
+	var wanDetecting = false;
+	var ROUTER_MAC = "routerMac";
+	var CLONE_MAC = "cloneMac";
+	var CUSTOM_MAC = "customMac";
+	var wanOptions = [{str:label.pppoe, value:LINK_TYPE_PPPOE},
+					  {str:label.staticIp, value:LINK_TYPE_STATIC_IP},
+					  {str:label.dhcp, value:LINK_TYPE_DHCP}];
+
+	var rateOptions = [];
+
+	var rateChoice = [{str:label.dupAuto100M, value:"auto"},
+		{str:label.dup10MF, value:"10F"},
+		{str:label.dup10MH, value:"10H"},
+		{str:label.dup100MF, value:"100F"},
+		{str:label.dup100MH, value:"100H"},
+		{str:label.dup1000MH, value:"1000H"},
+		{str:label.dup1000MF, value:"1000F"}];
+
+	var wanMacOptions = [{str:label.routerMac, value:ROUTER_MAC},
+						 {str:label.cloneMac, value:CLONE_MAC},
+						 {str:label.customMac, value:CUSTOM_MAC}];
+
+	var wanProto = uciProto.optValue.proto;
+	var wanTypes = ['DynamicIp.htm', 'StaticIp.htm', 'PPPoE.htm'];
+	var wanTypesToVal = {};
+
+	var WAN = uciNetwork.optValue.ifname.wan;
+	var HOST = uciNetwork.optValue.ifname.host;
+	var FACTORY = uciNetwork.optValue.ifname.factory;
+	var wanMacVal, hostMacVal, factoryMacVal;
+
+	var mac = {};
+
+	var wanTypeLast;
+
+	var wanPortSelTmp;
+	var wanPortIndexList;
+
+	var dualWanOpen = false;
+	var currentSelectedWan = -1;
+	var currentSelectPos = []; // 当前选择WAN口对应的物理位置(从左至右)
+	var currentSelectHardType = []; // 设备各端口是否为光口
+	var curSysMode = uciSystem.optValue.sysMode.routerMode;
+
+	wanTypesToVal[wanProto.dynIp] = 0;
+	wanTypesToVal[wanProto.staticIp] = 1;
+	wanTypesToVal[wanProto.pppoe] = 2;
+
+	function wanMacErrHandle(errNo, objOrId)
+	{
+		var showStr = "";
+
+		switch (errNo)
+		{
+		case ENONE:
+			return false;
+		case EINVMACFMT:
+			showStr = errStr.macFmtErr;
+			break;
+		case EINVMACZERO:
+			showStr = errStr.macZeroErr;
+			break;
+		case EINVMACBROAD:
+			showStr = errStr.macBroadErr;
+			break;
+		case EINVMACGROUP:
+			showStr = errStr.macGroupErr;
+			break;
+		default:
+			showStr = errStr.invRequestFail;
+			break;
+		}
+
+		showAlert(showStr, objOrId);
+		return true;
+	}
+
+	function wanSetImgOnClick(value) {
+		if (gSupportWanPortSwap && !id("wanSetAuto").checked) {
+			id("sampleImg").src = "../web-static/images/wanSetFixed"+ value + ".png";
+			wanPortSelTmp = value;
+		}
+	}
+
+	function getWanRateOption(wanRate)
+	{
+		for (var i = 0, len = rateOptions.length; i < len; i++)
+		{
+			if (rateOptions[i].value == wanRate)
+			{
+				return wanRate;
+			}
+		}
+
+		return "auto";
+	}
+
+	function getBridgeStatus()
+	{
+		var data = {};
+
+		data[uciCustomNetwork.fileName] = {};
+		data[uciCustomNetwork.fileName][KEY_NAME] = [uciCustomNetwork.dynData.bridgestatus];
+		$.query(data, realSetMacInfo);
+	}
+
+	function brigeModelUiAdjust()
+	{
+		var INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+		var macMac = id("wanMac");
+		var li = $("#macCloneUl li");
+		macMac.value = li[1].innerHTML = factoryMacVal.toUpperCase();
+		li[1].style.display = INLINE_BLOCK;
+		li[0].style.display = "none";
+		document.getElementById("wanMacSel").children[1].setAttribute("class", "arrow arrowDis");
+		document.getElementById("elinkWarn").style.width = "177px";
+		document.getElementById("elinkWarn" ).style.lineHeight = "15px";
+		document.getElementById("elinkWarn").style.marginLeft="10px";
+		document.getElementById("elinkWarn" ).innerHTML="设备处于桥模式，已恢复出厂MAC，且此模式下不允许更改MAC地址。";
+		document.getElementById("wanMacSel").children[0].innerHTML="使用路由器的MAC地址";
+		hiddenSaveButton();
+	}
+
+	function realSetMacInfo(data)
+	{
+		var wanKey;
+		var keys = Object.keys(data.protocol);
+		var patt = /wan/;
+		for(var i=0;i<keys.length;i++){
+			if(patt.test(keys[i])){
+				wanKey = keys[i];
+				break;
+			}
+		}
+		var wanMac = id("wanMac");
+		var wanMacSel;
+		wanMacVal = data.protocol[wanKey]["macaddr"];
+		hostMacVal = mac[HOST];
+		factoryMacVal = data.protocol[wanKey]["fac_macaddr"];
+
+		wanMac.value = wanMacVal.toUpperCase();
+
+		if (wanMacVal.toUpperCase() == factoryMacVal.toUpperCase())
+		{
+			wanMacSel = ROUTER_MAC;
+		}
+		else if (wanMacVal.toUpperCase() == hostMacVal.toUpperCase())
+		{
+			wanMacSel = CLONE_MAC;
+		}
+		else
+		{
+			wanMacSel = CUSTOM_MAC;
+		}
+
+		if (gModeSwitchSupport && 1 == parseInt(data.custom_network.bridge_status.enable)) {
+			brigeModelUiAdjust();
+		} else {
+		selectInit("wanMacSel", wanMacOptions, wanMacSel, wanMacSelectChange);
+		wanMacSelectChange(wanMacSel);
+	}
+	}
+
+	function setMacInfo(data)
+	{
+		mac = data[uciNetwork.fileName][uciNetwork.dynData.ifaceMac];
+		if (gModeSwitchSupport) {
+			getBridgeStatus();
+		} else {
+			realSetMacInfo(data);
+		}
+	}
+
+	function wanMacSelectChange(value)
+	{
+		var INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+		var macMac = id("wanMac");
+		var li = $("#macCloneUl li");
+		switch (value)
+		{
+		case ROUTER_MAC:
+			macMac.value = li[1].innerHTML = factoryMacVal.toUpperCase();
+			li[1].style.display = INLINE_BLOCK;
+			li[0].style.display = "none";
+			break;
+		case CLONE_MAC:
+			macMac.value = li[1].innerHTML = hostMacVal.toUpperCase();
+			li[1].style.display = INLINE_BLOCK;
+			li[0].style.display = "none";
+			break;
+		case CUSTOM_MAC:
+			macMac.value = wanMacVal.toUpperCase();
+			li[0].style.display = INLINE_BLOCK;
+			li[1].style.display = "none";
+			break;
+		default:
+			break;
+		}
+	}
+
+	function wanSelectChange(value)
+	{
+		if ("" == value.toString())
+		{
+			value = LINK_TYPE_PPPOE;
+		}
+
+		loadPage(wanTypes[value], "routeSetRCon");
+	}
+
+	function getWanPortTipsText(currentPort)
+	{
+		var text = "";
+		$.each(wanPortDescList, function(desc, value){
+			if (currentPort != value)
+			{
+				text = text == "" ? desc : "、" + desc;
+			}
+		});
+
+		return text;
+	}
+
+	function wanPortSelectChange(value)
+	{
+		$("#wanPortSelected").html(getWanPortTipsText(value));
+	}
+
+	function wanDetectResult()
+	{
+		if (false == wanDetecting)
+		{
+			return;
+		}
+
+		var reqData = {};
+
+		reqData[uciNetwork.fileName] = {};
+		reqData[uciNetwork.fileName][uciNetwork.action.wanDetect] = null;
+
+		$.action(reqData, function(dataObj){
+			var wanStatus = parseInt(dataObj[uciNetwork.optName.proto]);
+
+			switch (wanStatus)
+			{
+			case WAN_IFACE_NOT_LINK:
+				showAlert(errStr.wanLinkDown);
+				wanDetectStop();
+				closeLoading();
+				return;
+			case ERROR_INTERNEL_ERROR:
+			case ERROR_INPUT_PARA_ERROR:
+				/* TODO: 此处需要错误提示语 */
+				wanDetectStop();
+				closeLoading();
+				return;
+			case WAN_TYPE_DHCP:
+			case WAN_TYPE_STATIC:
+			case WAN_TYPE_PPPOE:
+				break;
+			default:
+				$.setTimeout(wanDetectResult, 1000);
+				return;
+			}
+
+			wanDetectStop();
+			closeLoading();
+			wanSelectChange(wanStatus - 1);
+		});
+	}
+
+	function wanDetectStop()
+	{
+		wanDetecting = false;
+	}
+
+	function wanDetect()
+	{
+		var reqData = {};
+
+		reqData[uciNetwork.fileName] = {};
+		reqData[uciNetwork.fileName][uciNetwork.action.wanDetect] = null;
+
+		$.action(reqData, function(dataObj){
+			var wanStatus = parseInt(dataObj[uciNetwork.optName.proto]);
+
+			switch(wanStatus)
+			{
+			case WAN_IFACE_NOT_LINK:
+				showAlert(errStr.wanLinkDown);
+				break;
+			default:
+				wanDetecting = true;
+				showLoading(label.checkingWait, wanDetectStop);
+				$.setTimeout(wanDetectResult, 2000);
+				break;
+			}
+		});
+	}
+
+	function wanCheckWDS(callBack)
+	{
+		var rqData = {};
+
+		rqData[uciWireless.fileName] = {};
+		rqData[uciWireless.fileName][KEY_NAME] = [uciWireless.dynData.wds_2g,uciWireless.dynData.wds_5g];
+
+		$.query(rqData, function(result){
+			if (result[ERR_CODE] == ENONE &&
+				(result[uciWireless.fileName][uciWireless.dynData.wds_2g][uciWireless.dynOptName.enable] == uciWireless.dynOptValue.enable.on ||
+				result[uciWireless.fileName][uciWireless.dynData.wds_5g][uciWireless.dynOptName.enable] == uciWireless.dynOptValue.enable.on))
+			{
+				showAlert(label.wanWDSTip);
+			}
+			else
+			{
+				typeof callBack == "function" && callBack();
+			}
+		});
+	}
+
+	function setRateOptions(rateOptions, moduleSpec)
+	{
+		var rates;
+		var bandwidth;
+		rateOptions.splice(0,rateOptions.length);
+
+		bandwidth = moduleSpec[uciFunction.optName.ethBandwidth];
+		if (bandwidth == "100")
+		{
+			rateChoice[0].str = label.dupAuto100M;
+		}
+		else if (bandwidth == "1000")
+		{
+			rateChoice[0].str = label.dupAuto1000M;
+		}
+
+		rates = moduleSpec[uciFunction.optName.wanRate];
+		for (var i = 0; i < rates.length; i++)
+		{
+			for (var j = 0; j < rateChoice.length; j++)
+			{
+				if (rates[i] == rateChoice[j].value)
+				{
+					rateOptions.push(rateChoice[j]);
+					break;
+				}
+			}
+		}
+	}
+
+	function initDynamicPortRate(port,powerPos){
+		var portNum  = Object.keys(wanPortRateList).length;
+		var portIndex;
+		if(powerPos == "left"){
+			portIndex = port;
+		}else{
+			portIndex = portNum - port - 1;
+		}
+		var rateList = wanPortRateList[portIndex];
+		var rateDescList = wanPortRateDescList[portIndex];
+
+		var rateOptions = [];
+		for (var i = 0;  i < rateList.length; i++)
+		{
+			rateOptions.push({str: rateDescList[i], value:rateList[i]});
+		}
+
+		return rateOptions;
+	}
+
+	function checkIfWanRateShouldChange(port, curWanRate){
+		var rateList = wanPortRateList[port];
+		for (var i = 0; i < rateList.length; i++)
+		{
+			if (rateList[i] == curWanRate)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// 初始化上网设置中WAN口选择按钮
+	function initDualWanPort() {
+		var portSwitch = $(".dualWanWrapper").find("label");
+
+		portSwitch[0].onclick = function() {
+			portSwitch[1].className = "";
+			portSwitch[0].className = "selected";
+			currentSelectedWan = 1;
+			initWanSet();
+			gBasicRouteSetRNiceScroll.scrollTo(0);
+		};
+		portSwitch[1].onclick = function() {
+			portSwitch[0].className = "";
+			portSwitch[1].className = "selected";
+			currentSelectedWan = 2;
+			initWanSet();
+			gBasicRouteSetRNiceScroll.scrollTo(0);
+		};
+		if(currentSelectedWan == 1 || currentSelectedWan ==2){
+			portSwitch[currentSelectedWan-1].click();
+		}else{
+			portSwitch[0].click();
+		}
+	}
+
+	function setWanOptions(moduleSpec) {
+		wanOptions = [];
+		wanTypes = [];
+		for (var i = 0; i < moduleSpec.dial_mode.length; ++i) {
+			switch(moduleSpec.dial_mode[i]) {
+			case "dhcp":
+				wanOptions.push({str:label.dhcp, value:LINK_TYPE_DHCP});
+				wanTypes.push('DynamicIp.htm');
+				break;
+			case "staticip":
+				wanOptions.push({str:label.staticIp, value:LINK_TYPE_STATIC_IP});
+				wanTypes.push('StaticIp.htm');
+				break;
+			case "pppoe":
+				wanOptions.push({str:label.pppoe, value:LINK_TYPE_PPPOE});
+				wanTypes.push('PPPoE.htm');
+				break;
+			case "wired_relay":
+				wanOptions.push({str:label.wiredRepeater, value:LINK_TYPE_WIRED_REPEATER});
+				wanTypes[LINK_TYPE_WIRED_REPEATER] = 'WiredRepeater.htm';
+				break;
+			case "wds_relay":
+				wanOptions.push({str:label.wirelessRepeater, value:LINK_TYPE_WIRELESS_REPEATER});
+				wanTypes[LINK_TYPE_WIRELESS_REPEATER] = 'WirelessRepeater.htm';
+				break;
+			}
+		}
+	}
+
+	function initWanSet()
+	{
+		var wanArgModify = false;
+		if(dualWanOpen && currentSelectedWan != 1){
+			wanArgModify = true;
+		}
+		var reqData = {};
+
+		reqData[uciProto.fileName] = {};
+		if(!wanArgModify){
+			reqData[uciProto.fileName][KEY_NAME] = uciProto.secName.wan;
+		}else{
+			reqData[uciProto.fileName][KEY_NAME] = uciProto.secName.wan + "_" + currentSelectedWan;
+		}
+		reqData[uciFunction.fileName] = {};
+		reqData[uciFunction.fileName][KEY_NAME] = uciFunction.secName.newModuleSpec;
+
+		if (gSysModeSupport && !dualWanOpen) {
+			reqData[uciSystem.fileName] = {};
+			reqData[uciSystem.fileName][KEY_NAME] = uciSystem.secName.sysMode;
+		}
+
+		$.query(reqData, function(dataObj){
+			var wanType;
+			var moduleSpec = {};
+
+			moduleSpec = dataObj[uciFunction.fileName][uciFunction.secName.newModuleSpec];
+			setRateOptions(rateOptions, moduleSpec);
+			setWanOptions(moduleSpec);
+
+			if (gSupportWanPortSwap && gWanPortDetectSupport) {
+				wanPortIndexList = moduleSpec[uciFunction.optName.wanPortIndexList];
+			}
+
+			if ($.local == true)
+			{
+				wanType = LINK_TYPE_PPPOE;
+			}
+			else
+			{
+				if (gSysModeSupport && !dualWanOpen) {
+					curSysMode = dataObj[uciSystem.fileName][uciSystem.secName.sysMode][uciSystem.optName.mode];
+					if (curSysMode == uciSystem.optValue.sysMode.apMode) {
+						wanType = LINK_TYPE_WIRED_REPEATER;
+					} else if (curSysMode == uciSystem.optValue.sysMode.wdsMode) {
+						wanType = LINK_TYPE_WIRELESS_REPEATER;
+					} else {
+						wanType = wanTypesToVal[dataObj[uciProto.fileName][uciProto.secName.wan][uciProto.optName.type]];
+						if(!wanArgModify){
+							wanType = wanTypesToVal[dataObj[uciProto.fileName][uciProto.secName.wan][uciProto.optName.type]];
+						}
+						else{
+							wanType = wanTypesToVal[dataObj[uciProto.fileName][uciProto.secName.wan + "_" + currentSelectedWan][uciProto.optName.type]];
+						}
+					}
+				} else {
+					if(!wanArgModify){
+						wanType = wanTypesToVal[dataObj[uciProto.fileName][uciProto.secName.wan][uciProto.optName.type]];
+					}
+					else{
+						wanType = wanTypesToVal[dataObj[uciProto.fileName][uciProto.secName.wan + "_" + currentSelectedWan][uciProto.optName.type]];
+					}
+				}
+			}
+
+			wanSelectChange(wanType);
+		});
+	}
+
+	var WANNUM = 2; // 多WAN支持设置的WAN口数
+	var arg = {"network":{"name":"lan"}};
+	if (gSysModeSupport) {
+		arg.system = {"name":"sys_mode"};
+	}
+	$.query(arg, function(ret) {
+		var currentCapMac = ret.network.lan.macaddr.toUpperCase();
+		var curSysMode = uciSystem.optValue.sysMode.routerMode;
+		if (gSysModeSupport) {
+			curSysMode = ret.system.sys_mode.mode;
+		}
+		if(!gMulWanSupport || curSysMode != uciSystem.optValue.sysMode.routerMode){
+			$("#dualWanWrapper").hide();
+			initWanSet();
+		}else{
+			$.query({"port_manage":{"table":"dev_info"}},function(resCap){
+				var deviceList = resCap.port_manage.dev_info;
+				var power_position,port_num,capIndex;
+				for(var i=0;i<deviceList.length;i++){
+					if(deviceList[i].cap == 1 && deviceList[i]["mac"].toUpperCase() == currentCapMac){
+						capIndex = i;
+						power_position = deviceList[i]["power_pos"];
+						port_num = deviceList[i]["phy_num"];
+					}
+				}
+				$.query({"port_manage":{"table":"mwan"}},function(res){
+					dualWanOpen = true;
+					var currentActiveWan = 0;
+					for(var i=0; i<WANNUM; i++){
+						if(res.port_manage.mwan[i]["mwan_"+(i+1)].enable == 0){
+							dualWanOpen = false;
+						}
+					}
+					for(var i=0;i<port_num;i++){
+						currentSelectHardType[i] = deviceList[capIndex]["phy_info"][i]["type"].toUpperCase() == "SFP";
+						if(deviceList[capIndex]["phy_info"][i]["role"].slice(0,3).toUpperCase() == "WAN"){
+							currentActiveWan++;
+							if(deviceList[capIndex]["phy_info"][i]["role"].toUpperCase() == "WAN1"){
+								currentSelectPos[0] = i;
+							}else{
+								currentSelectPos[1] = i;
+							}
+						}
+					}
+					if(dualWanOpen && currentActiveWan == WANNUM){
+						$("#dualWanWrapper").show();
+						initDualWanPort();
+					}else{
+						// 双WAN未打开
+						$("#dualWanWrapper").hide();
+						initWanSet();
+					}
+				});
+			});
+		}
+	});
 </script>

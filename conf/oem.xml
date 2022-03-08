@@ -1,14 +1,14 @@
 <root>
 <oem name="oem_info">
-	<device name="xdr5480mtv1">
-		<element name="fullName">TP-LINK Wireless Router TL-XDR5480易展Turbo版</element>
+	<device name="xdr6080mv1">
+		<element name="fullName">TP-LINK Wireless Router TL-XDR6080易展Turbo版</element>
 		<element name="facturer">TP-LINK</element>
-		<element name="modelName">TL-XDR5480易展Turbo版</element>
-		<element name="deviceInfo">XDR5480易展Turbo版V1 Wireless Router</element>
+		<element name="modelName">TL-XDR6080易展Turbo版</element>
+		<element name="deviceInfo">XDR6080易展Turbo版V1 Wireless Router</element>
 		<element name="modelVer">1.0</element>
 		<element name="domainEnable">true</element>
 		<element name="domainName">tplogin.cn</element>
-		<element name="prodId">0x5480A021</element>
+		<element name="prodId">0x60801121</element>
 		<element name="languId">CN</element>
 		<element name="oemId">0x00000000</element>
 		<element name="cloudSefDomain">n-deventry.tplinkcloud.com.cn</element>

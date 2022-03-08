@@ -1,8 +1,8 @@
 Package: kmod-wlan_access_mng_notify
 Version: 4.4.60+1.0
-Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), u_netlink_ipc, kmod-k_netlink_ipc
+Depends: kernel (=4.4.60-1-a506bed59bd9524e13e88ca7ae2a68df), u_netlink_ipc, kmod-k_netlink_ipc
 Source: tp_package/k_packages/wlan_access_mng_notify
 Section: ko util
 Architecture: ipq
-Installed-Size: 1639
+Installed-Size: 1638
 Description:  tp-link wlan_access_mng_notify kernel module: to notify joining of wireless stations

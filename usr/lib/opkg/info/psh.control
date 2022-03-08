@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/sys_packages/psh
 Section: utils
 Architecture: ipq
-Installed-Size: 44785
+Installed-Size: 44788
 Description:  A protect shell based on busybox 1.19.4 ash

@@ -148,20 +148,29 @@ do_load_ipq4019_board_bin()
                     ln -s ${apdk}/IPQ8074/caldata.bin /lib/firmware/IPQ8074/caldata.bin
             ;;
             ap-cp01-c3*)
-                    CP_BD_FILENAME=/lib/firmware/IPQ6018/bdwlan.bin
                     mkdir -p ${apdk}/IPQ6018
-                    if [ -f "$CP_BD_FILENAME" ]; then
-                        FILESIZE=$(stat -Lc%s "$CP_BD_FILENAME")
-                    else
-                        FILESIZE=65536
-                    fi
-                    dd if=${mtdblock} of=${apdk}/IPQ6018/caldata.bin bs=1 count=$FILESIZE skip=4096
-                    [ -L /lib/firmware/IPQ6018/caldata.bin ] || \
-                    ln -s ${apdk}/IPQ6018/caldata.bin /lib/firmware/IPQ6018/caldata.bin
+                    FILESIZE=131072
+
+                    #FTM Daemon compresses the caldata and writes the tar file in ART Partition
+                    dd if=${mtdblock} of=${apdk}/virtual_art.bin.tar.xz
+                    tar -zxvf  ${apdk}/virtual_art.bin.tar.xz || {
+                        # Create dummy virtual_art.bin file of size 512K
+                        dd if=/dev/zero of=${apdk}/virtual_art.bin bs=1024 count=512
+                    }
+
+                    # Read after 4KB
+                    dd if=${apdk}/virtual_art.bin of=${apdk}/IPQ6018/caldata.bin bs=1 count=$FILESIZE skip=4096
+                    # Read IPQ6018 calTag and calTag_2
+                    dd if=${apdk}/virtual_art.bin of=${apdk}/calTag bs=1 count=2 skip=4094
+                    dd if=${apdk}/virtual_art.bin of=${apdk}/calTag_2 bs=1 count=2 skip=4094
 
                     mkdir -p ${apdk}/qcn9000
-                    FILESIZE=131072
-                    dd if=${mtdblock} of=${apdk}/qcn9000/caldata_1.bin bs=1 count=$FILESIZE skip=157696
+                    # Read after 154KB
+                    dd if=${apdk}/virtual_art.bin of=${apdk}/qcn9000/caldata_1.bin bs=1 count=$FILESIZE skip=157696
+                    # Read qcn9000 calTag
+                    dd if=${apdk}/virtual_art.bin of=${apdk}/calTag_1 bs=1 count=2 skip=157694
+
+                    ln -s ${apdk}/IPQ6018/caldata.bin /lib/firmware/IPQ6018/caldata.bin
                     ln -s ${apdk}/qcn9000/caldata_1.bin /lib/firmware/qcn9000/caldata_1.bin
             ;;
             ap-mp02.1* | db-mp02.1*)

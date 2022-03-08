@@ -85,10 +85,10 @@ set_nss_buffer_pool() {
 			;;
 	esac
 	elif [ "$mp_512" == "MP_512" ]; then
-		# 三频机型内存扩大到512M，且创建了新的频段，但由于/sys/module/qca_ol
-		# 目录存在，故此处不会执行sysctl_cmd指令，没有配置extra_pbuf_core0等
-		# 参数，导致NSS FW内存不足，进而导致无法产生数据包中断，有线不通。
-		# 故临时修改脚本，对于512M内存机型，强制执行如下sysctl_cmd指令。
+		# ��Ƶ�����ڴ�����512M���Ҵ������µ�Ƶ�Σ�������/sys/module/qca_ol
+		# Ŀ¼���ڣ��ʴ˴�����ִ��sysctl_cmdָ�û������extra_pbuf_core0��
+		# ����������NSS FW�ڴ治�㣬���������޷��������ݰ��жϣ����߲�ͨ��
+		# ����ʱ�޸Ľű�������512M�ڴ���ͣ�ǿ��ִ������sysctl_cmdָ�
 		#[ -d /sys/module/qca_ol ] || { \
 		#	hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
 		#	if [ $hk_ol_num -eq 3 ]; then

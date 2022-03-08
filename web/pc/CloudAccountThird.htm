@@ -1,4 +1,126 @@
+<script type="text/javascript">
+	function init()
+	{
+		var save = id("save");
 
+		function errHandle(errNo, objId)
+		{
+			var showStr = "";
+			var cloudErrRel;
+
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				showAlert(label.cloudChgPwdSuccess);
+				return false;
+			case EINVLGPWDLEN:
+				showStr = errStr.pwdLenErrTip;
+				break;
+			case EINVACCOUNTPWDERR:
+				showStr = appendErrCode(errStr.invCloudOldPwdErr, errNo);
+				break;
+			case ECHPWDDIF:
+				showStr = errStr.invCloudPswNotMatch;
+				break;
+			case EINVACCOUNTNEWPWDERR:
+				showStr = appendErrCode(errStr.invCloudNewPwdErr, errNo);
+				break;
+			case EINVPASSWORDFMT:
+			case EINVACCOUNTPWDFMT:
+				showStr = appendErrCode(errStr.pwdInvalid, errNo);
+				break;
+			case EINVNEWPASSWORD:
+				showStr = errStr.invCloudNewPwdFmtErr;
+				break;
+			case EINVCLOUDERRORRESETPWDTIMEOUT:
+				showStr = appendErrCode(errStr.invRequestFailTrylater, errNo);
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(errNo);
+				if (cloudErrRel.result == false)
+				{
+					showStr = cloudErrRel.tip;
+				}
+				else
+				{
+					showStr = appendErrCode(errStr.invRequestFail, errNo);
+				}
+				break;
+			}
+
+			showAlert(showStr, objId);
+			return true;
+		}
+
+		function chkPswVal(szValue)
+		{
+			return (/^[\x21-\x7e]+$/.test(szValue));
+		}
+
+		if (USER_GROUP_REMOTE == $.authRltObj["group"])
+		{
+			disableBtn(save, true);
+		}
+		else
+		{
+			save.onclick = function(){
+				var oldPwd = id("oldPwd");
+				var newPwd = id("newPwd");
+				var newPwdC = id("newPwdC");
+				var oldVal = oldPwd.value;
+				var newVal = newPwd.value;
+				var newCVal = newPwdC.value;
+				var result;
+
+				if (oldVal.length == 0 || oldVal.length < 6 || oldVal.length > 32)
+				{
+					return errHandle(EINVLGPWDLEN, "oldPwd");
+				}
+
+				if (chkPswVal(oldVal) == false)
+				{
+					return errHandle(EINVPASSWORDFMT, "oldPwd");
+				}
+
+				if (newVal.length == 0 || newVal.length < 6 || newVal.length > 32)
+				{
+					return errHandle(EINVLGPWDLEN, "newPwd");
+				}
+
+				if (chkPswVal(newVal) == false)
+				{
+					return errHandle(EINVNEWPASSWORD, "newPwd");
+				}
+
+				if (newVal != newCVal)
+				{
+					return errHandle(ECHPWDDIF, "newPwd");
+				}
+
+				/* 显示Loading的id */
+				setLoadingId("save");
+				hsLoading(true);
+				cloudAccountModifyPwd(oldVal, newVal, function(code){
+					var objId = "newPwd";
+
+					if (code == EPWDERROR)
+					{
+						objId = "oldPwd";
+					}
+					errHandle(code, objId);
+					hsLoading(false);
+				}, function(){
+					hsLoading(false);
+					errHandle(EINVCLOUDERRORRESETPWDTIMEOUT);
+				}, function(){
+					hsLoading(false);
+					errHandle(EINVCLOUDERRORRESETPWDTIMEOUT);
+				});
+			};
+		}
+	}
+	init();
+</script>
 <div class="title">
 	<label class="title">{%label.cloudChgPwd%}</label>
 </div>
@@ -16,7 +138,4 @@
 </ul>
 <div class="blockFuncA">
 	<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
-</div><script type="text/javascript">function init(){function d(b,c){var a="";switch(parseInt(b)){case ENONE:return showAlert(label.cloudChgPwdSuccess),!1;case EINVLGPWDLEN:a=errStr.pwdLenErrTip;break;case EINVACCOUNTPWDERR:a=appendErrCode(errStr.invCloudOldPwdErr,b);break;case ECHPWDDIF:a=errStr.invCloudPswNotMatch;break;case EINVACCOUNTNEWPWDERR:a=appendErrCode(errStr.invCloudNewPwdErr,b);break;case EINVPASSWORDFMT:case EINVACCOUNTPWDFMT:a=appendErrCode(errStr.pwdInvalid,b);break;case EINVNEWPASSWORD:a=errStr.invCloudNewPwdFmtErr;
-break;case EINVCLOUDERRORRESETPWDTIMEOUT:a=appendErrCode(errStr.invRequestFailTrylater,b);break;default:a=cloudErrHandle(b),a=!1==a.result?a.tip:appendErrCode(errStr.invRequestFail,b)}showAlert(a,c);return!0}var e=id("save");USER_GROUP_REMOTE==$.authRltObj.group?disableBtn(e,!0):e.onclick=function(){var b=id("oldPwd"),c=id("newPwd"),a=id("newPwdC"),b=b.value,c=c.value,a=a.value;if(0==b.length||6>b.length||32<b.length)return d(EINVLGPWDLEN,"oldPwd");if(!1==/^[\x21-\x7e]+$/.test(b))return d(EINVPASSWORDFMT,
-"oldPwd");if(0==c.length||6>c.length||32<c.length)return d(EINVLGPWDLEN,"newPwd");if(!1==/^[\x21-\x7e]+$/.test(c))return d(EINVNEWPASSWORD,"newPwd");if(c!=a)return d(ECHPWDDIF,"newPwd");setLoadingId("save");hsLoading(!0);cloudAccountModifyPwd(b,c,function(a){var b="newPwd";a==EPWDERROR&&(b="oldPwd");d(a,b);hsLoading(!1)},function(){hsLoading(!1);d(EINVCLOUDERRORRESETPWDTIMEOUT)},function(){hsLoading(!1);d(EINVCLOUDERRORRESETPWDTIMEOUT)})}}init();
-</script>
+</div>

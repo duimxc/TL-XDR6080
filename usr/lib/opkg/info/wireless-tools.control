@@ -4,6 +4,6 @@ Depends: libc, libssp
 Source: tp_package/sys_packages/wireless-tools
 Section: net
 Architecture: ipq
-Installed-Size: 24780
+Installed-Size: 24783
 Description:  This package contains a collection of tools for configuring wireless
  adapters implementing the "Linux Wireless Extensions".

@@ -1,5 +1,87 @@
+<script type="text/javascript">
+	function init()
+	{
+		function wzdPppoePwdConfirm()
+		{
+			var tipStr = label.pppoeAccPwdNullTip;
 
+			showWzdConfirm(tipStr, function(){
+				var name = id("pppoeAccount"), psw = id("pppoePasswd");
+				if (name.value == 0)
+				{
+					name.focus();
+				}
+				else
+				{
+					psw.focus();
+				}
+			}, function(){
+				loadPage('WizardWirelessCfg.htm', "wizardCon");
+				saveNetworkCfg(uciProto.optValue.proto.pppoe, function(result){
+					var conArg = {"network":{"change_wan_status":{"proto":"pppoe", "operate":"connect"}}};
 
+					$.action(conArg);
+				});
+			}, "重新填写", "确认为空");
+		}
+
+		function onSave()
+		{
+			var nameVal = id("pppoeAccount").value;
+			var pswVal = id("pppoePasswd").value;
+
+			/* 检查合法性 */
+			if ((0 == nameVal.length) || (0 == pswVal.length))
+			{
+				showCover(wzdPppoePwdConfirm);
+				return;
+			}
+
+			loadPage('WizardWirelessCfg.htm', "wizardCon");
+			saveNetworkCfg(uciProto.optValue.proto.pppoe, function(result){
+				var conArg = {"network":{"change_wan_status":{"proto":"pppoe", "operate":"connect"}}};
+
+				$.action(conArg);
+			});
+		}
+
+		/* 设置导航栏颜色 */
+		wzdNavSet(1);
+		wzdConSet({"height":"550px"});
+		id("sub").onclick = onSave;
+		id("pppoeAccount").focus();
+
+		if (true == bWzdWanTypeDetected)
+		{
+			$("i.connect").css("display","block");
+		}
+		else
+		{
+			$("i.disConnect").css("display","block");
+		}
+
+		if (gSysModeSupport) {
+			$("#wzdAp").removeClass("disNone");
+		}
+
+		showNetworkCfg(uciProto.optValue.proto.pppoe);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			$("#wanPortSelDiv").removeClass("disNone");
+			wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	p.tipsP {
+		font-size: 12px;
+		color: #FFF;
+		margin-left: 347px;
+		margin-bottom: 16px;
+	}
+</style>
 <ul class="wzdConTitleUl">
 	<p class="wzdConTitle">{%label.netSet%}</p>
 </ul>
@@ -41,7 +123,3 @@
     <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_STATIC)">{%label.staticIp%} ></a>
     <a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)" class="disNone" id="wzdAp">{%label.wiredRepeater%} ></a>
 </div>
-<script type="text/javascript">function init(){function c(){showWzdConfirm(label.pppoeAccPwdNullTip,function(){var a=id("pppoeAccount"),b=id("pppoePasswd");0==a.value?a.focus():b.focus()},function(){loadPage("WizardWirelessCfg.htm","wizardCon");saveNetworkCfg(uciProto.optValue.proto.pppoe,function(a){$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})})},"重新填写","确认为空")}wzdNavSet(1);wzdConSet({height:"550px"});id("sub").onclick=function(){var a=id("pppoeAccount").value,b=id("pppoePasswd").value;0==a.length||
-0==b.length?showCover(c):(loadPage("WizardWirelessCfg.htm","wizardCon"),saveNetworkCfg(uciProto.optValue.proto.pppoe,function(a){$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})}))};id("pppoeAccount").focus();!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");gSysModeSupport&&$("#wzdAp").removeClass("disNone");showNetworkCfg(uciProto.optValue.proto.pppoe);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),
-wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)))}init();
-</script><style type="text/css">p.tipsP{font-size:12px;color:#FFF;margin-left:347px;margin-bottom:16px}</style>

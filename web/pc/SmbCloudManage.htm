@@ -1,5 +1,128 @@
+<script type="text/javascript">
+	function init() {
+		var SWITCH_ON = 1, SWITCH_OFF = 0;
+		var opend = statusStr.opened, closed = statusStr.closed;
+		var ON = uciCloudConfig.optValue.enable.on;
+		var OFF = uciCloudConfig.optValue.enable.off;
+		var pbcEnableSwitch;
+		var pbcEnableState = id("pbcEnableState");
 
+		function switchHandle(state)
+		{
+			pbcEnableState.innerHTML = (state == SWITCH_ON) ? opend : closed;
+			$(".cloudTypeRow").toggle(state == SWITCH_ON);
+		}
 
+		function onSave()
+		{
+			var state = pbcEnableSwitch.state;
+			var data = {}, args = {};
+			data[uciCloudConfig.fileName] = {};
+			data[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt] = args;
+			args[uciCloudConfig.optName.mngtSwitch] = (state == SWITCH_ON) ? ON : OFF;
+
+			setLoadingId("save");
+			hsLoading(true);
+			$.modify(data, function (result) {
+				hsLoading(false);
+				if (ENONE != result[ERR_CODE]) {
+					showAlert(errorStr.saveFail);
+				}
+			})
+		}
+
+		function getSmbCloudManageData(){
+			var data = {};
+			data[uciNetwork.fileName] = {};
+			data[uciNetwork.fileName][KEY_NAME] = uciNetwork.secName.lan;
+			data[uciCloudConfig.fileName] = {};
+			data[uciCloudConfig.fileName][KEY_NAME] = [uciCloudConfig.secName.confMngt];
+
+			if (gGetQRCodeSupport)
+			{
+				data[uciSystem.fileName] = {};
+				data[uciSystem.fileName][KEY_NAME] = [uciSystem.secName.deviceInfo];
+			}
+
+			$.query(data,function (result) {
+				if (ENONE == result[ERR_CODE]) {
+					var lanMac = result[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.mac];
+					var status = result[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt][uciCloudConfig.optName.mngtSwitch];
+					var state = (status == ON) ? SWITCH_ON : SWITCH_OFF;
+					pbcEnableSwitch = new Switch("switchCon", state, switchHandle, false);
+
+					$("#lanMac").html(lanMac);
+					$(".cloudTypeRow").toggle(state == SWITCH_ON);
+					pbcEnableState.innerHTML = (state == SWITCH_ON) ? opend : closed;
+
+					if (gGetQRCodeSupport)
+					{
+						var qrcodeStr = result[uciSystem.fileName][uciSystem.secName.deviceInfo][uciSystem.optName.qrCode];
+						var deviceId = qrcodeStr.substr(3, 17);
+
+						// 显示二维码
+						var qrcode = new QRCode(document.getElementById("qrcode"), {
+							text: qrcodeStr,
+							width: 124,
+							height: 124,
+							colorDark : "#000000",
+							colorLight : "#ffffff",
+							correctLevel : QRCode.CorrectLevel.H
+						});
+						$("#deviceId").html(deviceId);
+					}
+				}
+			})
+		};
+
+		$("#save").click(onSave);
+
+		getSmbCloudManageData();
+	}
+	init();
+</script>
+<style type="text/css">
+	div.block {
+		text-align: left;
+	}
+	div.block label{
+		font-size: 14px;
+		color: #FFFFFF;
+		letter-spacing: -0.43px;
+		vertical-align: middle;
+		margin-right: 24px;
+	}
+	div.block span {
+		font-size: 12px;
+		color: #FFFFFF;
+		letter-spacing: -0.37px;
+		vertical-align: middle;
+	}
+	div.block p {
+		font-size: 12px;
+		color: #FFFFFF;
+	}
+	div.block p.mt22 {
+		margin-top: 22px;
+	}
+	div.block div.cloudTypeRow {
+		margin-top: 24px;
+	}
+	div.deviceIdCon {
+		width: 156px;
+		height: 190px;
+		margin-top: 16px;
+		padding: 12px 16px;
+		color: #FFFFFF;
+		background: #65C7E5;
+		border: 1px solid #2F95CD;
+		box-sizing: border-box;
+		text-align: center;
+	}
+	div.deviceIdCon .deviceIdLabel{
+		margin-top: 8px;
+	}
+</style>
 <div id="hcCo" class="hcCo">
 	<div class="title">
 		<label class="title">{%menuStr.smbCloudManage%}</label>
@@ -27,7 +150,4 @@
 		<div class="deviceIdLabel">设备ID：</div>
 		<div id="deviceId"></div>
 	</div>
-</div><script type="text/javascript">function init(){function m(a){f.innerHTML=a==b?g:h;$(".cloudTypeRow").toggle(a==b)}var b=1,g=statusStr.opened,h=statusStr.closed,k=uciCloudConfig.optValue.enable.on,n=uciCloudConfig.optValue.enable.off,l,f=id("pbcEnableState");$("#save").click(function(){var a=l.state,d={},c={};d[uciCloudConfig.fileName]={};d[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt]=c;c[uciCloudConfig.optName.mngtSwitch]=a==b?k:n;setLoadingId("save");hsLoading(!0);$.modify(d,function(a){hsLoading(!1);ENONE!=a[ERR_CODE]&&
-showAlert(errorStr.saveFail)})});(function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=uciNetwork.secName.lan;a[uciCloudConfig.fileName]={};a[uciCloudConfig.fileName][KEY_NAME]=[uciCloudConfig.secName.confMngt];gGetQRCodeSupport&&(a[uciSystem.fileName]={},a[uciSystem.fileName][KEY_NAME]=[uciSystem.secName.deviceInfo]);$.query(a,function(a){if(ENONE==a[ERR_CODE]){var c=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.mac],e=a[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt][uciCloudConfig.optName.mngtSwitch]==
-k?b:0;l=new Switch("switchCon",e,m,!1);$("#lanMac").html(c);$(".cloudTypeRow").toggle(e==b);f.innerHTML=e==b?g:h;gGetQRCodeSupport&&(a=a[uciSystem.fileName][uciSystem.secName.deviceInfo][uciSystem.optName.qrCode],c=a.substr(3,17),new QRCode(document.getElementById("qrcode"),{text:a,width:124,height:124,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H}),$("#deviceId").html(c))}})})()}init();
-</script><style type="text/css">div.block{text-align:left}div.block label{font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle;margin-right:24px}div.block span{font-size:12px;color:#fff;letter-spacing:-0.37px;vertical-align:middle}div.block p{font-size:12px;color:#fff}div.block p.mt22{margin-top:22px}div.block div.cloudTypeRow{margin-top:24px}div.deviceIdCon{width:156px;height:190px;margin-top:16px;padding:12px 16px;color:#fff;background:#65c7e5;border:1px solid #2f95cd;box-sizing:border-box;text-align:center}div.deviceIdCon .deviceIdLabel{margin-top:8px}</style>
+</div>

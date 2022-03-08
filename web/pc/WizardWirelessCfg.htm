@@ -1,6 +1,88 @@
+<script type="text/javascript">
+	var gBSHandler = {
+		ON: "1",
+		OFF: "0",
+		web:
+		{
+			pageBS: "WizardWirelessBS.htm",
+			pageNoBS: "WizardWireless3Band.htm",
+			container: "wizardCon"
+		},
+		phone:
+		{
+			pageBS: "PhoneWirelessBS.htm",
+			pageNoBS: "PhoneWireless3Band.htm",
+			container: "phCon"
+		},
+		target:
+		{
+			pageBS: "WizardWirelessBS.htm",
+			pageNoBS: "WizardWireless3Band.htm",
+			container: "wizardCon"
+		},
 
-<script type="text/javascript">var gBSHandler={ON:"1",OFF:"0",web:{pageBS:"WizardWirelessBS.htm",pageNoBS:"WizardWireless3Band.htm",container:"wizardCon"},phone:{pageBS:"PhoneWirelessBS.htm",pageNoBS:"PhoneWireless3Band.htm",container:"phCon"},target:{pageBS:"WizardWirelessBS.htm",pageNoBS:"WizardWireless3Band.htm",container:"wizardCon"},init:function(){switch(gBandNum){case BAND_1:this.web.pageBS="WizardWireless.htm";this.web.pageNoBS="WizardWireless.htm";this.phone.pageBS="PhoneWireless.htm";this.phone.pageNoBS="PhoneWireless.htm";
-break;case BAND_2:this.web.pageBS="WizardWireless2BandBS.htm";this.web.pageNoBS="WizardWireless2Band.htm";this.phone.pageBS="PhoneWireless2BandBS.htm";this.phone.pageNoBS="PhoneWireless2Band.htm";break;default:this.web.pageBS="WizardWirelessBS.htm",this.web.pageNoBS="WizardWireless3Band.htm",this.phone.pageBS="PhoneWirelessBS.htm",this.phone.pageNoBS="PhoneWireless3Band.htm"}!0==OS.portable&&!1==OS.iPad&&!1==phoneSet.bContinuePCSet?(this.target.pageBS=this.phone.pageBS,this.target.pageNoBS=this.phone.pageNoBS,
-this.target.container=this.phone.container):(this.target.pageBS=this.web.pageBS,this.target.pageNoBS=this.web.pageNoBS,this.target.container=this.web.container)}},gBSOptions=[{str:label.wlanOn,value:gBSHandler.ON},{str:label.wlanOff,value:gBSHandler.OFF}];function changeBSPage(a){loadPage(gBSHandler.ON==a?gBSHandler.target.pageBS:gBSHandler.target.pageNoBS,gBSHandler.target.container)}
-(function(){gBSHandler.init();if(gSupportBS){var a={};a[uciWireless.fileName]={};a[uciWireless.fileName][KEY_NAME]=uciWireless.secName.wlanBS;$.query(a,function(a){changeBSPage(a[uciWireless.fileName][uciWireless.secName.wlanBS][uciWireless.optName.bsEnable])})}else loadPage(gBSHandler.target.pageNoBS,gBSHandler.target.container)})();
+		init: function()
+		{
+			switch (gBandNum)
+			{
+			case BAND_1:
+				this.web.pageBS = "WizardWireless.htm";
+				this.web.pageNoBS = "WizardWireless.htm";
+				this.phone.pageBS = "PhoneWireless.htm";
+				this.phone.pageNoBS = "PhoneWireless.htm";
+				break;
+			case BAND_2:
+				this.web.pageBS = "WizardWireless2BandBS.htm";
+				this.web.pageNoBS = "WizardWireless2Band.htm";
+				this.phone.pageBS = "PhoneWireless2BandBS.htm";
+				this.phone.pageNoBS = "PhoneWireless2Band.htm";
+				break;
+			case BAND_3:
+			default:
+				this.web.pageBS = "WizardWirelessBS.htm";
+				this.web.pageNoBS = "WizardWireless3Band.htm";
+				this.phone.pageBS = "PhoneWirelessBS.htm";
+				this.phone.pageNoBS = "PhoneWireless3Band.htm";
+				break;
+			}
+
+			if (OS.portable == true && OS.iPad == false && phoneSet["bContinuePCSet"] == false)
+			{
+				this.target.pageBS = this.phone.pageBS;
+				this.target.pageNoBS = this.phone.pageNoBS;
+				this.target.container = this.phone.container;
+			}
+			else
+			{
+				this.target.pageBS = this.web.pageBS;
+				this.target.pageNoBS = this.web.pageNoBS;
+				this.target.container = this.web.container;
+			}
+		}
+	};
+	var gBSOptions = [{str:label.wlanOn, value:gBSHandler.ON}, {str:label.wlanOff, value:gBSHandler.OFF}];
+
+	function changeBSPage(value)
+	{
+		var target = (gBSHandler.ON == value) ? gBSHandler.target.pageBS : gBSHandler.target.pageNoBS;
+		loadPage(target, gBSHandler.target.container);
+	}
+
+	(function(){
+		gBSHandler.init();
+
+		if (gSupportBS)
+		{
+			var data = {};
+			data[uciWireless.fileName] = {};
+			data[uciWireless.fileName][KEY_NAME] = uciWireless.secName.wlanBS;
+			$.query(data, function(result){
+				changeBSPage(result[uciWireless.fileName][uciWireless.secName.wlanBS][uciWireless.optName.bsEnable]);
+			});
+		}
+		else
+		{
+			loadPage(gBSHandler.target.pageNoBS, gBSHandler.target.container);
+		}
+	})();
 </script>

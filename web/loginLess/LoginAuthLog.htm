@@ -1,5 +1,137 @@
+<style type="text/css">
+	body{
+		background:#5e85c0 !important;
+		fontSize:12px;
+		height:100%;
+	}
+	div.logo{
+		width:980px;
+		height:80px;
+		background:url(../web-static/images/logo.png) no-repeat 0px 21px;
+		margin:0px auto;
+		position:relative;
+	}
+	div.logCon{
+		width:980px;
+		margin:0px auto;
+		position:relative;
+	}
+	div.logDetailWarn{
+		padding:0px 195px;
+	}
+	div.logDetailWarn img.warnLogo{
+		height:88px;
+		position:absolute;
+		top:0px;
+		left:88px;
+		width:88px;
+	}
+	h1.authLogTitle{
+		color:#FFFFFF;
+		font-size:28px;
+		font-weight:normal;
+		line-height:30px;
+	}
+	p.authLogTipF{
+		color:#FFFFFF;
+		font-size:14px;
+		margin-top:13px;
+		line-height:20px;
+	}
+	div.btnCon{
+		overflow:hidden;
+		zoom:1;
+	}
+	div.btnCon input{
+		float:right;
+		padding-top:3px;
+		padding-bottom:3px;
+		*padding-top:2px;
+		*padding-bottom:1px;
+	}
+	p.authLogTblDes{
+		color:#FFFFFF;
+		font-size:12px;
+		font-weight:bold;
+		margin:25px 0 12px;
+	}
+	p.authLogTips{
+		color:#FFFFFF;
+		font-size:12px;
+		margin:15px 0 30px;
+	}
+	td.authLogTime{
+		letter-spacing:1px;
+	}
+	label.proName{
+		font-size:12px;
+		color:#FFFFFF;
+		top:21px;
+		right:0px;
+		position:absolute;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var authRltObj = $.authRltObj;
+		var authCode = authRltObj["code"];
+		var authLogBtnCon = id("authLogBtnCon");
+		var goMgtBtn = id("goMgtBtn");
+		var authLogTip = $("p.authLogTipF")[0];
+		var authLoglist = authRltObj["authLog"];
+		var client = $.authRltObj["client"];
+		var item = null, dataGridAl, time;
 
+		id("prdName").innerHTML=label.productName + proName;
 
+		if (ESYSLOCKEDFOREVER == authCode)
+		{
+			authLogTip.innerHTML = label.authLogTip;
+		}
+		else if (ESYSLOCKED == authCode)
+		{
+			authLogTip.innerHTML = label.authLogTipFF;
+		}
+		else
+		{
+			authLogTip.innerHTML = label.authLogTipF;
+			authLogBtnCon.style.display = "block";
+			goMgtBtn.onclick = function(){
+				showCon("Con");
+				contentPageLoad();
+			};
+		}
+
+		authLoglist.splice(authLoglist.length - 1, 1);
+		authLoglist = formatTableData(authLoglist);
+		for (var index in authLoglist)
+		{
+			item = authLoglist[index];
+			time = item["time"].split("-");
+			item["time"] = time[0] + label.year + time[1] + label.month + time[2] + label.day + time[3] + ":" + time[4];
+		}
+
+		dataGridAl = new DataGrid();
+		dataGridAl.init({
+			id:"authLogTbl",									// table ID
+			data:authLoglist,									// 数据源
+			hasSelBox:false,
+			edit:false,
+			classCol:{gridClassName:"dataGridCloud", 			// 表格的相关样式类的集合
+				  gridPageListClassName:"pageListPo",
+				  ListSpanClassName:"ListSpanCloud",
+				  headClassName:"dataGrid_header_tr"},
+			head:[{field:label.ipAddr, width:100},					// 表头选项
+				  {field:label.mac, width:100},
+				  {field:label.time, width:110}],
+			list:[{edit:false, name:"ip", type:"ip"},
+				  {edit:false, name:"mac", type:"mac", maxSize:40},
+				  {edit:false, name:"time", className:"authLogTime"}]
+		});
+	}
+	init();
+</script>
 <div class="logo">
 	<label class="proName" id="prdName">{%label.productName%}</label>
 </div>
@@ -17,6 +149,4 @@
 		</div>
 		<p class="authLogTips">{%label.authLogTips%}</p>
 	</div>
-</div><script type="text/javascript">function init(){var a=$.authRltObj,b=a.code,f=id("authLogBtnCon"),g=id("goMgtBtn"),c=$("p.authLogTipF")[0],a=a.authLog,d=null;id("prdName").innerHTML=label.productName+proName;ESYSLOCKEDFOREVER==b?c.innerHTML=label.authLogTip:ESYSLOCKED==b?c.innerHTML=label.authLogTipFF:(c.innerHTML=label.authLogTipF,f.style.display="block",g.onclick=function(){showCon("Con");contentPageLoad()});a.splice(a.length-1,1);var a=formatTableData(a),e;for(e in a)d=a[e],b=d.time.split("-"),d.time=b[0]+label.year+b[1]+label.month+
-b[2]+label.day+b[3]+":"+b[4];(new DataGrid).init({id:"authLogTbl",data:a,hasSelBox:!1,edit:!1,classCol:{gridClassName:"dataGridCloud",gridPageListClassName:"pageListPo",ListSpanClassName:"ListSpanCloud",headClassName:"dataGrid_header_tr"},head:[{field:label.ipAddr,width:100},{field:label.mac,width:100},{field:label.time,width:110}],list:[{edit:!1,name:"ip",type:"ip"},{edit:!1,name:"mac",type:"mac",maxSize:40},{edit:!1,name:"time",className:"authLogTime"}]})}init();
-</script><style type="text/css">body{background:#5e85c0!important;fontSize:12px;height:100%}div.logo{width:980px;height:80px;background:url(../web-static/images/logo.png) no-repeat 0 21px;margin:0 auto;position:relative}div.logCon{width:980px;margin:0 auto;position:relative}div.logDetailWarn{padding:0 195px}div.logDetailWarn img.warnLogo{height:88px;position:absolute;top:0;left:88px;width:88px}h1.authLogTitle{color:#fff;font-size:28px;font-weight:normal;line-height:30px}p.authLogTipF{color:#fff;font-size:14px;margin-top:13px;line-height:20px}div.btnCon{overflow:hidden;zoom:1}div.btnCon input{float:right;padding-top:3px;padding-bottom:3px;*padding-top:2px;*padding-bottom:1px}p.authLogTblDes{color:#fff;font-size:12px;font-weight:bold;margin:25px 0 12px}p.authLogTips{color:#fff;font-size:12px;margin:15px 0 30px}td.authLogTime{letter-spacing:1px}label.proName{font-size:12px;color:#fff;top:21px;right:0;position:absolute}</style>
+</div>

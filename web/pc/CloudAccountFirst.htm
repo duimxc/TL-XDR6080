@@ -1,5 +1,45 @@
+<script type="text/javascript">
+	function init()
+	{
+		function cloudBRHandle()
+		{
+			cloudSetBackBRHd(function(result){
+				basicBRGoBackHandle(result);
+			});
+		}
 
-
+		id("bind").onclick = function(){
+			cloudBRHandle();
+			showCloudPage("CloudBindCfg.htm");
+		};
+		id("regist").onclick = function(){
+			cloudBRHandle();
+			showCloudPage("CloudRegistCfg.htm");
+		};
+	}
+	init();
+</script>
+<style type="text/css">
+	#cloudCon h4{
+		font-size:12px;
+		font-weight:bold;
+		color:#FFFFFF;
+	}
+	#cloudCon p{
+		font-size:12px;
+		color:#FFFFFF;
+		margin-top:10px;
+	}
+	#cloudCon ul{
+		margin-top:20px;
+		list-style:none;
+		font-size:12px;
+		color:#FFFFFF;
+	}
+	#cloudCon ul li{
+		margin-top:6px;
+	}
+</style>
 <div class="title" id="CloudAccountSecondTitle">
 	<label class="title">{%label.cloudAccountManage%}</label>
 </div>
@@ -17,5 +57,4 @@
 		<input id="bind" type="button" value="{%label.cloudAccountUsed%}" class="btnB subBtn" />
 		<input id="regist" type="button" value="{%label.cloudAccountCreate%}" class="btnB subBtn" />
 	</div>
-</div><script type="text/javascript">function init(){function a(){cloudSetBackBRHd(function(a){basicBRGoBackHandle(a)})}id("bind").onclick=function(){a();showCloudPage("CloudBindCfg.htm")};id("regist").onclick=function(){a();showCloudPage("CloudRegistCfg.htm")}}init();
-</script><style type="text/css">#cloudCon h4{font-size:12px;font-weight:bold;color:#fff}#cloudCon p{font-size:12px;color:#fff;margin-top:10px}#cloudCon ul{margin-top:20px;list-style:none;font-size:12px;color:#fff}#cloudCon ul li{margin-top:6px}</style>
+</div>

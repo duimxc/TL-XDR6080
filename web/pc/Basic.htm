@@ -1,8 +1,1127 @@
+<style type="text/css">
+	body{
+		background:white;
+	}
+	#head{
+		height:8.8%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		width:100%;
+		min-width:980px;
+		_width:expression(this.offsetWidth<980?"980px":this.offsetWidth);
+		position:relative;
+	}
+	#basicContent{
+		height:86.5%;
+		min-height:61.41em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*61.41?"61.41em":this.offsetHeight+"px");
+		min-width:980px;
+		_width:expression(this.offsetWidth<980?"980px":this.offsetWidth);
+	}
+	#basicSCon{
+		min-height:39.16em;
+		height:63.78%;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		position:relative;
+		clear:both;
+	}
+	#bConFun{
+		min-height:22.25em;
+		height:36.22%;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*22.25?"22.25em":this.offsetHeight);
+		background:#F0F0F0;
+		position: relative;
+		z-index: 1002;
+	}
+	#foot{
+		height:4.6%;
+		min-height:3.3em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*3.3?"3.3em":this.offsetHeight);
+		min-width:980px;
+		_width:expression(this.offsetWidth<980?"980px":this.offsetWidth);
+		background:#DFDFDF;
+		position: relative;
+		z-index: 1002;
+	}
+	#bConCnt{
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		position:relative;
+		z-index:1;
+	}
+	div.bConfL{
+		width:50%;
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		top:0px;
+		left:0px;
+		position:absolute;
+		text-align:right;
+	}
+	div.bConfR{
+		width:50%;
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		top:0px;
+		left:50%;
+		position:absolute;
+		text-align:left;
+	}
+	div.bConfLCnt{
+		width:30%;
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		float:left;
+		text-align:left;
+	}
+	div.bConfRCnt{
+		width:70%;
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		float:left;
+		text-align:left;
+	}
+	div.bcRCon{
+		position:relative;
+		height:100%;
+		min-height:39.16em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);
+		margin:0;
+	}
+</style>
+<style type="text/css">
+	ul.headFunc{
+		list-style:none;
+		overflow:hidden;
+		float:right;
+	}
+	ul.headFunc li{
+		height:5.83em;
+		width:5.83em;
+		float:left;
+		margin-left:20px;
+		overflow:hidden;
+		border-radius:4px;
+		cursor:pointer;
+		background-color:#38A38F;
+	}
+	i.basicSet{
+		float:left;
+		width:27px;
+		height:27px;
+		margin-top:10px;
+		margin-left:22px;
+		background:url(../web-static/images/basic.png) no-repeat scroll -318px -402px;
+	}
+	i.highSet{
+		float:left;
+		width:39px;
+		height:28px;
+		margin-top:10px;
+		margin-left:16px;
+		background:url(../web-static/images/basic.png) no-repeat scroll -319px -367px;
+	}
+	i.logout{
+		float:left;
+		width:27px;
+		height:27px;
+		margin-top:10px;
+		margin-left:22px;
+		background:url(../web-static/images/basic.png) no-repeat scroll -389px -393px;
+	}
+	ul.headFunc li label{
+		float:left;
+		width:100%;
+		color:white;
+		font-size:1em;
+		font-weight:bold;
+		margin-top:0.7em;
+		text-align:center;
+		cursor:pointer;
+	}
+	ul.headFunc li.h{
+		background-color:#38A38F;
+	}
+	#headL{
+		width:50%;
+		height:100%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		top:0px;
+		left:0px;
+		position:absolute;
+		text-align:right;
+		background:#3EC7A3;
+	}
+	#headR{
+		width:50%;
+		height:100%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		top:0px;
+		left:50%;
+		position:absolute;
+		text-align:left;
+		background:#48CFAE;
+	}
+	#headCnt{
+		height:100%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		position:relative;
+		z-index:1;
+	}
+	#headLCnt{
+		width:30%;
+		height:100%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		float:left;
+		text-align:left;
+	}
+	.logoCon{
+		width: 235px;
+		height: 100%;
+		margin-left: auto;
+	}
+	.tpLogo{
+		display: inline-block;
+		width: 131px;
+		height: 100%;
+	}
+	.andlinkLogo{
+		display: inline-block;
+		width: 205px;
+		height: 100%;
+	}
+	#headRCnt{
+		color:#FFFFFF;
+		width:70%;
+		height:100%;
+		min-height:6.25em;
+		_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);
+		float:left;
+		text-align:left;
+		background:#48CFAE;
+	}
+	.cloudIdCon{
+		width: 745px;
+		height: 100%;
+		padding-top: 18px;
+		box-sizing: border-box;
+	}
+	#headRCnt p{
+		text-align:right;
+	}
+	#headRCnt span{
+		margin-left:5px;
+		cursor:pointer;
+	}
+	#headRCnt a{
+		color:#FFFFFF;
+		margin-left:5px;
+	}
+	h1.bMdelTitle{
+		line-height:1.1em;
+		color:white;
+		font-size:3em;
+		padding-left:0.44em;
+		width: 235px;
+		margin-left: auto;
+	}
+	label.proName{
+		font-size:12px;
+		color:#FFFFFF;
+		margin-left:20px;
+		text-align:left;
+		position:absolute;
+	}
+</style>
+<style type="text/css">
+	ul.footCon{
+		width:980px;
+		height:100%;
+		margin:0 auto;
+		list-style:none;
+	}
+	ul.footCon li{
+		line-height:1.4em;
+		margin-top:1em;
+		color:#7e7e7f;
+		font-size:1em;
+	}
+	#softVersion{
+		float:left;
+		text-align:left;
+	}
+	#netAddrTel{
+		float:right;
+		text-align:right;
+		text-indent:0.5em;
+	}
+	#netAddrTel a{
+		color:#7e7e7f;
+		text-decoration:none;
+	}
+	#netAddrTel label{
+		color:#7e7e7f;
+		margin-left:10px;
+		padding-left:10px;
+		text-decoration:none;
+		border-left:1px solid #7e7e7f;
+	}
+</style>
+<style type="text/css">
+	ul.basicMenuUl{
+		width:980px;
+		height:22.25em;
+		margin:0 auto;
+		list-style:none;
+		overflow:hidden;
+	}
+	ul.basicMenuUl li{
+		width:180px;
+		height:16em;
+		float:left;
+		margin-left:54px;
+		text-align:center;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl{
+		width: 1001px;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl li{
+		margin-left: 32px;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl #QRCode{
+		margin-left: 16px;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode{
+		width:80px;
+		margin-left: 9px;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode img{
+		height:77px;
+		width:76px;
+		margin-top:74px;
+	}
+	ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode i{
+		height:31px;
+		width:60px;
+		display:block;
+		margin:5px auto 0 auto;
+	}
+	#bmNetState{
+		margin-left:0px !important;
+	}
+	#QRCode{
+		width:80px;
+		margin-left:13px !important;
+		text-align:left !important;
+	}
+	#QRCode img{
+		height:77px;
+		width:76px;
+		margin:74px 0 0 3px;
+	}
+	#QRCode i{
+		height:31px;
+		width:84px;
+		display:block;
+		margin-top:5px;
+		background:url(../web-static/images/downLoadAPP.png) no-repeat;
+	}
+	#netStateMbtn{
+		position:relative;
+		background:#1DCFBA;
+	}
+	#routeMgtMbtn{
+		position:relative;
+		background:#FF7547;
+	}
+	#appsMgtMbtn{
+		position:relative;
+		background:#B8D138;
+	}
+	#routerSetMbtn{
+		position:relative;
+		background:#5EC6E5;
+	}
+	i.bEptMenuArrow{
+		width:0px;
+		height:0px;
+		display:block;
+		margin:0px auto;
+		overflow:hidden;
+		visibility:hidden;
+	}
+	#netStateArrow{
+		border-left:0.83em solid #F0F0F0;
+		border-right:0.83em solid #F0F0F0;
+		border-bottom:0em solid #F0F0F0;
+		border-top:0.83em solid #29C4B2;
+	}
+	#routeMgtArrow{
+		border-left:0.83em solid #F0F0F0;
+		border-right:0.83em solid #F0F0F0;
+		border-bottom:0em solid #F0F0F0;
+		border-top:0.83em solid #F57E4E;
+	}
+	#appsMgtArrow{
+		border-left:0.83em solid #F0F0F0;
+		border-right:0.83em solid #F0F0F0;
+		border-bottom:0em solid #F0F0F0;
+		border-top:0.83em solid #9EBE1D;
+	}
+	#routeSetArrow{
+		border-left:0.83em solid #F0F0F0;
+		border-right:0.83em solid #F0F0F0;
+		border-bottom:0em solid #F0F0F0;
+		border-top:0.83em solid #4ABDE0;
+	}
+	ul.basicMenuUl h2{
+		color:#FFFFFF;
+		font-weight:bold;
+		font-size:1.5em;
+		padding-top:1.4em;
+		text-align:center;
+	}
+	ul.basicMenuUl li div{
+		height:13.75em;
+		width:100%;
+		max-width:230px;
+		margin:1.25em auto 0;
+		vertical-align:top;
+		cursor:pointer;
+		position:relative;
+		_width:expression(this.offsetWidth<230?this.offsetWidth:"230px");
+		z-index:1;
+	}
+	ul.basicMenuUl li div i{
+		height:30px;
+		width:30px;
+		top:-12px;
+		right:-12px;
+		font-size:18px;
+		font-style:normal;
+		line-height:29px;
+		position:absolute;
+		font-family:Arial;
+	}
+	#netStateMbtn i.menu1{
+		width:95px;
+		height:74px;
+		position:absolute;
+		top:65px;
+		left:38px;
+		background:url(../web-static/images/routerBg.png) -395px -231px no-repeat;
+	}
+	#routeMgtMbtn i{
+		background:url(../web-static/images/routerBg.png) -347px -1px no-repeat;
+		color:#f07544;
+	}
+	#routeMgtMbtn i.menu2{
+		width:94px;
+		height:69px;
+		position:absolute;
+		top:65px;
+		left:38px;
+		background:url(../web-static/images/routerBg.png) -207px -231px no-repeat;
+	}
+	#appsMgtMbtn i.appsMgtMbtNum{
+		display:none;
+		background:url(../web-static/images/routerBg.png) -315px -1px no-repeat;
+		color:#b8d138;
+	}
+	#appsMgtMbtn i.menu3{
+		width:77px;
+		height:67px;
+		position:absolute;
+		top:65px;
+		left:48px;
+		background:url(../web-static/images/routerBg.png) -315px -141px no-repeat;
+	}
+	#routerSetMbtn i.routerSetMbtNum{
+		display:none;
+		background:url(../web-static/images/routerBg.png) -411px -1px no-repeat;
+		color:#5ec6e5;
+	}
+	#routerSetMbtn i.menu4{
+		width:86px;
+		height:75px;
+		position:absolute;
+		top:65px;
+		left:38px;
+		background:url(../web-static/images/routerBg.png) -307px -230px no-repeat;
+	}
+	#netStateMbtn h2{
+		text-shadow:2px 2px #27baa8;
+	}
+	#routeMgtMbtn h2{
+		text-shadow:2px 2px #DA734B;
+	}
+	#appsMgtMbtn h2{
+		text-shadow:2px 2px #9DB42D;
+	}
+	#routerSetMbtn h2{
+		text-shadow:2px 2px #62B6CE;
+	}
+</style>
+<script type="text/javascript">
+	var basicLisConf = [{colorL:"#29C4B2", colorR:"#00B8A2",
+		arrId:"netStateArrow", pageName: "BasicNetState.htm",
+		basicMDiv:"netStateMbtn"},
 
+		{colorL:"#FF8C5E", colorR:"#F57E4E",
+		arrId:"routeMgtArrow", pageName:"BasicEptMgt.htm",
+		basicMDiv:"routeMgtMbtn"},
 
+		{colorL:"#B0CB33", colorR:"#9EBE1D",
+		arrId:"appsMgtArrow", pageName:"BasicApps.htm",
+		basicMDiv:"appsMgtMbtn"},
 
+		{colorL:"#70D2EF", colorR:"#4ABDE0",
+		arrId:"routeSetArrow", pageName:"BasicRouteSet.htm",
+		basicMDiv:"routerSetMbtn"}];
 
+	var netStateTag = $("#netStateMbtn i").first();
+	var routeMgtTag = $("#routeMgtMbtn i").first();
+	var appsMgtTag = $("#appsMgtMbtn i").first();
+	var routerSetTag = $("#routerSetMbtn i").first();
+	var INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+	var basicAppsRConLoadingObj = {
+		hideLoadingCallBack:null,
+		bShow:false,
+		set:function(options){
+			for (var prop in options)
+			{
+				if (undefined == this[prop] || "setLoadingObj" == prop)
+				{
+					break;
+				}
+				else
+				{
+					this[prop] = options[prop];
+				}
+			}
+		}
+	};
+	var gMenuRefreshHD;
 
+	function basicAppsLoadingShow(bShow, tips, callBack)
+	{
+		var appsRLoadingCon = id("appsRLoadingCon");
+		var appsRCon = id("appsRCon");
+
+		if (null == appsRLoadingCon)
+		{
+			return;
+		}
+
+		if (true == bShow)
+		{
+			basicAppsRConLoadingObj.set({hideLoadingCallBack:callBack, bShow:true});
+			appsRCon.style.display = "none";
+			$(appsRLoadingCon).find("p").html(tips);
+			appsRLoadingCon.style.display = "block";
+		}
+		else
+		{
+			appsRLoadingCon.style.display = "none";
+			appsRCon.style.display = "block";
+			if (basicAppsRConLoadingObj.hideLoadingCallBack == "function")
+			{
+				basicAppsRConLoadingObj.hideLoadingCallBack();
+			}
+
+			basicAppsRConLoadingObj.set({hideLoadingCallBack:null, bShow:false});
+		}
+	}
+
+	/* 设置basicMenu的响应事件 */
+	function basicMenuClick(index)
+	{
+		var confObj = basicLisConf[index];
+		var arrow = id(basicLisConf[index].arrId);
+
+		loadPage(confObj.pageName, "basicSCon", function(){
+			id("headL").style.backgroundColor = confObj.colorL;
+			id("headLCnt").style.backgroundColor = confObj.colorL;
+			id("headR").style.backgroundColor = confObj.colorR;
+			id("headRCnt").style.backgroundColor = confObj.colorR;
+
+			/* change arrow */
+			for(var i = 0, len = basicLisConf.length; i < len; i++)
+			{
+				id(basicLisConf[i].arrId).style.visibility = "hidden";
+			}
+
+			id(basicLisConf[index].arrId).style.visibility = "visible";
+
+			/* 初始化窗口左右两侧宽度 */
+			if ($("#resizeStyle").length == 0)
+			{
+				resizeWindow();
+			}
+
+			clearTimeout(gMenuRefreshHD);
+			gMenuRefreshHD = window.setTimeout(basicMenuStateRefresh, 0);
+		});
+	}
+
+	/* 加载basic的detail，通过出发menu[index]的click函数实现 */
+	function basicPageLoad(index)
+	{
+		id(basicLisConf[index].basicMDiv).onclick();
+	}
+
+	function basicBRGoBackHandle(result)
+	{
+		var binded = result["binded"];
+		var account = result["account"];
+
+		if (true == binded)
+		{
+			basicCloudSet(binded, account);
+
+			if (null != id("CloudAccountSecondTitle"))
+			{
+				loadPage("CloudAccountCfg.htm", "routeSetRCon");
+			}
+		}
+	}
+
+	function basicCloudSet(bCloudBinded, account)
+	{
+		var cloudInfoA = $("#headRCnt a");
+		var dis = (bCloudBinded == true ? "none" : "inline");
+
+		cloudInfoA[0].style.display = dis;
+		cloudInfoA[1].style.display = dis;
+		cloudInfoA[2].style.display = (bCloudBinded == true ? "inline" : "none");
+
+		if (bCloudBinded == true)
+		{
+			cloudInfoA[0].onclick = null;
+			cloudInfoA[1].onclick = null;
+			cloudInfoA[2].innerHTML = account;
+			cloudInfoA[2].onclick = function(){
+				setBasicMenu(undefined, "CloudAccountCfg.htm");
+				basicPageLoad(ROUTE_SET_INDEX);
+			};
+		}
+		else
+		{
+			cloudInfoA[0].onclick = function(){
+				cloudSetBackBRHd(basicBRGoBackHandle);
+				showCloudPage("CloudBindCfg.htm");
+			};
+			cloudInfoA[1].onclick = function(){
+				cloudSetBackBRHd(basicBRGoBackHandle);
+				showCloudPage("CloudRegistCfg.htm");
+			};
+			cloudInfoA[2].innerHTML = "";
+			cloudInfoA[2].onclick = null;
+		}
+	}
+
+	function calWanStatus(status,code){
+		var DOWNICON = 0;
+		var LOADICON = 1;
+		var LINKEDICON = 2;
+		var tagIcon = DOWNICON;
+		switch(status)
+		{
+			case LINK_DOWN:
+				tagIcon = DOWNICON;
+				break;
+			case LINK_UP:
+				tagIcon = LOADICON;
+				break;
+			case LINKING_DOWN:
+				tagIcon = LINKEDICON;
+				break;
+			case LINKING_UP:
+				switch(code)
+				{
+				case LINK_CODE_AUTH_ERR:
+				case LINK_CODE_NOECHO:
+				case LINK_CODE_UNKNOWN:
+				case LINK_CODE_DENY:
+				case LINK_CODE_SRVDOWN:
+				case LINK_CODE_OPT_UNSUPPORT:
+				case LINK_CODE_AUTH_UNSUPPORT:
+					tagIcon = DOWNICON;
+					break;
+				default:
+					tagIcon = LINKEDICON;
+					break;
+				}
+				break;
+			default:
+				tagIcon = DOWNICON;
+				break;
+		}
+		return tagIcon;
+	}
+	function rebuildWanStatus(status1,code1,status2,code2){
+		var DOWNICON = 0;
+		var LOADICON = 1;
+		var LINKEDICON = 2;
+		var wanTag1 = calWanStatus(status1,code1);
+		var wanTag2 = calWanStatus(status2,code2);
+		if(wanTag1 == DOWNICON && wanTag2 == DOWNICON){
+			netStateTag.css("background", "url(../web-static/images/routerBg.png) -424px -130px no-repeat");
+		}else{
+			if(wanTag1 == LINKEDICON || wanTag2 == LINKEDICON){
+				netStateTag.css("background", "url(../web-static/images/routerBg.png) -443px -1px no-repeat");
+			}else{
+				netStateTag.css("background", "url(../web-static/images/routerBg.png) -379px -1px no-repeat");
+			}
+		}
+	}
+
+	function basicMenuNetStateSet(status, code)
+	{
+		switch(status)
+		{
+		case LINK_DOWN:
+			netStateTag.css("background", "url(../web-static/images/routerBg.png) -424px -130px no-repeat");
+			break;
+		case LINK_UP:
+			netStateTag.css("background", "url(../web-static/images/routerBg.png) -379px -1px no-repeat");
+			break;
+		case LINKING_DOWN:
+			netStateTag.css("background", "url(../web-static/images/routerBg.png) -443px -1px no-repeat");
+			break;
+		case LINKING_UP:
+			switch(code)
+			{
+			case LINK_CODE_AUTH_ERR:
+			case LINK_CODE_NOECHO:
+			case LINK_CODE_UNKNOWN:
+			case LINK_CODE_DENY:
+			case LINK_CODE_SRVDOWN:
+			case LINK_CODE_OPT_UNSUPPORT:
+			case LINK_CODE_AUTH_UNSUPPORT:
+				netStateTag.css("background", "url(../web-static/images/routerBg.png) -424px -130px no-repeat");
+				break;
+			default:
+				netStateTag.css("background", "url(../web-static/images/routerBg.png) -443px -1px no-repeat");
+				break;
+			}
+			break;
+		default:
+			netStateTag.css("background", "url(../web-static/images/routerBg.png) -424px -130px no-repeat");
+			break;
+		}
+	}
+
+	function basicMenuAppUpdateNumSet(appNum)
+	{
+		appNum = parseInt(appNum);
+
+		if (0 == appNum || true == isNaN(appNum))
+		{
+			appsMgtTag.css("display", "none");
+		}
+		else
+		{
+			appsMgtTag.html(appNum).css("display", INLINE_BLOCK);
+		}
+	}
+
+	function basicMenuNewUpgradeSet(tagNum)
+	{
+		var sysUpgradeMenu = $("#sysUpgrade_rsMenu");
+		var menuC, tipI;
+
+		if (tagNum > 0)
+		{
+			/* 设置菜单软件升级的标志 */
+			if (undefined != sysUpgradeMenu[0])
+			{
+				tipI = $(sysUpgradeMenu).find("i.routesetUpgradeTipI");
+				if (tipI[0] == undefined)
+				{
+					tipI = el("i");
+					tipI.className = "routesetUpgradeTipI";
+					sysUpgradeMenu[0].appendChild(tipI);
+				}
+				else
+				{
+					tipI.css("visibility", "visible");
+				}
+			}
+
+			routerSetTag.css("display", INLINE_BLOCK);
+			routerSetTag.html(tagNum);
+		}
+		else
+		{
+			if (undefined != sysUpgradeMenu[0])
+			{
+				tipI = $(sysUpgradeMenu).find("i.routesetUpgradeTipI");
+				if (tipI[0] != undefined)
+				{
+					tipI.css("visibility", "hidden");
+				}
+			}
+
+			routerSetTag.css("display", "none");
+		}
+	}
+
+	function basicMenuStateRefresh()
+	{
+		var data = {};
+		var hostData = {};
+		var pluginData = {};
+		var lUCC = uciCloudConfig;
+		var pluginObj, bShow;
+		var refreshCount = 3;
+
+		if (true === $.accountStatus["logoutHandle"])
+		{
+			return;
+		}
+
+		data[uciNetwork.fileName] = {};
+		if(gSupportPortManage){
+			data[uciNetwork.fileName][KEY_NAME] = [uciNetwork.dynData.wanStatus,"wan_status_2"];
+		}else{
+			data[uciNetwork.fileName][KEY_NAME] = uciNetwork.dynData.wanStatus;
+		}
+		data[lUCC.fileName] = {};
+		data[lUCC.fileName][KEY_NAME] = [lUCC.secName.newFirmware, lUCC.secName.deviceStatus, lUCC.secName.bind];
+		if (gSysModeSupport) {
+			data[uciSystem.fileName] = {};
+			data[uciSystem.fileName][KEY_NAME] = uciSystem.secName.sysMode;
+		}
+		data[uciWireless.fileName] = {};
+		data[uciWireless.fileName][KEY_NAME] = [uciWireless.dynData.wds_2g];
+		if (BAND_2 == gBandNum) {
+			data[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g);
+		} else if (BAND_3 == gBandNum) {
+			data[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g1);
+			data[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g4);
+		}
+
+		data[uciPlc.fileName] = {};
+		data[uciPlc.fileName][KEY_TABLE]= uciPlc.secType.connectedExt;
+
+		pluginData[uciAppInfo.fileName] = {};
+		pluginData[uciAppInfo.fileName][KEY_NAME] = uciAppInfo.secName.plugin;
+
+		hostData[uciHostsInfo.fileName] = {};
+		hostData[uciHostsInfo.fileName][KEY_TABLE] = uciHostsInfo.dynData.online_host;
+
+		$.query(data, function(result){
+			if (ENONE == result[ERR_CODE])
+			{
+				refreshCount--;
+				if (0 == refreshCount)
+				{
+					clearTimeout(gMenuRefreshHD);
+					gMenuRefreshHD = window.setTimeout(basicMenuStateRefresh, 5000);
+				}
+
+				try
+				{
+					var wanStatus = result[uciNetwork.fileName][uciNetwork.dynData.wanStatus];
+					var status = parseInt(wanStatus[uciNetwork.optName.wanStatus]);
+					var code = parseInt(wanStatus[uciNetwork.optName.code]);
+					var WDS_OFF = uciWireless.dynOptValue.enable.off;
+					var wdsEnable = parseInt(result.wireless.wlan_wds_2g.enable);
+					if (BAND_2 == gBandNum) {
+						wdsEnable = wdsEnable || parseInt(result.wireless.wlan_wds_5g.enable);
+					} else if (BAND_3 == gBandNum) {
+						wdsEnable = wdsEnable || parseInt(result.wireless.wlan_wds_5g_1.enable);
+						wdsEnable = wdsEnable || parseInt(result.wireless.wlan_wds_5g_4.enable);
+					}
+
+					if (gSysModeSupport && result.system.sys_mode.mode != uciSystem.optValue.sysMode.routerMode) {
+						wdsEnable = 1;
+					}
+
+					/* set wan status */
+					if (WDS_OFF == wdsEnable)
+					{
+						if(gSupportPortManage){
+							var wanStatus2 = result[uciNetwork.fileName]["wan_status_2"];
+							var status2 = parseInt(wanStatus2[uciNetwork.optName.wanStatus]);
+							var code2 = parseInt(wanStatus2[uciNetwork.optName.code]);
+							rebuildWanStatus(status,code,status2,code2);
+						}else{
+							basicMenuNetStateSet(status, code);
+						}
+						netStateTag.css('visibility', 'visible');
+					}
+					else
+					{
+						netStateTag.css('visibility', 'hidden');
+					}
+
+					var cldList = formatTableData(result[uciPlc.fileName][uciPlc.secType.connectedExt]);
+					var extHasNewFirmwareNum = 0;
+					var routerHasNewFirmware = 0;
+
+					for (var i = 0, j = cldList.length; i < j; i++)
+					{
+						var cld = cldList[i];
+						cld.cur_fw_version = cld.cur_fw_version.split(" ")[0] == "" ? label.notFoundVersion : cld.cur_fw_version.split(" ")[0];
+						cld.newest_fw_version = (cld.newest_fw_version && cld.newest_fw_version.split(" ")[0]) || cld.cur_fw_version;
+
+						if (cld[uciPlc.optName.supportOlUp] == uciPlc.optValue.supportOlUp.yes &&
+								cld.cur_fw_version != label.notFoundVersion &&
+								cld.newest_fw_version != label.notFoundVersion &&
+								cld.newest_fw_version != cld.cur_fw_version)
+						{
+							extHasNewFirmwareNum++;
+						}
+					}
+
+					if (result[lUCC.fileName][lUCC.secName.newFirmware][lUCC.optName.fwNewNotify] == lUCC.optValue.fwNewTrue)
+					{
+						routerHasNewFirmware = 1;
+					}
+
+					/* set new firmware */
+					basicMenuNewUpgradeSet(routerHasNewFirmware + extHasNewFirmwareNum);
+
+					/* set bind info */
+					if (result[lUCC.fileName][lUCC.secName.deviceStatus][lUCC.optName.bindStatus] == lUCC.optValue.bindStatusBind)
+					{
+						basicCloudSet(true, result[lUCC.fileName][lUCC.secName.bind][lUCC.optName.username]);
+					}
+					else
+					{
+						basicCloudSet(false);
+					}
+				}catch(ex){debugInfo(ex);}
+			}
+		});
+
+		$.query(hostData, function(result){
+			if (ENONE == result[ERR_CODE])
+			{
+				refreshCount--;
+				if (0 == refreshCount)
+				{
+					clearTimeout(gMenuRefreshHD);
+					gMenuRefreshHD = window.setTimeout(basicMenuStateRefresh, 5000);
+				}
+
+				try
+				{
+					var epStaList = formatTableData(result[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]);
+					var item, mac, hostNum = 0;
+
+					/* set linked ept num */
+					for (var index in epStaList)
+					{
+						item = epStaList[index];
+						mac = item[uciHostsInfo.optName.mac];
+
+						if (mac.length == 0 || mac == "00-00-00-00-00-00")
+						{
+							break;
+						}
+
+						hostNum++;
+					}
+					if(hostNum > 99){
+						routeMgtTag.css("background","url(../web-static/images/hint_long_orange.png");
+						routeMgtTag.css("display","inline-block");
+						routeMgtTag.css('width','62px');
+						routeMgtTag.css('line-height','32px');
+						routeMgtTag.css('height','32px');
+						routeMgtTag.css('left','132px');
+					}
+					routeMgtTag.html(hostNum);
+				}catch(ex){debugInfo(ex);}
+			}
+		});
+
+		$.query(pluginData, function(result){
+			if (ENONE == result[ERR_CODE])
+			{
+				refreshCount--;
+				if (0 == refreshCount)
+				{
+					clearTimeout(gMenuRefreshHD);
+					gMenuRefreshHD = window.setTimeout(basicMenuStateRefresh, 5000);
+				}
+
+				try
+				{
+					pluginObj = result[uciAppInfo.fileName][uciAppInfo.secName.plugin];
+
+					/* set update app num */
+					basicMenuAppUpdateNumSet(pluginObj[uciAppInfo.optName.updateNum]);
+
+					/* set app loading */
+					bShow = pluginObj[uciAppInfo.optName.preUpdating] == uciAppInfo.dynOptValue.updated.yes;
+					basicAppsLoadingShow(bShow, statusStr.appsUpdating);
+				}catch(ex){debugInfo(ex);}
+			}
+		});
+	}
+
+	function init()
+	{
+		var beWzd = gCloudAccountBR["bFWzd"];
+		var data = {};
+		var lUCC = uciCloudConfig;
+		id("product").innerHTML = label.productName + proName;
+
+		/* 根据配置判断是否需要显示移动LOGO和和家亲二维码 */
+		var tpLogoBg = "url(../web-static/images/logo.png) no-repeat scroll 0 18px";
+		var andlinkLogoBg = "url(../web-static/images/logo_andlink.png) no-repeat scroll 0 18px";
+		var andlinkQRcodeSrc = "../web-static/images/QRcode_andlink.png";
+		var andlinkQRcodeDesBg = "url(../web-static/images/downloadAndlinkAPP.png) no-repeat";
+
+		!showAndlinkLogo && $(".tpLogo").css("background", tpLogoBg);
+		showAndlinkLogo && $(".andlinkLogo").css("background", andlinkLogoBg);
+		showAndlinkQRcode && $(".andlinkQRcode img").attr("src", andlinkQRcodeSrc);
+		showAndlinkQRcode && $(".andlinkQRcode i").css("background", andlinkQRcodeDesBg);
+		showAndlinkQRcode && $("#basicMenuUl").addClass("andlinkBasicMenuUl");
+
+		$(".tpLogo").toggle(!showAndlinkLogo);
+		$(".andlinkLogo").toggle(showAndlinkLogo);
+		$(".andlinkQRcode").toggle(showAndlinkQRcode);
+
+		/* 初始化basic的menu,即页面下面的三个menu */
+		function basicMenuInit()
+		{
+			for (var i = 0, len = basicLisConf.length; i < len; i++)
+			{
+				id(basicLisConf[i].basicMDiv).onclick = (function(index)
+				{
+					$("#dualWanWrapper").addClass("disNone");
+					return function(){basicMenuClick(index);};
+				})(i);
+			}
+		}
+
+		/* 菜单设置 */
+		basicMenuInit();
+		basicPageLoad(gBasicMenu["menuIndex"]);
+		setBasicMenu(NET_STATE_INDEX);
+
+		/* 设置退出按钮 */
+		$("#headRCnt span").click(function(){
+			$.logout();
+		});
+
+		data[lUCC.fileName] = {};
+		data[lUCC.fileName][KEY_NAME] = [lUCC.secName.newFirmware,
+												   lUCC.secName.bind,
+												   lUCC.secName.deviceStatus,
+												   lUCC.secName.bindTip];
+
+		data[uciDeviceInfo.fileName] = {};
+		data[uciDeviceInfo.fileName][KEY_NAME] = uciDeviceInfo.secName.info;
+		data[cloudClientStatus.fileName] = {};
+		data[cloudClientStatus.fileName][KEY_NAME] = cloudClientStatus.secName.clientInfo;
+		data[uciNetwork.fileName] = {};
+		data[uciNetwork.fileName][KEY_NAME] = uciNetwork.dynData.ifaceMac;
+		data[uciPlc.fileName] = {};
+		data[uciPlc.fileName][KEY_TABLE]= uciPlc.secType.connectedExt;
+
+		if (true == $.local)
+		{
+			basicCloudSet(false, "manong@tp-link.cn");
+			return;
+		}
+
+		gCloudAccountBR["bFWzd"] = false;
+
+		$.query(data, function(result){
+			if (ENONE == result[ERR_CODE])
+			{
+				var beCloudConnected, bCloudBinded = false, extHasNewFirmware = false;
+				var beCloudNotBindTip = result[lUCC.fileName][lUCC.secName.bindTip][lUCC.optName.noShow];
+				var upgradeTip =  result[lUCC.fileName][lUCC.secName.newFirmware][lUCC.optName.noShow];
+				var info = result[uciDeviceInfo.fileName][uciDeviceInfo.secName.info];
+				var version = (info[uciDeviceInfo.optName.swVer].split(" "))[0];
+				var connectStatus = result[cloudClientStatus.fileName][cloudClientStatus.secName.clientInfo][cloudClientStatus.optName.connectStatus];
+				var cldList = formatTableData(result[uciPlc.fileName][uciPlc.secType.connectedExt]);
+
+				/* 获取当前MAC */
+				g_cur_host_mac = result[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];
+
+				/* set vesion */
+				id("softVersion").innerHTML += version;
+				gCloudAccountBR["softVersion"] = info[uciDeviceInfo.optName.swVer];
+				beCloudConnected = connectStatus == cloudClientStatus.optValue.connectStatus.connected;
+
+				for (var i = 0, j = cldList.length; i < j; i++)
+				{
+					var cld = cldList[i];
+					cld.cur_fw_version = cld.cur_fw_version.split(" ")[0] == "" ? label.notFoundVersion : cld.cur_fw_version.split(" ")[0];
+					cld.newest_fw_version = (cld.newest_fw_version && cld.newest_fw_version.split(" ")[0]) || cld.cur_fw_version;
+
+					if (cld[uciPlc.optName.supportOlUp] == uciPlc.optValue.supportOlUp.yes &&
+							cld.cur_fw_version != label.notFoundVersion &&
+							cld.newest_fw_version != label.notFoundVersion &&
+							cld.newest_fw_version != cld.cur_fw_version)
+					{
+						extHasNewFirmware = true;
+					}
+				}
+
+				/* set cloud account */
+				if (result[lUCC.fileName][lUCC.secName.deviceStatus][lUCC.optName.bindStatus] == lUCC.optValue.bindStatusBind)
+				{
+					bCloudBinded = true;
+					basicCloudSet(true, result[lUCC.fileName][lUCC.secName.bind][lUCC.optName.username]);
+				}
+				else
+				{
+					basicCloudSet(false);
+				}
+				if (true == gOnlineUpgradeFail)
+				{
+					gOnlineUpgradeFail = false;
+				}
+				/* new firmware or account unbind */
+				else if ((result[ERR_CODE] == ENONE) && (pageCloudPush == true) &&
+					(((result[lUCC.fileName][lUCC.secName.newFirmware][lUCC.optName.fwNewNotify] == lUCC.optValue.fwNewTrue) &&
+					(result[lUCC.fileName][lUCC.secName.newFirmware][lUCC.optName.fwUpdateType] == lUCC.optValue.fwUpdateTypeNormal)) ||
+					(extHasNewFirmware == true)) &&
+					(upgradeTip == lUCC.optValue.noShow.no))
+				{
+					showCoverB(function(cover){
+						var upgradeCon = document.createElement("div");
+
+						pageCloudPush = false;
+						upgradeCon.id = "UpgradeConfirm";
+						document.body.appendChild(upgradeCon);
+						loadPage("SysUpgradeConfirm.htm", "UpgradeConfirm", undefined, {bClearPageTickArray:false});
+					});
+				}
+				else if ((false == bCloudBinded) && (true == beCloudConnected) && (true != beWzd) &&
+						(beCloudNotBindTip == lUCC.optValue.noShow.no))
+				{
+					showCoverB(function(cover){
+						var upgradeCon = document.createElement("div");
+
+						pageCloudPush = false;
+						upgradeCon.id = "CloudBindConfirm";
+						document.body.appendChild(upgradeCon);
+						loadPage("CloudBindConfirm.htm", "CloudBindConfirm", undefined, {bClearPageTickArray:false});
+					});
+				}
+			}
+		});
+	}
+	init();
+</script>
 <div id="head">
 	<div id="headL"></div>
 	<div id="headR"></div>
@@ -78,31 +1197,4 @@
 		<li id="softVersion">{%label.softVersion%}{%label.colon%}</li>
 		<li id="netAddrTel"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}400-8863-400</label></li>
 	</ul>
-</div><script type="text/javascript">var basicLisConf=[{colorL:"#29C4B2",colorR:"#00B8A2",arrId:"netStateArrow",pageName:"BasicNetState.htm",basicMDiv:"netStateMbtn"},{colorL:"#FF8C5E",colorR:"#F57E4E",arrId:"routeMgtArrow",pageName:"BasicEptMgt.htm",basicMDiv:"routeMgtMbtn"},{colorL:"#B0CB33",colorR:"#9EBE1D",arrId:"appsMgtArrow",pageName:"BasicApps.htm",basicMDiv:"appsMgtMbtn"},{colorL:"#70D2EF",colorR:"#4ABDE0",arrId:"routeSetArrow",pageName:"BasicRouteSet.htm",basicMDiv:"routerSetMbtn"}],netStateTag=$("#netStateMbtn i").first(),
-routeMgtTag=$("#routeMgtMbtn i").first(),appsMgtTag=$("#appsMgtMbtn i").first(),routerSetTag=$("#routerSetMbtn i").first(),INLINE_BLOCK=isIESix||isIESeven?"inline":"inline-block",basicAppsRConLoadingObj={hideLoadingCallBack:null,bShow:!1,set:function(b){for(var c in b)if(void 0==this[c]||"setLoadingObj"==c)break;else this[c]=b[c]}},gMenuRefreshHD;
-function basicAppsLoadingShow(b,c,a){var d=id("appsRLoadingCon"),f=id("appsRCon");null!=d&&(!0==b?(basicAppsRConLoadingObj.set({hideLoadingCallBack:a,bShow:!0}),f.style.display="none",$(d).find("p").html(c),d.style.display="block"):(d.style.display="none",f.style.display="block","function"==basicAppsRConLoadingObj.hideLoadingCallBack&&basicAppsRConLoadingObj.hideLoadingCallBack(),basicAppsRConLoadingObj.set({hideLoadingCallBack:null,bShow:!1})))}
-function basicMenuClick(b){var c=basicLisConf[b];id(basicLisConf[b].arrId);loadPage(c.pageName,"basicSCon",function(){id("headL").style.backgroundColor=c.colorL;id("headLCnt").style.backgroundColor=c.colorL;id("headR").style.backgroundColor=c.colorR;id("headRCnt").style.backgroundColor=c.colorR;for(var a=0,d=basicLisConf.length;a<d;a++)id(basicLisConf[a].arrId).style.visibility="hidden";id(basicLisConf[b].arrId).style.visibility="visible";0==$("#resizeStyle").length&&resizeWindow();clearTimeout(gMenuRefreshHD);
-gMenuRefreshHD=window.setTimeout(basicMenuStateRefresh,0)})}function basicPageLoad(b){id(basicLisConf[b].basicMDiv).onclick()}function basicBRGoBackHandle(b){var c=b.binded;b=b.account;!0==c&&(basicCloudSet(c,b),null!=id("CloudAccountSecondTitle")&&loadPage("CloudAccountCfg.htm","routeSetRCon"))}
-function basicCloudSet(b,c){var a=$("#headRCnt a"),d=!0==b?"none":"inline";a[0].style.display=d;a[1].style.display=d;a[2].style.display=!0==b?"inline":"none";!0==b?(a[0].onclick=null,a[1].onclick=null,a[2].innerHTML=c,a[2].onclick=function(){setBasicMenu(void 0,"CloudAccountCfg.htm");basicPageLoad(ROUTE_SET_INDEX)}):(a[0].onclick=function(){cloudSetBackBRHd(basicBRGoBackHandle);showCloudPage("CloudBindCfg.htm")},a[1].onclick=function(){cloudSetBackBRHd(basicBRGoBackHandle);showCloudPage("CloudRegistCfg.htm")},
-a[2].innerHTML="",a[2].onclick=null)}function calWanStatus(b,c){var a=0;switch(b){case LINK_DOWN:a=0;break;case LINK_UP:a=1;break;case LINKING_DOWN:a=2;break;case LINKING_UP:switch(c){case LINK_CODE_AUTH_ERR:case LINK_CODE_NOECHO:case LINK_CODE_UNKNOWN:case LINK_CODE_DENY:case LINK_CODE_SRVDOWN:case LINK_CODE_OPT_UNSUPPORT:case LINK_CODE_AUTH_UNSUPPORT:a=0;break;default:a=2}break;default:a=0}return a}
-function rebuildWanStatus(b,c,a,d){b=calWanStatus(b,c);a=calWanStatus(a,d);0==b&&0==a?netStateTag.css("background","url(../web-static/images/routerBg.png) -424px -130px no-repeat"):2==b||2==a?netStateTag.css("background","url(../web-static/images/routerBg.png) -443px -1px no-repeat"):netStateTag.css("background","url(../web-static/images/routerBg.png) -379px -1px no-repeat")}
-function basicMenuNetStateSet(b,c){switch(b){case LINK_DOWN:netStateTag.css("background","url(../web-static/images/routerBg.png) -424px -130px no-repeat");break;case LINK_UP:netStateTag.css("background","url(../web-static/images/routerBg.png) -379px -1px no-repeat");break;case LINKING_DOWN:netStateTag.css("background","url(../web-static/images/routerBg.png) -443px -1px no-repeat");break;case LINKING_UP:switch(c){case LINK_CODE_AUTH_ERR:case LINK_CODE_NOECHO:case LINK_CODE_UNKNOWN:case LINK_CODE_DENY:case LINK_CODE_SRVDOWN:case LINK_CODE_OPT_UNSUPPORT:case LINK_CODE_AUTH_UNSUPPORT:netStateTag.css("background",
-"url(../web-static/images/routerBg.png) -424px -130px no-repeat");break;default:netStateTag.css("background","url(../web-static/images/routerBg.png) -443px -1px no-repeat")}break;default:netStateTag.css("background","url(../web-static/images/routerBg.png) -424px -130px no-repeat")}}function basicMenuAppUpdateNumSet(b){b=parseInt(b);0==b||!0==isNaN(b)?appsMgtTag.css("display","none"):appsMgtTag.html(b).css("display",INLINE_BLOCK)}
-function basicMenuNewUpgradeSet(b){var c=$("#sysUpgrade_rsMenu"),a;0<b?(void 0!=c[0]&&(a=$(c).find("i.routesetUpgradeTipI"),void 0==a[0]?(a=el("i"),a.className="routesetUpgradeTipI",c[0].appendChild(a)):a.css("visibility","visible")),routerSetTag.css("display",INLINE_BLOCK),routerSetTag.html(b)):(void 0!=c[0]&&(a=$(c).find("i.routesetUpgradeTipI"),void 0!=a[0]&&a.css("visibility","hidden")),routerSetTag.css("display","none"))}
-function basicMenuStateRefresh(){var b={},c={},a={},d=uciCloudConfig,f,k,h=3;!0!==$.accountStatus.logoutHandle&&(b[uciNetwork.fileName]={},b[uciNetwork.fileName][KEY_NAME]=gSupportPortManage?[uciNetwork.dynData.wanStatus,"wan_status_2"]:uciNetwork.dynData.wanStatus,b[d.fileName]={},b[d.fileName][KEY_NAME]=[d.secName.newFirmware,d.secName.deviceStatus,d.secName.bind],gSysModeSupport&&(b[uciSystem.fileName]={},b[uciSystem.fileName][KEY_NAME]=uciSystem.secName.sysMode),b[uciWireless.fileName]={},b[uciWireless.fileName][KEY_NAME]=
-[uciWireless.dynData.wds_2g],BAND_2==gBandNum?b[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g):BAND_3==gBandNum&&(b[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g1),b[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wds_5g4)),b[uciPlc.fileName]={},b[uciPlc.fileName][KEY_TABLE]=uciPlc.secType.connectedExt,a[uciAppInfo.fileName]={},a[uciAppInfo.fileName][KEY_NAME]=uciAppInfo.secName.plugin,c[uciHostsInfo.fileName]={},c[uciHostsInfo.fileName][KEY_TABLE]=uciHostsInfo.dynData.online_host,
-$.query(b,function(a){if(ENONE==a[ERR_CODE]){h--;0==h&&(clearTimeout(gMenuRefreshHD),gMenuRefreshHD=window.setTimeout(basicMenuStateRefresh,5E3));try{var b=a[uciNetwork.fileName][uciNetwork.dynData.wanStatus],c=parseInt(b[uciNetwork.optName.wanStatus]),f=parseInt(b[uciNetwork.optName.code]),k=uciWireless.dynOptValue.enable.off,e=parseInt(a.wireless.wlan_wds_2g.enable);BAND_2==gBandNum?e=e||parseInt(a.wireless.wlan_wds_5g.enable):BAND_3==gBandNum&&(e=(e=e||parseInt(a.wireless.wlan_wds_5g_1.enable))||
-parseInt(a.wireless.wlan_wds_5g_4.enable));gSysModeSupport&&a.system.sys_mode.mode!=uciSystem.optValue.sysMode.routerMode&&(e=1);if(k==e){if(gSupportPortManage){var p=a[uciNetwork.fileName].wan_status_2,t=parseInt(p[uciNetwork.optName.wanStatus]),u=parseInt(p[uciNetwork.optName.code]);rebuildWanStatus(c,f,t,u)}else basicMenuNetStateSet(c,f);netStateTag.css("visibility","visible")}else netStateTag.css("visibility","hidden");for(var q=formatTableData(a[uciPlc.fileName][uciPlc.secType.connectedExt]),
-f=c=b=0,v=q.length;f<v;f++){var g=q[f];g.cur_fw_version=""==g.cur_fw_version.split(" ")[0]?label.notFoundVersion:g.cur_fw_version.split(" ")[0];g.newest_fw_version=g.newest_fw_version&&g.newest_fw_version.split(" ")[0]||g.cur_fw_version;g[uciPlc.optName.supportOlUp]==uciPlc.optValue.supportOlUp.yes&&g.cur_fw_version!=label.notFoundVersion&&g.newest_fw_version!=label.notFoundVersion&&g.newest_fw_version!=g.cur_fw_version&&b++}a[d.fileName][d.secName.newFirmware][d.optName.fwNewNotify]==d.optValue.fwNewTrue&&
-(c=1);basicMenuNewUpgradeSet(c+b);a[d.fileName][d.secName.deviceStatus][d.optName.bindStatus]==d.optValue.bindStatusBind?basicCloudSet(!0,a[d.fileName][d.secName.bind][d.optName.username]):basicCloudSet(!1)}catch(w){debugInfo(w)}}}),$.query(c,function(a){if(ENONE==a[ERR_CODE]){h--;0==h&&(clearTimeout(gMenuRefreshHD),gMenuRefreshHD=window.setTimeout(basicMenuStateRefresh,5E3));try{var b=formatTableData(a[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]),c,d;a=0;for(var f in b){c=b[f];d=c[uciHostsInfo.optName.mac];
-if(0==d.length||"00-00-00-00-00-00"==d)break;a++}99<a&&(routeMgtTag.css("background","url(../web-static/images/hint_long_orange.png"),routeMgtTag.css("display","inline-block"),routeMgtTag.css("width","62px"),routeMgtTag.css("line-height","32px"),routeMgtTag.css("height","32px"),routeMgtTag.css("left","132px"));routeMgtTag.html(a)}catch(e){debugInfo(e)}}}),$.query(a,function(a){if(ENONE==a[ERR_CODE]){h--;0==h&&(clearTimeout(gMenuRefreshHD),gMenuRefreshHD=window.setTimeout(basicMenuStateRefresh,5E3));
-try{f=a[uciAppInfo.fileName][uciAppInfo.secName.plugin],basicMenuAppUpdateNumSet(f[uciAppInfo.optName.updateNum]),k=f[uciAppInfo.optName.preUpdating]==uciAppInfo.dynOptValue.updated.yes,basicAppsLoadingShow(k,statusStr.appsUpdating)}catch(b){debugInfo(b)}}}))}
-function init(){var b=gCloudAccountBR.bFWzd,c={},a=uciCloudConfig;id("product").innerHTML=label.productName+proName;!showAndlinkLogo&&$(".tpLogo").css("background","url(../web-static/images/logo.png) no-repeat scroll 0 18px");showAndlinkLogo&&$(".andlinkLogo").css("background","url(../web-static/images/logo_andlink.png) no-repeat scroll 0 18px");showAndlinkQRcode&&$(".andlinkQRcode img").attr("src","../web-static/images/QRcode_andlink.png");showAndlinkQRcode&&$(".andlinkQRcode i").css("background",
-"url(../web-static/images/downloadAndlinkAPP.png) no-repeat");showAndlinkQRcode&&$("#basicMenuUl").addClass("andlinkBasicMenuUl");$(".tpLogo").toggle(!showAndlinkLogo);$(".andlinkLogo").toggle(showAndlinkLogo);$(".andlinkQRcode").toggle(showAndlinkQRcode);(function(){for(var a=0,b=basicLisConf.length;a<b;a++)id(basicLisConf[a].basicMDiv).onclick=function(a){$("#dualWanWrapper").addClass("disNone");return function(){basicMenuClick(a)}}(a)})();basicPageLoad(gBasicMenu.menuIndex);setBasicMenu(NET_STATE_INDEX);
-$("#headRCnt span").click(function(){$.logout()});c[a.fileName]={};c[a.fileName][KEY_NAME]=[a.secName.newFirmware,a.secName.bind,a.secName.deviceStatus,a.secName.bindTip];c[uciDeviceInfo.fileName]={};c[uciDeviceInfo.fileName][KEY_NAME]=uciDeviceInfo.secName.info;c[cloudClientStatus.fileName]={};c[cloudClientStatus.fileName][KEY_NAME]=cloudClientStatus.secName.clientInfo;c[uciNetwork.fileName]={};c[uciNetwork.fileName][KEY_NAME]=uciNetwork.dynData.ifaceMac;c[uciPlc.fileName]={};c[uciPlc.fileName][KEY_TABLE]=
-uciPlc.secType.connectedExt;!0==$.local?basicCloudSet(!1,"manong@tp-link.cn"):(gCloudAccountBR.bFWzd=!1,$.query(c,function(c){if(ENONE==c[ERR_CODE]){var f,k=!1,h=!1,r=c[a.fileName][a.secName.bindTip][a.optName.noShow],s=c[a.fileName][a.secName.newFirmware][a.optName.noShow];f=c[uciDeviceInfo.fileName][uciDeviceInfo.secName.info];var l=f[uciDeviceInfo.optName.swVer].split(" ")[0],m=c[cloudClientStatus.fileName][cloudClientStatus.secName.clientInfo][cloudClientStatus.optName.connectStatus],n=formatTableData(c[uciPlc.fileName][uciPlc.secType.connectedExt]);
-g_cur_host_mac=c[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];id("softVersion").innerHTML+=l;gCloudAccountBR.softVersion=f[uciDeviceInfo.optName.swVer];f=m==cloudClientStatus.optValue.connectStatus.connected;l=0;for(m=n.length;l<m;l++){var e=n[l];e.cur_fw_version=""==e.cur_fw_version.split(" ")[0]?label.notFoundVersion:e.cur_fw_version.split(" ")[0];e.newest_fw_version=e.newest_fw_version&&e.newest_fw_version.split(" ")[0]||e.cur_fw_version;e[uciPlc.optName.supportOlUp]==
-uciPlc.optValue.supportOlUp.yes&&e.cur_fw_version!=label.notFoundVersion&&e.newest_fw_version!=label.notFoundVersion&&e.newest_fw_version!=e.cur_fw_version&&(h=!0)}c[a.fileName][a.secName.deviceStatus][a.optName.bindStatus]==a.optValue.bindStatusBind?(k=!0,basicCloudSet(!0,c[a.fileName][a.secName.bind][a.optName.username])):basicCloudSet(!1);!0==gOnlineUpgradeFail?gOnlineUpgradeFail=!1:c[ERR_CODE]==ENONE&&!0==pageCloudPush&&(c[a.fileName][a.secName.newFirmware][a.optName.fwNewNotify]==a.optValue.fwNewTrue&&
-c[a.fileName][a.secName.newFirmware][a.optName.fwUpdateType]==a.optValue.fwUpdateTypeNormal||!0==h)&&s==a.optValue.noShow.no?showCoverB(function(a){a=document.createElement("div");pageCloudPush=!1;a.id="UpgradeConfirm";document.body.appendChild(a);loadPage("SysUpgradeConfirm.htm","UpgradeConfirm",void 0,{bClearPageTickArray:!1})}):!1==k&&!0==f&&!0!=b&&r==a.optValue.noShow.no&&showCoverB(function(a){a=document.createElement("div");pageCloudPush=!1;a.id="CloudBindConfirm";document.body.appendChild(a);
-loadPage("CloudBindConfirm.htm","CloudBindConfirm",void 0,{bClearPageTickArray:!1})})}}))}init();
-</script><style type="text/css">body{background:white}#head{height:8.8%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);width:100%;min-width:980px;_width:expression(this.offsetWidth<980?"980px":this.offsetWidth);position:relative}#basicContent{height:86.5%;min-height:61.41em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*61.41?"61.41em":this.offsetHeight+"px");min-width:980px;_width:expression(this.offsetWidth<980?"980px":this.offsetWidth)}#basicSCon{min-height:39.16em;height:63.78%;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);position:relative;clear:both}#bConFun{min-height:22.25em;height:36.22%;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*22.25?"22.25em":this.offsetHeight);background:#f0f0f0;position:relative;z-index:1002}#foot{height:4.6%;min-height:3.3em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*3.3?"3.3em":this.offsetHeight);min-width:980px;_width:expression(this.offsetWidth<980?"980px":this.offsetWidth);background:#dfdfdf;position:relative;z-index:1002}#bConCnt{height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);position:relative;z-index:1}div.bConfL{width:50%;height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);top:0;left:0;position:absolute;text-align:right}div.bConfR{width:50%;height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);top:0;left:50%;position:absolute;text-align:left}div.bConfLCnt{width:30%;height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);float:left;text-align:left}div.bConfRCnt{width:70%;height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);float:left;text-align:left}div.bcRCon{position:relative;height:100%;min-height:39.16em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*39.16?"39.16em":this.offsetHeight);margin:0}</style><style type="text/css">ul.headFunc{list-style:none;overflow:hidden;float:right}ul.headFunc li{height:5.83em;width:5.83em;float:left;margin-left:20px;overflow:hidden;border-radius:4px;cursor:pointer;background-color:#38a38f}i.basicSet{float:left;width:27px;height:27px;margin-top:10px;margin-left:22px;background:url(../web-static/images/basic.png) no-repeat scroll -318px -402px}i.highSet{float:left;width:39px;height:28px;margin-top:10px;margin-left:16px;background:url(../web-static/images/basic.png) no-repeat scroll -319px -367px}i.logout{float:left;width:27px;height:27px;margin-top:10px;margin-left:22px;background:url(../web-static/images/basic.png) no-repeat scroll -389px -393px}ul.headFunc li label{float:left;width:100%;color:white;font-size:1em;font-weight:bold;margin-top:.7em;text-align:center;cursor:pointer}ul.headFunc li.h{background-color:#38a38f}#headL{width:50%;height:100%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);top:0;left:0;position:absolute;text-align:right;background:#3ec7a3}#headR{width:50%;height:100%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);top:0;left:50%;position:absolute;text-align:left;background:#48cfae}#headCnt{height:100%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);position:relative;z-index:1}#headLCnt{width:30%;height:100%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);float:left;text-align:left}.logoCon{width:235px;height:100%;margin-left:auto}.tpLogo{display:inline-block;width:131px;height:100%}.andlinkLogo{display:inline-block;width:205px;height:100%}#headRCnt{color:#fff;width:70%;height:100%;min-height:6.25em;_height:expression(this.offsetHeight<parseInt(document.body.style.fontSize)*6.25?"6.25em":this.offsetHeight);float:left;text-align:left;background:#48cfae}.cloudIdCon{width:745px;height:100%;padding-top:18px;box-sizing:border-box}#headRCnt p{text-align:right}#headRCnt span{margin-left:5px;cursor:pointer}#headRCnt a{color:#fff;margin-left:5px}h1.bMdelTitle{line-height:1.1em;color:white;font-size:3em;padding-left:.44em;width:235px;margin-left:auto}label.proName{font-size:12px;color:#fff;margin-left:20px;text-align:left;position:absolute}</style><style type="text/css">ul.footCon{width:980px;height:100%;margin:0 auto;list-style:none}ul.footCon li{line-height:1.4em;margin-top:1em;color:#7e7e7f;font-size:1em}#softVersion{float:left;text-align:left}#netAddrTel{float:right;text-align:right;text-indent:.5em}#netAddrTel a{color:#7e7e7f;text-decoration:none}#netAddrTel label{color:#7e7e7f;margin-left:10px;padding-left:10px;text-decoration:none;border-left:1px solid #7e7e7f}</style><style type="text/css">ul.basicMenuUl{width:980px;height:22.25em;margin:0 auto;list-style:none;overflow:hidden}ul.basicMenuUl li{width:180px;height:16em;float:left;margin-left:54px;text-align:center}ul.basicMenuUl.andlinkBasicMenuUl{width:1001px}ul.basicMenuUl.andlinkBasicMenuUl li{margin-left:32px}ul.basicMenuUl.andlinkBasicMenuUl #QRCode{margin-left:16px}ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode{width:80px;margin-left:9px}ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode img{height:77px;width:76px;margin-top:74px}ul.basicMenuUl.andlinkBasicMenuUl .andlinkQRcode i{height:31px;width:60px;display:block;margin:5px auto 0 auto}#bmNetState{margin-left:0!important}#QRCode{width:80px;margin-left:13px!important;text-align:left!important}#QRCode img{height:77px;width:76px;margin:74px 0 0 3px}#QRCode i{height:31px;width:84px;display:block;margin-top:5px;background:url(../web-static/images/downLoadAPP.png) no-repeat}#netStateMbtn{position:relative;background:#1dcfba}#routeMgtMbtn{position:relative;background:#ff7547}#appsMgtMbtn{position:relative;background:#b8d138}#routerSetMbtn{position:relative;background:#5ec6e5}i.bEptMenuArrow{width:0;height:0;display:block;margin:0 auto;overflow:hidden;visibility:hidden}#netStateArrow{border-left:.83em solid #f0f0f0;border-right:.83em solid #f0f0f0;border-bottom:0 solid #f0f0f0;border-top:.83em solid #29c4b2}#routeMgtArrow{border-left:.83em solid #f0f0f0;border-right:.83em solid #f0f0f0;border-bottom:0 solid #f0f0f0;border-top:.83em solid #f57e4e}#appsMgtArrow{border-left:.83em solid #f0f0f0;border-right:.83em solid #f0f0f0;border-bottom:0 solid #f0f0f0;border-top:.83em solid #9ebe1d}#routeSetArrow{border-left:.83em solid #f0f0f0;border-right:.83em solid #f0f0f0;border-bottom:0 solid #f0f0f0;border-top:.83em solid #4abde0}ul.basicMenuUl h2{color:#fff;font-weight:bold;font-size:1.5em;padding-top:1.4em;text-align:center}ul.basicMenuUl li div{height:13.75em;width:100%;max-width:230px;margin:1.25em auto 0;vertical-align:top;cursor:pointer;position:relative;_width:expression(this.offsetWidth<230?this.offsetWidth:"230px");z-index:1}ul.basicMenuUl li div i{height:30px;width:30px;top:-12px;right:-12px;font-size:18px;font-style:normal;line-height:29px;position:absolute;font-family:Arial}#netStateMbtn i.menu1{width:95px;height:74px;position:absolute;top:65px;left:38px;background:url(../web-static/images/routerBg.png) -395px -231px no-repeat}#routeMgtMbtn i{background:url(../web-static/images/routerBg.png) -347px -1px no-repeat;color:#f07544}#routeMgtMbtn i.menu2{width:94px;height:69px;position:absolute;top:65px;left:38px;background:url(../web-static/images/routerBg.png) -207px -231px no-repeat}#appsMgtMbtn i.appsMgtMbtNum{display:none;background:url(../web-static/images/routerBg.png) -315px -1px no-repeat;color:#b8d138}#appsMgtMbtn i.menu3{width:77px;height:67px;position:absolute;top:65px;left:48px;background:url(../web-static/images/routerBg.png) -315px -141px no-repeat}#routerSetMbtn i.routerSetMbtNum{display:none;background:url(../web-static/images/routerBg.png) -411px -1px no-repeat;color:#5ec6e5}#routerSetMbtn i.menu4{width:86px;height:75px;position:absolute;top:65px;left:38px;background:url(../web-static/images/routerBg.png) -307px -230px no-repeat}#netStateMbtn h2{text-shadow:2px 2px #27baa8}#routeMgtMbtn h2{text-shadow:2px 2px #da734b}#appsMgtMbtn h2{text-shadow:2px 2px #9db42d}#routerSetMbtn h2{text-shadow:2px 2px #62b6ce}</style>
+</div>

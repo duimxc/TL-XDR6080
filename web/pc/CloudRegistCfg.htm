@@ -1,5 +1,778 @@
+<style type="text/css">
+	body{
+		background:#5e85c0 !important;
+		fontSize:12px;
+		height:100%;
+	}
+	span.phoneRegist{
+		color:#FFFFFF;
+		font-size:18px;
+		font-weight:bold;
+	}
+	span.phoneAdvice{
+		color:#FFFFFF;
+		font-size:14px;
+		font-weight:bold;
+	}
+	a.phoneAdvice{
+		color:#184283;
+		font-weight:bold;
+		font-size:14px;
+		margin-left:28px;
+		text-decoration:none;
+	}
+	input.resendBtn{
+		background:#5e85c0;
+		border-radius:5px;
+		border:1px solid #184283;
+		color:#184283;
+		cursor:pointer;
+		height:25px;
+		font-size:12px;;
+		margin-left:5px;
+		vertical-align:middle;
+		width:92px;
+	}
+	label.agreeAndRead{
+		color:#FFFFFF;
+		font-size:12px;
+		margin-left:5px;
+		line-height:30px;
+		vertical-align:middle;
+	}
+	a.cloudRegistProtocalA{
+		color:#FFFFFF;
+		font-size:12px;
+		vertical-align:middle;
+	}
+	li.textConE1 label{
+		color:#FFFFFF;
+		font-size:12px;
+		line-height:36px;
+		vertical-align:middle;
+		margin-left:5px;
+	}
+	input.returnBtn{
+		background:#335C9C;
+		border-radius:3px;
+		border:none;
+		color:#FFFFFF;
+		cursor:pointer;
+		height:25px;
+		position:absolute;
+		top:0px;
+		right:15px;
+		width:60px;
+	}
+	#cloudRgProtocalCon{
+		position:relative;
+		z-index:1012;
+		width:715px;
+		margin:0px auto;
+		height:0px;
+		line-height:0px;
+		font-size:0px;
+		visibility:hidden;
+		top:-9999px;
+	}
+	div.cloudRgProtocal{
+		background:#FFFFFF;
+		font-size:12px;
+		line-height:normal;
+		height:485px;
+		position:absolute;
+		top:90px;
+		margin:0 auto;
+		width:715px;
+	}
+	p.cloudRgProtocalTitle{
+		height:35px;
+		background:#5E85C0;
+	}
+	p.cloudRgProtocalTitle span{
+		color:#FFFFFF;
+		line-height:35px;
+		margin-left:20px;
+	}
+	p.cloudRgProtocalTitle i{
+		background:url(../web-static/images/routerBg.png) -422px -108px no-repeat;
+		cursor:pointer;
+		float:right;
+		height:20px;
+		width:20px;
+		margin:7px 7px 0 0;
+	}
+	div.cloudRgDetialCon{
+		color:#3C3E43;
+		padding:0px 30px;
+		margin:30px 10px 0;
+		height:375px;
+		overflow:hidden;
+		text-align:center;
+	}
+	div.cloudRgDetialCon h1{
+		font-size:24px;
+		line-height:24px;
+		margin-bottom:40px;
+	}
+	#cloudRgDetial{
+		font-size:12px;
+		text-align:left;
+	}
+	label.proName{
+		right:16px;
+		font-size:12px;
+		color:#FFFFFF;
+		margin-top:18px;
+		margin-left:20px;
+		text-align:left;
+		position:absolute;
+	}
+</style>
+<script type="text/javascript">
+	function gCloudAccountRegstErrHandle(errNo, objOrId)
+	{
+		var showStr = "";
+		var cloudErrRel;
 
+		switch (parseInt(errNo))
+		{
+		case ENONE:
+			gCloudAccountBR["success"] = true;
+			gCloudAccountBR["noteF"] = label.cloudAccountBindSuccess;
+			return true;
+		case EINVACCOUNTREGISTED:
+			showStr = appendErrCode(label.cloudAcccountRegisted, errNo);
+			break;
+		case EINVACCOUNTNOTEXIST:
+			showStr = appendErrCode(errStr.invCloudAccountNotExist, errNo);
+			break;
+		case EINVPASSWORDFMT:
+		case EINVACCOUNTPWDFMT:
+			showStr = appendErrCode(errStr.pwdInvalid, errNo);
+			break;
+		case EINVACCOUNTPWDERR:
+			showStr = appendErrCode(label.passwdErr, errNo);
+			break;
+		case EINVCLOUDUSRCOUNTFORMAT:
+		case EINVACCOUNTEMAILFMT:
+		case EINVACCOUNTPHONENUMFMT:
+			showStr = appendErrCode(errStr.invCloudAccountFmtErr, errNo);
+			break;
+		case EINVACCOUNTRESETPWDCAPTCHAERR:
+		case EINVVERICODEFORMAT:
+			showStr = appendErrCode(errStr.CAPTCHAErrorTip, errNo);
+			break;
+		case EINVCLOUDERRORCAPTCHAINVAL:
+			showStr = appendErrCode(errStr.invCloudCAPTCHAInval, errNo);
+			break;
+		default:
+			cloudErrRel = cloudErrHandle(errNo);
+			if (cloudErrRel.result == false)
+			{
+				showStr = cloudErrRel.tip;
+			}
+			else
+			{
+				showStr = appendErrCode(errStr.invRequestFail, errNo);
+			}
+			break;
+		}
 
+		gCloudAccountBR["success"] = false;
+		showAlert(showStr, objOrId);
+		return false;
+	}
+
+	function gCloudAccountBRHd(callBack, timeoutCallBack, closeHandle)
+	{
+		showLoading(label.cloudAccoundRegistWaiting, closeHandle, undefined, false);
+		cloudAccountRegist(gCloudAccountBR["account"], gCloudAccountBR["accountType"], gCloudAccountBR["pwd"], gCloudAccountBR["CAPTCHAR"], function(code){
+			closeLoading();
+			if (true == gCloudAccountRegstErrHandle(code))
+			{
+				typeof callBack == "function" && callBack();
+			}
+		}, function(){
+			gCloudAccountBR["success"] = false;
+			gCloudAccountBR["noteF"] = label.cloudAccountRegistFail;
+			gCloudAccountBR["noteS"] = label.cloudServerNoRespCheckNetwork;
+			typeof timeoutCallBack == "function" && timeoutCallBack();
+		});
+	}
+
+	function gCloudAccountBindErrHandle(errNo, objOrId)
+	{
+		var showStr = "";
+		var cloudErrRel;
+
+		switch (parseInt(errNo))
+		{
+		case ENONE:
+			gCloudAccountBR["success"] = true;
+			gCloudAccountBR["noteF"] = label.cloudAccountBindSuccess;
+			return true;
+		case EINVACCOUNTBINDED:
+		case EINDEVICEALREADYBOUND:
+            showStr = label.cloudAccountBindFailAndCallSupport;
+            break;
+		case EINVDEVICEIDNOTEXIST:
+		case EINVERRORDEVICEIDFORMATERROR:
+			showStr = label.cloudDeviceInfoExpt;
+			break;
+		case EINVACCOUNTNOTEXIST:
+			showStr = appendErrCode(errStr.invCloudAccountNotExist, errNo);
+			break;
+		case EINVACCOUNTPWDERR:
+			showStr = appendErrCode(errStr.invCloudOldPwdErr, errNo);
+			break;
+		case EINVACCOUNTPHONENUMFMT:
+			showStr = appendErrCode(errStr.invCloudAccountFmtErr, errNo);
+			break;
+		default:
+			cloudErrRel = cloudErrHandle(errNo);
+			if (cloudErrRel.result == false)
+			{
+				showStr = cloudErrRel.tip;
+			}
+			else
+			{
+				showStr = appendErrCode(errStr.invRequestFail, errNo);
+			}
+			break;
+		}
+
+		gCloudAccountBR["success"] = false;
+		showAlert(showStr, objOrId);
+		return false;
+	}
+
+	function gCloudAccountBindHd(callBack, timeoutCallBack, closeHandle)
+	{
+		showLoading(label.cloudAccoundBindWaiting, closeHandle, undefined, false);
+		cloudAccountBind(gCloudAccountBR["account"], gCloudAccountBR["pwd"], function(code){
+			closeLoading();
+			if (true == gCloudAccountBindErrHandle(parseInt(code)))
+			{
+				gCloudAccountBR["success"] = true;
+				gCloudAccountBR["noteF"] = label.cloudAccountBindSuccess;
+				gCloudAccountBR["noteS"] = label.cloudServerNoRespCheckNetwork;
+				typeof callBack == "function" && callBack();
+			}
+		}, function(){
+			gCloudAccountBR["success"] = false;
+			gCloudAccountBR["noteF"] = label.cloudAccountBindFail;
+			gCloudAccountBR["noteS"] = label.cloudServerNoRespCheckNetwork;
+			typeof timeoutCallBack == "function" && timeoutCallBack();
+		});
+	}
+
+	function cloudRegistBindLoadPage()
+	{
+		loadPage("CloudBindRegistResult.htm", "cloudMgtDetial", undefined, {bClearPageTickArray:false});
+	}
+
+	function cloudRegistSubHd(checkSub)
+	{
+		if (true == checkSub())
+		{
+			gCloudAccountBRHd(function(){
+				/* 创建成功则登录 */
+				$.setTimeout(function(){
+					gCloudAccountBindHd(cloudRegistBindLoadPage, cloudRegistBindLoadPage, cloudAccountQueryStop);
+				}, 10);
+			}, cloudRegistBindLoadPage, cloudAccountQueryStop);
+		}
+	}
+
+	function init()
+	{
+		var account = id("cloudAccount");
+		var cloudPwd = id("cloudPwd");
+		var cloudConfPwd = id("cloudConfPwd");
+		var adminPwdBox = id("adminPwd");
+		var INLINE_BLOCK = ((isIESix || isIESeven) ? "inline":"inline-block");
+		var lgPwdNote = id("lgPwdNote");
+		var lgPwdConfNote = id("lgPwdConfNote");
+		var lgPwdNoteLess = id("lgPwdNoteLess");
+		var lgAgreeNote = id("lgAgreeNote");
+		var lgPwdNoteInvalidChar = id("lgPwdNoteInvalidChar");
+		var pwdDep = id("pwdDep");
+		var chgPwdDep = id("chgPwdDep");
+		var CAPTCHAGet = id("CAPTCHAGet");
+		var resend = id("resend");
+		var CAPTCHASendTip = id("CAPTCHASendTip");
+		var cloudRegistSub = id("cloudRegistSub");
+		var phoneAdvice = $("a.phoneAdvice");
+		var emailRegistTitle = id("emailRegistTitle");
+		var phoneRegistTitle = id("phoneRegistTitle");
+		var cloudAccountLbl = id("cloudAccountLbl");
+		var returnBtn = id("return");
+		var agree = id("agree");
+		var pwdDepI = id("pwdDepI");
+		var WAITING_CLOUD_RESPONSE_CAPTCHA = 2000;
+		var CAPTCHA_TIME = 1000;
+		var CAPTCHA_MAX_TIME = 120;
+		var ACCOUNT_TYPE_EMAIL = uciCloudConfig.optValue.accountTypeEmail;
+		var ACCOUNT_TYPE_PHONE = uciCloudConfig.optValue.accountTypePhoneNum;
+		var accountType = ACCOUNT_TYPE_PHONE;
+		var data = {};
+		var bGettingCAPTCHA = false;
+
+		id("productName").innerHTML = label.productName + proName;
+
+		function errHandle(errNo, objOrId)
+		{
+			var showStr = "";
+
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				return true;
+			case EINVERICODEEMPTY:
+				objOrId = "CAPTCHA";
+				showStr = errStr.invVericodeNULL;
+				break;
+			case EINVACCOUNTRESETPWDCAPTCHAERR:
+			case EINVVERICODEFORMAT:
+				objOrId = "CAPTCHA";
+				showStr = appendErrCode(errStr.CAPTCHAErrorTip, errNo);
+				break;
+			case EINVCLOUDUSRCOUNTFORMAT:
+			case EINVACCOUNTEMAILFMT:
+			case EINVACCOUNTPHONENUMFMT:
+				objOrId = account;
+				showStr = appendErrCode(errStr.invCloudAccountFmtErr, errNo);
+				break;
+			case EINVACCOUNTREGISTED:
+				objOrId = account;
+				showStr = appendErrCode(label.cloudAcccountRegisted, errNo);
+				break;
+			case EINVACCOUNTTYPEERR:
+				objOrId = account;
+				showStr = appendErrCode(errStr.invCloudAccountType, errNo);
+				break;
+			case EINVDEVICELOCKED:
+				showStr = appendErrCode(errStr.invCloudDeviceLocked, errNo);
+				break;
+			case EINVCLOUDERRORCAPTCHAINVAL:
+				showStr = appendErrCode(errStr.invCloudCAPTCHAInval, errNo);
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(errNo);
+				if (cloudErrRel.result == false)
+				{
+					showStr = cloudErrRel.tip;
+				}
+				else
+				{
+					showStr = errStr.invRequestFail;
+				}
+				break;
+			}
+
+			showAlert(showStr, objOrId);
+			return false;
+		}
+
+		function chkPswVal(szValue)
+		{
+			return (/^[\x21-\x7e]+$/.test(szValue));
+		}
+		function pwdConfFocus()
+		{
+			lgPwdNote.style.visibility = "hidden";
+		}
+		function pwdFocus()
+		{
+			lgPwdConfNote.style.visibility = "hidden";
+		}
+		function pwdConfCheck()
+		{
+			pwdConfFocus();
+
+			if (cloudConfPwd.value == cloudPwd.value)
+			{
+				lgPwdConfNote.style.visibility = "hidden";
+				return true;
+			}
+			else
+			{
+				lgPwdConfNote.style.visibility = "visible";
+				return false;
+			}
+		}
+		function pwdBlur()
+		{
+			var len = cloudPwd.value.length;
+
+			if (len >= 0 && len < 6)
+			{
+				$("#lgPwdNoteLess").css("display", INLINE_BLOCK).css("visibility", "visible");
+			}
+		}
+		function pwdCheckMixChars(str)
+		{
+			var hasNum = false;
+			var hasLetter = false;
+			var hasSymbol = false;
+
+			hasNum = /\d/g.test(str);
+			hasLetter = /[a-zA-Z]/g.test(str);
+			hasSymbol = /[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(str);
+
+			return hasNum&&hasSymbol&&hasLetter;
+		}
+		function pwdCheck()
+		{
+			var width = 24, tip = "";
+			var lgPwdlessTip = INLINE_BLOCK;
+			var lgPwdValTip = INLINE_BLOCK;
+			var pwdValue = cloudPwd.value;
+			var len = pwdValue.length;
+			var lgPwdNoteVi = "visible";
+			var result = true;
+			var iClass = "warn";
+
+			if (len >= 0 && len < 6)
+			{
+				result = false;
+				lgPwdValTip = "none";
+				$("#lgPwdNoteLess").css("display", INLINE_BLOCK).css("visibility", "visible");
+			}
+			else if(!chkPswVal(pwdValue))
+			{
+				lgPwdlessTip = "none";
+				result = false;
+			}
+			else if (len > 32)
+			{
+				lgPwdlessTip = "none";
+				lgPwdValTip = "none";
+				result = false;
+			}
+			else
+			{
+				lgPwdlessTip = "none";
+				lgPwdValTip = "none";
+			}
+
+			if ("none" != lgPwdlessTip || "none" != lgPwdValTip)
+			{
+				lgPwdNoteVi = "hidden";
+			}
+			else if (/^\d+$/.test(pwdValue) ||
+					/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(pwdValue) ||
+					/^[a-zA-Z]+$/.test(pwdValue))
+			{
+				if (len <= 10)
+				{
+					tip = label.weak;
+					width = width;
+				}
+				else
+				{
+					tip = label.media;
+					width = width*2;
+				}
+			}
+			else if (true == pwdCheckMixChars(pwdValue))
+			{
+				tip = label.strong;
+				width = width*3;
+				iClass = "correct";
+			}
+			else
+			{
+				if (len <= 10)
+				{
+					tip = label.media;
+					width = width*2;
+				}
+				else
+				{
+					tip = label.strong;
+					width = width*3;
+					iClass = "correct";
+				}
+			}
+
+			lgPwdNote.style.visibility = lgPwdNoteVi;
+			lgPwdNoteLess.style.display = lgPwdlessTip;
+			lgPwdNoteInvalidChar.style.display = lgPwdValTip;
+			pwdDep.innerHTML = tip;
+			chgPwdDep.style.width = width + "px";
+			pwdDepI.className = iClass;
+
+			return result;
+		}
+		function checkAccount()
+		{
+			var accountVal = account.value;
+
+			if (ACCOUNT_TYPE_PHONE == accountType)
+			{
+				if (0 == accountVal.length)
+				{
+					showNoteB("cloudAccountNote", label.cloudAccountPhoneMumNull);
+					return false;
+				}
+
+				if (false == checkNum(accountVal))
+				{
+					showNoteB("cloudAccountNote", label.cloudAccountPhoneNumFmtErr, "twoLine");
+					return false;
+				}
+				else if (false == checkPhoneNum(accountVal))
+				{
+					showNoteB("cloudAccountNote", label.cloudAccountPhoneNumFmtErr, "twoLine");
+					return false;
+				}
+				else
+				{
+					closeNote("cloudAccountNote");
+					return true;
+				}
+			}
+			else
+			{
+				if (0 == accountVal.length)
+				{
+					showNoteB("cloudAccountNote", label.cloudAccountEmailNull);
+					return false;
+				}
+				else if (64 < accountVal.length)
+				{
+					showNoteB("cloudAccountNote", errStr.invMailLen);
+					return false;
+				}
+
+				if (false == checkEmail(accountVal))
+				{
+					showNoteB("cloudAccountNote", label.cloudAccountEmailFmtErr);
+					return false;
+				}
+				else
+				{
+					closeNote("cloudAccountNote");
+					return true;
+				}
+			}
+		}
+		function checkSub()
+		{
+			var accountVal = account.value;
+			var pwdValue = cloudPwd.value;
+			var CAPTCHAVal = id("CAPTCHA").value;
+
+			/* 检查账号信息 */
+			if (false == checkAccount())
+			{
+				return false;
+			}
+
+			/* 检查密码 */
+			if (false == pwdCheck() || false == pwdConfCheck())
+			{
+				return false;
+			}
+			else
+			{
+				gCloudAccountBR["pwd"] = pwdValue;
+			}
+
+			/* 检查验证码 */
+			if (0 == CAPTCHAVal.length)
+			{
+				errHandle(EINVERICODEEMPTY);
+				return false;
+			}
+
+			gCloudAccountBR["account"] = accountVal;
+			gCloudAccountBR["CAPTCHAR"] = CAPTCHAVal;
+			gCloudAccountBR["accountType"] = accountType;
+
+			return true;
+		}
+
+		/* 获取验证码 */
+		function getCAPTCHA()
+		{
+			var captchaHd;
+			var accountVal = account.value;
+			var emailAddr = null;
+
+			if (true == bGettingCAPTCHA)
+			{
+				return;
+			}
+
+			if (true == checkAccount())
+			{
+				bGettingCAPTCHA = true;
+				captchaHd = $.setTimeout(function(){
+					showLoading(label.cloudServerWaitingResp, function(){
+						bGettingCAPTCHA = false;
+						cloudAccountQueryStop();
+					}, undefined, false);
+				}, WAITING_CLOUD_RESPONSE_CAPTCHA);
+
+				cloudAccountGetRegistAC(accountVal, accountType, function(code){
+					closeLoading();
+					clearTimeout(captchaHd);
+
+					if (true == errHandle(code))
+					{
+						showCAPTCHABtn(CAPTCHA_MAX_TIME);
+						CAPTCHASendTip.style.display = "block";
+						if (ACCOUNT_TYPE_EMAIL == accountType)
+						{
+							if (null != (emailAddr = emailLinkCheck(accountVal)))
+							{
+								CAPTCHASendTip.innerHTML = label.CAPTCHASentEmainTip +
+									"<a href='" + emailAddr + "' target='blank'>" + label.CAPTCHASentEmainTipS + "</a>";
+							}
+							else
+							{
+								CAPTCHASendTip.innerHTML = label.CAPTCHASentEmainTip + label.CAPTCHASentEmainTipS;
+							}
+						}
+						else
+						{
+							CAPTCHASendTip.innerHTML = label.CAPTCHASentPhTip;
+						}
+					}
+
+					bGettingCAPTCHA = false;
+				}, function(){
+					clearTimeout(captchaHd);
+					bGettingCAPTCHA = false;
+				});
+			}
+			else
+			{
+				bGettingCAPTCHA = false;
+			}
+		}
+
+		/* 设置验证码剩余的时间 */
+		function showCAPTCHABtn(time)
+		{
+			time = parseInt(time);
+
+			if (time <= 0)
+			{
+				CAPTCHAGet.style.display = "inline";
+				resend.style.display = "none";
+				resend.time = -1;
+			}
+			else
+			{
+				CAPTCHAGet.style.display = "none";
+				resend.value = btn.resend + "(" + time + ")";
+				resend.time = --time;
+				resend.style.display = "inline";
+			}
+		}
+
+		/* 验证码剩余的时间的守护函数 */
+		function CAPTCHATime()
+		{
+			if (resend.style.display != "none")
+			{
+				showCAPTCHABtn(resend.time);
+			}
+
+			$.setTimeout(arguments.callee, CAPTCHA_TIME);
+		}
+
+		function changeRegistType(type)
+		{
+			closeNote("cloudAccountNote");
+			accountType = type;
+			if (ACCOUNT_TYPE_PHONE == type)
+			{
+				cloudAccountLbl.innerHTML = label.phoneNum;
+				phoneRegistTitle.style.display = "block";
+				emailRegistTitle.style.display = "none";
+			}
+			else
+			{
+				cloudAccountLbl.innerHTML = label.emailBox;
+				phoneRegistTitle.style.display = "none";
+				emailRegistTitle.style.display = "block";
+			}
+		}
+
+		cloudPageSetNodes(true);
+		CAPTCHAGet.onclick = getCAPTCHA;
+		CAPTCHATime();
+
+		data[cloudClientStatus.fileName] = {};
+		data[cloudClientStatus.fileName][KEY_NAME] = cloudClientStatus.secName.regVeriCodeTimer;
+
+		$.query(data, function(result){
+			if (errHandle(result[ERR_CODE]))
+			{
+				var regTimerObj = result[cloudClientStatus.fileName][cloudClientStatus.secName.regVeriCodeTimer];
+
+				showCAPTCHABtn(parseInt(regTimerObj[cloudClientStatus.optName.regVeriCodeTimer]));
+			}
+		});
+
+		phoneAdvice[0].onclick = function(){
+			changeRegistType(ACCOUNT_TYPE_PHONE);
+		};
+		phoneAdvice[1].onclick = function(){
+			changeRegistType(uciCloudConfig.optValue.accountTypeEmail);
+		};
+		agree.checked = true;
+		agree.onclick = function(){
+			if (true == this.checked)
+			{
+				lgAgreeNote.style.visibility = "hidden";
+			}
+			else
+			{
+				lgAgreeNote.style.visibility = "visible";
+			}
+		};
+		cloudRegistSub.onclick = function(){
+			if (false == agree.checked)
+			{
+				lgAgreeNote.style.visibility = "visible";
+			}
+			else
+			{
+				cloudRegistSubHd(checkSub);
+			}
+		};
+
+		id("softVersionCloud").innerHTML += (gCloudAccountBR["softVersion"].split(" "))[0];
+		returnBtn.onclick = function(){
+			cloudGoBackBR({binded:false});
+		};
+		if (true == gCloudAccountBR["bFWzd"])
+		{
+			returnBtn.value = "{%btn.skip%}>";
+		}
+		else
+		{
+			returnBtn.value = "{%btn.backWzd%}>";
+		}
+
+		account.onblur = checkAccount;
+		cloudConfPwd.onkeyup = pwdConfCheck;
+		cloudConfPwd.onfocus = pwdConfFocus;
+		cloudConfPwd.onblur = pwdConfCheck;
+		cloudPwd.onkeyup = pwdCheck;
+		cloudPwd.onblur = pwdBlur;
+		cloudPwd.onfocus = pwdFocus;
+		lgPwdNoteInvalidChar.style.visibility = "visible";
+		lgPwdNoteInvalidChar.style.display = "none";
+	}
+	init();
+</script>
 <div class="cloudAccountLogo">
 	<label class="proName" id="productName">{%label.productName%}</label>
 </div>
@@ -94,22 +867,3 @@
 	<img src="../web-static/images/cloudS.png" class="cloudBRBgS" />
 	<img src="../web-static/images/cloudS.png" class="cloudBRBgT" />
 </div>
-<script type="text/javascript">function gCloudAccountRegstErrHandle(b,c){var a="";switch(parseInt(b)){case ENONE:return gCloudAccountBR.success=!0,gCloudAccountBR.noteF=label.cloudAccountBindSuccess,!0;case EINVACCOUNTREGISTED:a=appendErrCode(label.cloudAcccountRegisted,b);break;case EINVACCOUNTNOTEXIST:a=appendErrCode(errStr.invCloudAccountNotExist,b);break;case EINVPASSWORDFMT:case EINVACCOUNTPWDFMT:a=appendErrCode(errStr.pwdInvalid,b);break;case EINVACCOUNTPWDERR:a=appendErrCode(label.passwdErr,b);break;case EINVCLOUDUSRCOUNTFORMAT:case EINVACCOUNTEMAILFMT:case EINVACCOUNTPHONENUMFMT:a=
-appendErrCode(errStr.invCloudAccountFmtErr,b);break;case EINVACCOUNTRESETPWDCAPTCHAERR:case EINVVERICODEFORMAT:a=appendErrCode(errStr.CAPTCHAErrorTip,b);break;case EINVCLOUDERRORCAPTCHAINVAL:a=appendErrCode(errStr.invCloudCAPTCHAInval,b);break;default:a=cloudErrHandle(b),a=!1==a.result?a.tip:appendErrCode(errStr.invRequestFail,b)}gCloudAccountBR.success=!1;showAlert(a,c);return!1}
-function gCloudAccountBRHd(b,c,a){showLoading(label.cloudAccoundRegistWaiting,a,void 0,!1);cloudAccountRegist(gCloudAccountBR.account,gCloudAccountBR.accountType,gCloudAccountBR.pwd,gCloudAccountBR.CAPTCHAR,function(a){closeLoading();!0==gCloudAccountRegstErrHandle(a)&&"function"==typeof b&&b()},function(){gCloudAccountBR.success=!1;gCloudAccountBR.noteF=label.cloudAccountRegistFail;gCloudAccountBR.noteS=label.cloudServerNoRespCheckNetwork;"function"==typeof c&&c()})}
-function gCloudAccountBindErrHandle(b,c){var a="";switch(parseInt(b)){case ENONE:return gCloudAccountBR.success=!0,gCloudAccountBR.noteF=label.cloudAccountBindSuccess,!0;case EINVACCOUNTBINDED:case EINDEVICEALREADYBOUND:a=label.cloudAccountBindFailAndCallSupport;break;case EINVDEVICEIDNOTEXIST:case EINVERRORDEVICEIDFORMATERROR:a=label.cloudDeviceInfoExpt;break;case EINVACCOUNTNOTEXIST:a=appendErrCode(errStr.invCloudAccountNotExist,b);break;case EINVACCOUNTPWDERR:a=appendErrCode(errStr.invCloudOldPwdErr,
-b);break;case EINVACCOUNTPHONENUMFMT:a=appendErrCode(errStr.invCloudAccountFmtErr,b);break;default:a=cloudErrHandle(b),a=!1==a.result?a.tip:appendErrCode(errStr.invRequestFail,b)}gCloudAccountBR.success=!1;showAlert(a,c);return!1}
-function gCloudAccountBindHd(b,c,a){showLoading(label.cloudAccoundBindWaiting,a,void 0,!1);cloudAccountBind(gCloudAccountBR.account,gCloudAccountBR.pwd,function(a){closeLoading();!0==gCloudAccountBindErrHandle(parseInt(a))&&(gCloudAccountBR.success=!0,gCloudAccountBR.noteF=label.cloudAccountBindSuccess,gCloudAccountBR.noteS=label.cloudServerNoRespCheckNetwork,"function"==typeof b&&b())},function(){gCloudAccountBR.success=!1;gCloudAccountBR.noteF=label.cloudAccountBindFail;gCloudAccountBR.noteS=label.cloudServerNoRespCheckNetwork;
-"function"==typeof c&&c()})}function cloudRegistBindLoadPage(){loadPage("CloudBindRegistResult.htm","cloudMgtDetial",void 0,{bClearPageTickArray:!1})}function cloudRegistSubHd(b){!0==b()&&gCloudAccountBRHd(function(){$.setTimeout(function(){gCloudAccountBindHd(cloudRegistBindLoadPage,cloudRegistBindLoadPage,cloudAccountQueryStop)},10)},cloudRegistBindLoadPage,cloudAccountQueryStop)}
-function init(){function b(d,a){var b="";switch(parseInt(d)){case ENONE:return!0;case EINVERICODEEMPTY:a="CAPTCHA";b=errStr.invVericodeNULL;break;case EINVACCOUNTRESETPWDCAPTCHAERR:case EINVVERICODEFORMAT:a="CAPTCHA";b=appendErrCode(errStr.CAPTCHAErrorTip,d);break;case EINVCLOUDUSRCOUNTFORMAT:case EINVACCOUNTEMAILFMT:case EINVACCOUNTPHONENUMFMT:a=e;b=appendErrCode(errStr.invCloudAccountFmtErr,d);break;case EINVACCOUNTREGISTED:a=e;b=appendErrCode(label.cloudAcccountRegisted,d);break;case EINVACCOUNTTYPEERR:a=
-e;b=appendErrCode(errStr.invCloudAccountType,d);break;case EINVDEVICELOCKED:b=appendErrCode(errStr.invCloudDeviceLocked,d);break;case EINVCLOUDERRORCAPTCHAINVAL:b=appendErrCode(errStr.invCloudCAPTCHAInval,d);break;default:cloudErrRel=cloudErrHandle(d),b=!1==cloudErrRel.result?cloudErrRel.tip:errStr.invRequestFail}showAlert(b,a);return!1}function c(){z.style.visibility="hidden"}function a(){c();if(l.value==m.value)return r.style.visibility="hidden",!0;r.style.visibility="visible";return!1}function y(){var d=
-24,a="",b=p,c=p,k=m.value,e=k.length,g="visible",f=!0,h="warn";0<=e&&6>e?(f=!1,c="none",$("#lgPwdNoteLess").css("display",p).css("visibility","visible")):/^[\x21-\x7e]+$/.test(k)?32<e?(c=b="none",f=!1):c=b="none":(b="none",f=!1);if("none"!=b||"none"!=c)g="hidden";else if(/^\d+$/.test(k)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(k)||/^[a-zA-Z]+$/.test(k))10>=e?a=label.weak:(a=label.media,d*=2);else{var l=a=!1,n=!1,a=/\d/g.test(k),l=/[a-zA-Z]/g.test(k),n=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(k);
-!0==(a&&n&&l)?(a=label.strong,d*=3,h="correct"):10>=e?(a=label.media,d*=2):(a=label.strong,d*=3,h="correct")}z.style.visibility=g;H.style.display=b;s.style.display=c;I.innerHTML=a;J.style.width=d+"px";K.className=h;return f}function t(){var a=e.value;if(n==h){if(0==a.length)return showNoteB("cloudAccountNote",label.cloudAccountPhoneMumNull),!1;if(!1==checkNum(a)||!1==checkPhoneNum(a))return showNoteB("cloudAccountNote",label.cloudAccountPhoneNumFmtErr,"twoLine"),!1;closeNote("cloudAccountNote");return!0}if(0==
-a.length)return showNoteB("cloudAccountNote",label.cloudAccountEmailNull),!1;if(64<a.length)return showNoteB("cloudAccountNote",errStr.invMailLen),!1;if(!1==checkEmail(a))return showNoteB("cloudAccountNote",label.cloudAccountEmailFmtErr),!1;closeNote("cloudAccountNote");return!0}function L(){var d=e.value,c=m.value,f=id("CAPTCHA").value;if(!1==t()||!1==y()||!1==a())return!1;gCloudAccountBR.pwd=c;if(0==f.length)return b(EINVERICODEEMPTY),!1;gCloudAccountBR.account=d;gCloudAccountBR.CAPTCHAR=f;gCloudAccountBR.accountType=
-h;return!0}function u(a){a=parseInt(a);0>=a?(v.style.display="inline",g.style.display="none",g.time=-1):(v.style.display="none",g.value=btn.resend+"("+a+")",g.time=--a,g.style.display="inline")}function A(a){closeNote("cloudAccountNote");h=a;n==a?(B.innerHTML=label.phoneNum,C.style.display="block",D.style.display="none"):(B.innerHTML=label.emailBox,C.style.display="none",D.style.display="block")}var e=id("cloudAccount"),m=id("cloudPwd"),l=id("cloudConfPwd");id("adminPwd");var p=isIESix||isIESeven?
-"inline":"inline-block",z=id("lgPwdNote"),r=id("lgPwdConfNote"),H=id("lgPwdNoteLess"),E=id("lgAgreeNote"),s=id("lgPwdNoteInvalidChar"),I=id("pwdDep"),J=id("chgPwdDep"),v=id("CAPTCHAGet"),g=id("resend"),q=id("CAPTCHASendTip"),M=id("cloudRegistSub"),F=$("a.phoneAdvice"),D=id("emailRegistTitle"),C=id("phoneRegistTitle"),B=id("cloudAccountLbl"),G=id("return"),w=id("agree"),K=id("pwdDepI"),N=uciCloudConfig.optValue.accountTypeEmail,n=uciCloudConfig.optValue.accountTypePhoneNum,h=n,x={},f=!1;id("productName").innerHTML=
-label.productName+proName;cloudPageSetNodes(!0);v.onclick=function(){var a,c=e.value,g=null;!0!=f&&(!0==t()?(f=!0,a=$.setTimeout(function(){showLoading(label.cloudServerWaitingResp,function(){f=!1;cloudAccountQueryStop()},void 0,!1)},2E3),cloudAccountGetRegistAC(c,h,function(e){closeLoading();clearTimeout(a);!0==b(e)&&(u(120),q.style.display="block",N==h?null!=(g=emailLinkCheck(c))?q.innerHTML=label.CAPTCHASentEmainTip+"<a href='"+g+"' target='blank'>"+label.CAPTCHASentEmainTipS+"</a>":q.innerHTML=
-label.CAPTCHASentEmainTip+label.CAPTCHASentEmainTipS:q.innerHTML=label.CAPTCHASentPhTip);f=!1},function(){clearTimeout(a);f=!1})):f=!1)};(function(){"none"!=g.style.display&&u(g.time);$.setTimeout(arguments.callee,1E3)})();x[cloudClientStatus.fileName]={};x[cloudClientStatus.fileName][KEY_NAME]=cloudClientStatus.secName.regVeriCodeTimer;$.query(x,function(a){b(a[ERR_CODE])&&u(parseInt(a[cloudClientStatus.fileName][cloudClientStatus.secName.regVeriCodeTimer][cloudClientStatus.optName.regVeriCodeTimer]))});
-F[0].onclick=function(){A(n)};F[1].onclick=function(){A(uciCloudConfig.optValue.accountTypeEmail)};w.checked=!0;w.onclick=function(){E.style.visibility=!0==this.checked?"hidden":"visible"};M.onclick=function(){!1==w.checked?E.style.visibility="visible":cloudRegistSubHd(L)};id("softVersionCloud").innerHTML+=gCloudAccountBR.softVersion.split(" ")[0];G.onclick=function(){cloudGoBackBR({binded:!1})};G.value=!0==gCloudAccountBR.bFWzd?"{%btn.skip%}>":"{%btn.backWzd%}>";e.onblur=t;l.onkeyup=a;l.onfocus=
-c;l.onblur=a;m.onkeyup=y;m.onblur=function(){var a=m.value.length;0<=a&&6>a&&$("#lgPwdNoteLess").css("display",p).css("visibility","visible")};m.onfocus=function(){r.style.visibility="hidden"};s.style.visibility="visible";s.style.display="none"}init();
-</script><style type="text/css">body{background:#5e85c0!important;fontSize:12px;height:100%}span.phoneRegist{color:#fff;font-size:18px;font-weight:bold}span.phoneAdvice{color:#fff;font-size:14px;font-weight:bold}a.phoneAdvice{color:#184283;font-weight:bold;font-size:14px;margin-left:28px;text-decoration:none}input.resendBtn{background:#5e85c0;border-radius:5px;border:1px solid #184283;color:#184283;cursor:pointer;height:25px;font-size:12px;margin-left:5px;vertical-align:middle;width:92px}label.agreeAndRead{color:#fff;font-size:12px;margin-left:5px;line-height:30px;vertical-align:middle}a.cloudRegistProtocalA{color:#fff;font-size:12px;vertical-align:middle}li.textConE1 label{color:#fff;font-size:12px;line-height:36px;vertical-align:middle;margin-left:5px}input.returnBtn{background:#335c9c;border-radius:3px;border:0;color:#fff;cursor:pointer;height:25px;position:absolute;top:0;right:15px;width:60px}#cloudRgProtocalCon{position:relative;z-index:1012;width:715px;margin:0 auto;height:0;line-height:0;font-size:0;visibility:hidden;top:-9999px}div.cloudRgProtocal{background:#fff;font-size:12px;line-height:normal;height:485px;position:absolute;top:90px;margin:0 auto;width:715px}p.cloudRgProtocalTitle{height:35px;background:#5e85c0}p.cloudRgProtocalTitle span{color:#fff;line-height:35px;margin-left:20px}p.cloudRgProtocalTitle i{background:url(../web-static/images/routerBg.png) -422px -108px no-repeat;cursor:pointer;float:right;height:20px;width:20px;margin:7px 7px 0 0}div.cloudRgDetialCon{color:#3c3e43;padding:0 30px;margin:30px 10px 0;height:375px;overflow:hidden;text-align:center}div.cloudRgDetialCon h1{font-size:24px;line-height:24px;margin-bottom:40px}#cloudRgDetial{font-size:12px;text-align:left}label.proName{right:16px;font-size:12px;color:#fff;margin-top:18px;margin-left:20px;text-align:left;position:absolute}</style>

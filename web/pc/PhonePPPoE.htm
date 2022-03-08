@@ -1,5 +1,207 @@
+<script type="text/javascript">
+	function init()
+	{
+		function initWanPwdConfirm()
+		{
+			id("notEncrypt").onclick = function(){
+				hideCover(function(){
+					phWanCover.style.visibility = "hidden";
+					phWanCover.style.top = "-9999px";
+				});
+				loadPage("WizardWirelessCfg.htm", "phCon");
+				saveNetworkCfg(uciProto.optValue.proto.pppoe);
+			};
 
+			id("encrypt").onclick = function(){
+				hideCover(function(){
+					phWanCover.style.visibility = "hidden";
+					phWanCover.style.top = "-9999px";
+				});
+				id("pppoeAccount").focus();
+			};
+		}
 
+		function onSave()
+		{
+			var nameVal = id("pppoeAccount").value;
+			var pswVal = id("pppoePasswd").value;
+
+			/* 检查合法性 */
+			if ((0 == nameVal.length) || (0 == pswVal.length))
+			{
+				showCover(function(){
+					phWanCover.style.visibility = "visible";
+					phWanCover.style.top = "150px";
+				});
+				return;
+			}
+
+			saveNetworkCfg(uciProto.optValue.proto.pppoe, function(){
+				var conArg = {"network":{"change_wan_status":{"proto":"pppoe", "operate":"connect"}}};
+
+				loadPage("WizardWirelessCfg.htm", "phCon");
+				$.action(conArg);
+			});
+		}
+
+		var phWanCover = id("phWanCover");
+		initWanPwdConfirm();
+
+		// wzdSelectInit("netModeSel", wzOptions, WAN_TYPE_PPPOE, wzdNetWorkModeChange);
+		id("sub").onclick = onSave;
+
+		/* 修复IOS系统CNA浏览器默认使用第三方输入法无法输入的问题 */
+		adaptCNABrowserInput("pppoeAccount");
+
+		$("#togglePwdShow").click(function() {
+			$("#togglePwdShow").toggleClass("pwdShowOff pwdShowOn");
+			id("pppoePasswd").type = $("#togglePwdShow").attr("class") == "pwdShowOff"
+				? "password" : "text";
+		});
+
+		showNetworkCfg(uciProto.optValue.proto.pppoe);
+
+		if (gSupportWanPortSwap && !gWanPortDetectSupport) {
+			$("#phWanPortSelDiv").removeClass("disNone");
+			// wzdSelectInit("wanPortSel", wanPortDisplayList, gWanPortSelCfg, wzdWanPortChange);
+			// $("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg));
+		}
+
+		loadPage("PhoneSelectNetworkType.htm", "selectNetTypeCon");
+		// 手动选择上网方式
+		$(".chooseOther a").click(function(e) {
+			showCover();
+			$(".selectNetType").show();
+		});
+
+		if(bWzdWanTypeDetected) {
+			$(".notDetected").hide();
+			$(".detected").show();
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	div.phoneCon{
+		padding-bottom: 114px;
+	}
+	#phWanCover, #phWanLoadingCover{
+		position:absolute;
+		top:-9999px;
+		visibility:hidden;
+		width:100%;
+		z-index:1011;
+	}
+	div.phAlertCon, div.phLoadingCon{
+		background:#ffffff;
+		margin:0 auto;
+		text-align:center;
+		width:300px;
+	}
+	img.errWarn{
+		height:85px;
+		margin:25px auto;
+		width:85px;
+	}
+	div.phAlertCon p{
+		color:#3c4e43;
+		font-size:16px;
+		margin-bottom:30px;
+	}
+	div.phAlertCon label{
+		border:medium none;
+		display:inline-block;
+		font-size:16px;
+		line-height:35px;
+		height:35px;
+		padding:0;
+		width:50%;
+	}
+	label.notEncrypt{
+		background:#d9d9d9;
+	}
+	label.encrypt{
+		background:#feeb1a;
+	}
+	img.loading{
+		height:85px;
+		width:85px;
+		margin:25px auto;
+	}
+	div.phLoadingCon p{
+		color: #3c4e43;
+		font-size: 16px;
+		padding-bottom: 50px;
+		line-height: 16px;
+		height: 16px;
+	}
+	li.phInputLi label.wanPortSel{
+		width: 91px;
+	}
+	li.phInputLi span.phSelect span.wanPortSel{
+		width: 118px;
+	}
+	li.phInputLi input{
+		box-sizing:border-box;
+	}
+	li.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+	}
+	li.wanPortSelTips label{
+		text-align:right;
+		display:inline-block;
+		vertical-align:middle;
+		height:20px;
+		line-height:20px;
+		width: 105px;
+	}
+	li.wanPortSelTips span.wanPortSelTips{
+		height:20px;
+		line-height:20px;
+		width: 118px;
+		color:#FFF;
+		font-size:14px;
+	}
+	ul.wanPortSel{
+		margin-bottom:10px;
+	}
+	ul.wanPortSelTips{
+		margin-bottom:16px;
+	}
+	p.chooseOther{
+		position:absolute;
+		bottom:72px;
+		width:100%;
+		text-align:center;
+	}
+	p a{
+		color:#FEEB1A;
+		font-size:14px;
+	}
+	p.detectTip{
+		color:#ffffff;
+		font-size:14px;
+		font-weight:bold;
+		text-align:left;
+	}
+	div.textCenter{
+		text-align:center;
+	}
+	img.detected{
+		margin:20px auto 20px;
+	}
+	li.phErrTip i.error{
+		background:url(../web-static/images/error@2x.png) no-repeat;
+		width:16px;
+		height:16px;
+		top:0;
+		background-size:cover;
+	}
+	li.phErrTip span.errDes {
+		line-height:16px;
+	}
+</style>
 <h1 class="phoneTitle">{%label.netSet%}</h1>
 <div class="textCenter">
 	<img class="detected disNone" src="../web-static/images/connect_success.png" />
@@ -68,7 +270,3 @@
 </div>
 <p class="chooseOther"><a href="javascript:void(0)">{%label.selectNetType%}</a></p>
 <div id="selectNetTypeCon"></div>
-<script type="text/javascript">function init(){var a=id("phWanCover");(function(){id("notEncrypt").onclick=function(){hideCover(function(){a.style.visibility="hidden";a.style.top="-9999px"});loadPage("WizardWirelessCfg.htm","phCon");saveNetworkCfg(uciProto.optValue.proto.pppoe)};id("encrypt").onclick=function(){hideCover(function(){a.style.visibility="hidden";a.style.top="-9999px"});id("pppoeAccount").focus()}})();id("sub").onclick=function(){var b=id("pppoeAccount").value,c=id("pppoePasswd").value;0==b.length||0==c.length?showCover(function(){a.style.visibility=
-"visible";a.style.top="150px"}):saveNetworkCfg(uciProto.optValue.proto.pppoe,function(){loadPage("WizardWirelessCfg.htm","phCon");$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})})};adaptCNABrowserInput("pppoeAccount");$("#togglePwdShow").click(function(){$("#togglePwdShow").toggleClass("pwdShowOff pwdShowOn");id("pppoePasswd").type="pwdShowOff"==$("#togglePwdShow").attr("class")?"password":"text"});showNetworkCfg(uciProto.optValue.proto.pppoe);gSupportWanPortSwap&&!gWanPortDetectSupport&&
-$("#phWanPortSelDiv").removeClass("disNone");loadPage("PhoneSelectNetworkType.htm","selectNetTypeCon");$(".chooseOther a").click(function(a){showCover();$(".selectNetType").show()});bWzdWanTypeDetected&&($(".notDetected").hide(),$(".detected").show())}init();
-</script><style type="text/css">div.phoneCon{padding-bottom:114px}#phWanCover,#phWanLoadingCover{position:absolute;top:-9999px;visibility:hidden;width:100%;z-index:1011}div.phAlertCon,div.phLoadingCon{background:#fff;margin:0 auto;text-align:center;width:300px}img.errWarn{height:85px;margin:25px auto;width:85px}div.phAlertCon p{color:#3c4e43;font-size:16px;margin-bottom:30px}div.phAlertCon label{border:medium none;display:inline-block;font-size:16px;line-height:35px;height:35px;padding:0;width:50%}label.notEncrypt{background:#d9d9d9}label.encrypt{background:#feeb1a}img.loading{height:85px;width:85px;margin:25px auto}div.phLoadingCon p{color:#3c4e43;font-size:16px;padding-bottom:50px;line-height:16px;height:16px}li.phInputLi label.wanPortSel{width:91px}li.phInputLi span.phSelect span.wanPortSel{width:118px}li.phInputLi input{box-sizing:border-box}li.wanPortSelTips{height:20px;line-height:20px}li.wanPortSelTips label{text-align:right;display:inline-block;vertical-align:middle;height:20px;line-height:20px;width:105px}li.wanPortSelTips span.wanPortSelTips{height:20px;line-height:20px;width:118px;color:#FFF;font-size:14px}ul.wanPortSel{margin-bottom:10px}ul.wanPortSelTips{margin-bottom:16px}p.chooseOther{position:absolute;bottom:72px;width:100%;text-align:center}p a{color:#feeb1a;font-size:14px}p.detectTip{color:#fff;font-size:14px;font-weight:bold;text-align:left}div.textCenter{text-align:center}img.detected{margin:20px auto 20px}li.phErrTip i.error{background:url(../web-static/images/error@2x.png) no-repeat;width:16px;height:16px;top:0;background-size:cover}li.phErrTip span.errDes{line-height:16px}</style>

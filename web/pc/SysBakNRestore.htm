@@ -1,5 +1,256 @@
+<style type="text/css">
+	div.bakNRstrBlock{
+		color:#FFFFFF;
+		font-size:12px;
+		margin-bottom:60px;
+		padding:10px 0 0 43px;
+		text-align:left;
+	}
+	#restoreIf{
+		top:-9999px;
+		position:absolute;
+		visibility:hidden;
+	}
+	div.fileDiv{
+		width:320px;
+		height:31px;
+		margin-top:10px;
+		overflow:hidden;
+		position:relative;
+		vertical-align:middle;
+	}
+	input.file{
+		font-size:110px;
+		top:-5px;
+		right:-5px;
+		opacity:0;
+		filter:alpha(opacity:0);
+		cursor:pointer;
+		position:absolute;
+		vertical-align:top;
+	}
+	input.fileTxt{
+		width:226px;
+		height:30px;
+		line-height:30px;
+		color:#FFFFFF;
+		font-size:12px;
+		border:0px;
+		border-radius:3px;
+		padding:0 2px 0 4px;
+		vertical-align:middle;
+		background:#2ba2d8;
+	}
+	input.fileBrowse{
+		padding:3px 18px;
+		*padding:2px 12px 0px;
+		margin-left:5px;
+		vertical-align:middle;
+	}
+	p.bakNRstr{
+		margin-top:30px;
+	}
+	#sysBackup{
+		margin-left:0px !important;
+	}
+	#sysRestore{
+		margin-left:0px !important;
+	}
+	p.restoreDesTi{
+		margin-top:30px;
+	}
+	ul.restoreNotice{
+		color:#FFFFFF;
+		list-style:none;
+	}
+	li.restoreNoticeT{
+		line-height:20px;
+		padding-top:10px;
+		width:520px;
+	}
+	li.restoreNoticeB{
+		line-height:20px;
+		padding-top:20px;
+		width:510px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var restoreTimeoutTag = false;
+		var restoreTimeoutHd = null;
 
+		function checkFile()
+		{
+			var fileName = file.value;
 
+			if (fileName == "")					/* check */
+			{
+				showAlert(label.upConfigWarn);
+				return false;
+			}
+			else if (fileName.search(/\.bin$/) == -1)
+			{
+				showAlert(errStr.fileFmttErr);
+				return false;
+			}
+
+			return true;
+		}
+
+		function reboot() {
+			var reqData = {system: {reboot:null}};
+
+			$.action(reqData, function(){});
+		}
+
+		function upLoadCallBack(code)
+		{
+			if (code == ENONE)	/* 固件没问题 */
+			{
+				var domain, lanIp;
+				var reqData = {}, rebootData;
+
+				if (true == restoreTimeoutTag)
+				{
+					return;
+				}
+
+				clearTimeout(restoreTimeoutHd);
+				restoreTimeoutHd = null;
+				closeLoading();
+
+				reqData[uciNetwork.fileName] = {};
+				reqData[uciDeviceInfo.fileName] = {};
+				reqData[uciNetwork.fileName][KEY_NAME] = [uciNetwork.secName.lan];
+				reqData[uciDeviceInfo.fileName][KEY_NAME] = [uciDeviceInfo.secName.info];
+
+				$.query(reqData,
+					function(data){
+						data = data || {};
+						if (data[ERR_CODE] == ENONE) {
+							lanIp = data[uciNetwork.fileName][uciNetwork.secName.lan]
+									[uciNetwork.optName.ip];
+							domain = data[uciDeviceInfo.fileName][uciDeviceInfo.secName.info]
+									[uciDeviceInfo.optName.domainName];
+						}
+					},
+					false
+				);
+
+				if (lanIp == null) {
+					showAlert(errorStr.reqDataIsNull);
+					return;
+				}
+
+				rebootData = {system: {reboot:null}};
+
+				$.action(rebootData, function(result){
+					var waitTime = parseInt(result["wait_time"], 10)  * 1000 || REBOOT_SECONDS;
+					showProgBar(waitTime, undefined, function(){
+						$.changeDomain(lanIp);
+						lanDetecting(function(){
+							window.location.href = ((location.href.toString()).indexOf(domain) == -1) ?
+								("http://" + lanIp) : ("http://" + domain);
+						});
+					}, true, statusStr.rebootOk, statusStr.rebootTip);
+				});
+			}
+			else if (code == EFILETOOBIG)
+			{
+				showAlert(errStr.fileSizeErr);
+			}
+			else /* 固件有问题 */
+			{
+				showAlert(errStr.bakNRestoreFail);
+			}
+		}
+		function restoreTimeout()
+		{
+			closeLoading();
+			closeProgBar();
+			restoreTimeoutTag = true;
+			clearTimeout(restoreTimeoutHd);
+			id("restoreIf").onload = null;
+			showAlert(errStr.restoreFail);
+		}
+		function BNREventBind()
+		{
+			var sysRestore = id("sysRestore");
+			var sysBackup = id("sysBackup");
+			file.onchange = function (){
+				var tempStr = this.value;
+
+				tempStr = tempStr.substring(tempStr.lastIndexOf('\\') + 1);	/* 统一所有浏览器不显示完全的文件路径 */
+				id("textfield").value = tempStr;
+			};
+
+			if (USER_GROUP_REMOTE == $.authRltObj["group"])
+			{
+				disableBtn(sysRestore, true);
+				disableBtn(sysBackup, true);
+			}
+			else
+			{
+				sysRestore.onclick = function()
+				{
+					if (checkFile())
+					{
+						showConfirm(label.upConfig, function(choose){
+							if (true == choose)
+							{
+								var reqData = {};
+
+								reqData[uciSystem.fileName] = {};
+								reqData[uciSystem.fileName][uciSystem.actionName.uploadConf] = null;
+
+								$("#restoreIf").one("load", function(){
+									iFrmOnload("restoreIf", upLoadCallBack);
+								});
+
+								showLoading(label.bakUploadingTip, undefined, undefined, false);
+								restoreTimeoutHd = $.setTimeout(restoreTimeout, 25000);
+
+								/* 判断是否超时 */
+								$.action(reqData, function(data){
+									if (ENONE == data[ERR_CODE])
+									{
+										formObj.action = $.orgURL(data["url"]);
+										formObj.submit();
+										formObj.reset();
+										restoreTimeoutTag = false;
+									}
+									else
+									{
+										restoreTimeout();
+									}
+								});
+							}
+						});
+					}
+				};
+
+				sysBackup.onclick = function()
+				{
+					var reqData = {};
+					reqData[uciSystem.fileName] = {};
+					reqData[uciSystem.fileName][uciSystem.actionName.downloadConf] = null;
+
+					/* 判断是否超时 */
+					$.action(reqData, function(data){
+						location.href = $.orgURL(data["url"]);
+					}, true);
+				};
+			}
+		}
+
+		var formObj = document.forms[0];
+		var file = id("fileName");
+
+		BNREventBind();
+	}
+	init();
+</script>
 <div id="hcCo" class="hcCo">
 	<div class="hsHelp"></div>
 	<div class="title">
@@ -34,8 +285,3 @@
 		</ul>
 	</div>
 </div>
-<script type="text/javascript">function init(){function k(){var a=g.value;return""==a?(showAlert(label.upConfigWarn),!1):-1==a.search(/\.bin$/)?(showAlert(errStr.fileFmttErr),!1):!0}function l(a){if(a==ENONE){var b,c;a={};!0!=e&&(clearTimeout(d),d=null,closeLoading(),a[uciNetwork.fileName]={},a[uciDeviceInfo.fileName]={},a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.secName.lan],a[uciDeviceInfo.fileName][KEY_NAME]=[uciDeviceInfo.secName.info],$.query(a,function(a){a=a||{};a[ERR_CODE]==ENONE&&(c=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip],
-b=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info][uciDeviceInfo.optName.domainName])},!1),null==c?showAlert(errorStr.reqDataIsNull):(a={system:{reboot:null}},$.action(a,function(a){a=1E3*parseInt(a.wait_time,10)||REBOOT_SECONDS;showProgBar(a,void 0,function(){$.changeDomain(c);lanDetecting(function(){window.location.href=-1==location.href.toString().indexOf(b)?"http://"+c:"http://"+b})},!0,statusStr.rebootOk,statusStr.rebootTip)})))}else a==EFILETOOBIG?showAlert(errStr.fileSizeErr):showAlert(errStr.bakNRestoreFail)}
-function h(){closeLoading();closeProgBar();e=!0;clearTimeout(d);id("restoreIf").onload=null;showAlert(errStr.restoreFail)}var e=!1,d=null,f=document.forms[0],g=id("fileName");(function(){var a=id("sysRestore"),b=id("sysBackup");g.onchange=function(){var a=this.value,a=a.substring(a.lastIndexOf("\\")+1);id("textfield").value=a};USER_GROUP_REMOTE==$.authRltObj.group?(disableBtn(a,!0),disableBtn(b,!0)):(a.onclick=function(){k()&&showConfirm(label.upConfig,function(a){!0==a&&(a={},a[uciSystem.fileName]=
-{},a[uciSystem.fileName][uciSystem.actionName.uploadConf]=null,$("#restoreIf").one("load",function(){iFrmOnload("restoreIf",l)}),showLoading(label.bakUploadingTip,void 0,void 0,!1),d=$.setTimeout(h,25E3),$.action(a,function(a){ENONE==a[ERR_CODE]?(f.action=$.orgURL(a.url),f.submit(),f.reset(),e=!1):h()}))})},b.onclick=function(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.actionName.downloadConf]=null;$.action(a,function(a){location.href=$.orgURL(a.url)},!0)})})()}init();
-</script><style type="text/css">div.bakNRstrBlock{color:#fff;font-size:12px;margin-bottom:60px;padding:10px 0 0 43px;text-align:left}#restoreIf{top:-9999px;position:absolute;visibility:hidden}div.fileDiv{width:320px;height:31px;margin-top:10px;overflow:hidden;position:relative;vertical-align:middle}input.file{font-size:110px;top:-5px;right:-5px;opacity:0;filter:alpha(opacity:0);cursor:pointer;position:absolute;vertical-align:top}input.fileTxt{width:226px;height:30px;line-height:30px;color:#fff;font-size:12px;border:0;border-radius:3px;padding:0 2px 0 4px;vertical-align:middle;background:#2ba2d8}input.fileBrowse{padding:3px 18px;*padding:2px 12px 0;margin-left:5px;vertical-align:middle}p.bakNRstr{margin-top:30px}#sysBackup{margin-left:0!important}#sysRestore{margin-left:0!important}p.restoreDesTi{margin-top:30px}ul.restoreNotice{color:#fff;list-style:none}li.restoreNoticeT{line-height:20px;padding-top:10px;width:520px}li.restoreNoticeB{line-height:20px;padding-top:20px;width:510px}</style>

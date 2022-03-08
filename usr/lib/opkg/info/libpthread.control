@@ -8,5 +8,5 @@ Status: unknown hold not-installed
 Essential: yes
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Architecture: ipq
-Installed-Size: 125
+Installed-Size: 126
 Description:  POSIX thread library

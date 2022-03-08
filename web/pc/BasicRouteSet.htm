@@ -1,5 +1,225 @@
+<style type="text/css">
+	div.bConfLBC{
+		background:#70D2EF;
+	}
+	div.bConfRBC{
+		background:#4ABDE0;
+	}
+	h1.bMdelTitle{
+		text-shadow:2px 2px #62B6CE;
+	}
+	div.menuCon{
+		height:34.2em;
+		overflow:hidden;
+		margin:20px 5px 0 0;
+		padding-right:10px;
+		position:relative;
+	}
+	#sysLog_rsMenu{
+		border:none !important;
+	}
+	li.menuLi{
+		color:#1E96D4;
+	}
+	li.menuLiClick{
+		color:#FFFFFF;
+		text-shadow:2px 2px #62B6CE;
+	}
+	li.menuLi i.hsMenuCloud{
+		background:url(../web-static/images/routerBg.png) -206px -1px no-repeat;
+	}
+	li.menuLiClick i.hsMenuCloud{
+		background:url(../web-static/images/routerBg.png) -233px -1px no-repeat;
+	}
+	li.menuLi i.hsMenuNetWork{
+		background:url(../web-static/images/routerBg.png) -206px -28px no-repeat;
+	}
+	li.menuLiClick i.hsMenuNetWork{
+		background:url(../web-static/images/routerBg.png) -233px -28px no-repeat;
+	}
+	li.menuLi i.hsMenuWlan{
+		background:url(../web-static/images/routerBg.png) -206px -57px no-repeat;
+	}
+	li.menuLiClick i.hsMenuWlan{
+		background:url(../web-static/images/routerBg.png) -233px -57px  no-repeat;
+	}
+	li.menuLi i.hsMenuNetControl{
+		background:url(../web-static/images/routerBg.png) -206px -86px no-repeat;
+	}
+	li.menuLiClick i.hsMenuNetControl{
+		background:url(../web-static/images/routerBg.png) -233px -86px no-repeat;
+	}
+	li.menuLi i.hsMenuAdvUser{
+		background:url(../web-static/images/routerBg.png) -206px -114px no-repeat;
+	}
+	li.menuLiClick i.hsMenuAdvUser{
+		background:url(../web-static/images/routerBg.png) -233px -114px no-repeat;
+	}
+	li.menuLi i.hsMenuFileShare{
+		background:url(../web-static/images/fileShareBg.png) -160px 0px no-repeat;
+	}
+	li.menuLiClick i.hsMenuFileShare{
+		background:url(../web-static/images/fileShareBg.png) -160px -25px no-repeat;
+	}
+	li.menuLi i.hsMenuPbcEnable{
+		background:url(../web-static/images/pbcEnbaleNormal.png) no-repeat;
+	}
+	li.menuLiClick i.hsMenuPbcEnable{
+		background:url(../web-static/images/pbcEnbalePress.png) no-repeat;
+	}
+	li.menuLi i.hsMenuLed{
+		background:url(../web-static/images/hyfiBg.png) -25px 0px no-repeat;
+	}
+	li.menuLiClick i.hsMenuLed{
+		background:url(../web-static/images/hyfiBg.png) -25px -25px no-repeat;
+	}
+	li.menuLi i.hsMenuEquipment{
+		background:url(../web-static/images/routerBg.png) -260px -1px no-repeat;
+	}
+	li.menuLiClick i.hsMenuEquipment{
+		background:url(../web-static/images/routerBg.png) -288px -1px no-repeat;
+	}
+	li.menuLi i.hsMenuSmbCloudManage{
+		background:url(../web-static/images/routerBg.png) -488px -381px no-repeat;
+	}
+	li.menuLiClick i.hsMenuSmbCloudManage{
+		background:url(../web-static/images/routerBg.png) -515px -381px no-repeat;
+	}
+	li.menuLi i.hsMenuSysLog{
+		background:url(../web-static/images/routerBg.png) -260px -31px no-repeat;
+	}
+	li.menuLiClick i.hsMenuSysLog{
+		background:url(../web-static/images/routerBg.png) -288px -31px no-repeat;
+	}
+	li.menuLi i.hsMenuElink{
+		background:url(../web-static/images/elinkNorm.png) no-repeat;
+	}
+	li.menuLiClick i.hsMenuElink{
+		background:url(../web-static/images/elinkClick.png) no-repeat;
+	}
+	li.menuLi i.hsMenuBridgeSwitch{
+		background:url(../web-static/images/switchmode_normal.png) no-repeat;
+	}
+	li.menuLiClick i.hsMenuBridgeSwitch{
+		background:url(../web-static/images/switchmode_press.png) no-repeat;
+	}
+	li.menuLi i.hsMenuCHgPwd{
+		background:url(../web-static/images/routerBg.png) -260px -57px  no-repeat;
+	}
+	li.menuLiClick i.hsMenuCHgPwd{
+		background:url(../web-static/images/routerBg.png) -288px -57px  no-repeat;
+	}
+	li.menuLi i.hsMenuBakRs{
+		background:url(../web-static/images/routerBg.png) -260px -85px no-repeat;
+	}
+	li.menuLiClick i.hsMenuBakRs{
+		background:url(../web-static/images/routerBg.png) -288px -85px no-repeat;
+	}
+	li.menuLi i.hsMenuReBootSet{
+		background:url(../web-static/images/routerBg.png) -260px -114px no-repeat;
+	}
+	li.menuLiClick i.hsMenuReBootSet{
+		background:url(../web-static/images/routerBg.png) -288px -114px no-repeat;
+	}
+	li.menuLi i.hsMenuHNat{
+		background:url(../web-static/images/hnatBlue.png) no-repeat;
+	}
+	li.menuLiClick i.hsMenuHNat{
+		background:url(../web-static/images/hnatWhite.png) no-repeat;
+	}
+	li.menuLi i.hsMenuCustomLed{
+		background:url(../web-static/images/led.png) no-repeat;
+	}
+	li.menuLiClick i.hsMenuCustomLed{
+		background:url(../web-static/images/ledWhite.png) no-repeat;
+	}
+	li.menuLi i.hsMenuAlinkTest{
+		background:url(../web-static/images/routerBg.png) -206px -1px no-repeat;
+	}
+	li.menuLiClick i.hsMenuAlinkTest{
+		background:url(../web-static/images/routerBg.png) -233px -1px no-repeat;
+	}
+	li.menuLi i.hsMenuPortSet{
+		background:url(../web-static/images/routerBg.png) -432px -384px no-repeat;
+	}
+	li.menuLiClick i.hsMenuPortSet{
+		background:url(../web-static/images/routerBg.png) -456px -384px no-repeat;
+	}
+	label.menuLbl{
+		white-space:pre;
+		cursor:pointer;
+		margin-left:15px;
+		vertical-align:middle;
+	}
+	i.menuC{
+		width:10px;
+		height:9px;
+		top:27px;
+		*top:25px;
+		right:10px;
+		font-size:0px;
+		position:absolute;
+		vertical-align:middle;
+		background:url(../web-static/images/routerBg.png) -426px -89px no-repeat;
+	}
+	li.menuLi i.menuC{
+		visibility:hidden;
+	}
+	li.menuLiClick i.menuC{
+		visibility:visible;
+	}
+	#dualWanWrapper ul{
+		display:inline-block;
+	}
+	#dualWanWrapper ul label{
+		display:table-cell;
+		width: 160px;
+        font-size: 14px;
+        color: #FFFFFF;
+        line-height: 32px;
+        text-align: center;
+        border: 1px solid #FFFFFF;
+        cursor: pointer;
+	}
+	#dualWanWrapper ul label.selected {
+        color: #2BA2D8;
+        background-color: #FFFFFF;
+	}
+	#dualWanWrapper ul label:first-child {
+        border-radius: 4px 0 0 4px;
+	}
+	#dualWanWrapper ul label:last-child {
+        border-radius: 0 4px 4px 0;
+	}
+	.dualWanWrapper{
+		width: 787px;
+		text-align: center;
+		padding-bottom: 32px;
+		position: relative;
+		top: -2px;
+	}
+</style>
+<script type="text/javascript">
+	var gBasicRouteSetRNiceScroll;
 
+	function init()
+	{
+		gBasicRouteSetRNiceScroll = new NiceScroll("routeSetRCon");
+		gBasicRouteSetRNiceScroll.scrollTipOpacity(1);
+		gBasicRouteSetRNiceScroll.scrollTipSet({"background":"#34A9DA"});
+		gBasicRouteSetRNiceScroll.init();
 
+		/* 设置下拉框位于滚动容器底部时自动居中选项 */
+		setSelectAutoMiddleOption({
+			enable: true,
+			outerScrollContainerId: "routeSetRCon",
+			bottomVal: 7/10
+		});
+
+		menuInit_BRS();
+	}
+	init();
+</script>
 <div class="bConfL bConfLBC"></div>
 <div class="bConfR bConfRBC"></div>
 <div id="bConCnt">
@@ -18,5 +238,4 @@
 		</div>
 		<div id="routeSetRCon" class="bcRCon"></div>
 	</div>
-</div><script type="text/javascript">var gBasicRouteSetRNiceScroll;function init(){gBasicRouteSetRNiceScroll=new NiceScroll("routeSetRCon");gBasicRouteSetRNiceScroll.scrollTipOpacity(1);gBasicRouteSetRNiceScroll.scrollTipSet({background:"#34A9DA"});gBasicRouteSetRNiceScroll.init();setSelectAutoMiddleOption({enable:!0,outerScrollContainerId:"routeSetRCon",bottomVal:0.7});menuInit_BRS()}init();
-</script><style type="text/css">div.bConfLBC{background:#70d2ef}div.bConfRBC{background:#4abde0}h1.bMdelTitle{text-shadow:2px 2px #62b6ce}div.menuCon{height:34.2em;overflow:hidden;margin:20px 5px 0 0;padding-right:10px;position:relative}#sysLog_rsMenu{border:none!important}li.menuLi{color:#1e96d4}li.menuLiClick{color:#fff;text-shadow:2px 2px #62b6ce}li.menuLi i.hsMenuCloud{background:url(../web-static/images/routerBg.png) -206px -1px no-repeat}li.menuLiClick i.hsMenuCloud{background:url(../web-static/images/routerBg.png) -233px -1px no-repeat}li.menuLi i.hsMenuNetWork{background:url(../web-static/images/routerBg.png) -206px -28px no-repeat}li.menuLiClick i.hsMenuNetWork{background:url(../web-static/images/routerBg.png) -233px -28px no-repeat}li.menuLi i.hsMenuWlan{background:url(../web-static/images/routerBg.png) -206px -57px no-repeat}li.menuLiClick i.hsMenuWlan{background:url(../web-static/images/routerBg.png) -233px -57px no-repeat}li.menuLi i.hsMenuNetControl{background:url(../web-static/images/routerBg.png) -206px -86px no-repeat}li.menuLiClick i.hsMenuNetControl{background:url(../web-static/images/routerBg.png) -233px -86px no-repeat}li.menuLi i.hsMenuAdvUser{background:url(../web-static/images/routerBg.png) -206px -114px no-repeat}li.menuLiClick i.hsMenuAdvUser{background:url(../web-static/images/routerBg.png) -233px -114px no-repeat}li.menuLi i.hsMenuFileShare{background:url(../web-static/images/fileShareBg.png) -160px 0 no-repeat}li.menuLiClick i.hsMenuFileShare{background:url(../web-static/images/fileShareBg.png) -160px -25px no-repeat}li.menuLi i.hsMenuPbcEnable{background:url(../web-static/images/pbcEnbaleNormal.png) no-repeat}li.menuLiClick i.hsMenuPbcEnable{background:url(../web-static/images/pbcEnbalePress.png) no-repeat}li.menuLi i.hsMenuLed{background:url(../web-static/images/hyfiBg.png) -25px 0 no-repeat}li.menuLiClick i.hsMenuLed{background:url(../web-static/images/hyfiBg.png) -25px -25px no-repeat}li.menuLi i.hsMenuEquipment{background:url(../web-static/images/routerBg.png) -260px -1px no-repeat}li.menuLiClick i.hsMenuEquipment{background:url(../web-static/images/routerBg.png) -288px -1px no-repeat}li.menuLi i.hsMenuSmbCloudManage{background:url(../web-static/images/routerBg.png) -488px -381px no-repeat}li.menuLiClick i.hsMenuSmbCloudManage{background:url(../web-static/images/routerBg.png) -515px -381px no-repeat}li.menuLi i.hsMenuSysLog{background:url(../web-static/images/routerBg.png) -260px -31px no-repeat}li.menuLiClick i.hsMenuSysLog{background:url(../web-static/images/routerBg.png) -288px -31px no-repeat}li.menuLi i.hsMenuElink{background:url(../web-static/images/elinkNorm.png) no-repeat}li.menuLiClick i.hsMenuElink{background:url(../web-static/images/elinkClick.png) no-repeat}li.menuLi i.hsMenuBridgeSwitch{background:url(../web-static/images/switchmode_normal.png) no-repeat}li.menuLiClick i.hsMenuBridgeSwitch{background:url(../web-static/images/switchmode_press.png) no-repeat}li.menuLi i.hsMenuCHgPwd{background:url(../web-static/images/routerBg.png) -260px -57px no-repeat}li.menuLiClick i.hsMenuCHgPwd{background:url(../web-static/images/routerBg.png) -288px -57px no-repeat}li.menuLi i.hsMenuBakRs{background:url(../web-static/images/routerBg.png) -260px -85px no-repeat}li.menuLiClick i.hsMenuBakRs{background:url(../web-static/images/routerBg.png) -288px -85px no-repeat}li.menuLi i.hsMenuReBootSet{background:url(../web-static/images/routerBg.png) -260px -114px no-repeat}li.menuLiClick i.hsMenuReBootSet{background:url(../web-static/images/routerBg.png) -288px -114px no-repeat}li.menuLi i.hsMenuHNat{background:url(../web-static/images/hnatBlue.png) no-repeat}li.menuLiClick i.hsMenuHNat{background:url(../web-static/images/hnatWhite.png) no-repeat}li.menuLi i.hsMenuCustomLed{background:url(../web-static/images/led.png) no-repeat}li.menuLiClick i.hsMenuCustomLed{background:url(../web-static/images/ledWhite.png) no-repeat}li.menuLi i.hsMenuAlinkTest{background:url(../web-static/images/routerBg.png) -206px -1px no-repeat}li.menuLiClick i.hsMenuAlinkTest{background:url(../web-static/images/routerBg.png) -233px -1px no-repeat}li.menuLi i.hsMenuPortSet{background:url(../web-static/images/routerBg.png) -432px -384px no-repeat}li.menuLiClick i.hsMenuPortSet{background:url(../web-static/images/routerBg.png) -456px -384px no-repeat}label.menuLbl{white-space:pre;cursor:pointer;margin-left:15px;vertical-align:middle}i.menuC{width:10px;height:9px;top:27px;*top:25px;right:10px;font-size:0;position:absolute;vertical-align:middle;background:url(../web-static/images/routerBg.png) -426px -89px no-repeat}li.menuLi i.menuC{visibility:hidden}li.menuLiClick i.menuC{visibility:visible}#dualWanWrapper ul{display:inline-block}#dualWanWrapper ul label{display:table-cell;width:160px;font-size:14px;color:#fff;line-height:32px;text-align:center;border:1px solid #fff;cursor:pointer}#dualWanWrapper ul label.selected{color:#2ba2d8;background-color:#fff}#dualWanWrapper ul label:first-child{border-radius:4px 0 0 4px}#dualWanWrapper ul label:last-child{border-radius:0 4px 4px 0}.dualWanWrapper{width:787px;text-align:center;padding-bottom:32px;position:relative;top:-2px}</style>
+</div>

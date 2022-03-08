@@ -1,21 +1,721 @@
+<style type="text/css">
+	#appsInstallList{
+		padding:0 16px 0 63px;
+	}
+	div.appCon span.name{
+		cursor:pointer;
+	}
+	div.appInstalledCon {
+		width: 745px;
+	}
+</style>
+<script type="text/javascript">
+	function init()
+	{
+		var GET_APP_DETAIL_TIME = 1000;
+		var GET_APP_LIST_TIME = 1000;
+		var ITEM_MARGIN_LEFT = 85;
 
+		var APP_ID = uciAppInfo.dynOptName.id;
+		var NAME = uciAppInfo.dynOptName.name;
+		var AUTHOR = uciAppInfo.dynOptName.author;
+		var SIZE = uciAppInfo.dynOptName.size;
+		var TIME = uciAppInfo.dynOptName.releaseTime;
+		var ICON_URL = uciAppInfo.dynOptName.iconURL;
+		var STATUS = uciAppInfo.dynOptName.status;
+		var DESCRIPTION = uciAppInfo.dynOptName.description;
+		var UPDATED = uciAppInfo.dynOptName.updated;
+		var VERSION = uciAppInfo.dynOptName.version;
+		var LAST_VERSION = uciAppInfo.dynOptName.lastVersion;
+		var LAST_SIZE = uciAppInfo.dynOptName.lastSize;
+		var PAGE_URL = uciAppInfo.dynOptName.pageURL;
+		var INSTALLED_NO = uciAppInfo.dynOptValue.installed.no;
+		var UPDATED_YES = uciAppInfo.dynOptValue.updated.yes;
 
+		var appsCon = id("appsInstallList");
+		var appDetailCon = id("appsInstallAppDetail");
+		var appsList = [];
+
+		function errHandle(code)
+		{
+			var note = "";
+			var bShowConfirm = false;
+			var cloudErrRel;
+
+			switch(parseInt(code, 10))
+			{
+			case ENONE:
+				return true;
+			case EINDEVICENOTBIND:
+				note = errStr.appCloudUnBindInstall;
+				bShowConfirm = true;
+				break;
+			case ENOMEMORY:
+				note = errStr.invMemoryOut;
+				break;
+			case EINVMEMORYOUT:
+				note = errStr.routerFlashNotEnough;
+				break;
+			case ESYSBUSY:
+			case EINVLASTOPTIONISNOTFINISHED:
+				note = errStr.invLastOptionIsNotFinished;
+				break;
+			case EINVDEVICEIDNOTEXIST:
+			case EINVERRORDEVICEIDFORMATERROR:
+			case EINVILLEGALDEVICE:
+				note = appendErrCode(label.cloudDeviceInfoExpt, code);		/* 设备非法 */
+				break;
+			default:
+				cloudErrRel = cloudErrHandle(code)
+				if (cloudErrRel.result == false)
+				{
+					note = cloudErrRel.tip;
+				}
+				else
+				{
+					note = appendErrCode(errStr.invRequestFailRefresh, code);
+				}
+				break;
+			}
+
+			if (true == bShowConfirm)
+			{
+				showConfirm(note, function(result){
+					if (true == result)
+					{
+						cloudSetBackBRHd(function(result){
+							basicBRGoBackHandle(result);
+						});
+						showCloudPage("CloudBindCfg.htm");
+					}
+				});
+			}
+			else
+			{
+				showAlert(note);
+			}
+
+			return false;
+		}
+
+		function netSpaceTrans(space)
+		{
+			var kSpace = 1024;
+
+			space = parseFloat(space)/kSpace;
+			space = space.toFixed(1) + "KB"
+
+			return space;
+		}
+
+		/* 从应用列表中获取某一个具体应用的信息 */
+		function getAppListItem(appID)
+		{
+			var item = null;
+
+			for (var i = 0, len = appsList.length; i < len; i++)
+			{
+				item = appsList[i];
+				if (item[APP_ID] == appID)
+				{
+					return item;
+				}
+			}
+
+			return null;
+		}
+
+		/* 设置应用列表中某一个具体应用的信息 */
+		function setAppListItem(newItem)
+		{
+			var item = null;
+
+			for (var i = 0, len = appsList.length; i < len; i++)
+			{
+				item = appsList[i];
+				if (item[APP_ID] == newItem[APP_ID])
+				{
+					for (var prop in newItem)
+					{
+						item[prop] = newItem[prop];
+					}
+
+					return;
+				}
+			}
+		}
+
+		/* 从应用列表中删除某一个具体应用的信息 */
+		function delAppListItem(appID)
+		{
+			var item = null;
+
+			for (var i = 0, len = appsList.length; i < len; i++)
+			{
+				if (appsList[i][APP_ID] == appID)
+				{
+					appsList.splice(i, 1);
+					return;
+				}
+			}
+		}
+
+		/* 从页面上的应用列表中删除某一个具体应用的信息 */
+		function delAppListItemInPage(appID)
+		{
+			var childNodes = appsCon.childNodes;
+			var childNode, moveDom = false;
+
+			for (var index = 0, len = childNodes.length; index < len; index++)
+			{
+				childNode = childNodes[index];
+				if (childNode.nodeType != 1)
+				{
+					continue;
+				}
+
+				if (childNode.appID == appID)
+				{
+					appsCon.removeChild(childNode);
+					index--;
+					len--;
+					moveDom = true;
+					continue;
+				}
+
+				if (false == moveDom)
+				{
+					continue;
+				}
+
+				if (parseInt(childNode.style.marginLeft) == ITEM_MARGIN_LEFT)
+				{
+					childNode.style.marginLeft = "0px";
+				}
+				else
+				{
+					childNode.style.marginLeft = ITEM_MARGIN_LEFT + "px";
+				}
+			}
+		}
+
+		/* 从页面上的应用列表中获取一个APP的容器 */
+		function getAppListItemInPage(appID)
+		{
+			var childNodes = appsCon.childNodes;
+			var childNode;
+
+			for (var index = 0, len = childNodes.length; index < len; index++)
+			{
+				childNode = childNodes[index];
+				if ((childNode.nodeType == 1) && (childNode.appID == appID))
+				{
+					return childNode;
+				}
+			}
+
+			return null;
+		}
+
+		/* 设置页面上的一个应用的按钮状态 */
+		function setAppListItemInputsInPage(inputs, item)
+		{
+			try
+			{
+				/* 更新 */
+				if (UPDATED_YES == item[UPDATED])
+				{
+					inputs[0].style.display = "inline";
+					inputs[1].style.display = "none";
+				}
+				else
+				{
+					inputs[0].style.display = "none";
+					inputs[1].style.display = "inline";
+				}
+			}catch(ex){}
+		}
+
+		/* 设置页面上的一个应用的具体信息 */
+		function setAppListItemInPage(item, appID)
+		{
+			var con = $(getAppListItemInPage(appID));
+
+			con.find("i.logo").attr("src", item[ICON_URL]);
+			con.find("p.vs").html(label.version + label.colon + item[VERSION] +
+								'<span>' + label.size + label.colon + netSpaceTrans(item[SIZE]) +
+								'</span>').css("display", "block");
+			con.find("a.updateDetail").css("display", "none");
+			setAppListItemInputsInPage(con.find("input"), item);
+		}
+
+		/* 显示操作的进度 */
+		function appPragBarShow(appID, btn, pragCallBack, complete)
+		{
+			var progressBar = new ProgressBar();
+			var con = btn.parentNode;
+			var rel = {"count":0};
+
+			$(con).children().css("display", "none");
+			progressBar.showProgBarApps(con, function(callback){
+				if (true == $.local)
+				{
+					rel["count"] += 20;
+					rel[ERR_CODE] = ENONE;
+
+					callback(rel);
+				}
+
+				pragCallBack(appID, callback);
+			}, function(tag, code){
+				if (true == $.local)
+				{
+					rel["count"] = 0;
+				}
+
+				$.setTimeout(function(){
+					progressBar.closeProgBar();
+					typeof complete == "function" && complete(tag, code);
+				}, 300);
+			});
+		}
+
+		/* 判断显示单个APP还是显示APP市场列表 */
+		function appsInstallShow(detialShowTag)
+		{
+			if (true == detialShowTag)
+			{
+				appsCon.style.display = "none";
+				appDetailCon.style.display = "block";
+			}
+			else
+			{
+				appsCon.style.display = "block";
+				appDetailCon.style.display = "none";
+			}
+
+			emptyNodes(appDetailCon);
+		}
+
+		/* 显示单个APP的详细信息 */
+		function showAppDetail(item)
+		{
+			var pageName = item[PAGE_URL];
+			var pIndex = 0;
+
+			if ((pIndex = pageName.lastIndexOf("/")) >= 0)
+			{
+				gAppPreUrl = pageName.substring(0, pIndex);
+			}
+
+			loadAppPage(pageName, "appsInstallAppDetail");
+		}
+
+		/* 显示单个APP的详细信息的响应函数 */
+		function appDetail(appID)
+		{
+			if (true == $.local)
+			{
+				var tmp = localPluginURI[appID];
+
+				appsInstallShow(true);
+				showAppDetail(tmp, appID);
+				return;
+			}
+
+			basicAppsRefreshLoading(function(){
+				if (appID != null)
+				{
+					var reqData = {};
+
+					reqData[uciAppInfo.fileName] = {};
+					reqData[uciAppInfo.fileName][uciAppInfo.actionName.open] = {};
+					reqData[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id] = appID;
+
+					$.action(reqData, function(result){
+						if (errHandle(result[ERR_CODE]))
+						{
+							appsInstallShow(true);
+							showAppDetail(result);
+						}
+						else
+						{
+							appsInstallShow(false);
+						}
+					});
+				}
+			});
+		}
+
+		/* 获取APP的更新、安装、卸载的进度 */
+		function getAppActionProgress(reqData, callback)
+		{
+			var rel = {};
+
+			$.action(reqData, function(result){
+				var code = result[ERR_CODE];
+				if (ENONE == code)
+				{
+					rel["count"] = parseInt(result[uciAppInfo.dynOptName.progress]);
+					rel[ERR_CODE] = ENONE;
+				}
+				else
+				{
+					rel["count"] = ERR_PERCENT;
+					rel[ERR_CODE] = code;
+					closeProgBar();
+					errHandle(code);
+				}
+
+				callback(rel);
+			}, true);
+		}
+
+		/* 获取APP的更新进度 */
+		function getAppUpdateProgress(appID, callback)
+		{
+			var data = {};
+			var reqObjDetail;
+
+			data[uciAppInfo.fileName] = {};
+			reqObjDetail = data[uciAppInfo.fileName][uciAppInfo.actionName.getAppStatus] = {};
+			reqObjDetail[uciAppInfo.dynOptName.id] = appID;
+			reqObjDetail[uciAppInfo.dynOptName.action] = uciAppInfo.dynOptValue.actionUpdate;
+
+			getAppActionProgress(data, callback);
+		}
+
+		/* 获取APP的卸载进度 */
+		function getAppUnInstallProgress(appID, callback)
+		{
+			var data = {};
+			var reqObjDetail;
+
+			data[uciAppInfo.fileName] = {};
+			reqObjDetail = data[uciAppInfo.fileName][uciAppInfo.actionName.getAppStatus] = {};
+			reqObjDetail[uciAppInfo.dynOptName.id] = appID;
+			reqObjDetail[uciAppInfo.dynOptName.action] = uciAppInfo.dynOptValue.actionUninstall;
+
+			getAppActionProgress(data, callback);
+		}
+
+		/* 单个APP的卸载函数 */
+		function appUninstall(appID, btn, complete, isUninstalling)
+		{
+			var reqData = {};
+			var item = getAppListItem(appID);
+
+			if (isUninstalling == true)
+			{
+				appPragBarShow(appID, btn, getAppUnInstallProgress, complete);
+			}
+			else if (item != null)
+			{
+				reqData[uciAppInfo.fileName] = {};
+				reqData[uciAppInfo.fileName][uciAppInfo.actionName.uninstall] = {};
+				reqData[uciAppInfo.fileName][uciAppInfo.actionName.uninstall][uciAppInfo.dynOptName.id] = appID;
+
+				$.action(reqData, function(result){
+					if (errHandle(result[ERR_CODE]))
+					{
+						appPragBarShow(appID, btn, getAppUnInstallProgress, complete);
+					}
+				});
+			}
+		}
+
+		/* 单个APP的卸载函数 */
+		function appsListAppUninstall(appID, btn, isUninstalling)
+		{
+			basicAppsRefreshLoading(function(){
+				appUninstall(appID, btn, function(tag, code){
+					if (true == tag)
+					{
+						delAppListItem(appID);
+						delAppListItemInPage(appID);
+						updateFlashInfo();
+					}
+					else
+					{
+						errHandle(code);
+						btn.style.display = "inline";
+					}
+				}, isUninstalling);
+			});
+		}
+
+		/* 单个APP的更新函数 */
+		function appUpdate(appID, btn, complete, isUpdating)
+		{
+			var reqData = {};
+			var item = getAppListItem(appID);
+
+			if (isUpdating == true)
+			{
+				appPragBarShow(appID, btn, getAppUpdateProgress, complete);
+			}
+			else if (item != null && UPDATED_YES == item[UPDATED])
+			{
+				reqData[uciAppInfo.fileName] = {};
+				reqData[uciAppInfo.fileName][uciAppInfo.actionName.update] = {};
+				reqData[uciAppInfo.fileName][uciAppInfo.actionName.update][uciAppInfo.dynOptName.id] = appID;
+
+				$.action(reqData, function(result){
+					if (errHandle(result[ERR_CODE]))
+					{
+						appPragBarShow(appID, btn, getAppUpdateProgress, complete);
+					}
+				});
+			}
+		}
+
+		/* 精选应用列表中单个APP的更新函数 */
+		function appsListAppUpdate(appID, btn, isUpdating)
+		{
+			basicAppsRefreshLoading(function(){
+				appUpdate(appID, btn, function(tag, code){
+					if (true == tag)
+					{
+						var reqData = {};
+
+						reqData[uciAppInfo.fileName] = {};
+						reqData[uciAppInfo.fileName][uciAppInfo.actionName.view] = {};
+						reqData[uciAppInfo.fileName][uciAppInfo.actionName.view][uciAppInfo.dynOptName.id] = appID;
+
+						$.action(reqData, function(result){
+							if (errHandle(result[ERR_CODE]))
+							{
+								var item = result[appID];
+
+								setAppListItem(item);
+								setAppListItemInPage(item, appID);
+								updateFlashInfo();
+							}
+						});
+					}
+					else
+					{
+						if (errHandle(code))
+						{
+							showAlert(errStr.appUpdateFailTip);
+						}
+						btn.style.display = "inline";
+					}
+				}, isUpdating);
+			});
+		}
+
+		/* 创建精选应用的列表 */
+		function appsListCreate()
+		{
+			var item, appID, canUpdate;
+			var divC, divS, p, span, uninsBtn, updateBtn, optenBtn, logo, shadow, a;
+			var handleInstall = uciAppInfo.dynOptValue.properties.handleInstall;
+			var propertyStr = uciAppInfo.optName.property;
+
+			for (var i = 0, len = appsList.length; i < len; i++)
+			{
+				item = appsList[i];
+				appID = item[APP_ID];
+
+				divC = document.createElement("div");
+				divC.className = "appConC";
+				divC.appID = appID;
+				if (i%2 == 1)
+				{
+					divC.style.marginLeft = ITEM_MARGIN_LEFT + "px";
+				}
+				appsCon.appendChild(divC);
+
+				canUpdate = item[UPDATED];
+
+				/* detail */
+				div = document.createElement("div");
+				div.className = "appCon";
+				if (UPDATED_YES == canUpdate)
+				{
+					div.innerHTML = '<p class="vs" style="display:none;"></p>';
+					a = document.createElement("a");
+					a.className = "updateDetail";
+					a.innerHTML = label.updateNoteStr + ">";
+					a.href = "javascript:void(0)";
+					a.onclick = (function(appID, updateLog){
+						return function(){
+							basicAppUpgradeInfoShow(this, updateLog.replace(/\\n/gi, "<br />"), 35);
+						};
+					})(appID, item[uciAppInfo.dynOptName.updateLog]);
+					div.appendChild(a);
+
+				}
+				else
+				{
+					div.innerHTML = '<p class="vs">'+ label.version + label.colon + item[VERSION] + '<span>' +
+									label.size + label.colon + netSpaceTrans(item[SIZE]) + '</span></p>';
+				}
+				divC.appendChild(div);
+
+				/* name */
+				span = document.createElement("span");
+				span.className = "name";
+				span.innerHTML = item[NAME];
+				span.onclick = (function(appID){
+					return function(){
+						basicAppUpgradeInfoClose();
+						appDetail(appID);
+					};
+				})(appID);
+				div.insertBefore(span, div.childNodes[0]);
+
+				/* logo && detial func */
+				logo = document.createElement("img");
+				logo.className = "logo";
+				logo.src = item[ICON_URL];
+				logo.onclick = (function(appID){
+					return function(){
+						basicAppUpgradeInfoClose();
+						appDetail(appID);
+					};
+				})(appID);
+				div.appendChild(logo);
+
+				/* shadow && detial func */
+				shadow = document.createElement("i");
+				shadow.className = "logoShadow";
+				shadow.onclick = (function(appID){
+					return function(){
+						basicAppUpgradeInfoClose();
+						appDetail(appID);
+					};
+				})(appID);
+				div.appendChild(shadow);
+
+				/* func con */
+				divS = document.createElement("div");
+				divS.className = "appFunc";
+				div.appendChild(divS);
+
+				/* func update */
+				updateBtn = document.createElement("input");
+				updateBtn.type = "button";
+				updateBtn.className = "subBtn disNone";
+				updateBtn.value = btn.update;
+				updateBtn.onclick = (function(appID){
+					return function(){
+						basicAppUpgradeInfoClose();
+						appsListAppUpdate(appID, this, false);
+					};
+				})(appID);
+				if (UPDATED_YES == canUpdate)
+				{
+					updateBtn.style.display = "inline";
+				}
+				divS.appendChild(updateBtn);
+
+				/* func open */
+				optenBtn = document.createElement("input");
+				optenBtn.type = "button";
+				optenBtn.className = "subBtn disNone";
+				optenBtn.value = btn.enter;
+				if (UPDATED_YES != canUpdate)
+				{
+					optenBtn.style.display = "inline";
+				}
+				optenBtn.onclick = (function(appID){
+					return function(){
+						basicAppUpgradeInfoClose();
+						appDetail(appID);
+					};
+				})(appID);
+				divS.appendChild(optenBtn);
+
+				/* func uninstall */
+				if (handleInstall == item[propertyStr])
+				{
+					uninsBtn = document.createElement("input");
+					uninsBtn.type = "button";
+					uninsBtn.className = "cancelBtn";
+					uninsBtn.value = btn.unInstall;
+					uninsBtn.onclick = (function(appID){
+						return function(){
+							var btn = this;
+
+							basicAppUpgradeInfoClose();
+							showConfirm(label.appDeleteTip, function(rel){
+								if (true == rel)
+								{
+									appsListAppUninstall(appID, btn, false);
+								}
+							});
+						};
+					})(appID);
+					divS.appendChild(uninsBtn);
+				}
+
+				/* 重新进入该页面时显示进度 */
+				switch(item[uciAppInfo.dynOptName.operaType])
+				{
+				case uciAppInfo.dynOptValue.operaType.uninstall:
+					appsListAppUninstall(appID, uninsBtn, true);
+					break;
+				case uciAppInfo.dynOptValue.operaType.update:
+					appsListAppUpdate(appID, updateBtn, true);
+					break;
+				default:
+					// nothing to do
+				}
+			}
+		}
+
+		/* 获取精选应用的列表信息 */
+		function getAppsList()
+		{
+			var reqData = {};
+
+			reqData[uciAppInfo.fileName] = {};
+			reqData[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp] = null;
+
+			if (true == $.local)
+			{
+				appsList = formatTableData(localPluginInfo[uciAppInfo.optName.installedApp]);
+				appsListCreate();
+			}
+			else
+			{
+				$.action(reqData, function(result){
+					if (errHandle(result[ERR_CODE]))
+					{
+						appsList = formatTableData(result[uciAppInfo.optName.installedApp]);
+						appsListCreate();
+					}
+				});
+			}
+		}
+
+		if (gLoadAppDetail["appId"].length > 0)
+		{
+			/* 直接显示某个APP的详细信息 */
+			var appId = gLoadAppDetail["appId"];
+			var uri = gLoadAppDetail["uri"];
+
+			gSetLoadAppDetail("", "");
+			appsInstallShow(true);
+			showAppDetail({uri:uri}, appId);
+		}
+		else if (true == gAppSet.appInstallShow.detialTag)
+		{
+			/* 判断是否直接显示某个APP的详细信息 */
+			appDetail(gAppSet.appInstallShow.appID);
+			gAppSet.appInstallShow = {detialTag:false, appID:-1};
+		}
+		else
+		{
+			/* APP的详细列表显示 */
+			getAppsList();
+		}
+	}
+	init();
+</script>
 <div class="appInstalledCon">
 	<div id="appsInstallList"></div>
 	<div id="appsInstallAppDetail" class="disNone"></div>
-</div><script type="text/javascript">function init(){function k(a){var b="",d=!1;switch(parseInt(a,10)){case ENONE:return!0;case EINDEVICENOTBIND:b=errStr.appCloudUnBindInstall;d=!0;break;case ENOMEMORY:b=errStr.invMemoryOut;break;case EINVMEMORYOUT:b=errStr.routerFlashNotEnough;break;case ESYSBUSY:case EINVLASTOPTIONISNOTFINISHED:b=errStr.invLastOptionIsNotFinished;break;case EINVDEVICEIDNOTEXIST:case EINVERRORDEVICEIDFORMATERROR:case EINVILLEGALDEVICE:b=appendErrCode(label.cloudDeviceInfoExpt,a);break;default:b=cloudErrHandle(a),b=
-!1==b.result?b.tip:appendErrCode(errStr.invRequestFailRefresh,a)}!0==d?showConfirm(b,function(a){!0==a&&(cloudSetBackBRHd(function(a){basicBRGoBackHandle(a)}),showCloudPage("CloudBindCfg.htm"))}):showAlert(b);return!1}function y(a){a=parseFloat(a)/1024;return a=a.toFixed(1)+"KB"}function z(a){for(var b=null,d=0,c=h.length;d<c;d++)if(b=h[d],b[r]==a)return b;return null}function m(a,b,d,c){var f=new ProgressBar;b=b.parentNode;var e={count:0};$(b).children().css("display","none");f.showProgBarApps(b,
-function(b){!0==$.local&&(e.count+=20,e[ERR_CODE]=ENONE,b(e));d(a,b)},function(a,b){!0==$.local&&(e.count=0);$.setTimeout(function(){f.closeProgBar();"function"==typeof c&&c(a,b)},300)})}function t(a){!0==a?(n.style.display="none",u.style.display="block"):(n.style.display="block",u.style.display="none");emptyNodes(u)}function v(a){a=a[K];var b=0;0<=(b=a.lastIndexOf("/"))&&(gAppPreUrl=a.substring(0,b));loadAppPage(a,"appsInstallAppDetail")}function p(a){if(!0==$.local){var b=localPluginURI[a];t(!0);
-v(b,a)}else basicAppsRefreshLoading(function(){if(null!=a){var b={};b[uciAppInfo.fileName]={};b[uciAppInfo.fileName][uciAppInfo.actionName.open]={};b[uciAppInfo.fileName][uciAppInfo.actionName.open][uciAppInfo.dynOptName.id]=a;$.action(b,function(a){k(a[ERR_CODE])?(t(!0),v(a)):t(!1)})}})}function B(a,b){var d={};$.action(a,function(a){var f=a[ERR_CODE];ENONE==f?(d.count=parseInt(a[uciAppInfo.dynOptName.progress]),d[ERR_CODE]=ENONE):(d.count=ERR_PERCENT,d[ERR_CODE]=f,closeProgBar(),k(f));b(d)},!0)}
-function C(a,b){var d={},c;d[uciAppInfo.fileName]={};c=d[uciAppInfo.fileName][uciAppInfo.actionName.getAppStatus]={};c[uciAppInfo.dynOptName.id]=a;c[uciAppInfo.dynOptName.action]=uciAppInfo.dynOptValue.actionUpdate;B(d,b)}function D(a,b){var d={},c;d[uciAppInfo.fileName]={};c=d[uciAppInfo.fileName][uciAppInfo.actionName.getAppStatus]={};c[uciAppInfo.dynOptName.id]=a;c[uciAppInfo.dynOptName.action]=uciAppInfo.dynOptValue.actionUninstall;B(d,b)}function L(a,b,d,c){var f={},e=z(a);!0==c?m(a,b,D,d):null!=
-e&&(f[uciAppInfo.fileName]={},f[uciAppInfo.fileName][uciAppInfo.actionName.uninstall]={},f[uciAppInfo.fileName][uciAppInfo.actionName.uninstall][uciAppInfo.dynOptName.id]=a,$.action(f,function(c){k(c[ERR_CODE])&&m(a,b,D,d)}))}function E(a,b,d){basicAppsRefreshLoading(function(){L(a,b,function(c,d){if(!0==c){a:for(var e=0,g=h.length;e<g;e++)if(h[e][r]==a){h.splice(e,1);break a}for(var e=n.childNodes,A=!1,q=0,l=e.length;q<l;q++)g=e[q],1==g.nodeType&&(g.appID==a?(n.removeChild(g),q--,l--,A=!0):!1!=A&&
-(parseInt(g.style.marginLeft)==w?g.style.marginLeft="0px":g.style.marginLeft=w+"px"));updateFlashInfo()}else k(d),b.style.display="inline"},d)})}function M(a,b,d,c){var f={},e=z(a);!0==c?m(a,b,C,d):null!=e&&s==e[x]&&(f[uciAppInfo.fileName]={},f[uciAppInfo.fileName][uciAppInfo.actionName.update]={},f[uciAppInfo.fileName][uciAppInfo.actionName.update][uciAppInfo.dynOptName.id]=a,$.action(f,function(c){k(c[ERR_CODE])&&m(a,b,C,d)}))}function F(a,b,d){basicAppsRefreshLoading(function(){M(a,b,function(c,
-d){if(!0==c){var e={};e[uciAppInfo.fileName]={};e[uciAppInfo.fileName][uciAppInfo.actionName.view]={};e[uciAppInfo.fileName][uciAppInfo.actionName.view][uciAppInfo.dynOptName.id]=a;$.action(e,function(b){if(k(b[ERR_CODE])){b=b[a];a:for(var c=null,d=0,e=h.length;d<e;d++)if(c=h[d],c[r]==b[r]){for(var f in b)c[f]=b[f];break a}f=$;a:{for(var c=n.childNodes,e=0,N=c.length;e<N;e++)if(d=c[e],1==d.nodeType&&d.appID==a){c=d;break a}c=null}f=f(c);f.find("i.logo").attr("src",b[G]);f.find("p.vs").html(label.version+
-label.colon+b[H]+"<span>"+label.size+label.colon+y(b[I])+"</span>").css("display","block");f.find("a.updateDetail").css("display","none");f=f.find("input");try{s==b[x]?(f[0].style.display="inline",f[1].style.display="none"):(f[0].style.display="none",f[1].style.display="inline")}catch(p){}updateFlashInfo()}})}else k(d)&&showAlert(errStr.appUpdateFailTip),b.style.display="inline"},d)})}function J(){for(var a,b,d,c,f,e,g,k=uciAppInfo.dynOptValue.properties.handleInstall,q=uciAppInfo.optName.property,
-l=0,m=h.length;l<m;l++)switch(a=h[l],b=a[r],c=document.createElement("div"),c.className="appConC",c.appID=b,1==l%2&&(c.style.marginLeft=w+"px"),n.appendChild(c),d=a[x],div=document.createElement("div"),div.className="appCon",s==d?(div.innerHTML='<p class="vs" style="display:none;"></p>',e=document.createElement("a"),e.className="updateDetail",e.innerHTML=label.updateNoteStr+">",e.href="javascript:void(0)",e.onclick=function(b,a){return function(){basicAppUpgradeInfoShow(this,a.replace(/\\n/gi,"<br />"),
-35)}}(b,a[uciAppInfo.dynOptName.updateLog]),div.appendChild(e)):div.innerHTML='<p class="vs">'+label.version+label.colon+a[H]+"<span>"+label.size+label.colon+y(a[I])+"</span></p>",c.appendChild(div),c=document.createElement("span"),c.className="name",c.innerHTML=a[O],c.onclick=function(a){return function(){basicAppUpgradeInfoClose();p(a)}}(b),div.insertBefore(c,div.childNodes[0]),c=document.createElement("img"),c.className="logo",c.src=a[G],c.onclick=function(a){return function(){basicAppUpgradeInfoClose();
-p(a)}}(b),div.appendChild(c),c=document.createElement("i"),c.className="logoShadow",c.onclick=function(a){return function(){basicAppUpgradeInfoClose();p(a)}}(b),div.appendChild(c),c=document.createElement("div"),c.className="appFunc",div.appendChild(c),e=document.createElement("input"),e.type="button",e.className="subBtn disNone",e.value=btn.update,e.onclick=function(a){return function(){basicAppUpgradeInfoClose();F(a,this,!1)}}(b),s==d&&(e.style.display="inline"),c.appendChild(e),g=document.createElement("input"),
-g.type="button",g.className="subBtn disNone",g.value=btn.enter,s!=d&&(g.style.display="inline"),g.onclick=function(a){return function(){basicAppUpgradeInfoClose();p(a)}}(b),c.appendChild(g),k==a[q]&&(f=document.createElement("input"),f.type="button",f.className="cancelBtn",f.value=btn.unInstall,f.onclick=function(a){return function(){var b=this;basicAppUpgradeInfoClose();showConfirm(label.appDeleteTip,function(c){!0==c&&E(a,b,!1)})}}(b),c.appendChild(f)),a[uciAppInfo.dynOptName.operaType]){case uciAppInfo.dynOptValue.operaType.uninstall:E(b,
-f,!0);break;case uciAppInfo.dynOptValue.operaType.update:F(b,e,!0)}}function P(){var a={};a[uciAppInfo.fileName]={};a[uciAppInfo.fileName][uciAppInfo.actionName.getInstalledApp]=null;!0==$.local?(h=formatTableData(localPluginInfo[uciAppInfo.optName.installedApp]),J()):$.action(a,function(a){k(a[ERR_CODE])&&(h=formatTableData(a[uciAppInfo.optName.installedApp]),J())})}var w=85,r=uciAppInfo.dynOptName.id,O=uciAppInfo.dynOptName.name,I=uciAppInfo.dynOptName.size,G=uciAppInfo.dynOptName.iconURL,x=uciAppInfo.dynOptName.updated,
-H=uciAppInfo.dynOptName.version,K=uciAppInfo.dynOptName.pageURL,s=uciAppInfo.dynOptValue.updated.yes,n=id("appsInstallList"),u=id("appsInstallAppDetail"),h=[];if(0<gLoadAppDetail.appId.length){var Q=gLoadAppDetail.appId,R=gLoadAppDetail.uri;gSetLoadAppDetail("","");t(!0);v({uri:R},Q)}else!0==gAppSet.appInstallShow.detialTag?(p(gAppSet.appInstallShow.appID),gAppSet.appInstallShow={detialTag:!1,appID:-1}):P()}init();
-</script><style type="text/css">#appsInstallList{padding:0 16px 0 63px}div.appCon span.name{cursor:pointer}div.appInstalledCon{width:745px}</style>
+</div>

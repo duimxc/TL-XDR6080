@@ -1,5 +1,427 @@
+<script type="text/javascript">
+	function init()
+	{
+		var save = id("save");
+		var saveAdmin = id("saveAdmin");
+		var saveCommon = id("saveCommon");
+		var oldPwd = id("oldPwd");
+		var newPwd = id("newPwd");
+		var newPwdAdmin = id("newPwdAdmin");
+		var newPwdCommon = id("newPwdCommon");
+		var newPwdC = id("newPwdC");
 
+		var CMCC_ADMIN = "cmccadmin";
 
+		var multiAccountShow = gUsernameSupport && gMultiAccountSupport && CMCC_ADMIN == $.getLgUsr();
+
+		function errHandle(errNo, objId)
+		{
+			var showStr = "";
+
+			switch (parseInt(errNo))
+			{
+			case ENONE:
+				return false;
+			case EINVLGUSRLEN:
+				showStr = errStr.lgUsrLenInvalid;
+				break;
+			case EINLGUSRVALOLDSAME:
+				showStr = errStr.usrNewOldSameErr;
+				break;
+			case EINLGUSRVALCHAR:
+				showStr = errStr.usrCharValid;
+				break;
+			case EINVLGPWDLEN:
+				if (PWD_MIN_LEN == 8)
+				{
+					showStr =errStr.lgPwdLenInvalid8;
+				}
+				else
+				{
+					showStr =errStr.lgPwdLenInvalid;
+				}
+				break;
+			case EINLGVALCHAR:
+				showStr = errStr.pwdInvalid;
+				break;
+			case ECHPWDDIF:
+				showStr = errStr.pswNotMatch;
+				break;
+			case EINLGVALOLDSAME:
+				showStr = errStr.pswNewOldSameErr;
+				break;
+			case EINVUSR:
+			case EINVKEY:
+				showStr = gUsernameSupport ? errStr.usrPwdError : errStr.pwdError;
+				break;
+			case ECMCCUSRERROR:
+				showStr = errStr.cmccUsrPwdError;
+				break;
+			case EINVNEWUSR:
+				showStr = errStr.cmccUsrError;
+				break;
+			default:
+				showStr = errStr.invRequestFail;
+				break;
+			}
+
+			showAlert(showStr, objId);
+			return true;
+		}
+
+		function chkPswVal(szValue)
+		{
+			return (/^[\x21-\x7e]+$/.test(szValue));
+		}
+
+		function getPwdComplexity(str)
+		{
+			var result = 0;
+			var hasNum = 0;
+			var hasLetter = 0;
+			var hasSymbol = 0;
+
+			hasNum = /\d/g.test(str) ? 1 : 0;
+			hasLetter = /[a-zA-Z]/g.test(str) ? 1 : 0;
+			hasSymbol = /[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(str) ? 1 : 0;
+
+			result = hasNum + hasSymbol + hasLetter
+			return result;
+		}
+
+		function pwdCheck(type)
+		{
+			var width = 24, tip = "", iClass = "warn";
+			var lgPwdlessTip = "inline-block";
+			var lgPwdValTip = "inline-block";
+			var pwdValue = $("#newPwd" + type).val();
+			var len = pwdValue.length;
+			var lgPwdNoteVi = "visible";
+			var result = true;
+			var lgPwdNote = id("lgPwdNote" + type);
+			var pwdDep = id("pwdDep" + type);
+			var chgPwdDep = id("chgPwdDep" + type);
+			var pwdDepI = id("pwdDepI" + type);
+			var pwdComplexity = getPwdComplexity(pwdValue);
+
+			$("#pwdStrengthNoteCon" + type).toggle(showPwdStrength);
+			$("#pwdNoteCon" + type).toggle(!showPwdStrength);
+
+			if (showPwdStrength)
+			{
+				if (6 <= len && len <= 32 && chkPswVal(pwdValue))
+				{
+					lgPwdNoteVi = "visible";
+				}
+				else
+				{
+					lgPwdNoteVi = "hidden";
+				}
+
+				if (pwdComplexity == 1)
+				{
+					if (len <= 10)
+					{
+						tip = label.weak;
+						width = width;
+					}
+					else
+					{
+						tip = label.media;
+						width = width*2;
+					}
+				}
+				else if (pwdComplexity == 2)
+				{
+					if (len <= 10)
+					{
+						tip = label.media;
+						width = width*2;
+					}
+					else
+					{
+						tip = label.strong;
+						width = width*3;
+						iClass = "correct";
+					}
+				}
+				else if (pwdComplexity == 3)
+				{
+					tip = label.strong;
+					width = width*3;
+					iClass = "correct";
+				}
+
+				lgPwdNote.style.visibility = lgPwdNoteVi;
+				pwdDep.innerHTML = tip;
+				chgPwdDep.style.width = width + "px";
+				pwdDepI.className = iClass;
+			}
+			else
+			{
+				if(!chkPswVal(pwdValue) && len != 0)
+				{
+					/* 密码中含有非法字符 */
+					iClass = "error";
+					tip = errStr.pwdCharInValid;
+					result = false;
+				}
+				else if ((len >= 0 && len < PWD_MIN_LEN) || (len > PWD_MAX_LEN))
+				{
+					/* 密码长度非法 */
+					iClass = "error";
+					tip = errStr.lgPwdLenTooShort;
+					result = false;
+				}
+				else if (pwdComplexity != 3)
+				{
+					iClass = "error";
+					tip = errStr.pwdCharTypeNotEnough;
+					result = false;
+				}
+				else
+				{
+					iClass = "correct";
+					tip = "";
+					result = true;
+				}
+
+				lgPwdNote.style.visibility = lgPwdNoteVi;
+				pwdDepI.className = iClass;
+				$("#pwdNoteLine" + type).text(tip);
+			}
+
+			return result;
+		}
+
+		if (USER_GROUP_REMOTE == $.authRltObj["group"])
+		{
+			disableBtn(save, true);
+			if (multiAccountShow)
+			{
+				disableBtn(saveAdmin, true);
+				disableBtn(saveCommon, true);
+			}
+		}
+		else
+		{
+			function onSave(type){
+				var oldPwdVal = id("oldPwd" + type).value;
+				var newPwdVal = id("newPwd" + type).value;
+				var newPwdCVal = id("newPwdC" + type).value;
+
+				if (gUsernameSupport)
+				{
+					var	oldUsrVal = id("oldUsr" + type).value;
+
+					if (type == "Admin")
+					{
+						var newUsrVal = CMCC_ADMIN;
+					}
+					else
+					{
+						var newUsrVal = id("newUsr" + type).value;
+					}
+				}
+
+				/* 校验参数 */
+				if (gUsernameSupport)
+				{
+					if (newUsrVal.length == 0 || newUsrVal.length > 32)
+					{
+						return errHandle(EINVLGUSRLEN, "newUsr" + type);
+					}
+
+					if (chkPswVal(newUsrVal) == false)
+					{
+						return errHandle(EINLGUSRVALCHAR, "newUsr" + type);
+					}
+
+					if (gMultiAccountSupport)
+					{
+						if ("Admin" != type && CMCC_ADMIN == newUsrVal)
+						{
+							return errHandle(EINVNEWUSR, "newUsr" + type);
+						}
+					}
+				}
+
+				if (newPwdVal.length == 0 || newPwdVal.length < PWD_MIN_LEN || newPwdVal.length > 32)
+				{
+					return errHandle(EINVLGPWDLEN, "newPwd" + type);
+				}
+
+				if (chkPswVal(newPwdVal) == false)
+				{
+					return errHandle(EINLGVALCHAR, "newPwd" + type);
+				}
+
+				if (newPwdVal != newPwdCVal)
+				{
+					return errHandle(ECHPWDDIF, "newPwd" + type);
+				}
+
+				if (false == pwdCheck(type))
+				{
+					return;
+				}
+
+				/* 显示Loading的id */
+				setLoadingId("save" + type);
+				hsLoading(true);
+				gCloudAccountBR["pwdLen"] = newPwdVal.length;
+
+				if (!gUsernameSupport && type == "")
+				{
+					$.changePwd(oldPwdVal, newPwdVal, function(code){
+						var objId = "newPwd";
+
+						if (code == EPWDERROR)
+						{
+							objId = "oldPwd";
+						}
+
+						errHandle(code, objId);
+						hsLoading(false);
+					});
+				}
+				else if ((gUsernameSupport && type == "") || type == "Admin")
+				{
+					$.changeUsrPwd(oldUsrVal, newUsrVal, oldPwdVal, newPwdVal, function(code){
+						var objId = "newPwd" + type;
+
+						if (code == EPWDERROR)
+						{
+							objId = "oldPwd" + type;
+						}
+						else if (code == EINVLGUSRLEN || code == EINVUSR)
+						{
+							objId = "oldUsr" + type;
+						}
+						else if (code == EINLGUSRVALOLDSAME
+								|| code == EINLGUSRVALCHAR
+								|| code == EINVUSR
+								|| code == EINVKEY)
+						{
+							objId = "newUsr" + type;
+						}
+						else if (code == ECHPWDDIF)
+						{
+							objId = "newPwdC" + type;
+						}
+
+						errHandle(code, objId);
+						hsLoading(false);
+					});
+				}
+				else if (type == "Common")
+				{
+					$.checkUsrPwd(oldUsrVal, $.orgAuthPwd(oldPwdVal),function(errCode){
+						if (errCode == ENONE){
+							$.authRltObj["bHandLg"] = true;
+							$.changeOthersUsrPwd("", newUsrVal, "", newPwdVal, function(code){
+								var objId = "newPwd" + type;
+
+								if (code == EPWDERROR)
+								{
+									objId = "oldPwd" + type;
+								}
+								else if (code == EINVLGUSRLEN || code == EINVUSR)
+								{
+									objId = "oldUsr" + type;
+								}
+								else if (code == EINLGUSRVALOLDSAME
+										|| code == EINLGUSRVALCHAR
+										|| code == EINVUSR
+										|| code == EINVKEY)
+								{
+									objId = "newUsr" + type;
+								}
+								else if (code == ECHPWDDIF)
+								{
+									objId = "newPwdC" + type;
+								}
+
+								errHandle(code, objId);
+								hsLoading(false);
+							});
+						}
+						else
+						{
+							errHandle(ECMCCUSRERROR, "oldPwd" + type);
+							// showLgError(parseInt($.authRltObj["code"]));
+							hsLoading(false);
+						}
+					});
+				}
+			}
+
+			newPwd.onkeyup = function(){
+				pwdCheck("");
+			};
+			save.onclick = function(){
+				onSave("");
+			};
+			if (multiAccountShow)
+			{
+				newPwdAdmin.onkeyup = function(){
+					pwdCheck("Admin");
+				};
+				newPwdCommon.onkeyup = function(){
+					pwdCheck("Common");
+				};
+				saveAdmin.onclick = function(){
+					onSave("Admin");
+				};
+				saveCommon.onclick = function(){
+					onSave("Common");
+				};
+			}
+		}
+
+		/* 判断显示单账号还是双账号，及用户名是否需要显示 */
+		if (multiAccountShow)
+		{
+			$("#pwdLenNote").toggle(false);
+			$("#pwdLenNoteAdmin").toggle(true);
+			$("#pwdLenNoteCommon").toggle(true);
+			$("#adminUserT1").removeClass("disNone");
+			$("#adminUserC1").removeClass("disNone");
+			$("#adminUserT2").removeClass("disNone");
+			$("#adminUserC2").removeClass("disNone");
+		}
+		else
+		{
+			if (gUsernameSupport)
+			{
+				$("#pwdLenNote").toggle(true);
+				$("#pwdLenNoteAdmin").toggle(false);
+				$("#pwdLenNoteCommon").toggle(false);
+				$("#normalUserT .title").text(menuStr.changeLgUsrPwd);
+				$("#oldUsrRow").removeClass("disNone");
+				$("#newUsrRow").removeClass("disNone");
+			}
+			else
+			{
+				$("#pwdLenNote").toggle(false);
+				$("#pwdLenNoteAdmin").toggle(false);
+				$("#pwdLenNoteCommon").toggle(false);
+			}
+
+			$("#normalUserT").removeClass("disNone");
+			$("#normalUserC").removeClass("disNone");
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	p.pwdLenNote{
+		margin:10px 0 25px 260px;
+		color: #fff;
+		font-size: 12px;
+		text-align: left;
+	}
+</style>
 <div id="hcCo" class="hcCo">
 	<div class="hsHelp"></div>
 	<div class="title disNone" id="normalUserT">
@@ -118,13 +540,4 @@
 			<input id="saveCommon" type="button" value="{%btn.save%}" class="btnA subBtn" />
 		</div>
 	</div>
-</div><script type="text/javascript">function init(){function d(b,c){var a="";switch(parseInt(b)){case ENONE:return!1;case EINVLGUSRLEN:a=errStr.lgUsrLenInvalid;break;case EINLGUSRVALOLDSAME:a=errStr.usrNewOldSameErr;break;case EINLGUSRVALCHAR:a=errStr.usrCharValid;break;case EINVLGPWDLEN:a=8==PWD_MIN_LEN?errStr.lgPwdLenInvalid8:errStr.lgPwdLenInvalid;break;case EINLGVALCHAR:a=errStr.pwdInvalid;break;case ECHPWDDIF:a=errStr.pswNotMatch;break;case EINLGVALOLDSAME:a=errStr.pswNewOldSameErr;break;case EINVUSR:case EINVKEY:a=gUsernameSupport?
-errStr.usrPwdError:errStr.pwdError;break;case ECMCCUSRERROR:a=errStr.cmccUsrPwdError;break;case EINVNEWUSR:a=errStr.cmccUsrError;break;default:a=errStr.invRequestFail}showAlert(a,c);return!0}function q(b){return/^[\x21-\x7e]+$/.test(b)}function l(b){var c=24,a="",d="warn",g=$("#newPwd"+b).val(),e=g.length,r="visible",f=!0,s=id("lgPwdNote"+b),l=id("pwdDep"+b),p=id("chgPwdDep"+b),k=id("pwdDepI"+b),h,m=h=0,n=0;h=/\d/g.test(g)?1:0;m=/[a-zA-Z]/g.test(g)?1:0;n=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(g)?
-1:0;h=h+n+m;$("#pwdStrengthNoteCon"+b).toggle(showPwdStrength);$("#pwdNoteCon"+b).toggle(!showPwdStrength);showPwdStrength?(r=6<=e&&32>=e&&q(g)?"visible":"hidden",1==h?10>=e?a=label.weak:(a=label.media,c*=2):2==h?10>=e?(a=label.media,c*=2):(a=label.strong,c*=3,d="correct"):3==h&&(a=label.strong,c*=3,d="correct"),s.style.visibility=r,l.innerHTML=a,p.style.width=c+"px",k.className=d):(q(g)||0==e?0<=e&&e<PWD_MIN_LEN||e>PWD_MAX_LEN?(d="error",a=errStr.lgPwdLenTooShort,f=!1):3!=h?(d="error",a=errStr.pwdCharTypeNotEnough,
-f=!1):(d="correct",a="",f=!0):(d="error",a=errStr.pwdCharInValid,f=!1),s.style.visibility=r,k.className=d,$("#pwdNoteLine"+b).text(a));return f}var m=id("save"),n=id("saveAdmin"),t=id("saveCommon");id("oldPwd");var u=id("newPwd"),v=id("newPwdAdmin"),w=id("newPwdCommon");id("newPwdC");var p=gUsernameSupport&&gMultiAccountSupport&&"cmccadmin"==$.getLgUsr();if(USER_GROUP_REMOTE==$.authRltObj.group)disableBtn(m,!0),p&&(disableBtn(n,!0),disableBtn(t,!0));else{var k=function(b){var c=id("oldPwd"+b).value,
-a=id("newPwd"+b).value,k=id("newPwdC"+b).value;if(gUsernameSupport)var g=id("oldUsr"+b).value,e="Admin"==b?"cmccadmin":id("newUsr"+b).value;if(gUsernameSupport){if(0==e.length||32<e.length)return d(EINVLGUSRLEN,"newUsr"+b);if(!1==q(e))return d(EINLGUSRVALCHAR,"newUsr"+b);if(gMultiAccountSupport&&"Admin"!=b&&"cmccadmin"==e)return d(EINVNEWUSR,"newUsr"+b)}if(0==a.length||a.length<PWD_MIN_LEN||32<a.length)return d(EINVLGPWDLEN,"newPwd"+b);if(!1==q(a))return d(EINLGVALCHAR,"newPwd"+b);if(a!=k)return d(ECHPWDDIF,
-"newPwd"+b);!1!=l(b)&&(setLoadingId("save"+b),hsLoading(!0),gCloudAccountBR.pwdLen=a.length,gUsernameSupport||""!=b?gUsernameSupport&&""==b||"Admin"==b?$.changeUsrPwd(g,e,c,a,function(a){var f="newPwd"+b;a==EPWDERROR?f="oldPwd"+b:a==EINVLGUSRLEN||a==EINVUSR?f="oldUsr"+b:a==EINLGUSRVALOLDSAME||a==EINLGUSRVALCHAR||a==EINVUSR||a==EINVKEY?f="newUsr"+b:a==ECHPWDDIF&&(f="newPwdC"+b);d(a,f);hsLoading(!1)}):"Common"==b&&$.checkUsrPwd(g,$.orgAuthPwd(c),function(c){c==ENONE?($.authRltObj.bHandLg=!0,$.changeOthersUsrPwd("",
-e,"",a,function(a){var c="newPwd"+b;a==EPWDERROR?c="oldPwd"+b:a==EINVLGUSRLEN||a==EINVUSR?c="oldUsr"+b:a==EINLGUSRVALOLDSAME||a==EINLGUSRVALCHAR||a==EINVUSR||a==EINVKEY?c="newUsr"+b:a==ECHPWDDIF&&(c="newPwdC"+b);d(a,c);hsLoading(!1)})):(d(ECMCCUSRERROR,"oldPwd"+b),hsLoading(!1))}):$.changePwd(c,a,function(a){var b="newPwd";a==EPWDERROR&&(b="oldPwd");d(a,b);hsLoading(!1)}))};u.onkeyup=function(){l("")};m.onclick=function(){k("")};p&&(v.onkeyup=function(){l("Admin")},w.onkeyup=function(){l("Common")},
-n.onclick=function(){k("Admin")},t.onclick=function(){k("Common")})}p?($("#pwdLenNote").toggle(!1),$("#pwdLenNoteAdmin").toggle(!0),$("#pwdLenNoteCommon").toggle(!0),$("#adminUserT1").removeClass("disNone"),$("#adminUserC1").removeClass("disNone"),$("#adminUserT2").removeClass("disNone"),$("#adminUserC2").removeClass("disNone")):(gUsernameSupport?($("#pwdLenNote").toggle(!0),$("#pwdLenNoteAdmin").toggle(!1),$("#pwdLenNoteCommon").toggle(!1),$("#normalUserT .title").text(menuStr.changeLgUsrPwd),$("#oldUsrRow").removeClass("disNone"),
-$("#newUsrRow").removeClass("disNone")):($("#pwdLenNote").toggle(!1),$("#pwdLenNoteAdmin").toggle(!1),$("#pwdLenNoteCommon").toggle(!1)),$("#normalUserT").removeClass("disNone"),$("#normalUserC").removeClass("disNone"))}init();
-</script><style type="text/css">p.pwdLenNote{margin:10px 0 25px 260px;color:#fff;font-size:12px;text-align:left}</style>
+</div>

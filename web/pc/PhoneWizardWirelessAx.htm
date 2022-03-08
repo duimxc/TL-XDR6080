@@ -1,5 +1,113 @@
+<script type="text/javascript">
+	function init()
+	{
+        var uciFile = uciWireless.fileName;
+		var uciSecWifi2G = uciWireless.dynData.host_2g;
+		var uciSecWifi5G = uciWireless.dynData.host_5g;
+		var optMode = uciWireless.dynOptName.mode;
+        var blockWidth;
 
+        function sendData()
+		{
+			$.modify(gWifiCfgToSave, function(resp) {
+                if (ENONE == resp[ERR_CODE]) {
+                    gSysMode == uciSystem.optValue.sysMode.wdsMode ? loadPage("PhoneWlanWDSCfgEnd.htm", "phCon")
+                        : loadPage("PhoneWireRepeaterEnd.htm", "phCon");
+                }
+			});
+		}
 
+        blockWidth = $(".WDSThBlock").innerWidth() - 72;
+        $("#intelSite").css("width", blockWidth - $("#intelTitle").outerWidth() - 1);
+        $("#mediatekSite").css("width", blockWidth - $("#mediatekTitle").outerWidth() - 1);
+        $("#realtekSite").css("width", blockWidth - $("#realtekTitle").outerWidth() - 1);
+
+        $("#toggleEnableAx").click(function() {
+            $("#toggleEnableAx").toggleClass("enbaleAx disableAx");
+        });
+        $("#next").click(function() {
+            if ($("#toggleEnableAx").attr("class") != "enableAx")
+            {
+				gWifiCfgToSave[uciFile] = gWifiCfgToSave[uciFile] || {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G] = gWifiCfgToSave[uciFile][uciSecWifi2G] || {};
+				gWifiCfgToSave[uciFile][uciSecWifi2G][optMode] = uciWireless.dynOptValue.mode.m_11bgn;
+
+				gWifiCfgToSave[uciFile][uciSecWifi5G] = gWifiCfgToSave[uciFile][uciSecWifi5G] || {};
+                gWifiCfgToSave[uciFile][uciSecWifi5G][optMode] = uciWireless.dynOptValue.mode.m_11ac;
+            }
+
+            if (gSysMode == uciSystem.optValue.sysMode.wdsMode) {
+                $.modify({"system":{"sys_mode":{"mode": gSysMode}}}, function(result) {
+                    if (true  == errHandle(result[ERR_CODE])) {
+                        sendData();
+                    }
+                });
+            } else {
+                sendData();
+            }
+        });
+        $("#pre").click(function() {
+            if (gSysMode == uciSystem.optValue.sysMode.wdsMode) {
+                loadPage("PhoneWlanWDSCfgThird.htm", "phCon");
+            } else {
+                loadPage("PhoneWireRepeater.htm", "phCon");
+            }
+        });
+    }
+	init();
+</script>
+<style type="text/css">
+	div.WDSThBlock{
+        margin-top:13px;
+        padding-left: 36px;
+        padding-right: 36px;
+	}
+	ul.WDSThNoteUl{
+		margin-top:48px !important;
+	}
+	p.WDSTitle{
+		color:#FFFFFF;
+		font-size:14px;
+		text-align:left !important;
+		margin-bottom:10px;
+    }
+    p.enableAx{
+        line-height:42px;
+        height:42px;
+        border-bottom:solid 1px rgba(255, 255, 255, 0.4);
+    }
+    p.bold{
+        font-weight:bold;
+    }
+    a.downloadSite{
+        font-size:14px;
+        color:#FBEB1A;
+        word-break:break-all;
+        line-height:20px;
+    }
+    i.enableAx{
+        background:url(../web-static/images/CheckBox_checked@1x.png) no-repeat;
+        width:24px;
+        height:24px;
+        display:inline-block;
+        vertical-align:middle;
+        margin-right:8px;
+    }
+    i.disableAx{
+        background:url(../web-static/images/CheckBox_unchecked@1x.png) no-repeat;
+        width:24px;
+        height:24px;
+        display:inline-block;
+        vertical-align:middle;
+        margin-right:8px;
+    }
+    .ib{
+        display:inline-block;
+    }
+    p.site{
+        vertical-align:top;
+    }
+</style>
 <h1 class="phoneTitle bold">802.11ax</h1>
 <div class="WDSThBlock">
     <p class="WDSTitle">{%label.ax80211Tip1%}</p>
@@ -23,7 +131,4 @@
 <div class="phFunc">
 	<label id="pre" class="phTwoBtn">{%btn.preStep%}</label>
 	<label id="next" class="phTwoBtn" style="margin-left:20px;">完成</label>
-</div><script type="text/javascript">function init(){function e(){$.modify(gWifiCfgToSave,function(a){ENONE==a[ERR_CODE]&&(gSysMode==uciSystem.optValue.sysMode.wdsMode?loadPage("PhoneWlanWDSCfgEnd.htm","phCon"):loadPage("PhoneWireRepeaterEnd.htm","phCon"))})}var a=uciWireless.fileName,c=uciWireless.dynData.host_2g,d=uciWireless.dynData.host_5g,f=uciWireless.dynOptName.mode,b;b=$(".WDSThBlock").innerWidth()-72;$("#intelSite").css("width",b-$("#intelTitle").outerWidth()-1);$("#mediatekSite").css("width",b-$("#mediatekTitle").outerWidth()-
-1);$("#realtekSite").css("width",b-$("#realtekTitle").outerWidth()-1);$("#toggleEnableAx").click(function(){$("#toggleEnableAx").toggleClass("enbaleAx disableAx")});$("#next").click(function(){"enableAx"!=$("#toggleEnableAx").attr("class")&&(gWifiCfgToSave[a]=gWifiCfgToSave[a]||{},gWifiCfgToSave[a][c]=gWifiCfgToSave[a][c]||{},gWifiCfgToSave[a][c][f]=uciWireless.dynOptValue.mode.m_11bgn,gWifiCfgToSave[a][d]=gWifiCfgToSave[a][d]||{},gWifiCfgToSave[a][d][f]=uciWireless.dynOptValue.mode.m_11ac);gSysMode==
-uciSystem.optValue.sysMode.wdsMode?$.modify({system:{sys_mode:{mode:gSysMode}}},function(a){!0==errHandle(a[ERR_CODE])&&e()}):e()});$("#pre").click(function(){gSysMode==uciSystem.optValue.sysMode.wdsMode?loadPage("PhoneWlanWDSCfgThird.htm","phCon"):loadPage("PhoneWireRepeater.htm","phCon")})}init();
-</script><style type="text/css">div.WDSThBlock{margin-top:13px;padding-left:36px;padding-right:36px}ul.WDSThNoteUl{margin-top:48px!important}p.WDSTitle{color:#fff;font-size:14px;text-align:left!important;margin-bottom:10px}p.enableAx{line-height:42px;height:42px;border-bottom:solid 1px rgba(255,255,255,0.4)}p.bold{font-weight:bold}a.downloadSite{font-size:14px;color:#fbeb1a;word-break:break-all;line-height:20px}i.enableAx{background:url(../web-static/images/CheckBox_checked@1x.png) no-repeat;width:24px;height:24px;display:inline-block;vertical-align:middle;margin-right:8px}i.disableAx{background:url(../web-static/images/CheckBox_unchecked@1x.png) no-repeat;width:24px;height:24px;display:inline-block;vertical-align:middle;margin-right:8px}.ib{display:inline-block}p.site{vertical-align:top}</style>
+</div>

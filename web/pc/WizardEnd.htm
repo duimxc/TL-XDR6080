@@ -1,5 +1,145 @@
+<script type="text/javascript">
+	function init()
+	{
+		var period = 500;
+		var restTime = 5000;
+		var netState = false;	/* 是否能上网 */
 
+		function wzdEndJumpHandle()
+		{
+			if (true == netState)
+			{
+				gCloudAccountBR["bFWzd"] = true;
+				cloudSetBackBRHd(function(){
+					if (gBeInCNA == "NO")
+					{
+						loadBasic();
+					}
+					else
+					{
+						loadPage("WizardIPadSuccess.htm", "wizardCon");
+					}
+				});
 
+				showCloudPage("CloudTPID.htm");
+				emptyNodes(id("Con"));
+			}
+			else
+			{
+				if(gBeInCNA == "NO")
+				{
+					loadBasic();
+				}
+				else
+				{
+					loadPage("WizardIPadSuccess.htm", "wizardCon");
+				}
+			}
+		}
+
+		function getWanStateHandle(callBack)
+		{
+			var reqData = {};
+			var ccs = cloudClientStatus;
+
+			reqData[ccs.fileName] = {};
+			reqData[ccs.fileName][KEY_NAME] = ccs.secName.clientInfo;
+
+			$.query(reqData, function(result){
+				if (ENONE == result[ERR_CODE])
+				{
+					var connectStatus = result[ccs.fileName][ccs.secName.clientInfo][ccs.optName.connectStatus];
+
+					netState = (connectStatus == ccs.optValue.connectStatus.connected);
+				}
+
+				if (typeof callBack == "function")
+				{
+					callBack(result);
+				}
+			});
+		}
+
+		/* 刷新网络状态 */
+		function refreshInternetState()
+		{
+			getWanStateHandle(function(result){
+				if ((restTime <= 0) || (true == netState))
+				{
+					wzdEndJumpHandle();
+				}
+				else
+				{
+					restTime = restTime - period;
+					$.setTimeout(refreshInternetState, period);
+				}
+			});
+		}
+
+		wzdDone();
+
+		/* 如果无线配置更改，保存无线配置 */
+		if (true == gIsWifiCfgChged)
+		{
+			$.modify(gWifiCfgToSave);
+		}
+
+		if (gIsWifiDevice && gIsWifiCfgChged)
+		{
+			var uciFile = uciWireless.fileName;
+			var uciSecWifi2G = uciWireless.dynData.host_2g;
+			var optSsid = uciWireless.dynOptName.ssid;
+			var optKey = uciWireless.dynOptName.key;
+			var wifiPwdCfg = gWifiCfgToSave[uciFile][uciSecWifi2G][optKey];
+
+			id("wifiName").innerHTML = htmlEscape(gWifiCfgToSave[uciFile][uciSecWifi2G][optSsid]);
+
+			if ((undefined == wifiPwdCfg) || (0 == wifiPwdCfg.length))
+			{
+				$("#pwdSpan").css("display", "none");
+			}
+			else
+			{
+				id("wifiPwd").innerHTML = htmlEscape(gWifiCfgToSave[uciFile][uciSecWifi2G][optKey]);
+			}
+
+			/* 是无线连接到管理页面且无线配置已更改，无线将会断开，显示重连提示页面 */
+			$("#saveCfgLi").css("display", "none");
+			$("#wifiTipsLi").css("display", "block");
+
+			/* 延迟4s进行LAN口探测，检查无线是否重新连接上 */
+			$.setTimeout(function(){
+				lanDetecting(function(){
+					getWanStateHandle(function(){
+						wzdEndJumpHandle();
+					});
+				});
+			}, 4000);
+		}
+		else
+		{
+			/* 是有线连接到管理页面或者无线连接但无线配置没更改，显示“配置生效中”页面 */
+			$("#saveCfgLi").css("display", "block");
+			$("#wifiTipsLi").css("display", "none");
+
+			/* 检测是否能上网，最长检测时间为5s */
+			$.setTimeout(refreshInternetState, 1000);
+		}
+	}
+	init();
+</script>
+<style type="text/css">
+	li.wifiTips p{
+		margin-bottom:25px;
+	}
+	#saveCfgLi{
+		margin-top:100px;
+		display:none;
+	}
+	#wifiTipsLi{
+		display:none;
+	}
+</style>
 <ul class="wzdUl">
 	<li id="saveCfgLi" class="wizardBom">
 		<i class="detecting"></i>
@@ -11,7 +151,4 @@
 		<span>{%label.wirelessName%}{%label.colon%}<label id="wifiName"></label></span>
 		<span id="pwdSpan">&nbsp;&nbsp;&nbsp;{%label.wirelessPwd%}{%label.colon%}<label id="wifiPwd"></label></span>
 	</li>
-</ul><script type="text/javascript">function init(){function f(){!0==d?(gCloudAccountBR.bFWzd=!0,cloudSetBackBRHd(function(){"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}),showCloudPage("CloudTPID.htm"),emptyNodes(id("Con"))):"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}function g(c){var a={},b=cloudClientStatus;a[b.fileName]={};a[b.fileName][KEY_NAME]=b.secName.clientInfo;$.query(a,function(a){ENONE==a[ERR_CODE]&&(d=a[b.fileName][b.secName.clientInfo][b.optName.connectStatus]==
-b.optValue.connectStatus.connected);"function"==typeof c&&c(a)})}function h(){g(function(a){0>=c||!0==d?f():(c-=k,$.setTimeout(h,k))})}var k=500,c=5E3,d=!1;wzdDone();!0==gIsWifiCfgChged&&$.modify(gWifiCfgToSave);if(gIsWifiDevice&&gIsWifiCfgChged){var a=uciWireless.fileName,e=uciWireless.dynData.host_2g,n=uciWireless.dynOptName.ssid,l=uciWireless.dynOptName.key,m=gWifiCfgToSave[a][e][l];id("wifiName").innerHTML=htmlEscape(gWifiCfgToSave[a][e][n]);void 0==m||0==m.length?$("#pwdSpan").css("display",
-"none"):id("wifiPwd").innerHTML=htmlEscape(gWifiCfgToSave[a][e][l]);$("#saveCfgLi").css("display","none");$("#wifiTipsLi").css("display","block");$.setTimeout(function(){lanDetecting(function(){g(function(){f()})})},4E3)}else $("#saveCfgLi").css("display","block"),$("#wifiTipsLi").css("display","none"),$.setTimeout(h,1E3)}init();
-</script><style type="text/css">li.wifiTips p{margin-bottom:25px}#saveCfgLi{margin-top:100px;display:none}#wifiTipsLi{display:none}</style>
+</ul>

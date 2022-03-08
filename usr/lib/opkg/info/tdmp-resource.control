@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/u_packages/resource
 Section: utils
 Architecture: ipq
-Installed-Size: 731954
+Installed-Size: 928665
 Description:  TDMP Resource

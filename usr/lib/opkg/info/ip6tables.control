@@ -4,5 +4,5 @@ Depends: libc, libssp, kmod-ip6tables, libip6tc, libxtables
 Source: tp_package/u_packages/iptables
 Section: net
 Architecture: ipq
-Installed-Size: 73813
+Installed-Size: 73814
 Description:  IPv6 firewall administration tool
