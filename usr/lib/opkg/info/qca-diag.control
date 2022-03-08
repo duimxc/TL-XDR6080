@@ -4,5 +4,5 @@ Depends: libc, libssp, libpthread
 Source: tp_package/sys_packages/qca_util/qca_ftm/qca-diag
 Section: QCA
 Architecture: ipq
-Installed-Size: 73456
+Installed-Size: 73453
 Description:  QCA Linux diag software

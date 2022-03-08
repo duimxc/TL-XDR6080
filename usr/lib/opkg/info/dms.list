@@ -20,6 +20,7 @@
 /conf/template/firewall.json
 /conf/cfgSyncBlackList.xml
 /conf/template/iptv_manage.json
+/etc/plugin_conflict.json
 /conf/template/protocol.json
 /conf/template/data_template_test.json
 /conf/template/system.json

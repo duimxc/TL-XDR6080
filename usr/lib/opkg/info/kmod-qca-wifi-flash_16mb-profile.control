@@ -6,5 +6,5 @@ Source: tp_package/wlan-driver/qca
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 7300141
+Installed-Size: 7299710
 Description:  QCA Wireless LAN Driver

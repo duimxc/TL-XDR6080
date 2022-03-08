@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
 Source: tp_package/k_packages/gpio
 Section: kernel
 Architecture: ipq
-Installed-Size: 3346
+Installed-Size: 3345
 Description:  Kernel modules for GPIO button and leds

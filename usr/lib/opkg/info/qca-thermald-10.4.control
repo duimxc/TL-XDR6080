@@ -5,5 +5,5 @@ Source: tp_package/sys_packages/qca_util/qca_framework/qca-thermald-10.4
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 19058
+Installed-Size: 19059
 Description:  This package is IPQ Thermal Mitigation daemon.

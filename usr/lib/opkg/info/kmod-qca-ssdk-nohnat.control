@@ -5,5 +5,5 @@ Provides: qca-ssdk
 Source: tp_package/ethernet-driver/ipq-nss/qca-ssdk
 Section: kernel
 Architecture: ipq
-Installed-Size: 186793
+Installed-Size: 186798
 Description:  Kernel driver for QCA SSDK

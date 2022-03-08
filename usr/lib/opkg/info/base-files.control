@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/base-files
 Section: base
 Architecture: ipq
-Installed-Size: 35198
+Installed-Size: 35187
 Description:  This package contains a base filesystem and system scripts for OpenWrt.

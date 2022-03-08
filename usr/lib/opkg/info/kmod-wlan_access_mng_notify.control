@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), u_netlink_ipc, kmo
 Source: tp_package/k_packages/wlan_access_mng_notify
 Section: ko util
 Architecture: ipq
-Installed-Size: 1637
+Installed-Size: 1639
 Description:  tp-link wlan_access_mng_notify kernel module: to notify joining of wireless stations

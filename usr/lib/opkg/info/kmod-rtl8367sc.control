@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
 Source: tp_package/ethernet-driver/ipq-nss/rtl8367sc
 Section: ko util
 Architecture: ipq
-Installed-Size: 66846
+Installed-Size: 66840
 Description:  contains rtl8367sc src code

@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
 Source: tp_package/k_packages/igmp_proxy_snooping
 Section: ko util
 Architecture: ipq
-Installed-Size: 7998
+Installed-Size: 8001
 Description:  tp-link igmp proxy & snooping

@@ -8,5 +8,5 @@ Status: unknown hold not-installed
 Essential: yes
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Architecture: ipq
-Installed-Size: 236034
+Installed-Size: 236033
 Description:  C library

@@ -5,5 +5,5 @@ Source: package/libnl
 License: LGPL-2.1
 Section: libs
 Architecture: ipq
-Installed-Size: 162355
+Installed-Size: 162342
 Description:  This package contains a library for applications dealing with netlink sockets

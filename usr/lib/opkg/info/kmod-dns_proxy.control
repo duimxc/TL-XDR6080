@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
 Source: tp_package/k_packages/dns_proxy
 Section: ko util
 Architecture: ipq
-Installed-Size: 8576
+Installed-Size: 8573
 Description:  tp-link dns proxy hook module

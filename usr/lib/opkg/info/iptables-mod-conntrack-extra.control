@@ -4,7 +4,7 @@ Depends: libc, libssp, iptables, kmod-ipt-conntrack-extra
 Source: tp_package/u_packages/iptables
 Section: net
 Architecture: ipq
-Installed-Size: 161
+Installed-Size: 160
 Description:  Extra iptables extensions for connection tracking.
  
  Matches:

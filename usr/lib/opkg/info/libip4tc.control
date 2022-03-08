@@ -4,5 +4,5 @@ Depends: libc, libssp
 Source: tp_package/u_packages/iptables
 Section: libs
 Architecture: ipq
-Installed-Size: 10549
+Installed-Size: 10547
 Description:  IPv4 firewall - shared libiptc library

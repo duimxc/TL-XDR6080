@@ -1,0 +1,10 @@
+{
+	"plugin_conflict":[
+		{
+			"plugin_name":"multiband_wds",
+			"plugin_id":"SL24C0E7C9E4A9666E",
+			"conflict_name":"wds",
+			"conflict_id":"SL8657DFE571492CAA"
+		}
+	]
+}

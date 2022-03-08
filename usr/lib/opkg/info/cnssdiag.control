@@ -5,5 +5,5 @@ Source: tp_package/sys_packages/qca_util/qca_ftm/cnssdiag
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 54527
+Installed-Size: 54528
 Description:  QCA cnssdiag utils

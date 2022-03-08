@@ -5,5 +5,5 @@ Source: tp_package/ethernet-driver/ipq-nss/qca-mcs-apps
 Section: QCA
 Maintainer: Qualcomm Atheros
 Architecture: ipq
-Installed-Size: 38003
+Installed-Size: 37995
 Description:  This package installs the IGMP/MLD snooping daemon and tools

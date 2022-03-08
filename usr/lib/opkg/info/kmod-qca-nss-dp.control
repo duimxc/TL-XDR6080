@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), kmod-qca-ssdk-nohn
 Source: tp_package/ethernet-driver/ipq-nss/qca-nss-dp
 Section: kernel
 Architecture: ipq
-Installed-Size: 18852
+Installed-Size: 18861
 Description:  Kernel driver for NSS data plane

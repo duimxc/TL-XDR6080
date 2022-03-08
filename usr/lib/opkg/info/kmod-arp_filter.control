@@ -4,5 +4,5 @@ Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
 Source: tp_package/k_packages/arp_filter
 Section: ko util
 Architecture: ipq
-Installed-Size: 2531
+Installed-Size: 2530
 Description:  tp-link arp filter module

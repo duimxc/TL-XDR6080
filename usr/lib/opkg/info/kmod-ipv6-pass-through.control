@@ -5,5 +5,5 @@ Source: tp_package/k_packages/ipv6-pass-through
 Section: ipv6
 Maintainer: Yang Taoliu <yangtaoliu@tp-link.net>
 Architecture: ipq
-Installed-Size: 2002
+Installed-Size: 2005
 Description:  Ipv6 Dial Mode of Pass Through.
