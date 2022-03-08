@@ -1,0 +1,33 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="title">
+		<label class="title">{%menuStr.smbCloudManage%}</label>
+	</div>
+	<div class="block">
+		<label>{%menuStr.smbCloudManage%}</label>
+		<div id="switchCon" class="switchCon">
+			<i class="switchBg"></i>
+			<i class="switchBall"></i>
+		</div>
+		<span id="pbcEnableState"></span>
+		<div class="cloudTypeRow disNone">
+			<label>{%label.cloudType%}</label>
+			<span id="cloudType">{%label.cloudTypePublic%}</span>
+		</div>
+		<div class="blockFuncA">
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+		<p class="mt22">注意：</p>
+		<p>1、开启商云管理后，可以登录“TP-LINK商用网络云平台”查看网络状态，进行无线设置、软件升级等配置，其余功能（如上网设置、端口功能）仍需在远程管理界面配置。</p>
+		<p>2、 推荐您使用“TP-LINK商云”APP扫描二维码添加设备。您也可在“TP-LINK商用网络云平台”手动输入设备ID或本路由器MAC地址（<u id="lanMac">xx-xx-xx-xx-xx-xx</u>）添加设备。</p>
+	</div>
+	<div class="deviceIdCon">
+		<div id="qrcode"></div>
+		<div class="deviceIdLabel">设备ID：</div>
+		<div id="deviceId"></div>
+	</div>
+</div><script type="text/javascript">function init(){function m(a){f.innerHTML=a==b?g:h;$(".cloudTypeRow").toggle(a==b)}var b=1,g=statusStr.opened,h=statusStr.closed,k=uciCloudConfig.optValue.enable.on,n=uciCloudConfig.optValue.enable.off,l,f=id("pbcEnableState");$("#save").click(function(){var a=l.state,d={},c={};d[uciCloudConfig.fileName]={};d[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt]=c;c[uciCloudConfig.optName.mngtSwitch]=a==b?k:n;setLoadingId("save");hsLoading(!0);$.modify(d,function(a){hsLoading(!1);ENONE!=a[ERR_CODE]&&
+showAlert(errorStr.saveFail)})});(function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=uciNetwork.secName.lan;a[uciCloudConfig.fileName]={};a[uciCloudConfig.fileName][KEY_NAME]=[uciCloudConfig.secName.confMngt];gGetQRCodeSupport&&(a[uciSystem.fileName]={},a[uciSystem.fileName][KEY_NAME]=[uciSystem.secName.deviceInfo]);$.query(a,function(a){if(ENONE==a[ERR_CODE]){var c=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.mac],e=a[uciCloudConfig.fileName][uciCloudConfig.secName.confMngt][uciCloudConfig.optName.mngtSwitch]==
+k?b:0;l=new Switch("switchCon",e,m,!1);$("#lanMac").html(c);$(".cloudTypeRow").toggle(e==b);f.innerHTML=e==b?g:h;gGetQRCodeSupport&&(a=a[uciSystem.fileName][uciSystem.secName.deviceInfo][uciSystem.optName.qrCode],c=a.substr(3,17),new QRCode(document.getElementById("qrcode"),{text:a,width:124,height:124,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H}),$("#deviceId").html(c))}})})()}init();
+</script><style type="text/css">div.block{text-align:left}div.block label{font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle;margin-right:24px}div.block span{font-size:12px;color:#fff;letter-spacing:-0.37px;vertical-align:middle}div.block p{font-size:12px;color:#fff}div.block p.mt22{margin-top:22px}div.block div.cloudTypeRow{margin-top:24px}div.deviceIdCon{width:156px;height:190px;margin-top:16px;padding:12px 16px;color:#fff;background:#65c7e5;border:1px solid #2f95cd;box-sizing:border-box;text-align:center}div.deviceIdCon .deviceIdLabel{margin-top:8px}</style>

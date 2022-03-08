@@ -1,0 +1,8 @@
+Package: factory_restore
+Version: 1
+Depends: libc, libssp
+Source: tp_package/sys_packages/factory_restore
+Section: utils
+Architecture: ipq
+Installed-Size: 2793
+Description:  tools for restore factory using SLP flash op interface.

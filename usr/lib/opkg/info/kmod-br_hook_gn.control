@@ -1,0 +1,10 @@
+Package: kmod-br_hook_gn
+Version: 4.4.60+1.0
+Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
+Source: tp_package/k_packages/br_hook_gn
+Section: ko util
+Architecture: ipq
+Installed-Size: 4418
+Description:  br_hook_gn this kernel module is used for:
+ 1, mark pkts from guest network.
+ 2, provide a method that prevent guests from accessing host network.

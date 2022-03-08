@@ -1,0 +1,46 @@
+
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.netMode%}</label>
+		<li class="textConA textCon">
+			<span id="wanSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="gridLine gridLineA mpPhoneRgt10">
+		<label class="desLblA">{%label.ipv6LanLocalAddr%}</label>
+		<label id="bridge_lan_local_addr" class="noteLbl"></label>
+	</ul>
+	<div class="blockFuncA">
+		<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+	</div>
+</div>
+<div class="title">
+	<label class="title">{%label.highSet%}</label>
+	<i class="helpBtn" helpStr="Bridgev6AdvHelp"></i>
+</div>
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.wanMac%}</label>
+		<li class="textConA textCon">
+			<span id="wanMacSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul id="macCloneUl" class="gridLine gridLineA">
+		<li class="textConAL textCon"><input id="wanMac" class="textA text hoverBd" maxLength="17" /><i class="tip"></i></li>
+		<li class="textConAL macCloneLi"></li>
+	</ul>
+	<div class="blockFuncA">
+		<input id="saveHighSet" type="button" value="{%btn.save%}" class="btnA subBtn" />
+	</div>
+</div>
+<script type="text/javascript">function init(){function e(a){var b="";switch(a){case ENONE:return!1;default:b=errStr.invRequestFail}showAlert(b);return!0}var g=uciProto.optName.type,h=uciProto.optName.macaddr,d;refreshWanStatus=function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=WAN_STATUS_NAME;updateTimerHandle&&clearTimeout(updateTimerHandle);$.query(a,function(a){a[uciNetwork.fileName][WAN_STATUS_NAME].proto!=BRIDGE_NAME?clearTimeout(updateTimerHandle):id("bridge_lan_local_addr").innerHTML=localLanAddr;
+updateTimerHandle=$.setTimeout(refreshWanStatus,2E3)})};selectInit("wanSel",wanOptions,LINK_TYPE_BRIDGE,wanSelectChange);curSysMode!=uciSystem.optValue.sysMode.routerMode&&(id("wanSel").disable(!0),disableBtn("save",!0),disableBtn("saveHighSet",!0));(function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=[WAN_STATUS_NAME,uciNetwork.dynData.ifaceMac];a[uciProto.fileName]={};a[uciProto.fileName][KEY_NAME]=uciProto.secName.wan;$.query(a,function(a){d=a[uciNetwork.fileName][WAN_STATUS_NAME].proto;
+setMacInfo(a)})})();refreshWanStatus();refreshLanStatus();id("save").onclick=function(){wanCheckWDS(function(){function a(){setLoadingId("save");hsLoading(!0);$.modify(b,function(a){d="bridgev6";hsLoading(!1);updateTimerHandle=$.setTimeout(refreshWanStatus,0);return e(a[ERR_CODE])})}var b={},c={},f={};b.protocol=c;c[WAN_NAME]=f;f[g]=BRIDGE_NAME;"bridgev6"!=d?showConfirm(label.ipv6BridgeChgTip,function(b){b&&a()}):a()})};id("saveHighSet").onclick=function(){wanCheckWDS(function(){var a={},b={},c={};
+a.protocol=b;b.wan=c;b=id("wanMac").value;c[h]=b;setLoadingId("saveHighSet");hsLoading(!0);$.modify(a,function(a){hsLoading(!1);return e(a[ERR_CODE])});updateTimerHandle=$.setTimeout(refreshWanStatus,2E3)})}}init();
+</script><style type="text/css">li.macCloneLi{color:#fff;font-size:12px;line-height:20px!important}</style>

@@ -1,0 +1,27 @@
+
+
+<h1 class="cloudForgH1">{%label.cloudAccountCheck%}</h1>
+<ul class="gridLine gridLineD mpPhoneRgt50">
+	<label class="desLblB" for="account">{%label.tpLinkID%}</label>
+	<li class="textConE textCon"><input id="account" class="textC text imeModeN" /></li>
+	<li id="accountNote" class="note">
+		<i class="tip"></i>
+		<span class="note"></span>
+	</li>
+</ul>
+<p class="inputTip">{%label.cloudBingNameTip%}</p>
+<ul class="gridLine gridLineD">
+	<label class="desLblB" for="CAPTCHA">{%label.loginCAPTCHA%}</label>
+	<li class="textConB5 textCon"><input id="CAPTCHA" class="textC textC1 text imeModeN"  maxLength="6" /></li>
+	<input id="resend" type="button" value="{%btn.resend%}" disabled="true" class="resendBtn disNone" />
+	<input id="CAPTCHAGet" type="button" value="{%btn.CAPTCHAGet%}" class="subBtn btnA btnA1" />
+</ul>
+<p id="CAPTCHASendTip" class="inputTip disNone">{%label.CAPTCHASentEmainTip%}</p>
+<input id="nextStep" type="button" value="{%btn.nextStep%}" class="subBtn cloudSub" /><script type="text/javascript">function init(){function g(a,c){var b="";switch(parseInt(a)){case ENONE:return!0;case EINVERICODEEMPTY:c="CAPTCHA";b=errStr.invVericodeNULL;break;case EINVACCOUNTRESETPWDCAPTCHAERR:case EINVVERICODEFORMAT:c="CAPTCHA";b=appendErrCode(errStr.CAPTCHAErrorTip,a);break;case EINVACCOUNTNOTEXIST:c="account";b=appendErrCode(errStr.invCloudAccountNotExist,a);break;case EINVACCOUNTTYPEERR:c="account";b=appendErrCode(errStr.invCloudAccountType,a);break;case EINVCLOUDUSRCOUNTFORMAT:case EINVACCOUNTEMAILFMT:case EINVACCOUNTPHONENUMFMT:c=
+"account";b=appendErrCode(errStr.invCloudAccountFmtErr,a);break;case EINVDEVICELOCKED:b=appendErrCode(errStr.invCloudDeviceLocked,a);break;case EINVCLOUDERRORCAPTCHAINVAL:b=appendErrCode(errStr.invCloudCAPTCHAInval,a);break;default:b=cloudErrHandle(a),b=!1==b.result?b.tip:appendErrCode(errStr.invRequestFail,a)}showAlert(b,c);return!1}function l(a){if(0==a.length)return showNoteB("accountNote",label.cloudAccountNull),!1;if(!0==checkNum(a)){if(!1==checkPhoneNum(a))return showNoteB("accountNote",errStr.invCloudAccountFmtErr,
+"twoLine"),!1;f=uciCloudConfig.optValue.accountTypePhoneNum;closeNote("accountNote");return!0}if(!1==checkEmail(a))return showNoteB("accountNote",errStr.invCloudAccountFmtErr,"twoLine"),!1;f=uciCloudConfig.optValue.accountTypeEmail;closeNote("accountNote");return!0}function m(a){a=parseInt(a);0>=a?(n.style.display="inline",d.style.display="none",d.time=-1):(n.style.display="none",d.value=btn.resend+"("+a+")",d.time=--a,d.style.display="inline")}var h=id("account"),n=id("CAPTCHAGet"),d=id("resend"),
+k=id("CAPTCHASendTip"),f=0,p={},e=!1;$("ul.cloudNav li").each(function(a){this.className=0==a?"select":""});id("nextStep").onclick=function(){var a=id("CAPTCHA").value,c=h.value;!1!=l(c)&&(0==a.length?g(EINVERICODEEMPTY):(cloudAccountRstPwdCheckCAPTCHA(c,a,function(b){closeLoading();!0==g(b)&&(gCloudAccount.account=c,gCloudAccount.CAPTCHAR=a,gCloudAccount.accountType=f,loadPage("CloudForgPwdSecond.htm","cloudForgDetial",void 0,{bClearPageTickArray:!1}))}),showLoading(label.cloudAccountCAPTCHAChecking,
+cloudAccountQueryStop,void 0,!1)))};h.onkeyup=function(){var a=this.value;0==a.length?closeNote("accountNote"):!0==checkNum(a)&&!0==checkPhoneNum(a)?closeNote("accountNote"):!0==checkEmail(a)&&closeNote("accountNote")};h.onblur=function(){l(this.value)};n.onclick=function(){var a,c=h.value,b=null;!0!=e&&(!0==l(c)?(e=!0,a=$.setTimeout(function(){showLoading(label.cloudServerWaitingResp,function(){e=!1;cloudAccountQueryStop()},void 0,!1)},2E3),cloudAccountRstPwdAC(c,f,function(d){e=!1;clearTimeout(a);
+closeLoading();!0==g(d)&&(m(120),k.style.display="block",uciCloudConfig.optValue.accountTypeEmail==f?null!=(b=emailLinkCheck(c))?k.innerHTML=label.CAPTCHASentEmainTip+"<a href='"+b+"' target='blank'>"+label.CAPTCHASentEmainTipS+"</a>":k.innerHTML=label.CAPTCHASentEmainTip+label.CAPTCHASentEmainTipS:k.innerHTML=label.CAPTCHASentPhTip)},function(){clearTimeout(a);e=!1;closeLoading()})):e=!1)};d.style.display="none";(function(){"none"!=d.style.display&&m(d.time);$.setTimeout(arguments.callee,1E3)})();
+p[cloudClientStatus.fileName]={};p[cloudClientStatus.fileName][KEY_NAME]=cloudClientStatus.secName.resetVeriCodeTimer;$.query(p,function(a){g(a[ERR_CODE])&&m(parseInt(a[cloudClientStatus.fileName][cloudClientStatus.secName.resetVeriCodeTimer][cloudClientStatus.optName.resetVeriCodeTimer]))})}init();
+</script><style type="text/css">input.resendBtn{background:#5e85c0;border-radius:5px;border:1px solid #184283;color:#184283;cursor:default;height:25px;font-size:12px;margin-left:5px;vertical-align:middle;width:92px}#CAPTCHASendTip a{color:#fff}</style>

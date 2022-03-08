@@ -1,0 +1,8 @@
+Package: zlib
+Version: 1.2.7-1
+Depends: libc, libssp
+Source: package/zlib
+Section: libs
+Architecture: ipq
+Installed-Size: 38681
+Description:  Library implementing the deflate compression method

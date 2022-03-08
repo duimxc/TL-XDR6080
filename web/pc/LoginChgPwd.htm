@@ -1,0 +1,89 @@
+
+
+<div class="wizardContent">
+	<div class="wizardLogo">
+		<i class="logoBand"></i>
+		<label class="proName" id="prodName">{%label.productName%}</label>
+	</div>
+	<div id="wzdIdx" class="wzdIdx">
+		<div id="wzdQCode" class="wzdQCode">
+			<img src="../web-static/images/bsQRCode.png" />
+			<p class="pF">{%label.wzdSacnQCodeF%}</p>
+			<p class="pS">{%label.wzdSacnQCodeS%}</p>
+		</div>
+		<ul class="wzdNav">
+			<li class="select">
+				<p>{%label.wzdChgPwd%}</p><i class="edgeItem"></i><span></span><i class="showRight"></i>
+			</li>
+			<li id="chgPwd"><p>{%label.wzdNetCfg%}</p>
+				<i class="showLeft"></i><span></span><i class="showRight"></i>
+			</li>
+			<li>
+				<p>{%label.wzdWirelessCfg%}</p><i class="showLeft"></i><span></span><i class="edgeItem"></i>
+			</li>
+		</ul>
+	</div>
+	<div id="wizardCon" class="wizardCon">
+		<img src="../web-static/images/wzdDetecting.gif" style="display: none"/>
+		<ul class="wzdConTitleUl">
+			<li class="wzdCTitle">
+				<p class="wzdConTitle">{%label.chgLgPwd%}</p>
+				<p class="wzdConTitleDes">{%label.chgLgPwdTip%}</p>
+			</li>
+		</ul>
+		<ul class="inputUl inputUlF">
+			<li class="inputLi">
+				<label for="pwd">{%label.loginSetPwd%}</label>
+				<input id="pwd" maxlength="32" type="password" />
+			</li>
+			<li id="lgPwdNoteLess" class="note">
+				<i class="error"></i>
+				<div class="noteCon">
+					<p>{%label.chgPwdLess%}</p>
+				</div>
+			</li>
+			<li id="lgPwdNoteInvalidChar" class="note">
+				<i class="error"></i>
+				<div class="noteCon">
+					<p>{%errStr.pwdCharValid%}</p>
+				</div>
+			</li>
+			<li id="lgPwdNote" class="note">
+				<i class="warn" id="pwdDepI"></i>
+				<div class="noteCon">
+					<p class="twoLine pwdDepC">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDep">{%label.weak%}</label></p>
+					<div class="pwdDepL"><label id="chgPwdDep"></label></div>
+				</div>
+			</li>
+		</ul>
+		<p class="wzdDesP">{%label.chgPwdChar%}</p>
+		<ul class="inputUl">
+			<li class="inputLi">
+				<label id="pwdConfLbl" for="pwdConf">{%label.loginPwdConf%}</label>
+				<input id="pwdConf" maxlength="32" type="password" />
+			</li>
+			<li id="lgPwdConfNote" class="note">
+				<i class="error"></i>
+				<div class="noteCon">
+					<p class="chgPwdDif">{%label.chgPwdDif%}</p>
+				</div>
+			</li>
+		</ul>
+		<ul>
+			<li class="wzdSubLi"><input id="sub" type="button" value="{%btn.ok%}" /></li>
+		</ul>
+	</div>
+	<div id="wizardFoot" class="wizardFoot">
+		<ul class="wzdFootCon">
+			<li class="showRight"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}{%label.colon%}400-8863-400</label></li>
+		</ul>
+	</div>
+</div><script type="text/javascript">var isSending=!1,PageObj={chkPswVal:function(a){return/^[\x21-\x7e]+$/.test(a)},pwdConfFocus:function(){this.lgPwdNote.style.display="none"},pwdFocus:function(){this.lgPwdConfNote.style.display="none"},pwdConfCheck:function(){var a=this.pwdConf,b=this.pwd;this.pwdConfFocus();if(a.value==b.value)return this.lgPwdConfNote.style.visibility="hidden",!0;this.lgPwdConfNote.style.display=this.INLINE_BLOCK;this.lgPwdConfNote.style.visibility="visible";return!1},pwdBlur:function(){var a=id("pwd"),b=a.value.length,
+c=a.value;0<b&&6>b&&this.chkPswVal(c)||0==b?($("#lgPwdNoteLess").css("display",this.INLINE_BLOCK).css("visibility","visible"),window.setTimeout(function(){a.focus()},0)):this.chkPswVal(c)||window.setTimeout(function(){a.focus()},0)},pwdCheckMixChars:function(a){var b=!1,c=!1,d=!1,b=/\d/g.test(a),c=/[a-zA-Z]/g.test(a),d=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(a);return b&&d&&c},pwdCheck:function(){var a=24,b="",c="warn",d=this.INLINE_BLOCK,g=this.INLINE_BLOCK,e=this.pwd.value,f=e.length,k=
+this.INLINE_BLOCK,h=!0;this.chkPswVal(e)||0==f?0<=f&&6>f?(h=!1,g="none"):32<f?(g=d="none",h=!1):g=d="none":(d="none",h=!1);"none"!=d||"none"!=g?k="none":/^\d+$/.test(e)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(e)||/^[a-zA-Z]+$/.test(e)?10>=f?b=label.weak:(b=label.media,a*=2):!0==this.pwdCheckMixChars(e)?(b=label.strong,a*=3,c="correct"):10>=f?(b=label.media,a*=2):(b=label.strong,a*=3,c="correct");this.lgPwdNote.style.display=k;this.lgPwdNoteLess.style.display=d;this.lgPwdNoteInvalidChar.style.display=
+g;this.pwdDep.innerHTML=b;this.chgPwdDep.style.width=a+"px";id("pwdDepI").className=c;return h},pwdConfChange:function(a){a=a||window.event;a=a.keyCode;if(this.pwdConfCheck()&&13==a)this.onsub()},skipWzdConfirm:function(){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,function(a){ENONE==a[ERR_CODE]&&(a=0==parseInt(a.custom_network.bridge_status.enable)?label.telWzdRouteCfm:label.telWzdBriCfm,showConfirmC(a,function(a){!0==
+a&&(a={},a[uciSystem.fileName]={},a[uciSystem.fileName][uciSystem.secName.sys]={},a[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory]=uciSystem.optValue.isFactory.no,$.modify(a),gSkipWzd=!0);unloadLogin()},label.telSkipWzd,label.telBackWzd))})},onsub:function(){var a=this.pwd,b=this.pwdConf;this.pwdCheck()&&this.pwdConfCheck()&&!isSending&&(isSending=!0,setLoadingId("sub",IMG_HS_LOADING_WZD),hsLoading(!0),gCloudAccountBR.pwdLen=a.value.length,$.changeDefaultPwd(a.value,function(c){isSending=
+!1;ENONE==c?(a.value="",b.value="",c={},c[uciFunction.fileName]={},c[uciFunction.fileName][KEY_NAME]=[uciFunction.secName.newModuleSpec],$.query(c,function(a){a[ERR_CODE]==ENONE?void 0!=a[uciFunction.fileName]&&void 0!=a[uciFunction.fileName][uciFunction.secName.newModuleSpec]&&a[uciFunction.fileName][uciFunction.secName.newModuleSpec][uciFunction.optName.elink]==uciFunction.optValue.enable?PageObj.skipWzdConfirm():unloadLogin():unloadLogin()})):EHASINITPWD==c?showAlert(errStr.hasInitPwd,void 0,void 0,
+function(){location.reload()}):showAlert(errStr.setPwdErr)}))},init:function(){var a=this,b=id("pwd"),c=id("pwdConf");id("prodName").innerHTML=label.productName+proName;this.pwdConf=c;this.pwd=id("pwd");this.lgPwdNote=id("lgPwdNote");this.lgPwdConfNote=id("lgPwdConfNote");this.lgPwdNoteLess=id("lgPwdNoteLess");this.lgPwdNoteInvalidChar=id("lgPwdNoteInvalidChar");this.pwdDep=id("pwdDep");this.chgPwdDep=id("chgPwdDep");this.INLINE_BLOCK=isIESix||isIESeven?"inline":"inline-block";$("#Login").css("display",
+"block");$("#Con").css("display","none");c.onkeyup=function(b){a.pwdConfChange(b)};c.onfocus=function(){a.pwdConfFocus()};c.onblur=function(){a.pwdConfCheck()};b.onkeyup=function(){a.pwdCheck()};b.onblur=function(){a.pwdBlur()};b.onfocus=function(){a.pwdFocus()};this.lgPwdNoteInvalidChar.style.display="none";this.lgPwdNote.style.display="none";id("sub").onclick=function(){a.onsub()};b.focus()}};PageObj.init();
+</script><style type="text/css">body{background-color:#248ab3}#wzdQCode{display:block}div.wzdQCode{display:none;float:right;font-size:0;width:220px;overflow:hidden;margin-top:0}div.wzdQCode p{font-size:12px;float:right;color:#fff;text-align:right;margin-right:10px}div.wzdQCode p.pF{letter-spacing:1px;margin-top:28px}div.wzdQCode p.pS{letter-spacing:.8px;_letter-spacing:1px;width:100px}div.wzdQCode img{float:right;height:60px;width:60px}#lgPwdNote{visibility:visible}#lgPwdNoteInvalidChar{visibility:visible}label.proName{font-size:12px;color:#fff;top:20px;right:10px;position:absolute}</style>

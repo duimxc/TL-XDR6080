@@ -1,0 +1,6 @@
+
+<script type="text/javascript">var WIFI_FILE=uciWireless.fileName,SECN_WLAN_BS=uciWireless.secName.wlanBS,OPT_BS_ENBALE=uciWireless.optName.bsEnable,OPT_WIFI_ENABLE=uciWireless.optName.wifiEnable,ENABLE="1",DISABLE="0",enbaleOptions=[{str:label.wlanOn,value:ENABLE},{str:label.wlanOff,value:DISABLE}],gEnableJumpPage="WlanNetwork3BandBS.htm",gDisableJumpPage="WlanNetwork3Band.htm";
+function bsSelectChange(a){""==a.toString()&&(a=DISABLE);a==DISABLE?loadPage(gDisableJumpPage,"routeSetRCon"):loadPage(gEnableJumpPage,"routeSetRCon")}function closeBs(a){var b={};b[OPT_BS_ENBALE]=DISABLE;modifyBs(b,a)}function modifyBs(a,b){var c={};c[WIFI_FILE]={};c[WIFI_FILE][SECN_WLAN_BS]=a;$.modify(c,function(a){b&&b(a)})}
+function init(){(function(){BAND_3==gBandNum?(gEnableJumpPage="WlanNetwork3BandBS.htm",gDisableJumpPage="WlanNetwork3Band.htm"):BAND_2==gBandNum?(gEnableJumpPage="WlanNetwork2BandBS.htm",gDisableJumpPage="WlanNetwork2Band.htm"):gDisableJumpPage=gEnableJumpPage="WlanNetwork.htm";if(gSupportBS){var a={};a[WIFI_FILE]={};a[WIFI_FILE][KEY_NAME]=[SECN_WLAN_BS];$.query(a,function(a){var c=gDisableJumpPage;ENABLE==a[WIFI_FILE][SECN_WLAN_BS][OPT_BS_ENBALE]?loadPage(gEnableJumpPage,"routeSetRCon"):loadPage(c,
+"routeSetRCon")})}else loadPage(gDisableJumpPage,"routeSetRCon")})()}init();
+</script>

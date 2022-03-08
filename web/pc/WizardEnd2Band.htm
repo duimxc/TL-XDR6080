@@ -1,0 +1,101 @@
+﻿
+
+<ul class="wzdConTitleUl wzdConTileUlW">
+	<p class="wzdConTitle">{%label.wifiSet%}</p>
+</ul>
+<ul class="wzdUl">
+	<li id="saveCfgLi" class="wizardBom">
+		<i class="detecting"></i>
+		<p id="savingCfgP">{%label.savingCfg%}</p>
+		<p id="dfsP">遵照国家法律法规，路由器正在做退避雷达信号探测，Wi-Fi信号要 <span id='DFScountdown'></span> 后才能上线，请稍候...</p>
+	</li>
+	<li id="wifiTipsLi" class="wizardBom wifiTips">
+		<i class="success"></i>
+		<p class="wzdSuccTitle">{%label.endWzdSuccessTip%}</p>
+		<p class="wzdSuccTip" style="margin-bottom: 8px" id="dfsTips">遵照国家法律法规，路由器正在做退避雷达信号探测，Wi-Fi信号要 <span id='DFScountdown1'>70s</span> 后才能上线，请稍候...</p>
+		<p class="wzdSuccTip" id="dfsTips2">Wi-Fi配置已经发生更改，待无线信号上线后，您的设备需要重新进行无线连接。</p>
+		<p class="wzdSuccTip" id="noneDfsTips">{%label.endWzdReconnectTip%}</p>
+		<div class="wzdWifiTips">
+			<div id="wifiInfo2G" class="disNone">
+				<span>
+					{%label.wirelessName2G%}{%label.colon%}<label id="wifiName"></label>
+				</span>
+				<br />
+				<span id="pwdSpan">
+					{%label.wirelessPwd2G%}{%label.colon%}<label id="wifiPwd"></label>
+				</span>
+			</div>
+			<div id="wifiInfo5G" class="disNone">
+				<br />
+				<span>
+					{%label.wirelessName5G%}{%label.colon%}<label id="wifiName5G"></label>
+				</span>
+				<br />
+				<span id="pwdSpan5G">
+					{%label.wirelessPwd5G%}{%label.colon%}<label id="wifiPwd5G"></label>
+				</span>
+			</div>
+			<div id="wifiInfo5G1" class="disNone">
+				<br />
+				<span>
+					{%label.wirelessName5G1%}{%label.colon%}<label id="wifiName5G1"></label>
+				</span>
+				<br />
+				<span id="pwdSpan5G1">
+					{%label.wirelessPwd5G1%}{%label.colon%}<label id="wifiPwd5G1"></label>
+				</span>
+			</div>
+			<div id="wifiInfo5G4" class="disNone">
+				<br />
+				<span>
+					{%label.wirelessName5G2%}{%label.colon%}<label id="wifiName5G4"></label>
+				</span>
+				<br />
+				<span id="pwdSpan5G4">
+					{%label.wirelessPwd5G2%}{%label.colon%}<label id="wifiPwd5G4"></label>
+				</span>
+			</div>
+			<div id="wifiInfoBs" class="disNone">
+				<span>
+					{%label.wirelessName%}{%label.colon%}<label id="wifiNameBs"></label>
+				</span>
+				<br />
+				<span id="pwdSpanBs">
+					{%label.wirelessPwd%}{%label.colon%}<label id="wifiPwdBs"></label>
+				</span>
+			</div>
+			<div id="lanIPCon" class="disNone">
+				<br />
+				<span>
+					{%label.lanIPAddr%}{%label.colon%}<label id="lanIP"></label>
+				</span>
+			</div>
+		</div>
+	</li>
+	<li id="extList" class="wizardBom">
+		<span id="extInfo" class="extInfo"></span>
+	</li>
+	<div id="pcbEnable" class="pcbEnableCon disNone">
+		<label class="switchTitle">TP按键</label>
+		<div id="switchCon" class="switchCon switchConNetState">
+			<i class="switchBg"></i>
+			<i class="switchBall"></i>
+		</div>
+		<span id="pbcEnableState"></span>
+		<p class="first">通过TP-LINK协议授权的设备会同步网络内其他设备的上网参数等信息，</p>
+		<p>如您在公共场所使用带TP按键的设备，建议关闭TP按键授权方式，仅允许通过WEB、</p>
+		<p>APP授权加入新设备，后续如需打开TP按键授权，请在“路由设置”中，进行设置即可。</p>
+	</div>
+	<li class="wzdSubLi disNone" id="subLi"><input id="sub" type="button" value="{%btn.finish%}" /></li>
+</ul><script type="text/javascript">function init(){function q(a){r=setInterval(function(){d--;id("DFScountdown").innerHTML=d+"s";id("DFScountdown1").innerHTML=d+"s";0>=d&&(clearInterval(r),"undefined"!=typeof a&&a())},1E3)}function v(){!0==m?(gCloudAccountBR.bFWzd=!0,cloudSetBackBRHd(function(){"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}),showCloudPage("CloudTPID.htm"),emptyNodes(id("Con"))):"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}function w(a){var b={},c=cloudClientStatus;
+b[c.fileName]={};b[c.fileName][KEY_NAME]=c.secName.clientInfo;$.query(b,function(b){ENONE==b[ERR_CODE]&&(m=b[c.fileName][c.secName.clientInfo][c.optName.connectStatus]==c.optValue.connectStatus.connected);"function"==typeof a&&a(b)})}function f(){w(function(a){0>=n||!0==m?v():(n-=s,$.setTimeout(f,s))})}function e(a,b,c,f,e,d){a?($("#"+b).text(gWifiCfgToSave[h][c][k]),$("#"+b).attr("title",gWifiCfgToSave[h][c][k]),a=gWifiCfgToSave[h][c][g],void 0==a||0==a.length?$("#"+f).css("display","none"):($("#"+
+e).text(gWifiCfgToSave[h][c][g]),$("#"+e).attr("title",gWifiCfgToSave[h][c][g]))):($("#"+b).text(d[k]),$("#"+b).attr("title",d[k]),a=d[g]||"",void 0==a||0==a.length?$("#"+f).css("display","none"):($("#"+e).text(d[g]),$("#"+e).attr("title",d[g])))}function x(a){y.innerHTML=a==z?A:B}function t(){if(gIsWifiDevice&&gIsWifiCfgChged||gSysModeSupport&&gIsLanIpChanged){if(gSupportBS&&gWifiCfgToSave.wireless.wlan_bs.bs_enable==uciWireless.optValue.bsEnable.enable)id("wifiInfoBs").style.display="block",e(gIsWifiCfgBsChged,
+"wifiNameBs",C,"pwdSpanBs","wifiPwdBs",oriWifiCfgBs);else switch(gBandNum){case BAND_1:id("wifiInfo2G").style.display="block";e(gIsWifiCfg2GChged,"wifiName",p,"pwdSpan","wifiPwd",oriWifiCfg);break;case BAND_2:id("wifiInfo2G").style.display="block";id("wifiInfo5G").style.display="block";e(gIsWifiCfg2GChged,"wifiName",p,"pwdSpan","wifiPwd",oriWifiCfg);e(gIsWifiCfg5GChged,"wifiName5G",D,"pwdSpan5G","wifiPwd5G",oriWifiCfg5G);break;default:id("wifiInfo2G").style.display="block",id("wifiInfo5G1").style.display=
+"block",id("wifiInfo5G4").style.display="block",e(gIsWifiCfg2GChged,"wifiName",p,"pwdSpan","wifiPwd",oriWifiCfg),e(gIsWifiCfg5GChged,"wifiName5G1",E,"pwdSpan5G1","wifiPwd5G1",oriWifiCfg5G),e(gIsWifiCfg5G4Chged,"wifiName5G4",F,"pwdSpan5G4","wifiPwd5G4",oriWifiCfg5G4)}gSysModeSupport&&gIsLanIpChanged&&($("#lanIPCon").css("display","block"),$("#lanIP").text(gLanIP));$("#saveCfgLi").css("display","none");$("#wifiTipsLi").css("display","block");$("#subLi").css("display","block");l?($("#dfsTips").css("display",
+"block"),$("#dfsTips2").css("display","block"),$("#noneDfsTips").css("display","none")):($("#dfsTips").css("display","none"),$("#dfsTips2").css("display","none"),$("#noneDfsTips").css("display","block"));if(gMeshSupport)switch(gBandNum){case BAND_2:wzdConSet({height:"730px"});break;case BAND_3:wzdConSet({height:"790px"})}else switch(gBandNum){case BAND_2:wzdConSet({height:"540px"});break;case BAND_3:wzdConSet({height:"600px"})}l&&q();gMeshSupport&&($("#pcbEnable").removeClass("disNone"),u=new Switch("switchCon",
+gPbcEnable,x))}else wzdConSet({height:"480px"}),$("#saveCfgLi").css("display","block"),$("#wifiTipsLi").css("display","none"),$("#subLi").css("display","none"),l?($("#savingCfgP").css("display","none"),$("#dfsP").css("display","block"),q(f)):($("#savingCfgP").css("display","block"),gSysModeSupport?gSysMode==uciSystem.optValue.sysMode.apMode?$.query({wired_extender:{name:"status"}},function(a){var b="0.0.0.0";ENONE==a.error_code&&(b=a.wired_extender.status.ip);"0.0.0.0"!=b?($.action({wired_extender:{set_ip:null}}),
+$.setTimeout(function(){window.location.href="http://"+b},6E4),$.changeDomain(b),$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+b})},4E3)):$.setTimeout(f,1E3)}):$.setTimeout(f,1E3):$.setTimeout(f,1E3))}var h=uciWireless.fileName,p=uciWireless.dynData.host_2g,D=uciWireless.dynData.host_5g,E=uciWireless.dynData.host_5g1,F=uciWireless.dynData.host_5g4,C=uciWireless.secName.wlanBS,k=uciWireless.dynOptName.ssid,g=uciWireless.dynOptName.key,s=500,n=5E3,m=!1,d=70,r,l=!1,z=
+1,A=statusStr.opened,B=statusStr.closed,y=id("pbcEnableState"),u;wzdDone();!0==gIsWifiCfgChged?$.modify(gWifiCfgToSave,function(a){a[ERR_CODE]==ENONE&&a.dfs_wait_time&&0!=a.dfs_wait_time&&(d=parseInt(a.dfs_wait_time),id("DFScountdown1").innerHTML=d+"s",l=!0);t()}):t();id("sub").onclick=function(){var a={};gMeshSupport&&(a.mesh={config:{pbc_enable:u.state}});gSysModeSupport&&gSysMode==uciSystem.optValue.sysMode.wdsMode&&(a.network={lan:{ipaddr:gLanIP,ip_mode:"dynamic",netmask:gLanMask}},a.dhcpd={udhcpd:{enable:"0",
+auto:"1"}});showLoading("正在保存设置，请稍候...",void 0,void 0,!1);$.modify(a,function(a){gSysModeSupport?(gSysMode==uciSystem.optValue.sysMode.apMode?$.action({wired_extender:{set_ip:null}}):gSysMode==uciSystem.optValue.sysMode.wdsMode&&$.action({network:{apply_lan_config:null},wireless:{wds_finish:null}},null,!0),gIsLanIpChanged?($.setTimeout(function(){window.location.href="http://"+gLanIP},6E4),$.changeDomain(gLanIP),$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},
+4E3)):f()):f()})}}init();
+</script><style type="text/css">li.wifiTips{margin-top:0}li.wifiTips i{margin-bottom:30px}#saveCfgLi{display:none}#wifiTipsLi{display:none}span.extInfo{line-height:35px}#extList{display:none;margin-top:0}p.wzdSuccTitle{font-size:16px;font-weight:bold;margin-bottom:9px}p.wzdSuccTip{font-size:14px;margin-bottom:30px}div.wzdWifiTips{width:360px;height:auto;padding:30px;border:1px #248ab3 solid;background-color:rgba(255,255,255,0.1);margin:0 auto;text-align:left}div.wzdWifiTips div{overflow:hidden;white-space:nowrap}div.wzdWifiTips span{line-height:22px}li.wizardBom label{color:#0d6a90;font-size:12px;font-weight:normal;text-overflow:ellipsis;overflow:hidden;max-width:275px;white-space:nowrap;vertical-align:bottom}li.wizardBom span{color:#0d6a90;font-size:12px;font-weight:bold}#saveCfgLi p{display:none}#DFScountdown,#DFScountdown1{font-size:14px;color:#d8ff68}div.pcbEnableCon{text-align:center;margin-top:40px;color:#FFF;font-size:12px}div.pcbEnableCon label.switchTitle{font-size:14px;vertical-align:middle;margin-right:14px}div.pcbEnableCon p.first{margin-top:24px}div.switchConNetState{vertical-align:middle}#pbcEnableState{margin-left:4px;vertical-align:middle}li.wzdSubLi{margin-top:24px}</style>

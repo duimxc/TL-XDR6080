@@ -1,0 +1,11 @@
+
+
+<div class="selectNetType disNone">
+    <p class="title">{%label.selectNetType%}</p>
+    <p id="pppoe" class="netType">{%label.pppoe%}</p>
+    <p id="dynamicIp" class="netType">{%label.dynamicIp%}{%label.advice%}</p>
+    <p id="staticIp" class="netType">{%label.staticIp%}</p>
+    <p id="wireRepeater" class="netType disNone">{%label.wireRepeater%}</p>
+    <p class="cancel">取消</p>
+</div><script type="text/javascript">function init(){!gSysModeSupport||gMultiWanOpen||gIpv6Enable||($("#wireRepeater").show(),$("#wireRepeater").click(function(){loadPage("PhoneWireRepeater.htm","phCon")}));$("#pppoe").click(function(){loadPage("PhonePPPoE.htm","phCon")});$("#dynamicIp").click(function(){loadPage("PhoneDynamicIp.htm","phCon")});$("#staticIp").click(function(){loadPage("PhoneStaticIp.htm","phCon")});$(".cancel").click(function(){$(".selectNetType").hide();hideCover()})}init();
+</script><style type="text/css">div.selectNetType{position:absolute;bottom:0;width:100%;background-color:#fff;z-index:1011}p.title{height:32px;font-size:12px;color:#666;line-height:32px;text-align:center;border-bottom:1px solid #e6e6e6}p.netType{height:48px;font-size:16px;color:#333;line-height:48px;text-align:center;border-bottom:1px solid #e6e6e6;cursor:pointer}p.cancel{height:48px;font-size:16px;color:#333;line-height:48px;text-align:center;border-top:8px solid #f5f5f5;cursor:pointer}</style>

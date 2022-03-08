@@ -1,0 +1,64 @@
+
+
+<div id="hcCo" class="hcCo hcCoT">
+	<i class="coverLoading" style="display: none"></i>
+	<div class="hsHelp"></div>
+	<div class="title titleT">
+		<label class="title">{%menuStr.lanSet%}</label>
+		<i class="helpBtn" helpStr="lanHelp"></i>
+	</div>
+	<div class="block">
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="mac">{%label.mac%}</label>
+			<label id="mac" class="noteLbl"></label>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.lanIpSetting%}</label>
+			<li class="textConA textCon">
+				<span id="lanSel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+			</li>
+			<label id="bridgeLanIpWarn" class="noteLbl"></label>
+		</ul>
+		<ul class="gridLine gridLineA gridLineTips" id="relayTip">
+			<div class="warnCon">
+				<img src="../web-static/images/routerBg.png" />
+			</div>
+			<span id="relayTipText"></span>
+		</ul>
+		<a id="lanManualIp">
+			<ul class="gridLine gridLineA">
+				<label class="desLblA" for="lanIpAddr">{%label.ipAddr%}</label>
+				<li class="textConA textCon"><input id="lanIpAddr" class="textA text hoverBd" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA" for="maskAddrInput">{%label.mask%}</label>
+				<li class="textConA textCon"><input id="maskAddrInput" class="textA text hoverBd" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+		</a>
+		<a id="lanAutoIp">
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.ipAddr%}</label>
+				<label id="lanIpLbl" class="noteLbl">0.0.0.0</label>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.mask%}</label>
+				<label id="lanMaskLbl" class="noteLbl">0.0.0.0</label>
+			</ul>
+		</a>
+		<div class="blockFuncA">
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+	</div>
+</div><script type="text/javascript">function init(){function h(a){id("lanManualIp").style.display=a==m?"none":"block";id("lanAutoIp").style.display=a==m?"block":"none"}function p(a,c){var b="";switch(a){case ENONE:return!1;case EINVNET:b=errStr.ipAddrNetErr;break;case EINVIP:b=errStr.ipAddrErr;break;case EINVIPFMT:b=errStr.ipAddrFmtErr;break;case EINVGROUPIP:b=errStr.ipAddrGroupErr;break;case EINVLOOPIP:b=errStr.ipAddrLoopErr;break;case EINVMASK:b=errStr.maskErr;break;case EINVNETID:b=errStr.ipAddrNetIdErr;break;case EINVHOSTID:b=errStr.ipAddrHostIdErr;
+break;case EINVIPMASKPAIR:b=errStr.ipAddrMaskNotMatch;break;case ECOMFLICTNET:b=errStr.ipAddrLanWanConflict;break;case ECONFLICTGATEWAY:b=errStr.ipAddrLanGatewayConflict;break;case ECONFLICTFDNS:b=errStr.ipAddrLanFDNSConflict;break;case ECONFLICTSDNS:b=errStr.ipAddrLanSDNSConflict;break;case EMANUALLANMODE:b=gSysModeSupport?label.lanWDSTip1:label.lanWDSTip;break;case EMANUALAPMODE:b=label.lanAPTip;break;case EINVLANMASK:b=errStr.massiveStaErr;break;default:b=errStr.invRequestFail}showAlert(b,c);return!0}
+function t(){clearTimeout(u);clearTimeout(k);k=u=null}function v(){!1==w?window.location.href="http://"+e[d]+":"+x:window.location.reload()}function z(a){a=a[l][q];e[d]==a[d]&&e[f]==a[f]?(e[g]=a[g],id("lanIpLbl").innerHTML=a[d],id("lanMaskLbl").innerHTML=a[f],id("lanIpAddr").value=a[d],id("maskAddrInput").value=a[f],disableBtn("save",!1)):(e[d]=a[d],e[f]=a[f],e[g]=a[g],$.action({network:{apply_lan_config:null}},null,!0),getRole()==ROLE_LOCAL&&($.changeDomain(a[d]),showLoading(label.lanCfgChgTip,t),
+k=$.setTimeout(v,A),$.setTimeout(function(){lanDetecting(function(){t();$.setTimeout(v,LAN_DETECT_TIME)})},B)))}function C(a){hsLoading(!1);!1==p(a[ERR_CODE])&&(a={},a[l]={},a[l][KEY_NAME]=[q],$.query(a,z))}function D(a){var c=a[uciNetwork.fileName][uciNetwork.secName.lan];if(gModeSwitchSupport){var b={};b[uciCustomNetwork.fileName]={};b[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(b,function(a){1==parseInt(a.custom_network.bridge_status.enable)?(document.getElementById("bridgeLanIpWarn").style.width=
+"177px",document.getElementById("bridgeLanIpWarn").style.lineHeight="15px",document.getElementById("bridgeLanIpWarn").style.marginLeft="10px",document.getElementById("bridgeLanIpWarn").innerHTML="设备处于桥模式，LAN口IP设置已恢复成自动，且不允许更改。",document.getElementById("lanSel").children[0].innerHTML="自动（推荐）",document.getElementById("save").style.display="none"):selectInit("lanSel",y,c[g],h)})}else selectInit("lanSel",y,c[g],h);h(c[g]);id("lanIpAddr").value=c[d];id("maskAddrInput").value=c[f];id("mac").innerHTML=c[E].toUpperCase();
+id("lanIpLbl").innerHTML=c[d];id("lanMaskLbl").innerHTML=c[f];e[d]=c[d];e[f]=c[f];e[g]=c[g];w=-1==location.href.toString().indexOf(c[d]);x=window.location.port||80;gSysModeSupport&&(s=a.system.sys_mode.mode);s!=uciSystem.optValue.sysMode.routerMode&&($("#relayTip").css("display","inline-block"),id("lanSel").disable(!0),disableBtn("save",!0),disableInput("lanIpAddr",!0),disableInput("maskAddrInput",!0),uciSystem.optValue.sysMode.apMode==s?$("#relayTipText").text("上网方式为AP（有线中继）时，LAN口IP设置不可修改"):$("#relayTipText").text("上网方式为桥接（无线中继）时，LAN口IP设置不可修改"))}
+var l=uciNetwork.fileName,q=uciNetwork.secName.lan,d=uciNetwork.optName.ip,f=uciNetwork.optName.netmask,g=uciNetwork.optName.ipMode,E=uciNetwork.optName.mac,m=uciNetwork.optValue.ipMode.dynamic,r=uciNetwork.optValue.ipMode.manual,A=12E4,B=4E3,u,k,w=!1,x=80,e={uciIpaddr:"0.0.0.0",uciNetmask:"255.255.255.0",uciIpMode:r},y=[{str:label.lanIpAuto,value:m},{str:label.lanIpManual,value:r}],s=uciSystem.optValue.sysMode.routerMode;(function(){var a={};a[l]={};a[l][KEY_NAME]=q;gSysModeSupport&&(a.system={name:"sys_mode"});
+$.query(a,D)})();id("save").onclick=function(){var a,c,b=id("lanSel").value,h={},k={},n={};h[l]=k;k[q]=n;if(m==b)n[g]=m;else{a=id("lanIpAddr").value;c=id("maskAddrInput").value;if(p(checkIp(a),"lanIpAddr")||p(checkMask(c),"maskAddrInput")||p(checkIpMask(a,c),"maskAddrInput"))return;a=hideLeadingZeros(a);id("lanIpAddr").value=a;c=hideLeadingZeros(c);id("maskAddrInput").value=c;n[g]=r;n[d]=a;n[f]=c}r==b&&e[d]==a&&e[f]==c&&e[g]==b||showConfirm(label.lanConfChgConfirm,function(a){!0==a&&(setLoadingId("save"),
+hsLoading(!0),$.modify(h,C))})}}init();
+</script><style type="text/css">#lanManualIp{display:none}#lanAutoIp{display:none}.hcCoT{width:680px}.titleT{width:637.8px}ul.gridLineTips{margin-top:8px!important;height:auto;display:none;line-height:unset}ul.gridLineTips span{width:225px;color:#FFF;line-height:18px;font-size:12px;display:inline-block;width:210px}div.warnCon{width:16px;height:16px;overflow:hidden;display:inline-block;vertical-align:top;margin-left:62px}div.warnCon img{margin-top:-187px;margin-left:-467px}</style>

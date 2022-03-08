@@ -1,0 +1,21 @@
+
+
+<div class="con">
+	<div class="headCon">
+		<h1 class="title">{%label.cloudAccountUnbindTip%}</h1>
+		<input id="cloudBindBtnOut" class="subBtn btnA cloudBindBtnOut" value="{%btn.unBindTmp%}>" type="button" />
+	</div>
+	<div class="detail">
+		<p>{%label.cloudAccountTip%}</p>
+	</div>
+	<div class="func">
+		<input id="bindAccountExist" class="upgrade" type="button" value="{%btn.bindAccountExist%}">
+		<input id="bindAccountRegist" class="cancel" type="button" value="{%btn.bindAccountRegist%}">
+	</div>
+	<p class="check">
+		<input id="TPcheck" type="checkbox" />
+		<label for="TPcheck">{%label.upgradeCheckLabelStr%}</label>
+	</p>
+</div><script type="text/javascript">function init(){function a(){var b={},a=id("CloudBindConfirm");!0==id("TPcheck").checked&&(b[uciCloudConfig.fileName]={},b[uciCloudConfig.fileName][uciCloudConfig.secName.bindTip]={},b[uciCloudConfig.fileName][uciCloudConfig.secName.bindTip][uciCloudConfig.optName.noShow]=uciCloudConfig.optValue.noShow.yes,$.modify(b));document.body.removeChild(a);hideCoverB()}id("cloudBindBtnOut").onclick=function(){a()};id("bindAccountExist").onclick=function(){a();cloudSetBackBRHd(basicBRGoBackHandle);showCloudPage("CloudBindCfg.htm")};
+id("bindAccountRegist").onclick=function(){a();cloudSetBackBRHd(basicBRGoBackHandle);showCloudPage("CloudRegistCfg.htm")}}init();
+</script><style type="text/css">div.con{background:#fff;font-size:0;margin:16px auto 0;position:relative;width:716px}div.headCon{background:#5e85bf;color:#fff;height:130px;text-align:center;position:relative}h1.title{font-size:30px;font-weight:normal;padding:40px 0 0}p.tips{font-size:14px;margin-top:45px}div.detail{color:#3c3e43;font-size:0;line-height:24px;margin:30px 0;padding:0 95px}div.detail p{font-size:14px;color:#000}div.func{height:95px;text-align:center;width:100%}div.func input{border:0;border-radius:5px;color:#3c3e43;cursor:pointer;font-size:14px;padding:4px 13px;*padding:2px 13px}input.upgrade{background:none repeat scroll 0 0 #feeb1a}input.cancel{background:none repeat scroll 0 0 #d9d9d9;margin-left:15px}p.check{text-align:right;padding-bottom:15px;margin-right:20px;font-size:12px;color:#7e7e7f}p.check input{vertical-align:middle}p.check label{vertical-align:middle}input.cloudBindBtnOut{background:#335c9c;color:#fff;right:20px;top:88px;position:absolute;width:80px!important}</style>

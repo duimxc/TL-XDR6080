@@ -1,0 +1,34 @@
+
+
+<ul class="wzdConTitleUl">
+    <p class="wzdConTitle">{%label.netSet%}</p>
+    <p class="wzdConTitleDes"></p>
+</ul>
+<div class="internetStateCon">
+    <img src="../web-static/images/routerWzd.png">
+    <div class="lineCon">
+        <span class="dot"></span><span class="line"></span><span class="dot"></span><i class="wiredIcon"></i>
+        <label>{%label.wiredRepeater%}</label>
+    </div>
+    <img src="../web-static/images/internetWzd.png">
+</div>
+<div class="tipsCon">
+    <p>· 如果前端路由器为“易展”路由器，推荐使用“易展”功能扩展无线网络。仅在前端路由器</p>
+    <p style="padding-left: 10px;">不支持“易展”功能时，才推荐使用本路由器的AP（有线中继）模式。</p>
+    <p>· 确保本路由与前端路由器的LAN口通过网线连接。</p>
+    <p>· 本路由器与前端路由器将处于同一局域网中，可以互访。</p>
+    <p>· AP模式下部分插件和功能不可用。</p>
+</div>
+<ul><li class="wzdSubLi"><input id="sub" type="button" value="{%btn.nextStep%}" /></li></ul>
+<div class="dividingLineCon">
+    <span class="dividingLine"></span><span class="title">或者</span><span class="dividingLine"></span>
+</div>
+<div class="menuCon">
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_DHCP)">{%label.dhcp%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_STATIC)">{%label.staticIp%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_PPPOE)">{%label.pppoe%} ></a>
+</div><script type="text/javascript">var getApStatusHd=null,retryCount;function lanIpModeHandle(a){"manual"==gLanIPMode?showConfirm("当前路由器的LAN口IP为手动设置，使用AP（有线中继）将更改为自动，确定更改LAN口IP设置？",function(b){!0==b&&(gLanIPMode="dynamic",$.modify({network:{lan:{ip_mode:"dynamic"}}},null,!0),a())}):a()}function apFailed(){showConfirm("中继失败，请确定是否重试？",function(a){a?(retryCount=0,showLoading("正在中继..."),getApStatus()):loadPage("WizardWirelessCfg.htm","wizardCon")},"重试","下一步")}
+function getApStatus(){clearTimeout(getApStatusHd);20<retryCount?(closeLoading(),apFailed()):$.query({wired_extender:{name:"status"}},function(a){a.error_code==ENONE&&("0.0.0.0"==a.wired_extender.status.ip?(retryCount++,getApStatusHd=$.setTimeout(getApStatus,1E3)):(closeLoading(),gLanIP=a.wired_extender.status.ip,gIsLanIpChanged=gOldLanIP!=gLanIP?!0:!1,loadPage("WizardWirelessCfg.htm","wizardCon")))})}
+function onSave(){showLoading("正在中继...");var a={};a.system={sys_mode:{mode:uciSystem.optValue.sysMode.apMode}};switch(gBandNum){case BAND_1:a.wireless={wlan_wds_2g:{enable:"0"}};break;case BAND_2:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g:{enable:"0"}};break;case BAND_3:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g_1:{enable:"0"},wlan_wds_5g_4:{enable:"0"}}}$.modify(a,function(a){a.error_code==ENONE&&(gSysMode=uciSystem.optValue.sysMode.apMode,retryCount=0,getApStatus())})}wzdConSet({height:"480px"});
+id("sub").onclick=function(){lanIpModeHandle(onSave)};
+</script><style type="text/css">div.tipsCon{margin-left:226px}div.internetStateCon div i.wiredIcon{background:url(../web-static/images/wiredLink.png) no-repeat;height:20px;width:20px;left:34px;position:absolute;top:6px}</style>

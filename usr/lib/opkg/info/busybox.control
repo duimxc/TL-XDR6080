@@ -1,0 +1,11 @@
+Package: busybox
+Version: 1.19.4-6
+Depends: libc, libssp, libpthread
+Source: tp_package/u_packages/busybox
+Section: base
+Essential: yes
+Maintainer: Nicolas Thill <nico@openwrt.org>
+Architecture: ipq
+Installed-Size: 210970
+Description:  The Swiss Army Knife of embedded Linux.
+ It slices, it dices, it makes Julian Fries.

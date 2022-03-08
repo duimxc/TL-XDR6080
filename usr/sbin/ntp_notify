@@ -1,0 +1,22 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+NTP_STATE="/tmp/state/ntp_sync"
+
+ntp_sync_notify () {
+    if [ $# -ne 1 ]; then
+        echo "Input error."
+        return
+    fi
+
+    if [ -f $NTP_STATE ]; then
+        rm $NTP_STATE
+    fi
+
+    echo $1 >> $NTP_STATE
+    ubus send ntp_sync "{\"status\":$1}"
+}
+
+ntp_sync_notify $*
+

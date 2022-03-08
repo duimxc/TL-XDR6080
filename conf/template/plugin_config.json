@@ -1,0 +1,119 @@
+{
+	"/plugin_config/plugin_profile/plugin" : {
+		"pre_installed" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"pre_updating" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"manual_installed" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"not_installed" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"can_update" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"good_num" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"excellent_num" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"sync_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+
+	"/plugin_config/plugin_info/*" : {
+		"name" : {
+			"type" : "string",
+			"length" : 32
+		},
+		"version" : {
+			"type" : "intStr32",
+			"length" : 8
+		},
+		"size" : {
+			"type" : "string",
+			"length" : 8
+		},
+		"author" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"tag" : {
+			"type" : "string",
+			"length" : 16
+		},
+		"desc_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"app_desc_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"update_log" : {
+			"type" : "string",
+			"length" : 256
+		},
+		"icon_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"app_icon_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"local_app_icon_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"webzip_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"local_webzip_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"data_url" : {
+			"type" : "string",
+			"length" : 512
+		},
+		"release_time" : {
+			"type" : "string",
+			"length" : 20
+		},
+		"components" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"property" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"can_update" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"opera_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"uri" : {
+			"type" : "string",
+			"length" : 512
+		}
+	}
+}

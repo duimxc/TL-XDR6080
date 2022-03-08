@@ -1,0 +1,46 @@
+
+
+<h1 class="phoneTitle">{%label.wifiSet%}</h1>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessName2G">{%label.wirelessName%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessName2G" maxlength="32" />
+	</li>
+	<li id="wlanSsidErrTip" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes"></span>
+	</li>
+</ul>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessPwd2G">{%label.wirelessPwd%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessPwd2G" maxlength="63" type="password" placeholder="{%label.phWifiPwdTip%}" />
+	</li>
+	<li id="wlanPwdNoteLess" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanWzdPwdLenValid%}</span>
+	</li>
+	<li id="wlanPwdNoteInvalidChar" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanPwdInvalid%}</span>
+	</li>
+	<li id="wlanPwdNote" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%label.chgPwdDep%}{%label.colon%}<span id="pwdDep2G"></span></span>
+		<span class="pwdDepCon"><span id="chgPwdDep2G" class="chgPwdDep"></span></span>
+	</li>
+</ul>
+<div class="phFunc">
+	<label id="pre" class="phTwoBtn phTwoBtnL">{%btn.preStep%}</label><label id="sub" class="phTwoBtn">{%btn.ok%}</label>
+</div>
+<div id="phWlanCover">
+	<div class="phAlertCon">
+		<img class="errWarn" src="../web-static/images/redWarn.png"></img>
+		<p>{%label.confirmNoWirelessPwd%}</p>
+		<label id="notEncrypt" class="notEncrypt">{%btn.unPwd%}</label><label id="encrypt" class="encrypt">{%btn.toPwd%}</label>
+	</div>
+</div><script type="text/javascript">function init(){function l(){var a=id("wlanSsidErrTip"),b=$("#wlanSsidErrTip span.errDes")[0],c=g.value;if(0==c.length)return b.innerHTML=errStr.wlanSsidErr,a.style.display="block",!1;if(!0==/^ +$/gi.test(c))return b.innerHTML=errStr.wlanSsidBlank,a.style.display="block",!1;if(!checkWifiName(c,32,1))return b.innerHTML=errStr.wlanSsidLenErr,a.style.display="block",!1;a.style.display="none";return!0}function p(){var a=g.value,b=c.value;if(gIsWifiCfgChged=a!=h[m]||b!=h[n])gWifiCfgToSave={},gWifiCfgToSave[d]=
+{},gWifiCfgToSave[d][e]={},gWifiCfgToSave[d][e][m]=a,0<b.length?(gWifiCfgToSave[d][e][q]=uciWireless.dynOptValue.encryption.on,gWifiCfgToSave[d][e][n]=b):gWifiCfgToSave[d][e][q]=uciWireless.dynOptValue.encryption.off;loadPage("PhoneEnd.htm","phCon")}function r(){if(0==c.value.length)showCover(function(){k.style.visibility="visible";k.style.top="150px"});else{switch(checkWlanPwd(c.value)){case EINVWLANPWD:id("wlanPwdNoteInvalidChar").style.display="block";return;case EINVPSKLEN:id("wlanPwdNoteLess").style.display=
+"block";return}p()}}function s(a){h=a[d][e];g.value=h[m];c.value=h[n]}var d=uciWireless.fileName,e=uciWireless.dynData.host_2g,m=uciWireless.dynOptName.ssid,q=uciWireless.dynOptName.encryption,n=uciWireless.dynOptName.key,g=id("wzdWirelessName2G"),c=id("wzdWirelessPwd2G"),k=id("phWlanCover"),h={};(function(){id("notEncrypt").onclick=p;id("encrypt").onclick=function(){hideCover(function(){k.style.visibility="hidden";k.style.top="-9999px"});c.focus()}})();id("pre").onclick=function(){wzdNetWorkModeChange(gNetworkCfg[uciProto.optName.type])};
+id("sub").onclick=function(){l()&&r()};g.onblur=l;g.onkeyup=l;c.onblur=function(){var a=checkWlanPwd(c.value);if(EINVWLANPWD==a||EINVPSKLEN==a)return!1;id("wlanPwdNoteLess").style.display="none";id("wlanPwdNoteInvalidChar").style.display="none";return!0};c.onkeyup=function(){var a=30,b="",d="none",f="none",f=c.value,e=f.length,g=checkWlanPwd(c.value);if(EINVWLANPWD==g)return id("wlanPwdNoteInvalidChar").style.display="block",id("wlanPwdNoteLess").style.display="none",id("wlanPwdNote").style.display=
+"none",!1;if(0<=e&&8>e)d="block",f="none";else{if(/^\d+$/.test(f)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(f)||/^[a-zA-Z]+$/.test(f))12>=e?b=label.weak:(b=label.media,a*=2);else{var h=g=b=!1,b=/\d/g.test(f),g=/[a-zA-Z]/g.test(f),h=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(f);!0==(b&&h&&g)?(b=label.strong,a*=3):12>=e?(b=label.media,a*=2):(b=label.strong,a*=3)}f="block"}id("wlanPwdNoteInvalidChar").style.display="none";id("wlanPwdNote").style.display=f;id("wlanPwdNoteLess").style.display=
+d;id("pwdDep2G").innerHTML=b;id("chgPwdDep2G").style.width=a+"px"};adaptCNABrowserInput("wzdWirelessName2G");(function(){var a={};a[d]={};a[d][KEY_NAME]=[e];$.query(a,s)})()}init();
+</script><style type="text/css">#phWlanCover{position:absolute;top:-9999px;visibility:hidden;width:100%;z-index:1011}div.phAlertCon{background:#fff;margin:0 auto;text-align:center;width:300px}img.errWarn{height:85px;margin:25px auto;width:85px}div.phAlertCon p{color:#3c4e43;font-size:16px;margin-bottom:30px}div.phAlertCon label{border:medium none;display:inline-block;font-size:16px;line-height:35px;height:35px;padding:0;width:50%}label.notEncrypt{background:#d9d9d9}label.encrypt{background:#feeb1a}</style>

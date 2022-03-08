@@ -1,0 +1,22 @@
+
+<div class="title">
+	<label class="title">{%label.cloudChgPwd%}</label>
+</div>
+<ul class="gridLine gridLineA">
+	<label class="desLblA" for="oldPwd">{%label.cloudOldPwd%}</label>
+	<li class="textConA textCon"><input id="oldPwd" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+</ul>
+<ul class="gridLine gridLineA">
+	<label class="desLblA" for="newPwd">{%label.cloudNewPwd%}</label>
+	<li class="textConA textCon"><input id="newPwd" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+</ul>
+<ul class="gridLine gridLineA">
+	<label class="desLblA" for="newPwdC">{%label.cloudConfirmPwd%}</label>
+	<li class="textConA textCon"><input id="newPwdC" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+</ul>
+<div class="blockFuncA">
+	<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+</div><script type="text/javascript">function init(){function d(b,c){var a="";switch(parseInt(b)){case ENONE:return showAlert(label.cloudChgPwdSuccess),!1;case EINVLGPWDLEN:a=errStr.pwdLenErrTip;break;case EINVACCOUNTPWDERR:a=appendErrCode(errStr.invCloudOldPwdErr,b);break;case ECHPWDDIF:a=errStr.invCloudPswNotMatch;break;case EINVACCOUNTNEWPWDERR:a=appendErrCode(errStr.invCloudNewPwdErr,b);break;case EINVPASSWORDFMT:case EINVACCOUNTPWDFMT:a=appendErrCode(errStr.pwdInvalid,b);break;case EINVNEWPASSWORD:a=errStr.invCloudNewPwdFmtErr;
+break;case EINVCLOUDERRORRESETPWDTIMEOUT:a=appendErrCode(errStr.invRequestFailTrylater,b);break;default:a=cloudErrHandle(b),a=!1==a.result?a.tip:appendErrCode(errStr.invRequestFail,b)}showAlert(a,c);return!0}var e=id("save");USER_GROUP_REMOTE==$.authRltObj.group?disableBtn(e,!0):e.onclick=function(){var b=id("oldPwd"),c=id("newPwd"),a=id("newPwdC"),b=b.value,c=c.value,a=a.value;if(0==b.length||6>b.length||32<b.length)return d(EINVLGPWDLEN,"oldPwd");if(!1==/^[\x21-\x7e]+$/.test(b))return d(EINVPASSWORDFMT,
+"oldPwd");if(0==c.length||6>c.length||32<c.length)return d(EINVLGPWDLEN,"newPwd");if(!1==/^[\x21-\x7e]+$/.test(c))return d(EINVNEWPASSWORD,"newPwd");if(c!=a)return d(ECHPWDDIF,"newPwd");setLoadingId("save");hsLoading(!0);cloudAccountModifyPwd(b,c,function(a){var b="newPwd";a==EPWDERROR&&(b="oldPwd");d(a,b);hsLoading(!1)},function(){hsLoading(!1);d(EINVCLOUDERRORRESETPWDTIMEOUT)},function(){hsLoading(!1);d(EINVCLOUDERRORRESETPWDTIMEOUT)})}}init();
+</script>

@@ -1,0 +1,9 @@
+Package: qca-nss-fw-retail
+Version: 1-1
+Depends: libc, libssp
+Provides: qca-nss-fw
+Source: tp_package/ethernet-driver/ipq-nss/qca-nss-fw
+Section: kernel
+Architecture: ipq
+Installed-Size: 290636
+Description:  This package contains the NSS firmwares (retail) for QCA chipset

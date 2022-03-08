@@ -1,0 +1,372 @@
+
+
+<ul id="PPPoEHelp" class="help">
+	<li class="title">宽带拨号上网方式</li>
+	<li class="content">使用运营商提供的宽带账号和密码进行上网的方式。</li>
+	<li class="title">宽带账号/宽带密码</li>
+	<li class="content">运营商提供的宽带账号和密码。</li>
+</ul>
+<ul id="PPPoEAdvHelp" class="help">
+	<li class="title">拨号模式</li>
+	<li class="content">某些特定地区的运营商线路需要特殊处理，建议保持默认的“自动选择拨号模式”。</li>
+	<li class="title">连接模式</li>
+	<li class="content">自动连接：路由器自动进行连接。在使用过程中，如果由于外部原因网络被断开，路由器会每隔10秒尝试重连，直到连接上为止。</li>
+	<li class="content">按需连接：路由器在有网络访问请求时将自动进行连接，在检测到持续10分钟都没有网络访问请求时将自动断开连接。</li>
+	<li class="content">手动连接：宽带拨号的连接断开都需要手动点击“连接”“断开”按钮进行操作。</li>
+	<li class="title">数据包MTU</li>
+	<li class="content">数据包的最大传输单元，可设置范围为576 ～ 1492。</li>
+	<li class="title">服务名/服务器名</li>
+	<li class="content">如若不是运营商特别要求，请勿填写。</li>
+	<li class="title">WAN口速率</li>
+	<li class="content">设置WAN口的速率以及双工模式。</li>
+	<li class="content">个别小区宽带线路被强制为10Mbps导致路由器无法正常使用，此时可以通过将WAN口速率强制为10Mbps解决。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+
+<ul id="PPPoEServerDeadHelp" class="help">
+	<li class="title">请确认网线连接是否正常</li>
+	<li class="content">请按照路由器的说明书图示确认网线连接是否正常（连接方式通常为：电话线→ADSLModem→路由器WAN口，如果是光纤接入则为：光纤→光猫→路由器WAN口），同时检查网线、电话线或者光纤的接头是否连接好，查看各设备接线口对应的指示灯状态是否常亮或闪烁。
+	</li>
+	<li class="content">
+		若线路连接正确但路由器仍然无法拨号成功，请去除路由器，将计算机与宽带线路（如ADSL Modem、光猫）直接连接，在计算机上拨号测试（注意：拨号时请在宽带连接中重新填写宽带账号和密码），如果此时：
+	</li>
+	<li class="titleList">■计算机拨号仍不成功，请联系您的运营商检查线路是否正常；</li>
+	<li class="titleList">■计算机能拨号成功，请参考下面帮助信息：</li>
+	<ul class="listNum">
+		<li class="title">请尝试克隆MAC地址之后再重新保存进行拨号</li>
+		<p><a href="javascript:void(0)" onclick="cloneCurHostMac()">>>>点击此处克隆本计算机MAC地址</a></p>
+		<li class="title">请联系您的运营商确认上网方式是否为宽带拨号上网</li>
+		<li class="title">请尝试等待几分钟之后再重新保存进行拨号</li>
+	</ul>
+</ul>
+<ul id="PPPoENPErrHelp" class="help">
+	<li class="title">请确认宽带账号和宽带密码是否填写正确</li>
+	<li class="content">填写宽带账号和密码时请注意区分字母大小写以及相似的字母和数字(例如字母“z”与字母“Z”、字母“o”与数字“0”、字母“l”与数字“1”)，带后缀的上网账号请注意填写完整(例如宽带账号为“0755911@163.gd”，不能只填写“0755911”) 。
+	</li>
+	<li class="content">如果确认上网账号和密码填写正确但路由器拨号仍然提示该错误，请去除路由器，将计算机与宽带线路（如ADSLModem、光猫）直接连接，在计算机上拨号测试，如果此时：
+	</li>
+	<li class="titleList">■计算机拨号仍不成功，请联系您的运营商确认宽带账号和密码；</li>
+	<li class="titleList">■计算机能拨号成功，请参考下面帮助信息。</li>
+	<ul class="listNum">
+		<li class="title">请尝试克隆MAC地址之后再重新保存进行拨号</li>
+		<p><a href="javascript:void(0)" onclick="cloneCurHostMac()">>>>点击此处克隆本计算机MAC地址</a></p>
+		<li class="title">请尝试等待几分钟之后再重新保存进行拨号</li>
+	</ul>
+</ul>
+<ul id="PPPoEOtherErrHelp" class="help">
+	<li class="content">请将计算机与宽带线路（如ADSL Modem、光猫）直接连接，在计算机上拨号测试，如果此时：</li>
+	<li class="titleList">■计算机拨号仍不成功，请联系您的运营商检查线路是否正常；</li>
+	<li class="titleList">
+		■计算机能拨号成功，请将ADSL Modem或光猫和路由器恢复出厂默认设置（通电状态下长按Reset按钮），
+		然后按照产品说明书的指示重新连接线路和设置拨号。
+	</li>
+	<li class="content">
+		若仍然提示此信息，请将您的问题以及系统日志以邮件的方式发送到TP-LINK技术支持邮箱fae@tp-link.com.cn，
+		（<a href="javascript:void(0)" onclick="logSave()">>>>点击此处保存系统日志</a>）或者电话联系TP-LINK技术支持热线400-8863-400咨询解决办法。
+	</li>
+</ul>
+
+<ul id="dhcpServerHelp" class="help">
+	<div id="staCapabilityHelp">
+		<li class="title">带机量</li>
+		<li class="content">无线路由器的Wi-Fi同时接入的终端数量。高带机量适用于多终端场景，此时可分配的IP地址超过256个；普通带机量适用于无线终端少于256个的场景。</li>
+	</div>
+	<li class="title">DHCP服务器</li>
+	<li class="content">DHCP服务器能够自动给局域网当中的设备分配IP、子网掩码等TCP/IP协议参数。DHCP服务器有三种状态，分别为“开”、“关”和“自动”，“自动”状态为在使用WDS功能时，路由器将检测局域网中是否有别的DHCP服务器存在，若存在则会关闭自身的DHCP服务器。</li>
+	<li class="title">地址池开始/结束地址</li>
+	<li class="content">DHCP服务器自动分配的IP的开始/结束地址。</li>
+	<li class="title">地址租期</li>
+	<li class="content">自动分配的IP的有效时间，超过该时间后局域网内的设备将重新获取IP。</li>
+	<li class="title">网关</li>
+	<li class="content">可选项，建议填入路由器LAN口的IP地址，默认为192.168.1.1。</li>
+	<li class="title">DNS服务器</li>
+	<li class="content">可选项，如果运营商有提供DNS服务器地址，请填于此。</li>
+</ul>
+
+<ul id="wlanSwitch" class="help">
+	<li class="title">无线总开关</li>
+	<li class="content">开启或关闭无线功能。</li>
+</ul>
+
+<!-- 无线基础设置项 -->
+<ul id="wlanNetworkBasic" class="help">
+	<li class="title">无线名称</li>
+	<li class="content">路由器的无线(Wi-Fi)名称。</li>
+	<li class="title">无线密码</li>
+	<li class="content">无线加密使用WPA-PSK/WPA2-PSK加密方式、AES加密算法，无线密码为8至63个字符，最好是数字、字母、符号的组合。</li>
+	<li class="title">WPA3</li>
+	<li class="content">开启后路由器加密协议将从WPA2切换为WPA3，增强加密算法，提高Wi-Fi设备的连接安全性。</li>
+</ul>
+
+<!-- 多频合一无线高级设置项 -->
+<ul id="wlanNetworkHelpAdvanced" class="help">
+	<li class="title">无线信道</li>
+	<li class="content">无线数据信号传送的通道，建议保持默认的自动，此时路由器会自动根据周围的无线环境选择一个最好的信道。</li>
+	<li class="title">无线模式</li>
+	<li class="content">路由器工作的无线模式。</li>
+	<li class="title">频段带宽</li>
+	<li class="content">路由器传输无线数据的频段宽度。</li>
+</ul>
+
+<!-- TWT帮助信息 -->
+<ul id="wlanTWTHelp" class="help">
+	<li class="title">TWT</li>
+	<li class="content">开启后路由器将自动优化设备间的资源调度，协商唤醒，减少无序竞争，增加设备休眠时间，提高电池寿命。</li>
+</ul>
+
+<!-- OFDMA帮助信息 -->
+<ul id="wlanOFDMAHelp" class="help">
+	<li class="title">OFDMA</li>
+	<li class="content">开启后路由器将实现多用户复用信道资源，改善多用户上网环境下的传输效率，降低网络延迟。</li>
+</ul>
+
+<!-- MU-MIMO帮助信息 -->
+<ul id="wlanMUMIMOHelp" class="help">
+	<li class="title">MU-MIMO</li>
+	<li class="content">在多设备接入环境中，开启此功能后可以显著提升支持MU-MIMO设备的吞吐量，建议开启此功能。</li>
+</ul>
+
+<ul id="multiSSIDHelp" class="help">
+	<li class="title">多 SSID 功能</li>
+	<li class="content">当开启时，各SSID均可正常使用。根据<span class="ispName">移动</span>定制要求，各SSID均接受<span class="ispPlatformName">移动家庭管理平台</span>远程设置。</li>
+	<li class="title">SSID-1</li>
+	<li class="content">工作在2.4GHz频段，对应路由器2.4G主人网络，可在 < 路由设置 - 无线设置 - 2.4G无线设置 > 界面进行设置。</li>
+	<li class="title">SSID-2</li>
+	<li class="content">工作在2.4GHz频段，对应路由器2.4G访客网络，可在 < 应用管理 - 访客网络 - 2.4G访客网络 > 界面进行设置。</li>
+	<li class="title">SSID-3</li>
+	<li class="content">工作在2.4GHz频段，根据<span class="ispName">移动</span>定制要求，只接受<span class="ispPlatformName">移动家庭管理平台</span>远程设置，不允许本地设置。</li>
+	<li class="title">SSID-4</li>
+	<li class="content">工作在2.4GHz频段，根据<span class="ispName">移动</span>定制要求，只接受<span class="ispPlatformName">移动家庭管理平台</span>远程设置，不允许本地设置。</li>
+	<li class="title">SSID-5</li>
+	<li class="content">工作在5GHz频段，对应路由器5G主人网络，可在 < 路由设置 - 无线设置 - 5G无线设置 > 界面进行设置。</li>
+	<li class="title">SSID-6</li>
+	<li class="content">工作在5GHz频段，对应路由器5G访客网络，可在 < 应用管理 - 访客网络 - 5G访客网络 > 界面进行设置。</li>
+	<li class="title">SSID-7</li>
+	<li class="content">工作在5GHz频段，根据<span class="ispName">移动</span>定制要求，只接受<span class="ispPlatformName">移动家庭管理平台</span>远程设置，不允许本地设置。</li>
+	<li class="title">SSID-8</li>
+	<li class="content">工作在5GHz频段，根据<span class="ispName">移动</span>定制要求，只接受<span class="ispPlatformName">移动家庭管理平台</span>远程设置，不允许本地设置。</li>
+</ul>
+
+<ul id="wpsHelp" class="help">
+	<li class="title">WPS设置</li>
+	<li class="content">可选择通过“按键连接”或“Pin码连接”开启设备的WPS功能。</li>
+</ul>
+
+<ul id="dynamicIpHelp" class="help">
+	<li class="title">自动获得IP地址上网方式</li>
+	<li class="content">使用运营商动态分配的临时IP进行上网的方式。</li>
+	<li class="title">IP地址、子网掩码、网关</li>
+	<li class="content">运营商动态分配的上网参数。</li>
+</ul>
+<ul id="ElinkHelp" class="help">
+	<li class="title">e-Link协议开关</li>
+	<li class="content">如果开启，则家庭网关通过e-Link协议对路由器进行配置，勾选“启用与智能网关的无线配置同步”开启相关配置同步功能。</li>
+	<li class="title">e-Link功能重要说明</li>
+	<ul class="listNum">
+		<li class="content">e-Link开关涉及到设备工作模式（路由器/桥）切换。设备出厂模式下处于路由模式，且e-Link协议开关默认开启。</li>
+		<li class="content">设备WAN口与智能网关LAN口相连，且e-Link协议开关开启时，若设备处于路由模式，则自动同步为桥模式。（备注：设备上网方式为宽带拨号上网时除外，此时e-Link协议强制关闭。）</li>
+		<li class="content">当设备经e-Link协议同步为桥模式时：若勾选e-Link协议开关，设备自动同步网关下发的配置信息；若取消勾选e-Link协议开关，则设备不再同步网关下发的配置信息，但仍保持桥模式。</li>
+		<li class="content">当设备经e-Link同步为桥模式时，若要恢复路由模式，有如下两种方法。</li>
+		<ul class="listNone">
+			<li class="title">方法一：</li>
+			<li class="content">（1）断开设备WAN口与智能家庭网关连接；</li>
+			<li class="content">（2）恢复出厂设置；</li>
+			<li class="content">（3）登陆管理页面，进入路由设置-e-Link设置界面，取消勾选“启用与智能网关的无线配置同步”开关。</li>
+			<li class="content">需要注意的是，在（2）、（3）完成之前，需要保持设备WAN口与智能家庭网关之间连接断开。</li>
+			<li class="title">方法二：</li>
+			<li class="content">关闭e-Link同步开关，进入路由设置-路由/桥模式切换 界面，选择设备工作模式为路由模式。</li>
+
+		</ul>
+	</ul>
+</ul>
+<ul id="WolinkHelp" class="help">
+	<li class="title">wo-Link协议开关</li>
+	<li class="content">如果开启，则家庭网关通过wo-Link协议对路由器进行配置，勾选“启用与智能网关的无线配置同步”开启相关配置同步功能。</li>
+	<li class="title">wo-Link功能重要说明</li>
+	<ul class="listNum">
+		<li class="content">wo-Link开关涉及到设备工作模式（路由器/桥）切换。设备出厂模式下处于路由模式，且wo-Link协议开关默认开启。</li>
+		<li class="content">设备WAN口与智能网关LAN口相连，且wo-Link协议开关开启时，若设备处于路由模式，则自动同步为桥模式。（备注：设备上网方式为宽带拨号上网时除外，此时wo-Link协议强制关闭。）</li>
+		<li class="content">当设备经wo-Link协议同步为桥模式时：若勾选wo-Link协议开关，设备自动同步网关下发的配置信息；若取消勾选wo-Link协议开关，则设备不再同步网关下发的配置信息，但仍保持桥模式。</li>
+		<li class="content">当设备经wo-Link同步为桥模式时，若要恢复路由模式，有如下两种方法。</li>
+		<ul class="listNone">
+			<li class="title">方法一：</li>
+			<li class="content">（1）断开设备WAN口与智能家庭网关连接；</li>
+			<li class="content">（2）恢复出厂设置；</li>
+			<li class="content">（3）登陆管理页面，进入路由设置-wo-Link设置界面，取消勾选“启用与智能网关的无线配置同步”开关。</li>
+			<li class="content">需要注意的是，在（2）、（3）完成之前，需要保持设备WAN口与智能家庭网关之间连接断开。</li>
+			<li class="title">方法二：</li>
+			<li class="content">关闭wo-Link同步开关，进入路由设置-路由/桥模式切换 界面，选择设备工作模式为路由模式。</li>
+
+		</ul>
+	</ul>
+</ul>
+<ul id="bridgeSwitchHelp" class="help">
+	<li class="title">路由/桥模式切换</li>
+	<li class="content">
+		选择设备工作在路由模式或桥模式下。
+	</li>
+</ul>
+<ul id="ledHelp" class="help">
+	<li class="title">指示灯开关</li>
+	<li class="content">
+		控制所有指示灯的开与关。
+	</li>
+</ul>
+<ul id="dynamicIpAdvHelp" class="help">
+	<li class="title">数据包MTU</li>
+	<li class="content">数据包的最大传输单元，可设置范围为576 ～ 1500。</li>
+	<li class="title">DNS服务器</li>
+	<li class="content">运营商会自动分配DNS服务器，如有需要也可以手动设置。</li>
+	<li class="title">主机名</li>
+	<li class="content">如若不是运营商特别要求，请勿修改。</li>
+	<li class="title">WAN口速率</li>
+	<li class="content">设置WAN口的速率以及双工模式。个别小区宽带线路被强制为10Mbps导致路由器无法正常使用，此时可以通过将WAN口速率强制为10Mbps解决。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+
+<ul id="lanHelp" class="help">
+	<li class="title">MAC地址</li>
+	<li class="content">路由器对局域网的MAC地址。</li>
+	<li class="title">LAN口IP参数</li>
+	<li class="content">支持自动获取和手动设置。</li>
+	<li class="content">当设置为自动获取时具有LAN-WAN冲突检测机制，主要表现为：当路由器WAN口获取的IP地址与LAN口IP地址在同一网段，路由器LAN口IP地址会自动变更到其他网段。如路由器LAN口默认IP地址为192.168.1.1，此时WAN口获取到的IP地址为192.168.1.X，那么LAN口IP地址会自动变为192.168.0.1。在使用WDS功能时，LAN口参数将从局域网中动态获取，如果获取超时，则IP地址设置为192.168.1.1，子网掩码设置为255.255.255.0。</li>
+	<li class="content">当为手动设置时，LAN口参数为页面上的设定值，不会自动修改。
+	</li>
+	<li class="title">IP地址</li>
+	<li class="content">路由器对局域网的IP地址。</li>
+	<li class="title">子网掩码</li>
+	<li class="content">路由器对局域网的子网掩码，一般为255.255.255.0。</li>
+	<li class="warnning">注意：</li>
+	<li class="warnning">1、LAN口IP地址变更之后，虚拟服务器、DMZ主机等原来设置好的与LAN口IP相关的应用将失效。</li>
+	<li class="warnning">2、LAN口IP地址变更之后，仍可以通过域名 “tplogin.cn” 登录路由器管理页面。</li>
+	<li class="warnning">3、为保证连接到路由器的设备能正常上网，建议设备配置为动态获取IP地址。如果设备是固定IP地址，请根据LAN口变更之后的IP地址，对应更改设备的IP地址和网关。</li>
+</ul>
+
+<ul id="macCloneHelp" class="help">
+	<li class="title">通过本功能可以设置路由器对广域网的MAC地址，一般情况下不需要更改此地址，但某些地区的运营商会将线路与MAC地址进行绑定，此时运营商会提供一个“有效的MAC地址”，您需要通过本功能将MAC地址设置为该“有效的MAC地址”才能正常共享上网。
+	</li>
+</ul>
+
+<ul id="routeTableHelp" class="help">
+	<li class="title">路由功能可设置静态路由条目，当数据包与静态路由匹配成功时，将按照指定的路径进行转发。</li>
+	<li class="title">目的网络地址</li>
+	<li class="content">数据包需要到达的地址。</li>
+	<li class="title">子网掩码</li>
+	<li class="content">目的地址的子网掩码。</li>
+	<li class="title">下一跳地址</li>
+	<li class="content">数据包到达目的地址前，可以直接转发的下一个路由器地址。</li>
+</ul>
+
+<ul id="staticIpHelp" class="help">
+	<li class="title">固定IP地址</li>
+	<li class="content">使用运营商提供的固定IP进行上网的方式。</li>
+	<li class="title">IP地址、子网掩码、网关、DNS服务器</li>
+	<li class="content">固定IP地址上网方式需要填写的上网参数，由您的运营商提供。</li>
+</ul>
+<ul id="staticIpAdvHelp" class="help">
+	<li class="title">数据包MTU</li>
+	<li class="content">数据包的最大传输单元，可设置范围为576 ～ 1500。</li>
+	<li class="title">WAN口速率</li>
+	<li class="content">设置WAN口的速率以及双工模式。个别小区宽带线路被强制为10Mbps导致路由器无法正常使用，此时可以通过将WAN口速率强制为10Mbps解决。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+
+<ul id="sysUpgradeHelp" class="help">
+	<li class="title">升级步骤</li>
+	<ul class="listNum">
+		<li>访问TP-LINK官方网站<a target="blank" href="http://www.tp-link.com.cn">www.tp-link.com.cn</a>，下载对应当前硬件版本的升级软件；</li>
+		<li>点击“浏览”按钮，选中步骤1中下载的升级文件；</li>
+		<li>点击“软件升级”按钮进行软件升级；</li>
+		<li>升级完成后，路由器将自动重启。</li>
+	</ul>
+</ul>
+
+<ul id="dynamicIpv6Help" class="help">
+	<li class="title">自动获得IP地址上网方式</li>
+	<li class="content">路由器自动从运营商获得IPv6地址进行上网。请注意更改WAN口连接类型时，局域网终端可能会断开几秒后自动重连。</li>
+	<li class="title">IPv6地址、网关、DNS服务器</li>
+	<li class="content">路由器从运营商获取的上网参数。当前路由器仅支持64位子网前缀长度。</li>
+</ul>
+<ul id="staticIpv6Help" class="help">
+	<li class="title">固定IP地址</li>
+	<li class="content">使用运营商提供的固定IPv6地址进行上网。请注意更改WAN口连接类型时，局域网终端可能会断开几秒后自动重连。</li>
+	<li class="title">IPv6地址、子网前缀长度、网关、DNS服务器</li>
+	<li class="content">固定IP地址上网方式需要填写的上网参数，由您的运营商提供。当前路由器仅支持64位子网前缀长度。</li>
+</ul>
+<ul id="PPPoEv6Help" class="help">
+	<li class="title">宽带拨号上网</li>
+	<li class="content">使用运营商提供的宽带帐号和密码进行上网的方式。请注意更改WAN口连接类型时，局域网终端可能会断开几秒后自动重连。</li>
+	<li class="title">IPv6宽带帐号/IPv6宽带密码</li>
+	<li class="content">运营商提供的宽带帐号和密码。</li>
+	<li class="title">复用IPv4拨号链路</li>
+	<li class="content">当IPv4上网方式也为宽带拨号上网时，可以选择是否开启此功能。开启此功能后，IPv6将使用IPv4账号密码进行拨号，不需要手动输入IPv6宽带账号及密码。请注意开启此功能需要运营商支持，请根据实际情况正确选择是否开启。</li>
+	<li class="title">IPv6地址、DNS服务器</li>
+	<li class="content">当前路由器获取的上网参数。当前路由器仅支持64位子网前缀长度。</li>
+</ul>
+<ul id="Bridgev6Help" class="help">
+	<li class="title">桥模式</li>
+	<li class="content">当选择此模式时，路由器IPv6工作在桥模式。连接到路由器上的终端将由路由器上联设备分配IPv6地址及提供路由功能。</li>
+</ul>
+<ul id="dynamicIpv6AdvHelp" class="help">
+	<li class="title">IPv6地址获取协议</li>
+	<li class="content">默认自动，也可以根据需要进行相应修改。如果选择DHCPv6，则直接由运营商动态分配一个IPv6地址；如果选择SLAAC，则由路由器根据路由通告自动生成IPv6地址。</li>
+	<li class="title">前缀授权</li>
+	<li class="content">开启此功能后，路由器将自动从运营商获取一个IPv6地址前缀，该前缀用于为局域网中设备生成IPv6地址。此时"局域网设置" -> "IPv6地址前缀"将不允许手动修改。开启此功能需要运营商支持，否则将无法获取IPv6地址前缀。请根据实际情况正确选择是否开启。</li>
+	<li class="title">DNS服务器</li>
+	<li class="content">运营商会自动分配DNS服务器，如有需要也可以手动设置。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+<ul id="staticIpv6AdvHelp" class="help">
+	<li class="title">数据包MTU</li>
+	<li class="content">数据包的最大传输单元，可设置范围为576 ～ 1500。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+<ul id="PPPoEv6AdvHelp" class="help">
+	<li class="title">IPv6地址获取协议</li>
+	<li class="content">默认自动，也可以根据需要进行相应修改。如果选择DHCPv6，则直接由运营商动态分配一个IPv6地址；如果选择SLAAC，则由路由器根据路由通告自动生成IPv6地址；如果选择固定IP，则使用运营商提供的固定IPv6地址进行上网。</li>
+	<li class="title">前缀授权</li>
+	<li class="content">当IPv6地址获取协议为自动、DHCPv6或者SLAAC时，可以选择是否开启前缀授权功能。开启此功能后，路由器将自动从运营商获取一个IPv6地址前缀，该前缀用于为局域网中设备生成IPv6地址。此时"局域网设置" -> "IPv6地址前缀"将不允许手动修改。开启此功能需要运营商支持，否则将无法获取IPv6地址前缀。请根据实际情况正确选择是否开启。</li>
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+<ul id="Bridgev6AdvHelp" class="help">
+	<li class="title">WAN口MAC地址</li>
+	<li class="content">设置路由器对广域网的MAC地址，一般情况下不需要更改此地址。 某些地区的运营商会将线路与MAC地址进行绑定，同时提供一个“有效的MAC地址”，此时只有将WAN口的MAC地址设置为该“有效的MAC地址”才可以正常共享上网。</li>
+</ul>
+<ul id="lanHostDhcpv6Help" class="help">
+	<li class="title">主机配置DHCPv6</li>
+	<li class="content">路由器将自动为局域网中设备分配IPv6地址、DNS服务器等上网参数。</li>
+	<li class="title">IPv6地址前缀</li>
+	<li class="content">请输入运营商提供的IPv6地址前缀。只有正确输入IPv6地址前缀后，局域网中设备才能获取到正确的IPv6地址。当高级设置中开启前缀授权时，路由器将自动从上级设备获取IPv6地址前缀，不需要手动输入。当前路由器只支持64位IPv6地址前缀。</li>
+	<li class="title">IPv6地址租期</li>
+	<li class="content">自动分配的IP的有效时间，超过该时间后局域网内的设备将重新获取IP。</li>
+	<li class="title">LAN口IPv6地址</li>
+	<li class="content">路由器对局域网的IPv6地址，由路由器根据IPv6地址前缀结合自身MAC地址自动生成。</li>
+</ul>
+<ul id="lanHostSlaacHelp" class="help">
+	<li class="title">主机配置SLAAC</li>
+	<li class="content">局域网中终端将根据路由通告自动生成IPv6地址。</li>
+	<li class="title">IPv6地址前缀</li>
+	<li class="content">请输入运营商提供的IPv6地址前缀。只有正确输入IPv6地址前缀后，局域网中设备才能获取到正确IPv6地址。当高级设置中开启前缀授权时，路由器将自动从上级设备获取IPv6地址前缀，不需要手动输入。当前路由器只支持64位IPv6地址前缀。</li>
+	<li class="title">DNS配置</li>
+	<li class="content">设置路由器为局域网中设备分配DNS服务器地址的方式。不同终端支持的情况可能不同，需要根据实际使用情况正确配置。</li>
+	<li class="title">LAN口IPv6地址</li>
+	<li class="content">路由器对局域网的IPv6地址，由路由器根据IPv6地址前缀结合自身MAC地址自动生成。</li>
+</ul>
+<ul id="wirelessRepeaterHelp" class="help">
+	<li class="title">当Wi-Fi覆盖不全时，通过本应用，路由器之间可以进行无线中继（桥接），从而扩展无线网络的覆盖范围。</li>
+	<li class="content">本应用提供向导，请按步骤设置无线中继：</li>
+	<li class="title">第一步：选择前端路由</li>
+	<li class="content">用户可从扫描发现的无线网络中，选择需要中继的前端路由（请确保前端路由的DHCP服务器已开启）。选好后，本路由器将作为从路由器进行无线中继。</li>
+	<li class="title">第二步：设置无线参数</li>
+	<li class="content">设置本路由器的无线参数（无线名称和无线密码），建议与前端路由保持一致，实现无缝漫游。</li>
+</ul>
+<ul id="wiredRepeaterHelp" class="help">
+	<li class="title">通过本应用可以将路由器设置成AP模式，满足组网需求。</li>
+</ul><script type="text/javascript">function cloneCurHostMac(){function e(a){a=a[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];var b={},c={},d={};b[uciProto.fileName]=c;c[uciProto.secName.wan]=d;d[uciProto.optName.macaddr]=a;$.modify(b,null,!0)}(function(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.dynData.ifaceMac];$.query(a,e)})()};
+</script>

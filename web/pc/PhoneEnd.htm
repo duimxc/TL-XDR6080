@@ -1,0 +1,21 @@
+
+
+<div class="phEndCon textCenter disNones" id="detecting">
+	<img class="detectErr" src="../web-static/images/greenCoWhite.png" />
+	<p class="detectTip detecting bold">{%label.phoneWizardEnd%}</p>
+	<p class="detectTip detecting">{%label.phoneWlanReload%}</p>
+	<p id="wifiName" class="detectTip detecting"></p>
+	<p id="wifiPwd" class="detectTip"></p>
+</div>
+<div class="phEndCon textCenter disNone" id="setOk">
+	<img class="detectErr" src="../web-static/images/greenCoWhite.png" />
+	<p class="detectTip detecting bold">{%label.phoneWizardEnd%}</p>
+	<p class="detectTip disNone" id="iPhone">{%label.phoneAppleEnd%}</p>
+	<div id="android" class="disNone">
+		<p class="detectTip detecting">{%label.phoneAppTipB%}</p>
+		<label id="continuePCSet" class="appBtn btnL">{%label.phoneEndBrowser%}</label><label id="downLoadApp" class="appBtn">{%label.phoneEndDownload%}</label>
+	</div>
+</div><script type="text/javascript">function init(){wzdDone();!0==gIsWifiCfgChged&&$.modify(gWifiCfgToSave);id("downLoadApp").onclick=function(){location.href="https://wap.tplinkcloud.com.cn/appdown"};id("continuePCSet").onclick=function(){phoneSet.bPhoneWizardSet=!1;loadPage("Content.htm","Con")};if(gIsWifiCfgChged){var b=uciWireless.fileName,c=uciWireless.dynData.host_2g,d=uciWireless.dynOptName.ssid,a=gWifiCfgToSave[b][c][uciWireless.dynOptName.key];id("wifiName").innerHTML=label.wirelessName+label.colon+gWifiCfgToSave[b][c][d];
+void 0==a||0==a.length?$("#wifiPwd").css("display","none"):id("wifiPwd").innerHTML=label.wirelessPwd+label.colon+a;$("#detecting").css("display","block");$("#setOk").css("display","none");$.setTimeout(function(){lanDetecting(function(){phoneSet.bPhoneWizardSet=!0;loadLgLessPage("PhoneApp.htm","Con",void 0,{bRecordLoadPage:!1})})},4E3)}else $("#detecting").css("display","none"),$("#setOk").css("display","block"),"NO"!=gBeInCNA?$("#iPhone").css("display","block"):$("#android").css("display","block")}
+init();
+</script><style type="text/css">div.phEndCon{margin:0 auto;width:290px}img.detectingGif{height:30px;margin:120px auto 0;width:30px}p.detectTip{color:#fff;font-size:14px;text-align:center;word-break:break-all;word-wrap:break-word}.textCenter{text-align:center}.bold{font-size:15px!important;font-weight:bold}p.detecting{margin-top:20px}img.detectErr{height:80px;margin:120px auto 0;width:83px}label.appBtn{background-color:#feeb1a;border:0;border-radius:3px;color:#3c3e43;cursor:pointer;display:inline-block;font-size:14px;margin-top:10px;padding:8px 15px}label.btnL{margin-right:10px}</style>

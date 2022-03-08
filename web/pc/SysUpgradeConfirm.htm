@@ -1,0 +1,26 @@
+
+
+<div class="con">
+	<div class="headCon">
+		<h1 class="title">{%label.upgradePushTip%}</h1>
+		<p class="tips">{%label.upgradeAdvice%}</p>
+	</div>
+	<div class="detail">
+		<div class="content" id="upgradeInfoContent"></div>
+	</div>
+	<p class="warn">{%label.upgradeWarnTip%}</p>
+	<div class="func">
+		<input id="upgrade" class="upgrade" type="button" value="{%btn.upgradeAtonce%}">
+		<input id="cancel" class="cancel" type="button" value="{%btn.upgradeLater%}">
+	</div>
+	<p class="check">
+		<input id="TPcheck" type="checkbox" />
+		<label for="TPcheck">{%label.upgradeCheckLabelStr%}</label>
+	</p>
+</div><script type="text/javascript">function init(){var b={},f=uciCloudConfig.fileName;id("upgrade").onclick=function(){var c=id("UpgradeConfirm");document.body.removeChild(c);hideCoverB();gOnlineUpgradeFail=gOnlineUpgradeAuto=!0;loadBasic(ROUTE_SET_INDEX,gEasyMeshUpgradeSupport?"SysUpgradeEyUp.htm":"SysUpgrade.htm")};id("cancel").onclick=function(){var c=id("UpgradeConfirm");!0==id("TPcheck").checked&&(b[f]={},b[f][uciCloudConfig.secName.newFirmware]={},b[f][uciCloudConfig.secName.newFirmware][uciCloudConfig.optName.noShow]=uciCloudConfig.optValue.noShow.yes,
+$.modify(b));document.body.removeChild(c);hideCoverB()};b[f]={};b[f][KEY_NAME]=[uciCloudConfig.secName.upgradeInfo,uciCloudConfig.secName.newFirmware];b[uciPlc.fileName]={};b[uciPlc.fileName][KEY_TABLE]=uciPlc.secType.connectedExt;b[uciProto.fileName]={};b[uciProto.fileName][KEY_NAME]=uciProto.secName.dhcp;var e=new NiceScroll("upgradeInfoContent");e.scrollTipOpacity(1);e.scrollTipSet({background:"#D9D9D9"});e.init();$(id(e.sb.id)).css("z-index","1012");$.query(b,function(c){if(c[ERR_CODE]==ENONE){var b=
+c[f][uciCloudConfig.secName.upgradeInfo],d=c[f][uciCloudConfig.secName.newFirmware],a=c[uciProto.fileName][uciProto.secName.dhcp],e=formatTableData(c[uciPlc.fileName][uciPlc.secType.connectedExt]);c=[];d[uciCloudConfig.optName.fwNewNotify]==uciCloudConfig.optValue.fwNewTrue&&(d={},d.name=a[uciProto.optName.hostName],d.newestVer=b[uciCloudConfig.optName.version].split(" ")[0],d.upgradeInfo=b[uciCloudConfig.optName.releaseLog].replace(/\\n/gi,"<br />"),c.push(d));for(b=0;b<e.length;b++)a=e[b],a[uciPlc.optName.supportOlUp]==
+uciPlc.optValue.supportOlUp.yes&&(a.name=void 0==a.name?label.notFoundVersion:a.name,a.cur_fw_version=""==a.cur_fw_version?label.notFoundVersion:""==a.cur_fw_version.split(" ")[0]?label.notFoundVersion:a.cur_fw_version.split(" ")[0],a.newest_fw_version=void 0==a.newest_fw_version?a.cur_fw_version:a.newest_fw_version.split(" ")[0]||a.cur_fw_version,a.isUpgradable=a.cur_fw_version==label.notFoundVersion||a.newest_fw_version==label.notFoundVersion?!1:a.newest_fw_version!=a.cur_fw_version?!0:!1,a.isUpgradable&&
+c.push({name:a.name,newestVer:a.newest_fw_version}));for(var e=$("#upgradeInfoContent"),g,a=0;a<c.length;a++)b=$("<div></div>").addClass("upgradeInfoContainer"),d=$("<div></div>").addClass("upgradeInfoTitle"),g=$("<span></span>").addClass("model").text(c[a].name+(c[a].upgradeInfo?" "+label.updateNoteStr:"")),d.append(g),g=$("<span></span>").addClass("version").text(label.upgradableVersion+"： "+c[a].newestVer),d.append(g),b.append(d),c[a].upgradeInfo&&(d=$("<div></div>").addClass("upgradeInfoContent").html(c[a].upgradeInfo),
+b.append(d)),a==c.length-1&&b.addClass("last"),e.append(b)}})}init();
+</script><style type="text/css">div.con{background:#fff;font-size:0;margin:16px auto 0;position:relative;width:716px}div.headCon{background:#5e85bf;color:#fff;height:130px;text-align:center}h1.title{font-size:30px;font-weight:normal;padding:40px 0 0}p.tips{font-size:14px;margin-top:45px;line-height:14px;height:14px}div.detail{padding-top:20px;padding-bottom:20px;padding-left:70px;padding-right:50px;height:204px}div.content{max-height:204px;font-size:13px;line-height:20px}div.detail h2{font-size:14px;font-weight:bold}div.detail pre{font-size:14px;white-space:pre-wrap;word-break:break-all;word-wrap:break-word}p.warn{font-size:12px;margin:25px auto 16px;height:14px;line-height:14px;text-align:center;color:#666}div.func{text-align:center;width:100%}div.func input{border:0;border-radius:5px;color:#3c3e43;cursor:pointer;font-size:14px;padding:5px 13px}input.upgrade{background:none repeat scroll 0 0 #feeb1a}input.cancel{background:none repeat scroll 0 0 #d9d9d9;margin-left:15px}p.check{text-align:right;padding-bottom:15px;margin-right:20px;font-size:12px;color:#7e7e7f}p.check input{vertical-align:middle}p.check label{vertical-align:middle}div.upgradeInfoContainer{width:576px;margin-bottom:20px}div.upgradeInfoContainer.last{margin-bottom:0}div.upgradeInfoTitle{height:32px;border-bottom:1px solid #d9d9d9}div.upgradeInfoTitle span.model{height:32px;line-height:32px;font-size:14px;font-weight:bold;color:#343434}div.upgradeInfoTitle span.version{height:32px;line-height:32px;font-size:12px;color:#666;float:right}div.upgradeInfoContent{margin-top:16px;line-height:20px;font-size:12px;color:#343434}</style>

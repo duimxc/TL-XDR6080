@@ -1,0 +1,8 @@
+Package: libjson
+Version: 0.9-2
+Depends: libc, libssp
+Source: tp_package/lib/libjson-c
+Section: libs
+Architecture: ipq
+Installed-Size: 10293
+Description:  This package contains a library for javascript object notation backends.

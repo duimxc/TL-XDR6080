@@ -1,0 +1,13 @@
+
+
+<div class="textCenter">
+	<img class="configGif" src="../web-static/images/wzdDetecting.gif" />
+</div>
+<div class="block">
+	<p>您的路由设置已完成</p>
+	<p>无线参数更改已生效，您的设备与路由器</p>
+	<p style="margin-bottom:32px;">的连接已断开，请重新进行无线连接</p>
+</div><script type="text/javascript">function init(){var a=[],f=["2G","5G","5G1","5G2"];switch(gBandNum){case BAND_1:a=[FREQ_2G];break;case BAND_2:a=[FREQ_2G,FREQ_5G];break;case BAND_3:a=[FREQ_2G,FREQ_5G1,FREQ_5G4]}if(gOpenBS){var b=document.createElement("p"),c=document.createElement("p");b.innerHTML=label.wirelessName+"： "+gWireRepeaterCfg[FREQ_BS].ssid;c.innerHTML=label.wirelessPwd+"： "+(uciWireless.dynOptValue.encryption.on==gWireRepeaterCfg[FREQ_BS].encryption?gWireRepeaterCfg[FREQ_BS].key:label.wirelessNoSecurity);$(".block").append(b);
+$(".block").append(c)}else for(var e=0;e<a.length;++e){var d=a[e],b=document.createElement("p"),c=document.createElement("p");b.innerHTML=label["wirelessName"+f[d]]+"： "+gWireRepeaterCfg[d].ssid;c.innerHTML=label["wirelessPwd"+f[d]]+"： "+(uciWireless.dynOptValue.encryption.on==gWireRepeaterCfg[d].encryption?gWireRepeaterCfg[d].key:label.wirelessNoSecurity);$(".block").append(b);$(".block").append(c)}a=document.createElement("p");a.innerHTML=label.ipAddr+"： "+(gLanIP||"0.0.0.0");$(".block").append(a);
+wzdDone();$.action({wired_extender:{set_ip:null}},null,!0);gLanIP&&($.setTimeout(function(){window.location.href="http://"+gLanIP},6E4),$.changeDomain(gLanIP),$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},4E3))}init();
+</script><style type="text/css">img.configGif{height:30px;margin:120px auto 40px;width:30px}.textCenter{text-align:center}.block p{color:#fff;font-size:14px;text-align:center}</style>

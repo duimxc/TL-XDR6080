@@ -1,0 +1,94 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="title">
+		<label class="title">{%menuStr.DHCPServer%}</label>
+		<i class="helpBtn" helpStr="dhcpServerHelp"></i>
+	</div>
+	<div class="block">
+		<ul class="gridLine gridLineA" id="staCapabilityWrap">
+			<label class="desLblA">{%label.staCapability%}</label>
+			<input id="commonStaNum" class="switchRadio" type="radio"/><label class="noteLbl" for="commonStaNum">{%label.normalCapability%}</label>
+			<input id="highStaNum" class="switchRadio switchRadio" type="radio"/><label class="noteLbl" for="highStaNum">{%label.highCapability%}</label>
+		</ul>
+		<ul id="lanIpAddrWrap" class="gridLine gridLineA2">
+			<label class="noteLbl">{%label.lanPortAddr%}{%label.colon%}<span id="lanIpAddr"></span></label>
+		</ul>
+		<div class = "dhcpServerSetWrap">
+			<ul class="gridLine gridLineA gridLineA2">
+				<label class="desLblA">{%menuStr.DHCPServer%}</label>
+				<input id="dhcpSwitchOn" name="dhcpSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="dhcpSwitchOn">{%label.openStr%}</label>
+				<input id="dhcpSwitchOff" name="dhcpSwitch" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="dhcpSwitchOff">{%label.closeStr%}</label>
+				<input id="dhcpSwitchAuto" name="dhcpSwitch" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="dhcpSwitchAuto">{%label.wirelessAuto%}</label>
+			</ul>
+			<ul class="gridLine gridLineA gridLineTips" id="relayTip">
+				<div class="warnCon">
+					<img src="../web-static/images/routerBg.png" />
+				</div>
+				<span id="relayTipText"></span>
+			</ul>
+			<ul class="gridLine gridLineA gridLineA2">
+				<label class="desLblA">{%label.addrPoolStart%}</label>
+				<li class="textConA textCon"><input id="dhcpIpStart" class="textA text hoverBd imeModeN" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.addrPoolEnd%}</label>
+				<li class="textConA textCon"><input id="dhcpIpEnd" class="textA text hoverBd imeModeN" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.addrLease%}</label>
+				<li class="textConB textCon"><input id="dhcpLsTime" class="textB text hoverBd imeModeN" maxLength="4" /></li>
+				<label class="noteLbl">{%label.DHCPMin%}</label>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.gateway%}</label>
+				<li class="textConA textCon"><input id="dhcpGateway" class="textA text hoverBd imeModeN" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.dns0%}</label>
+				<li class="textConA textCon"><input id="dhcpDnsPri" class="textA text hoverBd imeModeN" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA">{%label.dns1%}</label>
+				<li class="textConA textCon"><input id="dhcpDnsBak" class="textA text hoverBd imeModeN" maxLength="15" /><i class="tip"></i></li>
+			</ul>
+		</div>
+		<div class="blockFuncA">
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+		<ul id="dhcpStatus" class="gridLine gridLineA gridStatus">
+			<label class="noteLbl">{%label.dhcpServerState%}{%label.colon%}<span id="dhcpStatusSpn"></span></label>
+		</ul>
+	</div>
+
+	<div class="title">
+		<label class="title">{%label.dhcpEquipment%}</label>
+	</div>
+	<div class="blockTable">
+		<ul id="dhcpLsUl" class="gridToolBar">
+			<li gridType="refresh">{%btn.refresh%}</li>
+		</ul>
+		<table id="dhcpLeaseTbl" class="dataGrid"></table>
+	</div>
+</div>
+<script type="text/javascript">function init(){function l(a,c){var b="";switch(a){case ENONE:return!0;case EINVSTARTADDRPOOL:c="dhcpIpStart";b=errStr.dhcpsStrtAddrPoolErr;break;case EINVENDADDRPOOL:c="dhcpIpEnd";b=errStr.dhcpsEndAddrPoolErr;break;case EINVCAPABILITYSMALL:b=errStr.dhcpsAddrSmall;break;case EINVLEASETIME:c="dhcpLsTime";b=errStr.dhcpsLeaseErr;break;case EDHCPDGTW:c="dhcpGateway";b=errStr.gatewayErr;break;case EGTWNOTLANSUBNET:c="dhcpGateway";b=errStr.dhcpsGateWayErr;break;case EDHCPDPRIDNS:c="dhcpDnsPri";b=errStr.primDnsErr;
+break;case EDHCPDSNDDNS:c="dhcpDnsBak";b=errStr.seDnsErr;break;case EINVIP:b=errStr.ipAddrErr;break;case EINVIPFMT:b=errStr.ipAddrFmtErr;break;case EINVGROUPIP:b=errStr.ipAddrGroupErr;break;case EINVLOOPIP:b=errStr.ipAddrLoopErr;break;case EINVMACFMT:b=errStr.macFmtErr;break;case EINVMACZERO:b=errStr.macZeroErr;break;case EINVMACBROAD:b=errStr.macBroadErr;break;case EINVMACGROUP:b=errStr.macGroupErr;break;case EMULTIWANENABLE:b=errStr.dhcpsCloseConflict;break;case EWDSMODEOPEN:b=errStr.wdsOnDhcpsOpen;
+break;case EAPMODEOPEN:b=errStr.apOnDhcpsOpen;break;case EWDSMODECLOSE:b=errStr.wdsOnDhcpsClose;break;case EAPMODECLOSE:b=errStr.apOnDhcpsClose;break;default:b=errStr.invRequestFail}showAlert(b,c);return!1}function E(a){e=formatTableData(a[q][uciDhcpd.dynData.dhcpClient])||[];for(var c in e)0==e[c].hostname.length&&(e[c].hostname=label.anonymousHost);v.setDataSource(e);v.refresh(v.getPageNum())}function W(a){var c=a[uciFunction.fileName][uciFunction.secName.newModuleSpec];F=c[uciFunction.optName.wifisonMesh]&&
+"1"==c[uciFunction.optName.wifisonMesh];gSysModeSupport&&(B=a.system.sys_mode.mode);c=a[uciNetwork.fileName][uciNetwork.secName.lan];r=c[uciNetwork.optName.ip];s=c[uciNetwork.optName.netmask];y=JSON.parse(JSON.stringify(s));gSupportStaCapability&&($("#lanIpAddr").html(r),G=-1==location.href.toString().indexOf(r),H=window.location.port||80,a.network.massive_sta_capacity.enable==t?w():x());var c=a[q][C],b="0"==c[I]?!1:!0,d="0"==c.auto?!1:!0;gModeSwitchSupport&&1==parseInt(a.custom_network.bridge_status.enable)&&
+(disableInput("dhcpSwitchOn",!0),disableInput("dhcpSwitchOff",!0),disableInput("dhcpSwitchAuto",!0),d&&!b&&(disableInput("dhcpIpStart",!0),disableInput("dhcpIpEnd",!0),disableInput("dhcpLsTime",!0),disableInput("dhcpGateway",!0),disableInput("dhcpDnsPri",!0),disableInput("dhcpDnsBak",!0),disableBtn("save",!0),id("save").onclick=null));id("dhcpSwitchOn").checked=b;id("dhcpSwitchOff").checked=!b;id("dhcpSwitchAuto").checked=d;id("dhcpStatusSpn").innerHTML=d?b?label.autoOpen:label.autoClose:b?label.wlanOn:
+label.wlanOff;id("dhcpIpStart").value=c[J];id("dhcpIpEnd").value=c[K];id("dhcpLsTime").value=parseInt(parseInt(c[L])/60);id("dhcpGateway").value=c[M]||"0.0.0.0";id("dhcpDnsPri").value=c[N]||"0.0.0.0";id("dhcpDnsBak").value=c[O]||"0.0.0.0";E(a);B!=uciSystem.optValue.sysMode.routerMode&&(disableInput("commonStaNum",!0),disableInput("highStaNum",!0),disableInput("dhcpSwitchOn",!0),disableInput("dhcpSwitchOff",!0),disableInput("dhcpSwitchAuto",!0),disableInput("dhcpIpStart",!0),disableInput("dhcpIpEnd",
+!0),disableInput("dhcpLsTime",!0),disableInput("dhcpGateway",!0),disableInput("dhcpDnsPri",!0),disableInput("dhcpDnsBak",!0),disableBtn("save",!0),$("#dhcpLsUl li.refresh")[0].className="refreshUn",disableBtn($('ul.gridToolBar input[type="button"]')[0],!0),$("#relayTip").css("display","inline-block"),uciSystem.optValue.sysMode.apMode==B?$("#relayTipText").text("上网方式为AP（有线中继）时，DHCP服务器默认自动，不可修改"):$("#relayTipText").text("上网方式为桥接（无线中继）时，DHCP服务器默认自动，不可修改"))}function P(){var a={};a[q]={};a[q][KEY_NAME]=
+[C];a[q][KEY_TABLE]=[uciDhcpd.dynData.dhcpClient];a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.secName.lan];gSupportStaCapability&&a[uciNetwork.fileName][KEY_NAME].push(uciNetwork.secName.massiveSta);a[uciFunction.fileName]={};a[uciFunction.fileName][KEY_NAME]=[uciFunction.secName.newModuleSpec];gModeSwitchSupport&&(a[uciCustomNetwork.fileName]={},a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus]);gSysModeSupport&&(a.system={name:"sys_mode"});
+$.query(a,W)}function X(){var a={};a[q]={};a[q][KEY_TABLE]=[uciDhcpd.dynData.dhcpClient];$.query(a,E)}function Q(a){!1==G?window.location.href="http://"+a+":"+H:window.location.reload()}function R(){clearTimeout(S);clearTimeout(D);D=S=null}function T(a){$.changeDomain(a);showLoading(label.lanCfgChgTip,R);D=$.setTimeout(function(){Q(a)},Y);$.setTimeout(function(){lanDetecting(function(){R();$.setTimeout(function(){Q(a)},LAN_DETECT_TIME)})},Z)}function x(){m=u;id("commonStaNum").checked=!0;id("highStaNum").checked=
+!1}function w(){m=t;id("commonStaNum").checked=!1;id("highStaNum").checked=!0}function U(){disableBtn("dhcpSwitchOff",!0);disableBtn("dhcpSwitchOn",!0);disableBtn("dhcpSwitchAuto",!0);$("#dhcpIpStart").prop("readOnly",!0);$("#dhcpIpEnd").prop("readOnly",!0);$("#dhcpLsTime").prop("readOnly",!0);$("#dhcpGateway").prop("readOnly",!0);$("#dhcpDnsPri").prop("readOnly",!0);$("#dhcpDnsBak").prop("readOnly",!0);$(".dhcpServerSetWrap").addClass("opacityCover")}function g(){disableBtn("dhcpSwitchOff",!1);disableBtn("dhcpSwitchOn",
+!1);disableBtn("dhcpSwitchAuto",!1);$("#dhcpIpStart").removeProp("readOnly");$("#dhcpIpEnd").removeProp("readOnly");$("#dhcpLsTime").removeProp("readOnly");$("#dhcpGateway").removeProp("readOnly");$("#dhcpDnsPri").removeProp("readOnly");$("#dhcpDnsBak").removeProp("readOnly");$(".dhcpServerSetWrap").removeClass("opacityCover")}function z(a,c){$.action({network:{gen_massive_sta_capacity_ip:{enable:a}}},function(b){if(b.error_code==ENONE){var d=b.lan_ip;y=b.lan_mask;$("#lanIpAddr").html(d);"undefined"!=
+typeof c&&c()}else a==u?(showAlert(label.ipCalFailed),g(),w()):(showAlert(label.ipCalFailed),g(),x())})}function A(a,c){var b=$("#lanIpAddr").html();a==t?showConfirm(label.highCapabilityInfo+b+label.confirmChangeInfo,function(d){d?$.action({network:{config_massive_sta_capacity_ip:{lan_ip:b,lan_mask:y,enable:a}}},function(c){c.error_code==ELANIPCONFLICT?setTimeout(function(){z(a,function(){A(a)})},500):(w(),g(),T(b))}):"undefined"!=typeof c&&c()}):showConfirm(label.normalCapabilityInfo+b+label.confirmChangeInfo,
+function(d){d?$.action({network:{config_massive_sta_capacity_ip:{lan_ip:b,lan_mask:y,enable:a}}},function(c){c.error_code==ELANIPCONFLICT?setTimeout(function(){z(a,function(){A(a)})},500):(x(),g(),T(b))}):"undefined"!=typeof c&&c()})}var q=uciDhcpd.fileName,C=uciDhcpd.secName.udhcpd,I=uciDhcpd.optName.enable,J=uciDhcpd.optName.poolStart,K=uciDhcpd.optName.poolEnd,L=uciDhcpd.optName.leaseTime,M=uciDhcpd.optName.gateway,N=uciDhcpd.optName.priDns,O=uciDhcpd.optName.sndDns,r,s,v,e=[],F=!1,u=0,t=1,m=u,
+V=256,y,B=uciSystem.optValue.sysMode.routerMode,Y=12E4,Z=4E3,S,D,G=!1,H=80;(function(a){v=new DataGrid;v.init({id:"dhcpLeaseTbl",data:a,hasSelBox:!1,edit:!1,head:[{field:label.host,width:180},{field:label.mac,width:205},{field:label.ipAddr,width:134},{field:label.availTime,width:98}],list:[{edit:!1,name:uciDhcpd.optName.hostName,type:"str"},{edit:!1,name:uciDhcpd.optName.mac,type:"mac"},{edit:!1,name:uciDhcpd.optName.ip,type:"ip"},{edit:!1,name:uciDhcpd.optName.expires,type:"timeP"}],niceScroll:gBasicRouteSetRNiceScroll,
+toolBar:{id:"dhcpLsUl",refresh:X}})})(e);P();id("save").onclick=function(){function a(){c[q]=b;b[C]=d;0==g&&(d[I]=m);d.auto=g;if(""==n||ENONE!=checkIp(n)||0!=(transIp(n)&transIp(s)^transIp(r)&transIp(s)))return l(EINVSTARTADDRPOOL);if(""==p||checkIp(p)!=ENONE||0!=(transIp(p)&transIp(s)^transIp(r)&transIp(s)))return l(EINVENDADDRPOOL);ipStart=transIp(n);ipEnd=transIp(p);ipStart>ipEnd&&(id("dhcpIpStart").value=p,id("dhcpIpEnd").value=n);if(gSupportStaCapability&&id("highStaNum").checked&&!$(".dhcpServerSetWrap").hasClass("opacityCover")&&
+ipEnd-ipStart<V&&ipEnd-ipStart<V)return l(EINVCAPABILITYSMALL);if(""==e||!1==checkNum(e)||!1==checkNumRange(parseInt(e,10),2880,1))return l(EINVLEASETIME);if(""!=h&&"0.0.0.0"!=h&&ENONE!=checkIp(h))return l(EDHCPDGTW);if(""!=h&&"0.0.0.0"!=h&&0!=(transIp(h)&transIp(s)^transIp(r)&transIp(s)))return l(EGTWNOTLANSUBNET);if(""!=k&&"0.0.0.0"!=k&&ENONE!=checkIp(k))return l(EDHCPDPRIDNS);if(""!=f&&"0.0.0.0"!=f&&ENONE!=checkIp(f))return l(EDHCPDSNDDNS);var a=parseInt(e,10);id("dhcpLsTime").value=a;h=hideLeadingZeros(h);
+id("dhcpGateway").value=h;k=hideLeadingZeros(k);id("dhcpDnsPri").value=k;f=hideLeadingZeros(f);id("dhcpDnsBak").value=f;n=hideLeadingZeros(n);id("dhcpIpStart").value=n;p=hideLeadingZeros(p);id("dhcpIpEnd").value=p;d[J]=n;d[K]=p;d[L]=60*a;d[M]=h;"0.0.0.0"==k&&"0.0.0.0"!=f&&""!=f&&(id("dhcpDnsPri").value=f,id("dhcpDnsBak").value=k,k=id("dhcpDnsPri").value,f=id("dhcpDnsBak").value);d[N]=k;d[O]=f;setLoadingId("save");hsLoading(!0);$.modify(c,function(a){hsLoading(!1,a[ERR_CODE]);!0==l(a[ERR_CODE])&&P()})}
+var c={},b={},d={},h=id("dhcpGateway").value,k=id("dhcpDnsPri").value,f=id("dhcpDnsBak").value,e=id("dhcpLsTime").value,n=id("dhcpIpStart").value,p=id("dhcpIpEnd").value,m=!0==id("dhcpSwitchOn").checked?1:0,g=!0==id("dhcpSwitchAuto").checked?1:0;0==g&&0==m&&F?showConfirm("关闭DHCP功能，路由器的所有网口都将变为LAN口，IP地址也会从前端路由自动获取，可采用域名登录进入管理页面，请确定是否关闭?",function(b){b&&a()}):gSupportStaCapability?id("highStaNum").checked&&$(".dhcpServerSetWrap").hasClass("opacityCover")?A(t):id("highStaNum").checked&&!$(".dhcpServerSetWrap").hasClass("opacityCover")?
+a():id("commonStaNum").checked&&$(".dhcpServerSetWrap").hasClass("opacityCover")?A(u):a():a()};id("commonStaNum").onclick=function(){m!=t||$(".dhcpServerSetWrap").hasClass("opacityCover")?m==t&&$(".dhcpServerSetWrap").hasClass("opacityCover")&&($("#lanIpAddr").html(r),g(),x()):z(u,function(){U();x()})};id("highStaNum").onclick=function(){m!=u||$(".dhcpServerSetWrap").hasClass("opacityCover")?m==u&&$(".dhcpServerSetWrap").hasClass("opacityCover")&&($("#lanIpAddr").html(r),g(),w()):z(t,function(){U();
+w()})};gSupportStaCapability||($("#lanIpAddrWrap").hide(),$("#staCapabilityWrap").hide(),$("#staCapabilityHelp").hide())}init();
+</script><style type="text/css">#dhcpStatus{visibility:visible!important}#highStaNum{margin-left:10px}#lanIpAddrWrap{padding-left:260px}.opacityCover{opacity:.5}div.hsTip p.detail{width:293px}ul.gridToolBar li.refreshUn input{background:0 0!important;border:1px solid #fff;color:#fff;padding-left:18px;padding-right:18px}ul.gridLineTips{margin-top:8px!important;height:auto;display:none;line-height:unset}ul.gridLineTips span{color:#FFF;line-height:18px;font-size:12px}div.warnCon{width:16px;height:16px;overflow:hidden;display:inline-block;vertical-align:top;margin-left:246px}div.warnCon img{margin-top:-187px;margin-left:-467px}</style>

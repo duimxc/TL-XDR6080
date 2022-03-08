@@ -1,0 +1,8 @@
+Package: dms
+Version: 1
+Depends: libc, libssp, libjson, libpthread, libsecurity, libcyassl2, zlib, libnl, tdmp-resource
+Source: tp_package/u_packages/tdmp
+Section: utils
+Architecture: ipq
+Installed-Size: 1251525
+Description:  Data Module Service

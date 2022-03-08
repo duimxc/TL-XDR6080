@@ -1,0 +1,19 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="hsHelp"></div>
+	<div class="title">
+		<label class="title">{%menuStr.syslog%}</label>
+	</div>
+	<div class="blockTable">
+		<ul id="logUl" class="gridToolBar">
+			<li gridType="refresh">{%btn.refresh%}</li>
+			<li gridType="saveAll">{%btn.saveAllLog%}</li>
+			<li gridType="delAll">{%btn.cleanAllLog%}</li>
+		</ul>
+		<table id="logTbl" class="dataGrid"></table>
+	</div>
+</div><script type="text/javascript">function init(){function c(a){a=null==a||!1==checkNum(a)?dataGridLs.getPageNum():a;var c=dataGridLs.getNumPerPage();dataGridLs.getDataLen();$.action({system:{read_logs:{page:a,num_per_page:c}}},function(a){var c=a.syslog,e=a.page;a=a.total;var m="ALL DEBUG INFO NOTICE WARNING ERR EMERG MAX".split(" "),n=/<(\d+)>(.+)/,g,b=1,h=[],l=0,d=b=0;0<e?(b=Math.ceil(a/dataGridLs.getNumPerPage()),d=a%dataGridLs.getNumPerPage(),b=e!=b?0<d?dataGridLs.getNumPerPage()*(b-1-e)+d+1:dataGridLs.getNumPerPage()*(b-e)+
+1:1):b=1;for(d=0;d<c.length;d++){g=c[d];var f="syslog_"+parseInt(b);if(g=n.exec(g[f]))f={},f.num=b,f.level=m[parseInt(g[1])],f.msg=g[2],h[l]=f,b++,l++}0<e?dataGridLs.refreshPage(h,a,e):(k=h,dataGridLs.setDataSource(k),dataGridLs.refresh(dataGridLs.getPageNum()))})}var k=[];dataGridLs=new DataGrid;dataGridLs.init({id:"logTbl",data:k,hasSelBox:!1,edit:!1,head:[{field:label.logIndex,width:7},{field:label.logType,width:20},{field:label.logCont,width:73}],list:[{edit:!1,name:"num",type:"number"},{edit:!1,
+name:"level",type:"str"},{edit:!1,name:"msg",type:"str",maxSize:200,className:"sysLogTd",igHTMLEscape:!0}],paging:{num:20,page:1},max:160,pageTurnFunc:c,toolBar:{id:"logUl",refresh:c,saveAll:function(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.actionName.downloadLogs]=null;$.action(a,function(a){location.href=$.orgURL(a.url)},!0)},delAll:function(){$.action({system:{delete_logs:null}},c)}}});c()}init();
+</script><style type="text/css">p.sysLogEnMailP{height:24px;line-height:24px;color:#737373;padding-left:15px;margin-top:15px;text-align:left}input.sysLogRadio{margin-left:40px;margin-right:5px;vertical-align:middle}label.sysLogDesLbl{width:157px;font-size:12px;color:#737373;margin-right:3px;display:inline-block;vertical-align:middle}div.sysLogSubTitle{margin-top:24px;text-indent:8px;font-size:.1px;border-bottom:1px solid #ebebeb;padding-bottom:3px;position:relative;*zoom:1}div.sysLogSubTitle label.sysLogSubTitle{color:#737373;font-size:15px;line-height:26px;vertical-align:middle;text-align:left}table.dataGrid td.sysLogTd{text-align:left;padding:3px 0 3px 20px;word-break:break-all;word-wrap:break-word;white-space:normal!important}</style>

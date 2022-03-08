@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# notify uhttpd to rebind wan interface
+kill -SIGUSR1 $(cat /var/run/uhttpd_main.pid)

@@ -1,0 +1,63 @@
+
+
+<ul class="wzdConTitleUl">
+	<p class="wzdConTitle">{%label.netSet%}</p>
+</ul>
+<div class="internetStateCon">
+    <img src="../web-static/images/routerWzd.png">
+    <div class="lineCon">
+        <span class="dot"></span><span class="line"></span><span class="dot"></span><i class="connect"></i><i class="disConnect"></i>
+        <label>{%label.staticIp%}</label>
+    </div>
+    <img src="../web-static/images/internetWzd.png">
+</div>
+<p class="tipsP">{%label.wzdStaticIpTip%}</p>
+<div id="wanPortSelDiv" class="disNone">
+	<ul class="gridLine gridLineA wzdGridLineA wanSel">
+		<label class="wzdDesLblA">{%label.wanPortSel%}</label>
+		<li class="textConA textCon textConWzd">
+			<span id="wanPortSel" class="select">
+				<span class="value wzdValueA"></span>
+				<i class="arrow arrowWzd"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="inputUl wanSelTips">
+		<li class="inputLi"><label></label><span>此时<span id="wanPortSelected"></span>作为LAN1口</span></li>
+	</ul>
+</div>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.ipAddr%}</label><input id="ipAddrIn" maxLength="15" /></li>
+	<li id="wzdIpNote" class="note"><i class="error"></i><div class="noteCon"><p id="wzdIpNoteP"></p></div></li>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.mask%}</label><input id="netMaskIn" maxLength="15" /></li>
+	<li id="wzdMaskNote" class="note"><i class="error"></i><div class="noteCon"><p></p></div></li>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.gateway%}</label><input id="gatewayIn" maxLength="15" /></li>
+	<li id="wzdGatewayNote" class="note"><i class="error"></i><div class="noteCon"><p></p></div></li>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.dns0%}</label><input id="dns0In" maxLength="15" /></li>
+	<li id="wzdPrimDnsNote" class="note"><i class="error"></i><div class="noteCon"><p></p></div></li>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.dns1%}</label><input id="dns1In" maxLength="15" /></li>
+	<li id="wzdSeDnsNote" class="note"><i class="error"></i><div class="noteCon"><p></p></div></li>
+</ul>
+<ul><li class="wzdSubLi"><input id="sub" type="button" value="{%btn.nextStep%}" /></li></ul>
+<div class="dividingLineCon">
+	<span class="dividingLine"></span><span class="title">或者</span><span class="dividingLine"></span>
+</div>
+<div class="menuCon">
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_DHCP)">{%label.dhcp%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_PPPOE)">{%label.pppoe%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)" class="disNone" id="wzdAp">{%label.wiredRepeater%} ></a>
+</div><script type="text/javascript">function init(){function b(a){id("wzdIpNoteP").className="";switch(a){case ENONE:return!1;case EINVIPFMT:id("wzdIpNoteP").className="twoLine";showNote("wzdIpNote",errStr.ipAddrFmtNoteErr);break;case EINVLOOPIP:showNote("wzdIpNote",errStr.ipAddrLoopErr);break;case EINVGROUPIP:showNote("wzdIpNote",errStr.ipAddrGroupErr);break;case EINVNET:showNote("wzdIpNote",errStr.wzdStcIpNetErr);break;case EINVIP:showNote("wzdIpNote",errStr.wzdStcIpErr);break;case EINVTYPE:showNote("wzdIpNote",errStr.acIpTypeErr);
+break;case EINVMASK:showNote("wzdMaskNote",errStr.wzdStcMaskErr);break;case EINVNETID:case EINVHOSTID:case EINVIPMASKPAIR:showNote("wzdIpNote",errStr.wzdStcIpMaskNotMatch);break;case ECOMFLICTNET:showNote("wzdIpNote",errStr.wzdStcIpLanConflict);break;case EINVGTW:showNote("wzdGatewayNote",errStr.wzdStcGatewayErr);break;case EINVFDNSVR:showNote("wzdPrimDnsNote",errStr.wzdPrimDnsErr);break;case EINVSDNSVR:showNote("wzdSeDnsNote",errStr.wzdSeDnsErr);break;case ECONFLICTGATEWAY:showNote("wzdGatewayNote",
+errStr.wzdIpAddrLanGatewayConflict);break;case ECONFLICTFDNS:showNote("wzdPrimDnsNote",errStr.wzdIpAddrLanFDNSConflict);break;case ECONFLICTSDNS:showNote("wzdSeDnsNote",errStr.wzdIpAddrLanSDNSConflict)}return!0}function k(a){return""==a||"0.0.0.0"==a?(id("dns1In").value="0.0.0.0",ENONE):gNetworkCfg.lanIp==a?EINVSDNSVR:ENONE!=checkIp(a)?EINVSDNSVR:ENONE}function c(a){var b=hideLeadingZeros(id(a).value);return id(a).value=b}wzdNavSet(1);wzdConSet({height:"730px"});id("sub").onclick=function(){var a=
+id("ipAddrIn").value,g=id("netMaskIn").value,d=id("gatewayIn").value,e=id("dns0In").value,h=id("dns1In").value;closeNote("wzdIpNote");closeNote("wzdMaskNote");closeNote("wzdGatewayNote");closeNote("wzdPrimDnsNote");closeNote("wzdSeDnsNote");var f;(f=b(checkIp(a)))||(f=b(checkMask(g)))||((a=b(checkIpMask(a,g)))||((d=b(ENONE!=checkIp(d)?EINVGTW:ENONE))||(e=gNetworkCfg.lanIp==e?EINVFDNSVR:ENONE!=checkIp(e)?EINVFDNSVR:ENONE,d=b(e)||b(k(h))),a=d),f=a);f||(a=c("ipAddrIn"),g=c("netMaskIn"),d=c("gatewayIn"),
+e=c("dns0In"),h=c("dns1In"),saveNetworkCfg(uciProto.optValue.proto.staticIp,function(a){b(parseInt(a[ERR_CODE]))||loadPage("WizardWirelessCfg.htm","wizardCon")}))};id("ipAddrIn").focus();!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");showNetworkCfg(uciProto.optValue.proto.staticIp);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),
+$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));gSysModeSupport&&$("#wzdAp").removeClass("disNone")}init();
+</script><style type="text/css">p.tipsP{font-size:12px;color:#FFF;margin-left:347px;margin-bottom:16px}</style>

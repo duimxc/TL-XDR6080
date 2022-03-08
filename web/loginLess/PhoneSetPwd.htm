@@ -1,0 +1,44 @@
+
+<div class="phoneCon">
+	<div id="phCon">
+		<h1 class="phoneTitle">{%label.chgLgPwd%}</h1>
+		<ul class="phInputUl">
+			<li class="phInputLi">
+				<label for="pwd">{%label.loginSetPwd%}</label>
+				<i class="clapboard"></i>
+				<input id="pwd" maxlength="32" type="password" placeholder="{%label.phPwdTip%}" />
+			</li>
+			<li id="lgPwdNoteLess" class="phErrTip disNone">
+				<i class="error"></i><span class="errDes">{%label.chgPwdLess%}</span>
+			</li>
+			<li id="lgPwdNoteInvalidChar" class="phErrTip disNone">
+				<i class="error"></i><span class="errDes">{%errStr.pwdCharValid%}</span>
+			</li>
+			<li id="lgPwdNote" class="phErrTip disNone">
+				<i class="error"></i><span class="errDes">{%label.chgPwdDep%}{%label.colon%}<span id="pwdDep"></span></span>
+				<span class="pwdDepCon"><span id="chgPwdDep" class="chgPwdDep"></span></span>
+			</li>
+		</ul>
+		<ul class="phInputUl">
+			<li class="phInputLi">
+				<label id="pwdConfLbl" for="pwdConf">{%label.loginPwdConf%}</label>
+				<i class="clapboard"></i>
+				<input id="pwdConf" maxlength="32" type="password" />
+			</li>
+			<li id="lgPwdConfNote" class="phErrTip disNone">
+				<i class="error"></i><span class="errDes">{%label.chgPwdDif%}</span>
+			</li>
+		</ul>
+		<div class="phFunc">
+			<label id="sub" class="phOneBtn">{%btn.ok%}</label>
+		</div>
+	</div>
+	<img class="phoneLogo" src="../web-static/images/logo.png" />
+</div><script type="text/javascript">var isSending=!1,PageObj={chkPswVal:function(a){return/^[\x21-\x7e]+$/.test(a)},pwdConfFocus:function(){this.lgPwdNote.style.display="none"},pwdFocus:function(){this.lgPwdConfNote.style.display="none"},pwdConfCheck:function(){var a=this.pwdConf,b=this.pwd;this.pwdConfFocus();if(a.value==b.value)return this.lgPwdConfNote.style.display="none",!0;this.lgPwdConfNote.style.display="block";return!1},pwdBlur:function(){var a=id("pwd"),b=a.value.length;0<=b&&6>b&&(this.lgPwdNoteLess.style.display="block",
+window.setTimeout(function(){a.focus()},0))},pwdCheckMixChars:function(a){var b=!1,c=!1,d=!1,b=/\d/g.test(a),c=/[a-zA-Z]/g.test(a),d=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(a);return b&&d&&c},pwdCheck:function(){var a=30,b="",c="block",d="block",e=this.pwd.value,f=e.length,h="block",g=!0;0<=f&&6>f?(g=!1,d="none"):this.chkPswVal(e)?32<f?(d=c="none",g=!1):d=c="none":(c="none",g=!1);"none"!=c||"none"!=d?h="none":/^\d+$/.test(e)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(e)||/^[a-zA-Z]+$/.test(e)?
+10>=f?b=label.weak:(b=label.media,a*=2):!0==this.pwdCheckMixChars(e)?(b=label.strong,a*=3):10>=f?(b=label.media,a*=2):(b=label.strong,a*=3);this.lgPwdNote.style.display=h;this.lgPwdNoteLess.style.display=c;this.lgPwdNoteInvalidChar.style.display=d;this.pwdDep.innerHTML=b;this.chgPwdDep.style.width=a+"px";return g},pwdConfChange:function(){this.pwdConfCheck()},wzdDone:function(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.secName.sys]={};a[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory]=
+uciSystem.optValue.isFactory.no;$.modify(a)},wzdStop:function(){PageObj.wzdDone();"NO"==gBeInCNA?loadBasic(NET_STATE_INDEX):loadPage("WizardIPadSuccess.htm","wizardCon")},skipWizardConfirmHd:function(){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,function(a){ENONE==a[ERR_CODE]&&(a=0==parseInt(a.custom_network.bridge_status.enable)?label.telWzdRouteCfm:label.telWzdBriCfm,showPhConfirm(a,function(a){a?(unloadLogin(),
+PageObj.wzdStop()):unloadLogin()},label.telSkipWzd,label.telBackWzd))})},onsub:function(){var a=this.pwd,b=this.pwdConf;this.pwdCheck()&&this.pwdConfCheck()&&!isSending&&(isSending=!0,$.changeDefaultPwd(a.value,function(c){isSending=!1;ENONE==c?(a.value="",b.value="",c={},c[uciFunction.fileName]={},c[uciFunction.fileName][KEY_NAME]=[uciFunction.secName.newModuleSpec],$.query(c,function(a){a[ERR_CODE]==ENONE?void 0!=a[uciFunction.fileName]&&void 0!=a[uciFunction.fileName][uciFunction.secName.newModuleSpec]&&
+a[uciFunction.fileName][uciFunction.secName.newModuleSpec][uciFunction.optName.elink]==uciFunction.optValue.enable?PageObj.skipWizardConfirmHd():unloadLogin():unloadLogin()})):EHASINITPWD==c?showPhWzdAlert(errStr.hasInitPwdPh,function(){location.reload()}):showPhWzdAlert(errStr.setPwdErr)}))},init:function(){var a=this,b=id("pwd"),c=id("pwdConf");this.pwdConf=c;this.pwd=b;this.lgPwdNote=id("lgPwdNote");this.lgPwdConfNote=id("lgPwdConfNote");this.lgPwdNoteLess=id("lgPwdNoteLess");this.lgPwdNoteInvalidChar=
+id("lgPwdNoteInvalidChar");this.pwdDep=id("pwdDep");this.chgPwdDep=id("chgPwdDep");c.onkeyup=function(){a.pwdConfChange()};c.onfocus=function(){a.pwdConfFocus()};c.onblur=function(){a.pwdConfCheck()};b.onkeyup=function(){a.pwdCheck()};b.onblur=function(){a.pwdBlur()};b.onfocus=function(){a.pwdFocus()};id("sub").onclick=function(){a.onsub()}}};PageObj.init();
+</script>

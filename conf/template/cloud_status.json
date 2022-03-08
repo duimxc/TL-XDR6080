@@ -1,0 +1,336 @@
+{
+	"/cloud_status/router_request/check_fw_ver" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/download_fw" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_account_stat" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/reset_account_pwd" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/modify_account_pwd" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_reg_verify_code" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_reset_pwd_verify_code" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/check_reg_verify_code" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/check_reset_pwd_verify_code" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/notify_event" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/bind" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/login" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/resend_email" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/unbind" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/register" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/push_plugin_list" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_can_update_plugins" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_not_installed_plugins" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/check_plugin_update" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_plugin_info" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/router_request/get_plugins" : {
+		"owner" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"action_status" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"err_code" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+
+
+	"/cloud_status/cloud_client/client_info" : {
+		"connect_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"reconnect_time" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"disconnect_reason" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"fw_download_progress" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"fw_download_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"fw_download_error_code": {
+			"type" : "c32",
+			"default" : 0
+		}
+	},
+	"/cloud_status/cloud_client/reg_veri_code_timer" : {
+		"reg_veri_code_timer" : {
+			"type" : "intStr32",
+			"default" : 120
+		}
+	},
+	"/cloud_status/cloud_client/reset_veri_code_timer" : {
+		"reset_veri_code_timer" : {
+			"type" : "intStr32",
+			"default" : 120
+		}
+	}
+}

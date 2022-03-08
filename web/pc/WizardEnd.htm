@@ -1,0 +1,17 @@
+
+
+<ul class="wzdUl">
+	<li id="saveCfgLi" class="wizardBom">
+		<i class="detecting"></i>
+		<p>{%label.savingCfg%}</p>
+	</li>
+	<li id="wifiTipsLi" class="wizardBom wifiTips">
+		<i class="detecting"></i>
+		<p>{%label.endWzdWirelessChgTip%}</p>
+		<span>{%label.wirelessName%}{%label.colon%}<label id="wifiName"></label></span>
+		<span id="pwdSpan">&nbsp;&nbsp;&nbsp;{%label.wirelessPwd%}{%label.colon%}<label id="wifiPwd"></label></span>
+	</li>
+</ul><script type="text/javascript">function init(){function f(){!0==d?(gCloudAccountBR.bFWzd=!0,cloudSetBackBRHd(function(){"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}),showCloudPage("CloudTPID.htm"),emptyNodes(id("Con"))):"NO"==gBeInCNA?loadBasic():loadPage("WizardIPadSuccess.htm","wizardCon")}function g(c){var a={},b=cloudClientStatus;a[b.fileName]={};a[b.fileName][KEY_NAME]=b.secName.clientInfo;$.query(a,function(a){ENONE==a[ERR_CODE]&&(d=a[b.fileName][b.secName.clientInfo][b.optName.connectStatus]==
+b.optValue.connectStatus.connected);"function"==typeof c&&c(a)})}function h(){g(function(a){0>=c||!0==d?f():(c-=k,$.setTimeout(h,k))})}var k=500,c=5E3,d=!1;wzdDone();!0==gIsWifiCfgChged&&$.modify(gWifiCfgToSave);if(gIsWifiDevice&&gIsWifiCfgChged){var a=uciWireless.fileName,e=uciWireless.dynData.host_2g,n=uciWireless.dynOptName.ssid,l=uciWireless.dynOptName.key,m=gWifiCfgToSave[a][e][l];id("wifiName").innerHTML=htmlEscape(gWifiCfgToSave[a][e][n]);void 0==m||0==m.length?$("#pwdSpan").css("display",
+"none"):id("wifiPwd").innerHTML=htmlEscape(gWifiCfgToSave[a][e][l]);$("#saveCfgLi").css("display","none");$("#wifiTipsLi").css("display","block");$.setTimeout(function(){lanDetecting(function(){g(function(){f()})})},4E3)}else $("#saveCfgLi").css("display","block"),$("#wifiTipsLi").css("display","none"),$.setTimeout(h,1E3)}init();
+</script><style type="text/css">li.wifiTips p{margin-bottom:25px}#saveCfgLi{margin-top:100px;display:none}#wifiTipsLi{display:none}</style>

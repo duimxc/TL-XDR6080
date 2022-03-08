@@ -1,0 +1,159 @@
+#!/bin/sh /etc/rc.common
+#
+# Copyright (c) 2013, 2017, 2020 Qualcomm Technologies, Inc.
+#
+# All Rights Reserved.
+# Confidential and Proprietary - Qualcomm Technologies, Inc.
+#
+# 2013 Qualcomm Atheros, Inc.
+#
+# All Rights Reserved.
+# Qualcomm Atheros Confidential and Proprietary
+#
+
+. /lib/functions.sh
+[ -e /lib/ipq806x.sh ] && . /lib/ipq806x.sh
+
+START=97
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+MTD_ART_PART_NAME="art"
+
+compressed_art_read() {
+	local mtdblock=$(find_mtd_part art)
+
+	if [ -z "$mtdblock" ]; then
+		#read from mmc
+		mtdblock=$(find_mmc_part art)
+	fi
+
+	[ -n "$mtdblock" ] || return
+
+	local apmp="/tmp"
+
+	dd if=${mtdblock} of=${apmp}/virtual_art.bin.tar.xz
+	tar -zxvf ${apmp}/virtual_art.bin.tar.xz || {
+	# Create dummy virtual_art.bin file of size 512K
+	dd if=/dev/zero of=${apmp}/virtual_art.bin bs=1024 count=512
+	}
+	echo "Uncompressed and Copied ART content from ${mtdblock} to /tmp/virtual_art.bin" > /dev/console
+}
+
+raw_art_read() {
+	local mtdblock=$(find_mtd_part art)
+
+	if [ -z "$mtdblock" ]; then
+		#read from mmc
+		mtdblock=$(find_mmc_part art)
+	fi
+
+	[ -n "$mtdblock" ] || return
+
+	local apmp="/tmp"
+
+	dd if=${mtdblock} of=${apmp}/virtual_art.bin
+	echo "Copy ART caldata from ${mtdblock} to /tmp/virtual_art.bin" > /dev/console
+}
+
+retrieve_caldata() {
+	local board
+	[ -f /tmp/sysinfo/board_name ] && {
+		board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
+	}
+	echo "**** Platform Name: $board *****" > /dev/console
+
+	if [ -e /sys/firmware/devicetree/base/compressed_art ]
+	then
+		compressed_art_read
+	else
+		raw_art_read
+	fi
+}
+
+slp_check_calculate_data_2G(){
+	CALTAG_FILE_PATH="/tmp/calTag"
+	local CAL_TAG=nil
+
+	# it's not first time to check cal data, just get caltag from /tmp/calTag file
+	if [ -f "${CALTAG_FILE_PATH}" ]; then
+		CAL_TAG=$(hexdump "${CALTAG_FILE_PATH}" | grep 1111)
+	fi
+
+	if [ "$CAL_TAG" ]; then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
+slp_check_calculate_data_5G(){
+	CALTAG_FILE_PATH="/tmp/calTag_1"
+	CALTAG_FILE_PATH_5G2="/tmp/calTag_2"
+	local CAL_TAG=nil
+	local CAL_TAG_5G2=nil
+	local radioScheme=$(cat /proc/cmdline | awk -F 'radioScheme=' '{print $2}')
+	local radioNum=$(echo "${radioScheme}" | awk -F ',' '{print NF}')
+
+	# it's not first time to check cal data, just get caltag from /tmp/calTag_1 file
+	if [ -f "${CALTAG_FILE_PATH}" ]; then
+		CAL_TAG=$(hexdump "${CALTAG_FILE_PATH}" | grep 1111)
+		if [ "${radioNum}" == "3" ]; then
+			if [ -f "${CALTAG_FILE_PATH_5G2}" ]; then
+				CAL_TAG_5G2=$(hexdump "${CALTAG_FILE_PATH_5G2}" | grep 1111)
+				if [ -z "${CAL_TAG_5G2}" ]; then
+					echo "false"
+					return
+				fi
+			else
+				echo "false"
+				return
+			fi
+		fi
+	else
+		echo "false"
+		return
+	fi
+
+	if [ "$CAL_TAG" ]; then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
+start() {
+	local emmc_flash=""
+	local nor_flash=""
+	local caltag_2g=$(slp_check_calculate_data_2G)
+	local caltag_5g=$(slp_check_calculate_data_5G)
+
+	emmc_flash=$(find_mmc_part art 2> /dev/null)
+	mtd_name=$(grep -i -w ${MTD_ART_PART_NAME} /proc/mtd | cut -f1 -d:)
+	nor_flash=`find /sys/bus/spi/devices/*/mtd -name ${mtd_name} 2> /dev/null`
+
+	[ "$caltag_2g" == "false" -o "$caltag_5g" == "false" ] && { \
+
+		if [ -n "$emmc_flash" ]; then
+			[ -L /dev/caldata ] || \
+				ln -s $emmc_flash /dev/caldata
+		elif [ -n "$nor_flash" ]; then
+			[ -L /dev/caldata ] || \
+				ln -s /dev/${mtd_name//mtd/mtdblock} /dev/caldata
+		elif [ -n "$mtd_name" ]; then
+			[ -L /dev/caldata ] || \
+				ln -s /dev/${mtd_name//mtd/mtdblock} /dev/caldata
+		fi
+		retrieve_caldata
+
+		# if DUT has not calibrated, unload Mission Mode driver, and load FTM driver.
+		# Auto startup diag_socket_app and ftm
+		if [ -x /lib/wifi/qca_ftm_init.sh ]; then
+			/lib/wifi/qca_ftm_init.sh
+		fi
+	}
+}
+
+stop() {
+	[ -L /dev/caldata ] && rm /dev/caldata
+}

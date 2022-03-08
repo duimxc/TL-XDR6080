@@ -1,0 +1,130 @@
+
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.netMode%}</label>
+		<li class="textConA textCon">
+			<span id="wanSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA" style="height:30px;"></label>
+		<li class="textConA">
+			<input id="shareIpv4" class="checkbox" type="checkbox" />
+			<label class="noteLbl" for="shareIpv4">{%label.ipv6Share%}</label>
+		</li>
+	</ul>
+	<ul class="gridLine gridLineA pppoeUserLine"  style="margin-top:0px;">
+		<label class="desLblA">{%label.ipv6NetAccount%}</label>
+		<li class="textConA textCon"><input id="name" class="textA text hoverBd" maxLength="118" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA pppoeUserLine">
+		<label class="desLblA">{%label.ipv6NetPwd%}</label>
+		<li class="textConA textCon"><input id="psw" class="textA text hoverBd" maxLength="118" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA mpPhoneRgt15">
+		<label class="desLblA">{%label.ipv6Addr%}</label>
+		<label id="wanIpLbl" class="noteLbl">::</label>
+	</ul>
+	<ul class="gridLine gridLineA mpPhoneRgt10">
+		<label class="desLblA">{%label.dns0%}</label>
+		<label id="pri_dns" class="noteLbl">::</label>
+	</ul>
+	<ul class="gridLine gridLineA mpPhoneRgt10">
+		<label class="desLblA">{%label.dns1%}</label>
+		<label id="snd_dns" class="noteLbl">::</label>
+	</ul>
+	<ul id="onlineTimeUl" class="gridLine gridLineA mpPhoneRgt10">
+		<label class="desLblA">{%label.onlineTime%}</label>
+		<label id="onlineTimeLbl" class="noteLbl"></label>
+	</ul>
+	<div class="blockFuncA">
+		<input id="disconnect" type="button" value="{%btn.disconnect%}" class="btnA subBtn" />
+		<input id="save" type="button" value="{%btn.connect%}" class="btnA subBtn" />
+	</div>
+	<ul id="wanStatus" class="gridLine gridLineA gridStatus">
+		<i></i>
+		<label id="wanStatusLbl" class="noteLbl"></label>
+		<a id="pppoeSolution" href="javascript:void(0)">{%label.lookUpSolution%}</a>
+	</ul>
+</div>
+<div class="title">
+	<label class="title">{%label.highSet%}</label>
+	<i class="helpBtn" helpStr="PPPoEv6AdvHelp"></i>
+</div>
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.ipv6GetPtl%}</label>
+		<input id="PtlAuto" name="ipv6GetPtlSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PtlAuto">{%label.ipv6Auto%}</label>
+		<input id="PtlDHCPv6" name="ipv6GetPtlSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PtlDHCPv6">{%label.ipv6DHCPv6%}</label>
+		<input id="PtlSLAAC" name="ipv6GetPtlSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PtlSLAAC">{%label.ipv6SLAAC%}</label>
+		<input id="PtlStatic" name="ipv6GetPtlSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PtlStatic">{%label.ipv6Static%}</label>
+	</ul>
+	<ul class="gridLine gridLineA ipv6AddrLine">
+		<label class="desLblA">{%label.ipv6Addr%}</label>
+		<li class="textConA textCon"><input id="ipAddr" class="textA text hoverBd" maxLength="39" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA ipv6AddrLine">
+		<label class="desLblA">{%label.ipv6PrefixLen%}</label>
+		<li class="textConA textCon "><input class="textA text hoverBd disable" disabled="disabled" maxLength="71" value="64"/><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA"  id="ipv6PreDelgLine">
+		<label class="desLblA">{%label.ipv6PreDelg%}</label>
+		<input id="PreDelgOn" name="ipv6PreDelgSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PreDelgOn">{%label.ipv6On%}</label>
+		<input id="PreDelgOff" name="ipv6PreDelgSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="PreDelgOff">{%label.ipv6Off%}</label>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.dns%}</label>
+		<input id="dnsAuto" name="ipv6DnsSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="dnsAuto">{%label.ipv6DnsAuto%}</label>
+		<input id="dnsManual" name="ipv6DnsSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="dnsManual">{%label.ipv6DnsManual%}</label>
+	</ul>
+	<ul class="gridLine gridLineA dnsLine">
+		<label class="desLblA">{%label.dns0%}</label>
+		<li class="textConA textCon"><input id="pri_dns_input" class="textA text hoverBd" maxLength="39" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA dnsLine">
+		<label class="desLblA">{%label.dns1%}</label>
+		<li class="textConA textCon"><input id="snd_dns_input" class="textA text hoverBd" maxLength="39" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.wanMac%}</label>
+		<li class="textConA textCon">
+			<span id="wanMacSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul id="macCloneUl" class="gridLine gridLineA">
+		<li class="textConAL textCon"><input id="wanMac" class="textA text hoverBd" maxLength="17" /><i class="tip"></i></li>
+		<li class="textConAL macCloneLi"></li>
+	</ul>
+	<div class="blockFuncA">
+		<input id="saveHighSet" type="button" value="{%btn.save%}" class="btnA subBtn" />
+	</div>
+</div>
+<script type="text/javascript">function init(e){function n(a,d){var b="";switch(a){case ENONE:return!1;case EPPPOEUSER:b=errStr.pppoeUserErr;break;case EPPPOEPWD:b=errStr.pppoePwdErr;break;case EINVMTU:b=errStr.pppoeMtuErr;break;case EINVNET:b=errStr.ipAddrNetErr;break;case EIPV6INVIP:b=errStr.ipv6AddrErr;break;case EIPV6INVIPFMT:b=errStr.ipv6AddrFmtErr;break;case EIPV6INVGROUPIP:b=errStr.ipv6AddrGroupErr;break;case EIPV6LOOP:b=errStr.ipv6AddrLoopErr;break;case EIPV6LINKLOCAL:b=errStr.ipv6LinkLoaclErr;break;case EIPV66TO4ADDR:b=
+errStr.ipv6Addr6To4Err;break;case EIPV6INVFDNSVR:b=errStr.primDnsErr;break;case EIPV6INVSDNSVR:b=errStr.seDnsErr;break;case EINVTIME:b=errStr.pppoeOffTimeErr;break;case ENOLINK:b=errStr.wanLinkDown;break;case ECONFLICTLANMAC:b=errStr.lanWanMacConflict;break;case ECONFLICTWANMAC:b=errStr.mulWanMacConflict;break;default:b=errStr.invRequestFail}showAlert(b,d);return!0}function G(a){wanCheckWDS(function(){var d={},b={},c={},g={};d[l]=b;1==a||"undefined"==typeof a?(b[w]=g,b[PPPoE_NAME]=c):(b[w+"_"+a]=
+g,b[PPPoE_NAME+"_"+a]=c);var p,e,f,h,u,v,k;p=id("PtlAuto").checked?IP_CONFIG_AUTO:id("PtlDHCPv6").checked?IP_CONFIG_DHCPV6:id("PtlSLAAC").checked?IP_CONFIG_SLAAC:IP_CONFIG_STATIC;k=id("ipAddr").value;e=id("PreDelgOn").checked?PD_MODE_PREFIX:PD_MODE_NON_TEMP;b=id("dnsAuto").checked?DNS_MODE_DYN:DNS_MODE_MAN;f=id("pri_dns_input").value;h=id("snd_dns_input").value;u=id("wanMac");v=u.value;if(!wanMacErrHandle(checkMac(v),u)){c[I]=p;c[J]=b;if(p==IP_CONFIG_STATIC){if(n(checkIPv6(k),"ipAddr"))return;k=k.replace(/：/g,
+":");$("#ipAddr").val(k);c[x]=k}else c[K]=e;if(b==DNS_MODE_MAN){if(n(checkPriDnsV6(f),"pri_dns_input")||n(checkSeDnsV6(h),"snd_dns_input"))return;f=f.replace(/：/g,":");$("#pri_dns_input").val(f);h=h.replace(/：/g,":");$("#snd_dns_input").val(h);c[y]=f;c[z]=h}g[L]=v;updateTimerHandle&&clearTimeout(updateTimerHandle);disableBtn("save",!0);disableBtn("disconnect",!0);setLoadingId("saveHighSet");hsLoading(!0);$.modify(d,function(b){r=e;A=p;m==PPPoE_NAME&&(e==PD_MODE_PREFIX&&p!=IP_CONFIG_STATIC?(lanPrefixChange(!0),
+preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);preDelgOnFlag=!1},2E3));B(a);hsLoading(!1,function(){disableBtn("save",!1);disableBtn("disconnect",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},0);return n(b[ERR_CODE])})}})}function C(a){wanCheckWDS(function(){var d={},b={},c={},g={},e=id("name").value,H=id("psw").value;d[l]=b;1==a||"undefined"==typeof a?(b[WAN_NAME]=g,b[PPPoE_NAME]=c):(b[WAN_NAME+"_"+a]=g,b[PPPoE_NAME+"_"+a]=c);g[M]=PPPoE_NAME;c[D]=id("shareIpv4").checked?
+"1":"0";id("shareIpv4").checked?(b="",b=1==a||"undefined"==typeof a?"pppoe":"pppoe_"+a,$.query({protocol:{name:b}},function(a){a=a.protocol.pppoeKey;c[s]=a.username;c[t]=a.password},!1)):(c[s]=e,c[t]=H);setLoadingId("save");hsLoading(!0);disableBtn("disconnect",!0);disableBtn("saveHighSet",!0);$.modify(d,function(b){b=b[ERR_CODE];ENONE==b?($("#name").val(c[s]),$("#psw").val(c[t]),m=PPPoE_NAME,r==PD_MODE_PREFIX&&A!=IP_CONFIG_STATIC?(lanPrefixChange(!0),preDelgOnFlag=!0):setTimeout(function(){lanPrefixChange(!1);
+preDelgOnFlag=!1},2E3),N(a)):(hsLoading(!1,function(){disableBtn("disconnect",!1);disableBtn("saveHighSet",!1)}),updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},0));return n(b)})})}function N(a){var d;d=1==a||"undefined"==typeof a?{network:{change_wanv6_status:{proto:"pppoev6",operate:"connect"}}}:{network:{change_wanv6_status:{proto:"pppoev6_"+a,operate:"connect"}}};updateTimerHandle&&clearTimeout(updateTimerHandle);$.action(d,function(b){hsLoading(!1,function(){disableBtn("disconnect",
+!1);disableBtn("saveHighSet",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})}function O(a){var d;d=1==a||"undefined"==typeof a?{network:{change_wanv6_status:{proto:"pppoev6",operate:"disconnect"}}}:{network:{change_wanv6_status:{proto:"pppoev6_"+a,operate:"disconnect"}}};updateTimerHandle&&clearTimeout(updateTimerHandle);disableBtn("save",!0);disableBtn("saveHighSet",!0);setLoadingId("disconnect");hsLoading(!0);$.action(d,function(b){hsLoading(!1,function(){disableBtn("save",
+!1);disableBtn("saveHighSet",!1)});updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})}function E(a){var d,b,c="";d=parseInt(a/86400);b=parseInt(a%86400/3600);a=parseInt(a%3600/60);0<d&&(c=d+label.dayT);return c+=b+label.lHour+a+label.minuteT}function F(a,d){var b;b=1==d||"undefined"==typeof d?a[uciNetwork.fileName][WAN_STATUS_NAME]:a[uciNetwork.fileName][WAN_STATUS_NAME+"_"+d];if(b.proto!=PPPoE_NAME)clearTimeout(updateTimerHandle);else{var c="none",g=id("pppoeSolution"),e="none",
+l=id("onlineTimeUl"),f=b.error_code,h=b.ip6addr||"::",m=b[y]||"::",n=b[z]||"::",k=b[uciNetwork.optName.upTime]||0,q=parseInt(b.link_status);switch(q){case LINK_DOWN:case LINKING_UP:disableBtn("disconnect",LINK_DOWN==q||curSysMode!=uciSystem.optValue.sysMode.routerMode);e="none";id("wanIpLbl").innerHTML="::/64";id("pri_dns").innerHTML="::";id("snd_dns").innerHTML="::";h=LINK_DOWN==q?"error":"link";0==parseInt(b[uciNetwork.optName.phyStatus])&&(f=LINK_CODE_PHYDOWN);if(LINK_CODE_MANUAL!=f&&LINK_CODE_NORMAL!=
+f&&LINK_CODE_INET_ERR!=f&&LINK_CODE_PPPOEv4_SWITCH!=f)switch(c="inline-block",hsStatSet(h,linkStatus[q]+label.lBrackets+linkCode[f]+label.rBrackets),f){case LINK_CODE_NOECHO:helpBind(g,"PPPoEServerDeadHelp");break;case LINK_CODE_AUTH_ERR:helpBind(g,"PPPoENPErrHelp");break;case LINK_CODE_UNKNOWN:case LINK_CODE_DENY:case LINK_CODE_SRVDOWN:case LINK_CODE_OPT_UNSUPPORT:case LINK_CODE_AUTH_UNSUPPORT:helpBind(g,"PPPoEOtherErrHelp");break;default:g.onclick=null,c="none"}else hsStatSet(h,linkStatus[q]);break;
+case LINK_UP:id("wanIpLbl").innerHTML=h+"/64";id("pri_dns").innerHTML=m;id("snd_dns").innerHTML=n;curSysMode==uciSystem.optValue.sysMode.routerMode?disableBtn("disconnect",!1):disableBtn("disconnect",!0);id("onlineTimeLbl").innerHTML=E(k);e="block";hsStatSet("correct",linkStatus[LINK_UP]);break;case LINKING_DOWN:id("wanIpLbl").innerHTML="::/64",id("pri_dns").innerHTML="::",id("snd_dns").innerHTML="::",disableBtn("disconnect",!0),id("onlineTimeLbl").innerHTML=E(k),e="block",hsStatSet("link",linkStatus[LINKING_DOWN])}g.style.display=
+c;l.style.display=e}}function B(a){var d={};d[l]={};1==a||"undefined"==typeof a?(d[l][KEY_NAME]=[WAN_NAME,PPPoE_NAME,"wan"],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=["wan_status",WAN_STATUS_NAME,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]):(d[l][KEY_NAME]=[WAN_NAME+"_"+a,PPPoE_NAME+"_"+a,"wan_"+a],d[uciNetwork.fileName]={},d[uciNetwork.fileName][KEY_NAME]=["wan_status_"+a,WAN_STATUS_NAME+"_"+a,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]);$.query(d,function(b){var c=
+b[l],d;2<=a&&"undefined"!=typeof a?(c=c[PPPoE_NAME+"_"+a],d=b.network["wan_status_"+a],m=b[uciNetwork.fileName][WAN_STATUS_NAME+"_"+a].proto):(c=c[PPPoE_NAME],d=b.network.wan_status,m=b[uciNetwork.fileName][WAN_STATUS_NAME].proto);$("#name").val(c[s]);$("#psw").val(c[t]);"1"==c[D]&&"pppoe"==d.proto?id("shareIpv4").click():"pppoe"!=d.proto&&(id("shareIpv4").disabled=!0);id("PtlAuto").checked=c.ip_config==IP_CONFIG_AUTO?1:0;id("PtlDHCPv6").checked=c.ip_config==IP_CONFIG_DHCPV6?1:0;id("PtlSLAAC").checked=
+c.ip_config==IP_CONFIG_SLAAC?1:0;c.ip_config==IP_CONFIG_STATIC&&($("#ipAddr").val(c[x]),id("PtlStatic").click());r=c.pd_mode;"undefined"!=typeof a?(r=PD_MODE_NON_TEMP,id("PreDelgOff").checked=1,lanPrefixChange(!1),preDelgOnFlag=!1,disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0)):(disableBtn("PreDelgOn",!1),disableBtn("PreDelgOff",!1),c.pd_mode==PD_MODE_NON_TEMP?(id("PreDelgOff").checked=1,m==PPPoE_NAME&&(lanPrefixChange(!1),preDelgOnFlag=!1)):(id("PreDelgOn").checked=1,m==PPPoE_NAME&&(c.ip_config!=
+IP_CONFIG_STATIC?(lanPrefixChange(!0),preDelgOnFlag=!0):(lanPrefixChange(!1),preDelgOnFlag=!1))));curSysMode!=uciSystem.optValue.sysMode.routerMode&&(disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0));c.dns_mode==DNS_MODE_DYN?(id("dnsAuto").click(),dnsSwitchAutoFlag=!0):(id("pri_dns_input").value=c.pri_dns||"::",id("snd_dns_input").value=c.snd_dns&&"::"!=c.snd_dns?c.snd_dns:"",id("dnsManual").click());setMacInfo(b,a);F(b,a)})}function P(a){if(id("shareIpv4").checked){var d="",d=2<=a&&"undefined"!=
+typeof a?"wan_status_"+a:"wan_status";$.query({network:{name:d}},function(b){"pppoe"!=b.network[d].proto?(showAlert("检测到当前IPv4上网方式不为宽带拨号模式，无法复用IPv4拨号链路。请重试",void 0,void 0,function(){$.query({network:{name:d}},function(a){"pppoe"==a.network[d].proto&&curSysMode==uciSystem.optValue.sysMode.routerMode?id("shareIpv4").disabled=!1:(id("shareIpv4").click(),id("shareIpv4").disabled=!0)})}),clearTimeout(alertTimeHd)):C(a)})}else C(a)}var l="protocol",w="wan",M=uciProto.optName.type,s=uciProto.optName.pppoeUsr,
+t=uciProto.optName.pppoePwd,y="pri_dns",z="snd_dns",K="pd_mode",I="ip_config",J="dns_mode",L=uciProto.optName.macaddr,x="specific_ip",D="sharev4",r,m,A;refreshWanStatus=function(a){var d={};d[uciNetwork.fileName]={};d[uciNetwork.fileName][KEY_NAME]=2<=a&&"undefined"!=typeof a?WAN_STATUS_NAME+"_"+a:WAN_STATUS_NAME;updateTimerHandle&&clearTimeout(updateTimerHandle);$.query(d,function(b){F(b,a);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(a)},2E3)})};$("[name=ipv6GetPtlSwitch]").change(function(){"PtlStatic"==
+this.id?($(".ipv6AddrLine").css("display","block"),$("#ipv6PreDelgLine").css("display","none")):($(".ipv6AddrLine").css("display","none"),$("#ipv6PreDelgLine").css("display","block"))});$("[name=ipv6DnsSwitch]").change(function(){"dnsManual"==this.id?$("ul.dnsLine").css("display","block"):$("ul.dnsLine").css("display","none")});$("#shareIpv4").change(function(){!0==this.checked?$("ul.pppoeUserLine").css("display","none"):$("ul.pppoeUserLine").css("display","block")});if("undefined"==typeof e)selectInit("wanSel",
+wanOptions,LINK_TYPE_PPPOE,wanSelectChange);else{var Q=wanOptions.slice(0,wanOptions.length-1);selectInit("wanSel",Q,LINK_TYPE_PPPOE,wanSelectChange)}B(e);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(e)},2E3);refreshLanStatus(e);disableBtn("disconnect",!0);id("disconnect").onclick=function(){O(e)};id("save").onclick=function(){P(e)};id("saveHighSet").onclick=function(){G(e)};curSysMode!=uciSystem.optValue.sysMode.routerMode&&(id("wanSel").disable(!0),disableInput("shareIpv4",!0),disableInput("name",
+!0),disableInput("psw",!0),disableBtn("disconnect",!0),disableBtn("save",!0),disableInput("PtlAuto",!0),disableInput("PtlDHCPv6",!0),disableInput("PtlSLAAC",!0),disableInput("PtlStatic",!0),disableInput("ipAddr",!0),disableInput("pri_dns_input",!0),disableInput("snd_dns_input",!0),disableInput("wanMac",!0),disableBtn("dnsAuto",!0),disableBtn("dnsManual",!0),disableBtn("saveHighSet",!0))}
+function initWanPortSel(){if($("#dualWanIpv6Wrapper").is(":hidden"))init();else{var e=$("#dualWanIpv6Wrapper").find("label.selected").index()+1;init(e)}}initWanPortSel();
+</script><style type="text/css">li.macCloneLi{color:#fff;font-size:12px;line-height:20px!important}#pppoeSolution{color:#005fb8;font-size:12px;margin-left:10px;text-indent:0;vertical-align:middle}#onlineTimeUl{display:none}.ipv6AddrLine{display:none}</style>

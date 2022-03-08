@@ -1,0 +1,19 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="hsHelp"></div>
+	<div class="title">
+		<label class="title">{%menuStr.hyfiLed%}</label>
+	</div>
+	<div class="block ledStatusBlk">
+		<p id="hyfiName"></p>
+		<div id="switchCon" class="switchCon switchConNetState">
+			<i class="switchBg"></i>
+			<i class="switchBall"></i>
+		</div>
+		<span id="ledState" class="rsSwitchState"></span>
+		<p class="extTip"><label class="noteLbl">{%label.hyfiLedStatus%}<span id="hyfiLedSpn"></span></label></p>
+	</div>
+</div><script type="text/javascript">function init(){function m(a){if(f)f=!1,g.innerHTML=a==b?c:d,h.innerHTML=a==b?c:d;else{var e={},k={};e[uciPlc.fileName]={};e[uciPlc.fileName][uciPlc.actionName.setLedStatus]=k;k[uciPlc.optName.status]=a==b?l:n;$.action(e,function(){g.innerHTML=a==b?c:d;h.innerHTML=a==b?c:d})}}var f=!0,b=1,c=statusStr.ledOn,d=statusStr.ledOff,l=uciPlc.optValue.ledStatus.on,n=uciPlc.optValue.ledStatus.off,g=id("ledState"),p=id("hyfiName"),h=id("hyfiLedSpn");$.query({device_info:{name:"info"}},function(a){p.innerHTML=
+a.device_info.info.device_model+label.colon});(function(){var a={};a[uciPlc.fileName]={};a[uciPlc.fileName][uciPlc.actionName.getLedStatus]=null;$.action(a,function(a){new Switch("switchCon",a[uciPlc.optName.status]==l?b:0,m)})})()}init();
+</script><style type="text/css">div.ledStatusBlk{font-size:12px;padding:10px 0 0 0;text-align:left}#hyfiName{color:#fff;font-size:14px;display:inline-block;text-align:right;width:245px;vertical-align:middle;*display:inline;*zoom:1}p.extTip{color:#fff;margin-left:255px;margin-top:5px}span.rsSwitchState{color:#fff;font-size:12px;font-weight:bold;margin-left:8px;vertical-align:middle;position:relative;top:-1px}</style>

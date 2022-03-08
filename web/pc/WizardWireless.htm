@@ -1,0 +1,51 @@
+
+
+<ul class="wzdConTitleUl">
+	<p class="wzdConTitle">{%label.wifiSet%}</p>
+	<p class="wzdConTitleDes">{%label.wifiSetTip%}</p>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi">
+		<label for="wzdWirelessName2G">{%label.wirelessName%}</label>
+		<input id="wzdWirelessName2G" type="text" maxLength="32" />
+	</li>
+	<li id="wzdAntNote2G" class="note">
+		<i class="error"></i>
+		<div class="noteCon">
+			<p>{%errStr.wlanSsidErr%}</p>
+		</div>
+	</li>
+</ul>
+<ul class="inputUl inputUlF">
+	<li class="inputLi">
+		<label for="wzdWirelessPwd2G">{%label.wirelessPwd%}</label>
+		<input id="wzdWirelessPwd2G" type="text" class="imeModeN" maxLength="63" />
+	</li>
+	<li id="wzdPwdNote2G" class="note">
+		<i class="error"></i>
+		<div class="noteCon">
+			<p>{%label.netPwdTip%}</p>
+		</div>
+	</li>
+	<li id="pwdDepNote2G" class="note">
+		<i id="pwdDepI" class="warn"></i>
+		<div class="noteCon">
+			<p class="pwdDepC twoLine">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDep2G">{%label.weak%}</label></p>
+			<div class="pwdDepL"><label id="chgPwdDep2G"></label></div>
+		</div>
+	</li>
+</ul>
+<p class="wzdDesP">{%label.wifiPwdTip%}</p>
+<ul>
+	<li class="wzdSubLi">
+		<input id="pre" type="button" class="btnL" value="{%btn.preStep%}" />
+		<input id="sub" type="button" value="{%btn.ok%}" />
+	</li>
+</ul><script type="text/javascript">function init(){function s(){showWzdConfirm(label.confirmNoWirelessPwd,function(){d.focus()},n,btn.toPwd,btn.unPwd)}function t(){showWzdConfirm(label.confirmSsidHasCnStr,function(){c.select()},p)}function h(){var a=c.value;closeNote("wzdAntNote2G");return 0==a.length?(showNote("wzdAntNote2G",errStr.wlanSsidErr),!1):!0==/^ +$/gi.test(a)?(showNote("wzdAntNote2G",errStr.wlanSsidBlank),!1):checkWifiName(a,32,1)?!0:(showNote("wzdAntNote2G",errStr.wlanSsidLenErr),!1)}function n(){var a=c.value,b=d.value;
+if(gIsWifiCfgChged=a!=q[g]||b!=q[k])gWifiCfgToSave={},gWifiCfgToSave[e]={},gWifiCfgToSave[e][f]={},gWifiCfgToSave[e][f][g]=a,0<b.length?(gWifiCfgToSave[e][f][r]=uciWireless.dynOptValue.encryption.on,gWifiCfgToSave[e][f][k]=b):gWifiCfgToSave[e][f][r]=uciWireless.dynOptValue.encryption.off;loadPage("WizardEnd.htm","wizardCon")}function p(){if(0==d.value.length)showCover(s);else{switch(checkWlanPwd(d.value)){case EINVWLANPWD:showNote("wzdPwdNote2G",errStr.wlanWzdPwdValid);return;case EINVPSKLEN:showNote("wzdPwdNote2G",
+errStr.wlanWzdPwdLenValid);return}n()}}function u(a){var b=a[e][f];g_cur_host_mac=a[uciNetwork.fileName][uciNetwork.dynData.ifaceMac][uciNetwork.optValue.ifname.host];c.value=b[g];d.value=b[k];for(var b=formatTableData(a[uciHostsInfo.fileName][uciHostsInfo.dynData.online_host]),m=0;m<b.length;m++)if(a=b[m],a[uciHostsInfo.optName.mac].toUpperCase()==g_cur_host_mac.toUpperCase()){type=a[uciHostsInfo.optName.type];if(type==uciHostsInfo.optValue.linkType.hostWireless||type==uciHostsInfo.optValue.linkType.guestWireless)gIsWifiDevice=
+!0;break}}var e=uciWireless.fileName,f=uciWireless.dynData.host_2g,g=uciWireless.dynOptName.ssid,r=uciWireless.dynOptName.encryption,k=uciWireless.dynOptName.key,c=id("wzdWirelessName2G"),d=id("wzdWirelessPwd2G"),v=isIESix||isIESeven?"inline":"inline-block",q={};gIsWifiDevice=!1;wzdNavSet(2);wzdConSet({height:"480px"});c.focus();id("pre").onclick=function(){wzdNetWorkModeChange(gNetworkCfg[uciProto.optName.type])};id("sub").onclick=function(){if(h()){var a;a:{a=c.value;for(var b=a.length,d=0;d<b;d++)if(127<
+a.charCodeAt(d)){a=!0;break a}a=!1}a?showCover(t):p()}};c.onblur=h;c.onkeyup=h;d.onblur=function(){closeNote("wzdPwdNote2G");closeNote("pwdDepNote2G");var a=checkWlanPwd(d.value);if(EINVWLANPWD==a)return showNote("wzdPwdNote2G",errStr.wlanPwdInvalid),!1;if(EINVPSKLEN==a)return showNote("wzdPwdNote2G",errStr.wlanWzdPwdLenValid),!1;closeNote("wzdPwdNote2G");return!0};d.onkeyup=function(){var a=24,b="",e="none",c=d.value,f=c.length,h="visible",g="warn",l=checkWlanPwd(d.value);if(EINVWLANPWD==l)return closeNote("pwdDepNote2G"),
+showNote("wzdPwdNote2G",errStr.wlanPwdInvalid),!1;if(0<=f&&8>f)h="hidden",e=v;else if(/^\d+$/.test(c)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(c)||/^[a-zA-Z]+$/.test(c))12>=f?b=label.weak:(b=label.media,a*=2);else{var k=l=b=!1,b=/\d/g.test(c),l=/[a-zA-Z]/g.test(c),k=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(c);!0==(b&&k&&l)?(b=label.strong,g="correct",a*=3):12>=f?(b=label.media,a*=2):(b=label.strong,g="correct",a*=3)}id("pwdDepNote2G").style.visibility=h;id("wzdPwdNote2G").style.display=
+e;id("pwdDep2G").innerHTML=b;id("chgPwdDep2G").style.width=a+"px";id("pwdDepI").className=g};(function(){var a={};a[e]={};a[e][KEY_NAME]=[f];a[uciHostsInfo.fileName]={};a[uciHostsInfo.fileName][KEY_TABLE]=[uciHostsInfo.dynData.online_host];a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=uciNetwork.dynData.ifaceMac;$.query(a,u)})()}init();
+</script><style type="text/css">li.wzdSubLi input{width:85px}ul.inputUlF{overflow:hidden}</style>

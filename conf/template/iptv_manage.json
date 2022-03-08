@@ -1,0 +1,30 @@
+{
+	"/iptv_manage/iptv_entry" : {
+		"wan_index" : {
+			"type" : "intStr32"
+		},
+		"link_mode" : {
+			"type" : "intStr32"
+		},
+		"work_mode" : {
+			"type" : "intStr32"
+		},
+		"vlan_id" : {
+			"type" : "intStr32"
+		}
+	},
+	"/iptv_manage/iptv_entry/*" : {
+		"wan_index" : {
+			"type" : "intStr32"
+		},
+		"link_mode" : {
+			"type" : "intStr32"
+		},
+		"work_mode" : {
+			"type" : "intStr32"
+		},
+		"vlan_id" : {
+			"type" : "intStr32"
+		}
+	}
+}

@@ -1,0 +1,10 @@
+Package: kmod-qca-wifi-flash_16mb-profile
+Version: 4.4.60+11.3.x-1
+Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840), libgcc, libc, wireless-tools, librt, kmod-cfg80211-linux, libroxml, libnl, qca-cfg80211, kmod-msm-mproc, qca-qrtr
+Provides: kmod-qca-wifi
+Source: tp_package/wlan-driver/qca
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 7300141
+Description:  QCA Wireless LAN Driver

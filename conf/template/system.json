@@ -1,0 +1,24 @@
+{
+	"/system/system/sys" : {
+		"timezone" : {
+			"type" : "intStr32",
+			"default" : 480
+		},
+		"is_factory" : {
+			"type" : "intStr32",
+			"default" : 1
+		}
+	},
+	"/system/clock_success/clock_success" : {
+		"clock_success" : {
+			"type" : "bool"
+		}
+	}
+	,
+	"/system/system/sys_mode" : {
+		"mode" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	}
+}

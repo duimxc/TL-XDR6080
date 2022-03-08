@@ -1,0 +1,8 @@
+Package: kmod-map_filter
+Version: 4.4.60+
+Depends: kernel (=4.4.60-1-fe83b1a93c83d35c742e660320cc2840)
+Source: tp_package/k_packages/map_filter
+Section: ko util
+Architecture: ipq
+Installed-Size: 1252
+Description:  Kernel module to filter 1905.1 multicast packets

@@ -1,0 +1,8 @@
+Package: plugins
+Version: 1
+Depends: libc, libssp, dms
+Source: tp_package/u_packages/plugins
+Section: utils
+Architecture: ipq
+Installed-Size: 105
+Description:  TDMP plugins

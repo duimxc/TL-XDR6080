@@ -1,0 +1,6 @@
+/etc/sysctl.d/qca-nss-ecm.conf
+/usr/bin/ecm_dump.sh
+/etc/init.d/qca-nss-ecm
+/etc/firewall.d/qca-nss-ecm
+/lib/netifd/offload/on-demand-down
+/lib/modules/4.4.60/ecm.ko

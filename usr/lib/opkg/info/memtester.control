@@ -1,0 +1,8 @@
+Package: memtester
+Version: 1
+Depends: libc, libssp
+Source: package/memtester
+Section: utils
+Architecture: ipq
+Installed-Size: 6896
+Description:  realtek_tools package....

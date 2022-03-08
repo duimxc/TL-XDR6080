@@ -1,0 +1,62 @@
+
+
+<div id="hcCo" class="hcCo hcCoT">
+    <div class="hsHelp"></div>
+	<div class="title titleT">
+		<label class="title">{%label.basicSet%}</label>
+		<i class="helpBtn" helpStr="wiredRepeaterHelp"></i>
+	</div>
+    <div class="block">
+        <ul class="gridLine gridLineA" style="margin-bottom: 12px;">
+			<label class="desLblA">{%label.netMode%}</label>
+			<li class="textConA textCon">
+				<span id="wanSel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+			</li>
+		</ul>
+        <p class="tips disNone" id="meshHelp">如果前端路由器为“易展”路由器，推荐使用“易展”功能扩展无线网络。仅在前端路由器不支持“易展”功能时，才推荐使用本路由器的AP（有线中继）模式。</p>
+        <p class="tips">通过AP模式扩展现有网络时，请确保本路由与前端路由器的LAN口通过网线连接。</p>
+        <ul class="gridLine gridLineA mpPhoneRgt10" style="position: relative;">
+			<label class="desLblA">{%label.compatibleMode%}</label>
+			<input id="compatibleOn" name="compatible" class="switchRadio" type="radio">
+			<label class="noteLbl" for="compatibleOn">开</label>
+			<input id="compatibleOff" name="compatible" class="switchRadio switchRadioR" type="radio">
+			<label class="noteLbl" for="compatibleOff">关</label>
+			<label class="tip">{%label.compatibleTip%}</label>
+		</ul>
+        <ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.relayStatus%}</label>
+			<label id="relayStatus" class="noteLbl"></label>
+		</ul>
+        <ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.ipAddr%}</label>
+			<label id="ipAddr" class="noteLbl"></label>
+		</ul>
+        <ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.mask%}</label>
+			<label id="mask" class="noteLbl"></label>
+		</ul>
+        <ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.gateway%}</label>
+			<label id="gateway" class="noteLbl"></label>
+		</ul>
+        <ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.dns%}</label>
+			<label id="dns" class="noteLbl"></label>
+		</ul>
+        <div class="blockFuncA">
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+    </div>
+</div><script type="text/javascript">var curIP,lanIPMode,oldSysMode=0,compatibleMode="0",isRelaySuccess=!1,EXTENDER_STATUS_DHCPC=2;function lanIpModeHandle(a){"manual"==lanIPMode?showConfirm("当前路由器的LAN口IP为手动设置，使用AP（有线中继）将更改为自动，确定更改LAN口IP设置？",function(b){!0==b&&(lanIPMode="dynamic",$.modify({network:{lan:{ip_mode:"dynamic"}}},null,!0),a())}):a()}
+function setLanIp(a){$.action({wired_extender:{set_ip:null}});showLoading("连接成功，路由器IP地址已更改为："+a+"。页面将自动跳转到新的IP地址，请稍候...",void 0,void 0,!1);$.changeDomain(a);$.setTimeout(function(){window.location.href="http://"+a},12E4);$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+a})},4E3)}
+function onSave(){var a={};a.system={sys_mode:{mode:uciSystem.optValue.sysMode.apMode}};switch(gBandNum){case BAND_1:a.wireless={wlan_wds_2g:{enable:"0"}};break;case BAND_2:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g:{enable:"0"}};break;case BAND_3:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g_1:{enable:"0"},wlan_wds_5g_4:{enable:"0"}}}id("compatibleOn").checked?a.wired_extender={config:{compat_mode:"1"}}:a.wired_extender={config:{compat_mode:"0"}};$.modify(a,function(b){b.error_code!=ENONE?
+showAlert(errStr.invRequestFail):(compatibleMode=a.wired_extender.config.compat_mode,refreshRelayStatus(),$("#meshHelp").addClass("disNone"))})}
+function refreshRelayStatus(){$.query({wired_extender:{name:"status"}},function(a){var b=a.wired_extender.status.ip,c=a.wired_extender.status.state;"0.0.0.0"==b?$("#relayStatus").text("正在中继"):(isRelaySuccess=!0,$("#relayStatus").text("中继成功"),b!==curIP&&c>=EXTENDER_STATUS_DHCPC&&setLanIp(b));$("#ipAddr").text(a.wired_extender.status.ip);$("#mask").text(a.wired_extender.status.mask);$("#gateway").text(a.wired_extender.status.root_ip);$("#dns").text(a.wired_extender.status.pri_dns+" , "+a.wired_extender.status.snd_dns)});
+isRelaySuccess||$.setTimeout(refreshRelayStatus,2E3)}
+function init(){$.query({system:{name:"sys_mode"},network:{name:"lan"},wired_extender:{name:"config"}},function(a){curIP=a.network.lan.ipaddr;lanIPMode=a.network.lan.ip_mode;oldSysMode=a.system.sys_mode.mode;compatibleMode=a.wired_extender.config.compat_mode;oldSysMode==uciSystem.optValue.sysMode.apMode?(refreshRelayStatus(),$("#meshHelp").addClass("disNone")):($("#meshHelp").removeClass("disNone"),$("#relayStatus").text("未中继"),$("#ipAddr").text("0.0.0.0"),$("#mask").text("0.0.0.0"),$("#gateway").text("0.0.0.0"),
+$("#dns").text("0.0.0.0 , 0.0.0.0"));"1"===compatibleMode?id("compatibleOn").checked=!0:id("compatibleOff").checked=!0})}selectInit("wanSel",wanOptions,LINK_TYPE_WIRED_REPEATER,wanSelectChange);
+id("save").onclick=function(){var a="0"===compatibleMode?id("compatibleOn").checked:id("compatibleOff").checked;oldSysMode==uciSystem.optValue.sysMode.apMode?a&&onSave():oldSysMode==uciSystem.optValue.sysMode.wdsMode?showConfirm("切换为AP（有线中继）后，桥接（无线中继）将会自动关闭。确定切换吗？",function(a){a&&onSave()}):changeSysModeAlert("switch",uciSystem.optValue.sysMode.apMode,function(){lanIpModeHandle(onSave)})};init();
+</script><style type="text/css">p.tips{font-size:12px;color:#fff;letter-spacing:-0.37px;margin-left:260px;width:384px;text-align:left}label.tip{font-size:12px;color:#fff;position:absolute;left:350px}</style>

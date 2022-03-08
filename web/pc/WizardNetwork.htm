@@ -1,0 +1,50 @@
+
+
+<ul class="wzdConTitleUl">
+	<p class="wzdConTitle">{%label.netSet%}</p>
+</ul>
+<div id="detecting">
+	<ul class="wzdUl">
+		<li class="wizardBom">
+			<i class="detecting"></i>
+			<p>{%label.checkingWait%}</p>
+		</li>
+	</ul>
+</div>
+<div id="detectErr">
+	<div class="internetStateCon">
+		<img src="../web-static/images/routerWzd.png">
+		<div class="lineCon">
+			<span class="dot"></span><span class="line"></span><span class="dot"></span><i class="disConnect" style="display: block;"></i>
+			<label>连接失败</label>
+		</div>
+		<img src="../web-static/images/internetWzd.png">
+	</div>
+	<p class="tipsP">未检测到宽带网线</p>
+	<div class="tipsCon">
+		<p id="tipOne">1.请检查宽带网线是否接入路由器任一接口。</p>
+		<p>2.请检查网口指示灯是否闪烁，或更换网线重新尝试。</p>
+		<p>3.若仍无法上网，请联系您的运营商。</p>
+	</div>
+	<div class="dividingLineCon">
+		<span class="dividingLine"></span><span class="title">或者</span><span class="dividingLine"></span>
+	</div>
+	<div class="menuCon">
+		<a id="skipDetect" href="javascript:void(0)">跳过WAN口检测 ></a>
+		<div class="menuCon1 disNone" id="wzdWdsNotMesh">
+			<label>想扩展现有无线网络？</label><a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRELESS_REPEATER);">桥接 (无线中继) ></a>
+		</div>
+		<div class="menuCon1 disNone" id="wzdWdsMesh">
+			<label>想扩展现有无线网络？</label>
+			<div style="margin-top: 12px; margin-bottom: 12px;">
+				<label style="margin-right: 8px;">如果现有路由器为“易展”路由器，推荐您使用“易展”功能</label><img id="meshHelp" src="../web-static/images/helpWhite.png">
+			</div>
+			<label>或者使用</label><a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRELESS_REPEATER);">桥接 (无线中继) ></a>
+		</div>
+	</div>
+</div><script type="text/javascript">var gModeSwitchSupport=!1;
+function init(){function b(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;$.action(a,function(a){a=parseInt(a[uciNetwork.optName.proto]);!0==$.local&&(a=WAN_IFACE_NOT_LINK);switch(a){case ERROR_INTERNEL_ERROR:case ERROR_INPUT_PARA_ERROR:case WAN_IFACE_NOT_LINK:null!=id("skipDetect")&&$.setTimeout(b,1E3);break;default:$("#detecting").css("display","block"),$("#detectErr").css("display","none"),$.setTimeout(function(){c=$.setTimeout(function(){$("#detecting").css("display","none");
+$("#detectErr").css("display","block");b()},1E4);d()},2E3)}})}function d(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;$.action(a,function(a){a=parseInt(a[uciNetwork.optName.proto]);!0==$.local&&(a=WAN_IFACE_NOT_LINK);switch(a){case ERROR_INTERNEL_ERROR:case ERROR_INPUT_PARA_ERROR:case WAN_IFACE_NOT_LINK:$("#detecting").css("display","none");$("#detectErr").css("display","block");clearTimeout(c);b();break;case WAN_TYPE_DETECTING:f=$.setTimeout(d,1E3);
+break;default:clearTimeout(c),bWzdWanTypeDetected=!0,wzdNetWorkModeChange(a)}})}var c=null,f=null;wzdNavSet(1);wzdConSet({height:"460px"});gMeshSupport?$("#tipOne").text("1.请检查宽带网线是否接入路由器任一接口。"):$("#tipOne").text("1.请检查宽带网线是否接入路由器WAN口。");gSysModeSupport&&(gMeshSupport?($("#wzdWdsMesh").removeClass("disNone"),wzdConSet({height:"520px"})):$("#wzdWdsNotMesh").removeClass("disNone"));id("skipDetect").onclick=function(){gModeSwitchSupport?wzdNetWorkModeChange(WAN_TYPE_DHCP):wzdNetWorkModeChange(WAN_TYPE_PPPOE)};
+id("meshHelp").onclick=showMeshHelpDialog;var e={};e[uciFunction.fileName]={};e[uciFunction.fileName][KEY_NAME]=uciFunction.secName.newModuleSpec;$.query(e,function(a){ENONE==a[ERR_CODE]&&(gModeSwitchSupport=a[uciFunction.fileName][uciFunction.secName.newModuleSpec].mode_switch==uciFunction.optValue.enable)});c=$.setTimeout(function(){clearTimeout(f);$("#detecting").css("display","none");$("#detectErr").css("display","block");b()},1E4);d()}init();
+</script><style type="text/css">div.meshHelpDiv div.popBody i.resetIcon{background:url(../../web-static/images/meshHelpReset.png);display:block;width:219px;height:125px}div.meshHelpDiv div.popBody i.meshButton{background:url(../../web-static/images/meshButton.png);display:block;width:219px;height:125px}div.wizardCon ul.wzdUl{height:auto}#detectErr{display:none}#detecting{margin-top:100px}div.menuCon1{margin-top:13px}div.menuCon1 label{color:#FFF;margin-right:15px}p.tipsP{text-align:center;color:#FFF;font-size:14px;margin-bottom:10px;font-weight:bold}div.tipsCon{margin-left:338px}#meshHelp{vertical-align:middle;cursor:pointer}</style>

@@ -1,0 +1,700 @@
+{
+	"/wireless/wifi-web/wlan_host_2g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ssid" : {
+			"type" : "strtrunc",
+			"length" : 36,
+			"default" : ""
+		},
+		"ssidbrd" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "strtrunc",
+			"length" : 65,
+			"default" : ""
+		},
+		"channel" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"mode" : {
+			"type" : "intStr32",
+			"default" : 4
+		},
+		"bandwidth" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"power" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"isolate" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"turboon" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"mumimo" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+		,
+		"auth" : {
+			"type" : "c32",
+			"default" : 1
+		},
+		"cipher" : {
+			"type" : "c32",
+			"default" : 1
+		}
+		,
+		"twt" : {
+			"type" : "c32",
+			"default" : 1
+		},
+		"ofdma" : {
+			"type" : "c32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_host_5g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ssid" : {
+			"type" : "strtrunc",
+			"length" : 36,
+			"default" : ""
+		},
+		"ssidbrd" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "strtrunc",
+			"length" : 65,
+			"default" : ""
+		},
+		"channel" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"mode" : {
+			"type" : "intStr32",
+			"default" : 8
+		},
+		"bandwidth" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"power" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"isolate" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"turboon" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"mumimo" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+		,
+		"auth" : {
+			"type" : "c32",
+			"default" : 1
+		},
+		"cipher" : {
+			"type" : "c32",
+			"default" : 1
+		}
+		,
+		"twt" : {
+			"type" : "c32",
+			"default" : 1
+		},
+		"ofdma" : {
+			"type" : "c32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_host_bh_2g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 36,
+			"default" : ""
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65,
+			"default" : ""
+		}
+	},
+	"/wireless/wifi-web/wlan_host_bh_5g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 36,
+			"default" : ""
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65,
+			"default" : ""
+		}
+	},
+	"/wireless/wifi-web/wlan_wds_2g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33,
+			"default" : ""
+		},
+		"bssid" : {
+			"type" : "string",
+			"length" : 6,
+			"default" : ""
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65,
+			"default" : ""
+		},
+		"address_form" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"in_wizard" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_wds_5g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33,
+			"default" : ""
+		},
+		"bssid" : {
+			"type" : "string",
+			"length" : 6,
+			"default" : ""
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65,
+			"default" : ""
+		},
+		"address_form" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"in_wizard" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_wps_2g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"usrpin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"configured" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"islocked" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_wps_5g" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"usrpin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"configured" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"islocked" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/wireless/wifi-web/wlan_bs" : {
+		"bs_enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"wifi_enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ssid" : {
+			"type" : "strtrunc",
+			"length" : 36,
+			"default" : ""
+		},
+		"ssidbrd" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"encryption" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"key" : {
+			"type" : "strtrunc",
+			"length" : 65,
+			"default" : ""
+		}
+		,
+		"auth" : {
+			"type" : "c32",
+			"default" : 1
+		},
+		"cipher" : {
+			"type" : "c32",
+			"default" : 1
+		}
+	},
+	"/wireless/tmp_basic_cfg_2g/tmp_basic_cfg_2g" : {
+		"channel" : {
+			"type" : "i32"
+		},
+		"mode" : {
+			"type" : "i32"
+		},
+		"bandwidth" : {
+			"type" : "i32"
+		},
+		"power" : {
+			"type" : "i32"
+		},
+		"vhtmubfer" : {
+			"type" : "i32"
+		},
+		"twt" : {
+			"type" : "i32"
+		},
+		"ofdma" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_mssid_cfg_list_2g/*" : {
+		"enable" : {
+			"type" : "i32"
+		},
+		"ssidbrd" : {
+			"type" : "i32"
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "i32"
+		},
+		"authtype" : {
+			"type" : "i32"
+		},
+		"algorithm" : {
+			"type" : "i32"
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65
+		},
+		"isolate" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_mssid_cfg_list_2g" : {
+		"tmp_mssid_cfg_list_2g" : {
+			"type" : "array",
+			"index_format" : "_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/wireless/tmp_mssid_cfg_list_2g/*",
+			"length" : "3"
+		}
+	},
+	"/wireless/tmp_wds_cfg_2g/tmp_wds_cfg_2g" : {
+		"enable" : {
+			"type" : "i32"
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "i32"
+		},
+		"authtype" : {
+			"type" : "i32"
+		},
+		"algorithm" : {
+			"type" : "i32"
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65
+		},
+		"address_form" : {
+			"type" : "i32"
+		},
+		"bBackhaul" : {
+			"type" : "i32"
+		},
+		"bFactoryScan" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_host_cfg_2g/tmp_wps_cfg_2g" : {
+		"wpsEnable" : {
+			"type" : "i32"
+		},
+		"wpsPin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"wpsConfigured" : {
+			"type" : "i32"
+		},
+		"wpsLocked" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_guest_cfg_2g/tmp_wps_cfg_2g" : {
+		"wpsEnable" : {
+			"type" : "i32"
+		},
+		"wpsPin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"wpsConfigured" : {
+			"type" : "i32"
+		},
+		"wpsLocked" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_basic_cfg_5g/tmp_basic_cfg_5g" : {
+		"channel" : {
+			"type" : "i32"
+		},
+		"mode" : {
+			"type" : "i32"
+		},
+		"bandwidth" : {
+			"type" : "i32"
+		},
+		"power" : {
+			"type" : "i32"
+		},
+		"vhtmubfer" : {
+			"type" : "i32"
+		},
+		"twt" : {
+			"type" : "i32"
+		},
+		"ofdma" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_mssid_cfg_list_5g/*" : {
+		"enable" : {
+			"type" : "i32"
+		},
+		"ssidbrd" : {
+			"type" : "i32"
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "i32"
+		},
+		"authtype" : {
+			"type" : "i32"
+		},
+		"algorithm" : {
+			"type" : "i32"
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65
+		},
+		"isolate" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_mssid_cfg_list_5g" : {
+		"tmp_mssid_cfg_list_5g" : {
+			"type" : "array",
+			"index_format" : "_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/wireless/tmp_mssid_cfg_list_5g/*",
+			"length" : "3"
+		}
+	},
+	"/wireless/tmp_wds_cfg_5g/tmp_wds_cfg_5g" : {
+		"enable" : {
+			"type" : "i32"
+		},
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "i32"
+		},
+		"authtype" : {
+			"type" : "i32"
+		},
+		"algorithm" : {
+			"type" : "i32"
+		},
+		"key" : {
+			"type" : "string",
+			"length" : 65
+		},
+		"address_form" : {
+			"type" : "i32"
+		},
+		"bBackhaul" : {
+			"type" : "i32"
+		},
+		"bFactoryScan" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_host_cfg_5g/tmp_wps_cfg_5g" : {
+		"wpsEnable" : {
+			"type" : "i32"
+		},
+		"wpsPin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"wpsConfigured" : {
+			"type" : "i32"
+		},
+		"wpsLocked" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/tmp_guest_cfg_5g/tmp_wps_cfg_5g" : {
+		"wpsEnable" : {
+			"type" : "i32"
+		},
+		"wpsPin" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"wpsConfigured" : {
+			"type" : "i32"
+		},
+		"wpsLocked" : {
+			"type" : "i32"
+		}
+	},
+	"/wireless/wlan_scan_2g_status/wlan_scan_2g_status" : {
+		"status" : {
+			"type" : "intStr8"
+		}
+	},
+	"/wireless/wlan_scan_5g_status/wlan_scan_5g_status" : {
+		"status" : {
+			"type" : "intStr8"
+		}
+	},
+	"/wireless/wlan_scan_2g/*" : {
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"channel" : {
+			"type" : "i8"
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "intStr8"
+		},
+		"rssi" : {
+			"type" : "i8"
+		}
+	},
+	"/wireless/wlan_scan_2g" : {
+		"wlan_scan_2g" : {
+			"type" : "array",
+			"index_format" : "ap_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/wireless/wlan_scan_2g/*",
+			"length" : "64"
+		}
+	},
+	"/wireless/wlan_scan_5g/*" : {
+		"ssid" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"channel" : {
+			"type" : "i8"
+		},
+		"bssid" : {
+			"type" : "mac"
+		},
+		"encryption" : {
+			"type" : "intStr8"
+		},
+		"rssi" : {
+			"type" : "i8"
+		}
+	},
+	"/wireless/wlan_scan_5g" : {
+		"wlan_scan_5g" : {
+			"type" : "array",
+			"index_format" : "ap_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/wireless/wlan_scan_5g/*",
+			"length" : "64"
+		}
+	},
+	"/wireless/wlan_wds_2g_status/wlan_wds_2g_status" : {
+		"status": {
+			"type" : "intStr8"
+		}
+	},
+	"/wireless/wlan_wds_5g_status/wlan_wds_5g_status" : {
+		"status": {
+			"type" : "intStr8"
+		}
+	},
+	"/wireless/wlan_wds_2g_dhcps/wlan_wds_2g_dhcps" : {
+		"status" :{
+			"type" : "intStr32"
+		},
+		"result" :{
+			"type" : "intStr32"
+		}
+	},
+	"/wireless/wlan_wds_5g_dhcps/wlan_wds_5g_dhcps" : {
+		"status" :{
+			"type" : "intStr32"
+		},
+		"result" :{
+			"type" : "intStr32"
+		}
+	},
+	"/wireless/wlan_wds_2g_dhcpc/wlan_wds_2g_dhcpc" : {
+		"status" :{
+			"type" : "intStr32"
+		},
+		"ip" :{
+			"type" : "ip"
+		},
+		"mask" :{
+			"type" : "ip"
+		}
+	},
+	"/wireless/wlan_wds_5g_dhcpc/wlan_wds_5g_dhcpc" : {
+		"status" :{
+			"type" : "intStr32"
+		},
+		"ip" :{
+			"type" : "ip"
+		},
+		"mask" :{
+			"type" : "ip"
+		}
+	},
+	"/wireless/wds_cfg_status_2g/wds_cfg_status_2g" : {
+		"status": {
+			"type" : "enum:0:idle,1:connecting,2:connect_fail,3:unfinished,4:success",
+			"default" : "connect_fail"
+		}
+	}
+	,
+	"/wireless/wds_cfg_status_5g/wds_cfg_status_5g" : {
+		"status": {
+			"type" : "enum:0:idle,1:connecting,2:connect_fail,3:unfinished,4:success",
+			"default" : "connect_fail"
+		}
+	}
+}

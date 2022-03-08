@@ -1,0 +1,16 @@
+Package: iptables-mod-extra
+Version: 1.4.10-4
+Depends: libc, libssp, iptables, kmod-ipt-extra
+Source: tp_package/u_packages/iptables
+Section: net
+Architecture: ipq
+Installed-Size: 161
+Description:  Other extra iptables extensions.
+ 
+ Matches:
+ - condition
+ - owner
+ - physdev (if ebtables is enabled)
+ - pkttype
+ - quota
+ 

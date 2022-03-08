@@ -1,0 +1,28 @@
+﻿
+
+<ul class="wzdConTitleUl wzdConTileUlW">
+	<p class="wzdConTitle">{%label.wifi802Ax%}</p>
+	<p class="wzdConTitleDes">{%label.wifi802AxTip%}</p>
+</ul>
+<ul>
+	<li class="axCheckboxLi">
+		<input id="axCheckbox" class="axCheck" type="checkbox" />
+		<label class="axCheckboxLbl" for="axCheckbox">{%label.wifi802AxUse%}</label>
+	</li>
+</ul>
+<div class="wzdContent">
+	<span style="margin-bottom: 16px">*需终端支持802.11ax协议，才能体验到802.11ax带来的高速上网体验</span>
+	<span>由于部分无线网卡驱动较旧，连接至802.11ax无线路由器时，可能会出现一些兼容性问题。</span>
+	<span>如果您有以上疑虑，请到相关制造商官网下载最新驱动程序。</span>
+	<span>Intel:&nbsp;&nbsp;<a href="https://downloadcenter.intel.com" target="_blank">https://downloadcenter.intel.com</a></span>
+	<span>Mediatek:&nbsp;&nbsp;<a href="https://www.mediatek.com/products/connectivity-and-networking/broadband-wifi" target="_blank">https://www.mediatek.com/products/connectivity-and-networking/broadband-wifi</a></span>
+	<span>Realtek:&nbsp;&nbsp;<a href="https://www.realtek.com/en/downloads" target="_blank">https://www.realtek.com/en/downloads</a></span>
+</div>
+<ul>
+	<li class="wzdSubLi">
+		<input id="pre" type="button" class="btnL" value="{%btn.preStep%}" />
+		<input id="sub" type="button" value="{%btn.finish%}" />
+	</li>
+</ul><script type="text/javascript">function init(){var a=uciWireless.fileName,b=uciWireless.dynData.host_2g,c=uciWireless.dynData.host_5g,d=uciWireless.dynOptName.mode,e=id("axCheckbox");wzdNavSet(2);wzdConSet({height:"680px"});e.checked=!0;id("pre").onclick=function(){loadPage("WizardWirelessCfg.htm","wizardCon")};id("sub").onclick=function(){e.checked||(gIsWifiCfgChged=!0,void 0==gWifiCfgToSave[a][b]&&(gIsWifiCfgBsChged=!0),gWifiCfgToSave[a]=gWifiCfgToSave[a]||{},gWifiCfgToSave[a][b]=gWifiCfgToSave[a][b]||{},gWifiCfgToSave[a][b][d]=
+uciWireless.dynOptValue.mode.m_11bgn,gWifiCfgToSave[a][c]=gWifiCfgToSave[a][c]||{},gWifiCfgToSave[a][c][d]=uciWireless.dynOptValue.mode.m_11ac);loadPage("WizardEnd2Band.htm","wizardCon")}}init();
+</script><style type="text/css">li.wzdSubLi input{width:152px}li.wzdSubLi input.btnL{margin-right:24px!important;background-color:#fff}li.axCheckboxLi{list-style:none;margin-left:192px}input.axCheck{height:12px!important;margin:0;vertical-align:middle!important;width:12px!important}label.axCheckboxLbl{color:#fff!important;display:inline!important;font-size:14px;line-height:22px;height:22px}ul.wzdConTileUlW{margin-bottom:32px}div.wzdContent span{margin-left:207px;font-size:12px;color:#0d6a90;line-height:20px;display:block}div.wzdContent a{color:#0d6a90}</style>

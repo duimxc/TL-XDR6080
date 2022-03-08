@@ -1,0 +1,51 @@
+
+
+<div class="textCenter">
+	<img class="configGif" src="../web-static/images/wzdDetecting.gif" />
+</div>
+<div class="block">
+	<p>您的路由设置已完成</p>
+	<p>无线参数更改已生效，您的设备与路由器</p>
+	<p style="margin-bottom:32px;">的连接已断开，请重新进行无线连接</p>
+	<div style="text-align:center;">
+		<div class="ssidInfo">
+
+		</div>
+	</div>
+	<!-- <ul class="gridLine gridLineA gridLineA2">
+		<label class="desLblA">无线桥接</label>
+		<input id="wdsSwitchOn" name="wdsSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="wdsSwitchOn">开</label>
+		<input id="wdsSwitchOff" name="wdsSwitch" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wdsSwitchOff">关</label>
+	</ul>
+	<ul class="gridLine gridLineA gridLineA2">
+		<label class="desLblA">桥接状态</label>
+		<label id="wdsStatus" class="noteLbl"></label>
+	</ul>
+	<ul class="gridLine gridLineA gridLineA2">
+		<label class="desLblA">主路由器</label>
+		<label class="noteLbl">无线名称：<span id="wdsSsid"></span></label>
+	</ul>
+	<ul class="gridLine gridLineA wdsGridLine">
+		<label class="noteLbl">无线密码：<span id="wdsPwd"></span></label>
+	</ul>
+	<ul class="gridLine gridLineA gridLineA2">
+		<label class="desLblA">本路由器</label>
+		<label class="noteLbl">无线名称：<span id="wlanSsid"></span></label>
+	</ul>
+	<ul class="gridLine gridLineA wdsGridLine">
+		<label class="noteLbl">无线密码：<span id="wlanPwd"></span></label>
+	</ul>
+	<ul class="gridLine gridLineA wdsGridLine">
+		<label class="noteLbl">DHCP服务器：<span id="wlanDhcpState"></span></label>
+	</ul>
+	<ul class="gridLine gridLineA wdsGridLine">
+		<label class="noteLbl">LAN口IP地址：<span id="lanIpAddr"></span></label>
+	</ul> -->
+</div>
+<!-- <div class="blockFuncA">
+	<input id="pre" type="button" value="更改桥接" class="btnA subBtn" />
+	<input id="save" type="button" value="保存" class="btnA subBtn" />
+</div> --><script type="text/javascript">function init(){(function(){var c=["2G","5G","5G1","5G2"],a=[FREQ_2G,FREQ_5G],b=[FREQ_2G,FREQ_5G1,FREQ_5G4];if("1"==gLocalAPInfo[FREQ_BS].bs_enable)a=document.createElement("p"),b=document.createElement("p"),a.className="ssid",b.className="pwd",a.innerHTML=label.wirelessName+"： "+gLocalAPInfo[FREQ_BS].ssid,b.innerHTML=label.wirelessPwd+"： "+("1"==gLocalAPInfo[FREQ_BS].encryption?gLocalAPInfo[FREQ_BS].key:label.wirelessNoSecurity),$(".ssidInfo").append(a),$(".ssidInfo").append(b);else for(var f=gBandNum==
+BAND_3?b:a,e=0;e<f.length;e++){var d=f[e],a=document.createElement("p"),b=document.createElement("p");a.className="ssid";a.style.marginTop="20px";b.className="pwd";a.innerHTML=label["wirelessName"+c[d]]+"： "+gLocalAPInfo[d].ssid;b.innerHTML=label["wirelessPwd"+c[d]]+"： "+("1"==gLocalAPInfo[d].encryption?gLocalAPInfo[d].key:label.wirelessNoSecurity);$(".ssidInfo").append(a);$(".ssidInfo").append(b)}wzdDone();c=document.createElement("p");c.innerHTML=label.ipAddr+"： "+gLanIP;c.style.marginTop="20px";
+$(".ssidInfo").append(c);$.action({network:{apply_lan_config:null},wireless:{wds_finish:null}},null,!0);$.setTimeout(function(){window.location.href="http://"+gLanIP},6E4);$.changeDomain(gLanIP);$.setTimeout(function(){lanDetecting(function(){window.location.href="http://"+gLanIP})},4E3)})()}init();
+</script><style type="text/css">div.WDSFiBlock{margin:13px 0 11px 0;padding-bottom:35px;border:1px solid #cbcbcb;background:#fcfcfc;overflow:hidden}p.WDSFiTitle{font-size:14px;font-weight:bold;margin:20px 0 12px 51px;text-align:left}p.WDSFiDetail{line-height:21px;margin-left:51px;text-align:left;white-space:pre}p.WDSFiLine{font-size:0;padding:0;line-height:0;margin:13px 43px 0 43px;border-bottom:1px solid #ccc}p.WDSFiLineS{margin-top:21px!important}ul.wdsGridLine{padding-left:260px;margin-top:0!important}ul.gridLine label span{display:inline-block}ul.gridLine label span pre{overflow:hidden;text-overflow:ellipsis;vertical-align:middle;width:300px;display:inline-block;*display:inline;*zoom:1}img.configGif{height:30px;margin:120px auto 40px;width:30px}.textCenter{text-align:center}.block p{color:#fff;font-size:14px;text-align:center}.ssidInfo{display:inline-block}.ssidInfo p{text-align:left}</style>

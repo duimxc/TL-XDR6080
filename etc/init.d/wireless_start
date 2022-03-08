@@ -1,0 +1,231 @@
+#!/bin/sh /etc/rc.common
+
+START=20
+
+sysctl_cmd() {
+	sysctl -w $1=$2 >/dev/null 2>/dev/null
+}
+
+slp_check_calculate_data_2G(){
+	CALTAG_FILE_PATH="/tmp/calTag"
+	local CAL_TAG=nil
+
+	# it's not first time to check cal data, just get caltag from /tmp/calTag file
+	if [ -f "${CALTAG_FILE_PATH}" ]; then
+		CAL_TAG=$(hexdump "${CALTAG_FILE_PATH}" | grep 1111)
+	fi
+
+	if [ "$CAL_TAG" ]; then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
+slp_check_calculate_data_5G(){
+	CALTAG_FILE_PATH="/tmp/calTag_1"
+	CALTAG_FILE_PATH_5G2="/tmp/calTag_2"
+	local CAL_TAG=nil
+	local CAL_TAG_5G2=nil
+	local radioScheme=$(cat /proc/cmdline | awk -F 'radioScheme=' '{print $2}')
+	local radioNum=$(echo "${radioScheme}" | awk -F ',' '{print NF}')
+
+	# it's not first time to check cal data, just get caltag from /tmp/calTag_1 file
+	if [ -f "${CALTAG_FILE_PATH}" ]; then
+		CAL_TAG=$(hexdump "${CALTAG_FILE_PATH}" | grep 1111)
+		if [ "${radioNum}" == "3" ]; then
+			if [ -f "${CALTAG_FILE_PATH_5G2}" ]; then
+				CAL_TAG_5G2=$(hexdump "${CALTAG_FILE_PATH_5G2}" | grep 1111)
+				if [ -z "${CAL_TAG_5G2}" ]; then
+					echo "false"
+					return
+				fi
+			else
+				echo "false"
+				return
+			fi
+		fi
+	else
+		echo "false"
+		return
+	fi
+
+	if [ "$CAL_TAG" ]; then
+		echo "true"
+	else
+		echo "false"
+	fi
+}
+
+# Set NSS FW-TO-HOST buffer pool cfg
+set_nss_buffer_pool() {
+	local mp_256="$(ls /proc/device-tree/ | grep -rw "MP_256")"
+	local mp_512="$(ls /proc/device-tree/ | grep -rw "MP_512")"
+	local board_name
+	local hk_ol_num=0
+
+	[ -f /tmp/sysinfo/board_name ] && {
+		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
+	}
+
+	if [ "$mp_256" == "MP_256" ]; then
+	case "$board_name" in
+	ap-mp*)
+			#extra pbuf core0 = (high_water_core0 - (NSS + OCM buffers)) * pbuf_size
+			#where NSS+OCM buffers = 11720 and pbuf_size = 160 bytes
+			#total pbuf size is 160 bytes,allocate memory for 4616 pbufs
+			sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 800000
+			sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 16336
+			sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 0
+			;;
+	*)
+			sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 1400000
+			sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 20432
+			sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 0
+			;;
+	esac
+	elif [ "$mp_512" == "MP_512" ]; then
+		# 三频机型内存扩大到512M，且创建了新的频段，但由于/sys/module/qca_ol
+		# 目录存在，故此处不会执行sysctl_cmd指令，没有配置extra_pbuf_core0等
+		# 参数，导致NSS FW内存不足，进而导致无法产生数据包中断，有线不通。
+		# 故临时修改脚本，对于512M内存机型，强制执行如下sysctl_cmd指令。
+		#[ -d /sys/module/qca_ol ] || { \
+		#	hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
+		#	if [ $hk_ol_num -eq 3 ]; then
+				#total pbuf size is 160 bytes,allocate memory for 19928 pbufs
+				sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 3200000
+				sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 31648
+				sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 0
+		#	else
+		#		#total pbuf size is 160 bytes,allocate memory for 18904 pbufs
+		#		sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 3100000
+		#		sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 30624
+		#		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 8192
+		#	fi
+		#}
+	else
+	case "$board_name" in
+	ap-hk09*)
+			local soc_version_major
+			[ -f /sys/firmware/devicetree/base/soc_version_major ] && {
+				soc_version_major="$(hexdump -n 1 -e '"%1d"' /sys/firmware/devicetree/base/soc_version_major)"
+			}
+			if [ $soc_version_major = 2 ];then
+				[ -d /sys/module/qca_ol ] || { \
+					#total pbuf size is 160 bytes,allocate memory for 55672 pbufs
+					sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 9000000
+					sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 67392
+					#initially after init 4k buf for 5G and 4k for 2G will be allocated, later range will be configured
+					sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 40960
+				}
+			else
+				#total pbuf size is 160 bytes,allocate memory for 57184 pbufs
+				sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 9200000
+				sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 68904
+				sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 32768
+			fi
+	;;
+	ap-ac01)
+		#total pbuf size is 160 bytes,allocate memory for 14712 pbufs
+		sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 2400000
+		sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 26432
+		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 0
+
+	;;
+	ap-ac02)
+		#total pbuf size is 160 bytes,allocate memory for 18808 pbufs
+		sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 3100000
+		sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 30528
+		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 4096
+	;;
+	ap-hk* | ap-oak*)
+		hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
+		[ -d /sys/module/qca_ol ] || { \
+			if [ $hk_ol_num -eq 3 ]; then
+				#total pbuf size is 160 bytes,allocate memory for 93560 pbufs
+				#NSS general payload(8000),Rx Buffer per radio(4k),Tx queue buffer per radio(1k), intial TX allocation per radio(4k)
+				#Below table is Tx desc allocation based on number of clients connected
+				#Radio     Range0   Range1     Range2       Range3
+				#           (<=64) (<=128)     (<=256)      (>256)
+				#5G-Hi        24k	24k		24k		32k
+				#2G           16k	16k		16k		16k
+				#5G-Low       24k	24k		24k		32k
+				#Absolute high water=NSS payloads + Rx buf per radio + Tx queue per radio + TxDescRange3(5g-low/5g-hi/2g)
+				#wifi pool buff = Min(Total tx desc at range 3, device_limit) - total intial tx allocation
+				#extra pbuf core0 = (high_water_core0 - (NSS + OCM buffers)) * pbuf_size
+				#	where NSS+OCM buffers = 11720 and pbuf_size = 160
+				sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 10000000
+				sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 72512
+				#initially after init 4k buf for 5G and 4k for 2G will be allocated, later range will be configured
+				sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 36864
+			else
+				#total pbuf size is 160 bytes,allocate memory for 55672 pbufs
+				sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 9000000
+				sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 67392
+				#initially after init 4k buf for 5G and 4k for 2G will be allocated, later range will be configured
+				sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 40960
+			fi
+		}
+	;;
+	ap-cp* | ap-mp*)
+		[ -d /sys/module/qca_ol ] || { \
+			#total pbuf size is 160 bytes,allocate memory for 18808 pbufs
+			sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 3100000
+			sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 30528
+			sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 4096
+		}
+	;;
+	*)
+		#total pbuf size is 160 bytes,allocate memory for 48456 pbufs
+		sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 7800000
+		sysctl_cmd dev.nss.n2hcfg.n2h_high_water_core0 60176
+		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 35840
+	;;
+	esac
+	fi
+
+}
+
+start() {
+	# set the path of *.ini files
+	echo -n /ini > /sys/module/firmware_class/parameters/path
+
+	# create soft link for firmware_rdp_feature.ini
+	if [ -e /sys/firmware/devicetree/base/MP_512 ]; then
+		if [ -f /lib/firmware/IPQ5018/WIFI_FW/firmware_rdp_feature_512P.ini ]; then
+			cd /lib/firmware
+			ln -sf /lib/firmware/IPQ5018/WIFI_FW/firmware_rdp_feature_512P.ini .
+		fi
+	else
+		if [ -f /lib/firmware/IPQ5018/WIFI_FW/firmware_rdp_feature.ini ]; then
+			cd /lib/firmware
+			ln -sf /lib/firmware/IPQ5018/WIFI_FW/firmware_rdp_feature.ini .
+		fi
+	fi
+
+	set_nss_buffer_pool
+
+	#insmod ko
+	cd /lib/modules/4.4.60
+	insmod mem_manager.ko
+	#insmod cfg80211.ko
+	insmod qdf.ko
+	insmod asf.ko
+	#insmod qca-ssdk.ko
+	#insmod qca-nss-dp.ko
+	#insmod qca-nss-drv.ko
+	insmod umac.ko
+	insmod qca_spectral.ko
+
+	local caltag_2g=$(slp_check_calculate_data_2G)
+	local caltag_5g=$(slp_check_calculate_data_5G)
+	[ "$caltag_2g" == "false" -o "$caltag_5g" == "false" ] && { \
+		insmod qca_ol.ko testmode=1
+	} || {
+		insmod qca_ol.ko
+	}
+
+	insmod wifi_3_0.ko
+	insmod ath_pktlog.ko
+	#insmod smart_antenna.ko
+}

@@ -1,0 +1,18 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+# Start AFTER overlayfs is ready in case plugin install failure
+START=30
+
+start() {
+	local linkdir=/tmp/usr/bin
+	[ -e /proc/sys/kernel/core_pattern ] && {
+		ulimit -c unlimited
+		echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern
+	}
+
+	# create dir for dms cmd symlinks
+	[ ! -d $linkdir ] && mkdir -p $linkdir
+
+	dms
+}

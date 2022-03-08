@@ -1,0 +1,8 @@
+Package: mpstat
+Version: 1
+Depends: libc, libssp
+Source: tp_package/u_packages/mpstat
+Section: MTK Properties
+Architecture: ipq
+Installed-Size: 23147
+Description:  mpstat

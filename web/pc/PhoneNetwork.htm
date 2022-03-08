@@ -1,0 +1,35 @@
+
+
+<div class="textCenter" id="detecting">
+	<img class="detectingGif" src="../web-static/images/wzdDetecting.gif" />
+	<p class="detectTip detecting">{%label.checkingWait%}</p>
+</div>
+<div class="textCenter disNone" id="detectErr">
+	<img class="detectErr" src="../web-static/images/connect_fail.png" />
+	<p class="detectTip wanLinkDown bold">{%errStr.phCableUnlink%}</p>
+	<ul class="phInputUl">
+		<p class="leftTip" style="margin-top:20px;">{%label.phCheckWan%}</p>
+		<p class="leftTip">{%label.phCheckLightFlash%}</p>
+		<p class="leftTip">{%label.phContactNetProvider%}</p>
+	</ul>
+	<div class="phFunc">
+		<label id="reDetect" class="phOneBtn">{%label.phReDetect%}</label>
+	</div>
+	<a id="skipWanDetect" class="skip bold" href="javascript:void(0);">{%label.phSkipDetect%}</a>
+	<div class="wdsConfig">
+		<p class="leftTip" style="margin-top:8px;">{%label.phExtendWDS%}</p>
+		<p class="leftTip" style="margin-top:8px;">{%label.phRecommandMesh%}
+			<i id="meshHelp" class="meshHelp ib"></i>
+		</p>
+		<p class="leftTip" style="margin-left:0;margin-top:8px;">{%label.phOrUse%}
+			<span id="phWlanWDS" class="wds bold">{%label.phWDS%}</span>
+		</p>
+	</div>
+</div><script type="text/javascript">function init(){function n(a){if(ENONE==a[ERR_CODE]){var b=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info],p=b[uciDeviceInfo.optName.swVer].split(" ")[0];gNetworkCfg[uciProto.optName.type]=a[c][f][uciProto.optName.type];gNetworkCfg[uciProto.optValue.proto.pppoe]=a[c][g];gNetworkCfg[uciProto.optValue.proto.staticIp]=a[c][h];gNetworkCfg[uciProto.optValue.proto.dynIp]=a[c][k];gNetworkCfg.lanIp=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];gOldLanIP=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];
+gLanIP=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];gLanIPMode=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ipMode];gSupportWanPortSwap&&(gWanPortSelCfg=a[c][f][uciProto.optName.port]);id("softVersionWzd").innerHTML+=p;gCloudAccountBR.softVersion=b[uciDeviceInfo.optName.swVer]}}function q(){var a={};a[c]={};a[c][KEY_NAME]=[f,h,g,k];a[uciDeviceInfo.fileName]={};a[uciDeviceInfo.fileName][KEY_NAME]=uciDeviceInfo.secName.info;a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=
+uciNetwork.secName.lan;$.query(a,n)}function d(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;$.action(a,function(a){switch(parseInt(a[uciNetwork.optName.proto])){case ERROR_INTERNEL_ERROR:case ERROR_INPUT_PARA_ERROR:case WAN_IFACE_NOT_LINK:$.setTimeout(d,1E3);break;default:$("#detecting").css("display","block"),$("#detectErr").css("display","none"),$.setTimeout(function(){e=$.setTimeout(function(){$("#detecting").css("display","none");$("#detectErr").css("display",
+"block");d()},1E4);l()},2E3)}})}function l(){function a(){$.action(b,function(b){b=parseInt(b[uciNetwork.optName.proto]);!0==$.local&&(b=WAN_TYPE_PPPOE);switch(b){case ERROR_INTERNEL_ERROR:case ERROR_INPUT_PARA_ERROR:case WAN_IFACE_NOT_LINK:$("#detecting").css("display","none");$("#detectErr").css("display","block");clearTimeout(e);d();break;case WAN_TYPE_DETECTING:m=$.setTimeout(a,1E3);break;default:clearTimeout(e),bWzdWanTypeDetected=!0,wzdNetWorkModeChange(b)}})}var b={};b[uciNetwork.fileName]=
+{};b[uciNetwork.fileName][uciNetwork.action.wanDetect]=null;a()}function r(){$.query({mesh:{name:"config"}},function(a){ENONE==a[ERR_CODE]&&(gPcbEnable=a.mesh.config.pcb_enable)})}function s(){$.query({port_manage:{table:"mwan"}},function(a){gMultiWanOpen=!0;for(var b=0;2>b;b++)0==parseInt(a.port_manage.mwan[b]["mwan_"+(b+1)].enable)&&(gMultiWanOpen=!1);gMultiWanOpen&&$(".wdsConfig").css("display","none")})}function t(){$.query({protocol:{name:"ipv6_info"}},function(a){"on"==a.protocol.ipv6_info.enable&&
+(gIpv6Enable=!0,$(".wdsConfig").css("display","none"))})}var c=uciProto.fileName,f=uciProto.secName.wan,h=uciProto.secName.sta,g=uciProto.secName.pppoe,k=uciProto.secName.dhcp,e=null,m=null;id("skipWanDetect").onclick=function(){wzdNetWorkModeChange(WAN_TYPE_PPPOE)};id("meshHelp").onclick=function(){loadPage("PhoneMeshHelp.htm","phCon")};id("phWlanWDS").onclick=function(){loadPage("PhoneWDS.htm","phCon")};id("reDetect").onclick=function(){loadPage("PhoneNetwork.htm","phCon")};gSysModeSupport&&$(".wdsConfig").css("display",
+"inline-block");try{q(),gMeshSupport&&r(),gSupportPortManage&&s(),gIpv6Support&&t()}catch(u){}e=$.setTimeout(function(){clearTimeout(m);$("#detecting").css("display","none");$("#detectErr").css("display","block");d()},1E4);l()}init();
+</script><style type="text/css">img.detectingGif{height:30px;margin:120px auto 0;width:30px}p.detectTip{color:#fff;font-size:14px;text-align:center}p.leftTip{color:#fff;font-size:14px;text-align:left}.textCenter{text-align:center}.bold{font-weight:bold}p.detecting{margin-top:20px}p.wanLinkDown{margin-top:30px}img.detectErr{margin:40px auto 0}a.skip{color:#feeb1a;font-size:14px;margin:20px auto 0;width:150px;display:block}span.wds{color:#feeb1a;font-size:14px}.ib{display:inline-block}.wdsConfig{margin:40px 36px auto;width:280px;padding-top:12px;border-top:.5px solid;border-color:rgba(255,255,255,0.4)}i.meshHelp{background:url(../web-static/images/help_white.png) no-repeat;height:18px;width:18px;background-size:cover;vertical-align:top;margin-top:1px;margin-left:4px}</style>

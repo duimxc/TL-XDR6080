@@ -1,0 +1,719 @@
+<root>
+<moduler name="network">
+	<config name="/tmp/etc/config/network.json"></config>
+	<template name="/conf/template/network.json"></template>
+	<table name="interface" attribute="config" element="private">
+		<section name="lan">
+		</section>
+	</table>
+	<table name="config" attribute="config" element="private">
+		<section name="massive_sta_capacity">
+		</section>
+	</table>
+	<table name="user_route" attribute="config" notcheck="false" element="public" size="16">
+		<option name="target"></option>
+		<option name="netmask"></option>
+		<option name="gateway"></option>
+	</table>
+	<table name="dyn_route" attribute="dynamic" element="public" size="32">
+	</table>
+	<table name="sys_route" attribute="dynamic" element="public" size="64">
+	</table>
+	<table name="wan_status" attribute="dynamic" element="private">
+		<section name="wan_status">
+		</section>
+	</table>
+	<table name="wanv6_status" attribute="dynamic" element="private">
+		<section name="wanv6_status">
+		</section>
+	</table>
+	<table name="ipv6_switch_status" attribute="dynamic" element="private">
+		<section name="ipv6_switch_status">
+		</section>
+	</table>
+	<table name="wan_status_2" attribute="dynamic" element="private">
+		<section name="wan_status_2">
+		</section>
+	</table>
+	<table name="wanv6_status_2" attribute="dynamic" element="private">
+		<section name="wanv6_status_2">
+		</section>
+	</table>
+	<table name="ipv6_switch_status_2" attribute="dynamic" element="private">
+		<section name="ipv6_switch_status_2">
+		</section>
+	</table>
+
+	<table name="lan_status" attribute="dynamic" element="private">
+		<section name="lan_status">
+		</section>
+		<section name="lan_dhcpc_status">
+		</section>
+	</table>
+	<table name="lanv6_status" attribute="dynamic" element="private">
+		<section name="lanv6_status">
+		</section>
+	</table>
+	<table name="domain" attribute="dynamic" element="private">
+		<section name="dnlogin_params">
+		</section>
+	</table>
+	<table name="arp" attribute="dynamic" element="private">
+		<section name="arp_filter_params">
+		</section>
+	</table>
+</moduler>
+<moduler name="uhttpd">
+	<config name="/tmp/etc/config/uhttpd.json"></config>
+	<template name="/conf/template/uhttpd.json"></template>
+	<table name="uhttpd" attribute="config" element="private">
+		<section name="main">
+		</section>
+	</table>
+	<table name="webPwd" attribute="config" element="private">
+		<section name="webPwd">
+		</section>
+	</table>
+</moduler>
+<moduler name="dhcpd">
+	<config name="/tmp/etc/config/dhcpd.json"></config>
+	<template name="/conf/template/dhcpd.json"></template>
+	<table name="dhcpd" attribute="config" element="private">
+		<section name="udhcpd">
+		</section>
+	</table>
+	<table name="dhcp_clients" attribute="dynamic" element="public" size="2048">
+	</table>
+</moduler>
+<moduler name="firewall">
+	<config name="/tmp/etc/config/firewall.json"></config>
+	<template name="/conf/template/firewall.json"></template>
+	<table name="wan_manage" attribute="config" element="private">
+		<section name="wan_manage">
+		</section>
+	</table>
+</moduler>
+<moduler name="system">
+	<config name="/tmp/etc/config/system.json"></config>
+	<template name="/conf/template/system.json"></template>
+	<table name="system" attribute="config" element="private">
+		<section name="sys">
+		</section>
+		<section name="sys_mode">
+		</section>
+	</table>
+	<table name="clock_status" attribute="dynamic" element="private">
+		<section name="clock_status">
+		</section>
+	</table>
+	<table name="clock_success" attribute="dynamic" element="private">
+		<section name="clock_success">
+		</section>
+	</table>
+	<table name="runtime" attribute="dynamic" element="private">
+		<section name="runtime">
+		</section>
+	</table>
+	<table name="sys_log" attribute="dynamic" element="public" size="160">
+	</table>
+	<table name="exc_log" attribute="dynamic" element="public" size="8">
+	</table>
+	<table name="all_push_msg" attribute="dynamic" element="public" size="64">
+	</table>
+	<table name="realtime_push_msg" attribute="dynamic" element="public" size="64">
+	</table>
+	<table name="modulelist" attribute="config" element="public" size="16">
+		<option name="name"></option>
+	</table>
+</moduler>
+<moduler name="link">
+	<config name="/tmp/etc/config/link.json"></config>
+	<table name="status" attribute="dynamic" element="private">
+		<section name="status">
+		</section>
+	</table>
+</moduler>
+<moduler name="protocol">
+	<config name="/tmp/etc/config/protocol.json"></config>
+	<template name="/conf/template/protocol.json"></template>
+	<table name="status" attribute="dynamic" element="private">
+		<section name="wan_num">
+		</section>
+	</table>
+	<table name="interface" attribute="config" element="private">
+		<section name="wan">
+		</section>
+		<section name="wanv6">
+		</section>
+		<section name="lanv6">
+		</section>
+	</table>
+	<table name="proto" attribute="config" element="private">
+		<section name="static">
+		</section>
+		<section name="dhcp">
+		</section>
+		<section name="pppoe">
+		</section>
+		<section name="last_dial">
+		</section>
+		<section name="ipv6_info">
+		</section>
+		<section name="staticv6">
+		</section>
+		<section name="dhcpcv6">
+		</section>
+		<section name="pppoev6">
+		</section>
+		<section name="dhcpsv6">
+		</section>
+		<section name="slaac">
+		</section>
+		<section name="rdnss">
+		</section>
+	</table>
+	<table name="interface_2" attribute="config" element="private">
+		<section name="wan_2">
+		</section>
+		<section name="wanv6_2">
+		</section>
+		<section name="lanv6_2">
+		</section>
+	</table>
+	<table name="proto_2" attribute="config" element="private">
+		<section name="static_2">
+		</section>
+		<section name="dhcp_2">
+		</section>
+		<section name="pppoe_2">
+		</section>
+		<section name="last_dial_2">
+		</section>
+		<section name="ipv6_info_2">
+		</section>
+		<section name="staticv6_2">
+		</section>
+		<section name="dhcpcv6_2">
+		</section>
+		<section name="pppoev6_2">
+		</section>
+		<section name="dhcpsv6_2">
+		</section>
+		<section name="slaac_2">
+		</section>
+		<section name="rdnss_2">
+		</section>
+	</table>
+</moduler>
+<moduler name="wan_port_detect">
+	<config name="/tmp/etc/config/wan_port_detect.json"></config>
+	<template name="/conf/template/wan_port_detect.json"></template>
+	<table name="config" attribute="config" element="private">
+		<section name="config">
+		</section>
+	</table>
+	<table name="status" attribute="dynamic" element="private">
+		<section name="status">
+		</section>
+	</table>
+</moduler>
+<moduler name="mwan_load_balance">
+	<config name="/tmp/etc/config/mwan_load_balance.json"></config>
+	<template name="/conf/template/mwan_load_balance.json"></template>
+	<table name="band_width" attribute="config" element="private">
+		<section name="band_width">
+		</section>
+	</table>
+	<table name="basic" attribute="config" element="private">
+		<section name="basic">
+		</section>
+	</table>
+</moduler>
+<moduler name="upnpd">
+	<config name="/tmp/etc/config/upnpd.json"></config>
+	<template name="/conf/template/upnp.json"></template>
+	<table name="upnpd" attribute="config" element="private">
+		<section name="config">
+		</section>
+	</table>
+	<table name="upnp_lease" attribute="dynamic" element="public" size="64">
+	</table>
+</moduler>
+<moduler name="device_info">
+	<config name="/tmp/etc/config/device_info.json"></config>
+	<table name="info" attribute="dynamic" element="private">
+		<section name="info">
+		</section>
+	</table>
+</moduler>
+<moduler name="diagnose"></moduler>
+<moduler name="hosts_info">
+	<config name="/tmp/etc/config/hosts_info.json"></config>
+	<table name="device" attribute="config" notcheck="false" element="public" size="2048">
+		<option name="is_blocked"></option>
+		<option name="mac"></option>
+		<option name="down_limit"></option>
+		<option name="up_limit"></option>
+		<option name="name"></option>
+		<option name="forbid_domain"></option>
+		<option name="limit_time"></option>
+	</table>
+	<table name="limit_time" attribute="config" notcheck="false" element="public" size="16">
+		<option name="name"></option>
+		<option name="mon"></option>
+		<option name="tue"></option>
+		<option name="wed"></option>
+		<option name="thu"></option>
+		<option name="fri"></option>
+		<option name="sat"></option>
+		<option name="sun"></option>
+		<option name="start_time"></option>
+		<option name="end_time"></option>
+	</table>
+	<table name="forbid_domain" attribute="config" notcheck="false" element="public" size="64">
+		<option name="domain"></option>
+	</table>
+	<table name="plan_rule" attribute="config" notcheck="false" element="public" size="16">
+		<option name="name"></option>
+		<option name="mon"></option>
+		<option name="tue"></option>
+		<option name="wed"></option>
+		<option name="thu"></option>
+		<option name="fri"></option>
+		<option name="sat"></option>
+		<option name="sun"></option>
+		<option name="start_time"></option>
+		<option name="end_time"></option>
+	</table>
+	<table name="host_info" attribute="dynamic" notcheck="false" element="public" size="128">
+	</table>
+	<table name="statistics_info" attribute="dynamic" notcheck="false" element="public" size="128">
+	</table>
+	<table name="online_host" attribute="dynamic" notcheck="false" element="public" size="64">
+	</table>
+	<table name="blocked_host" attribute="dynamic" notcheck="false" element="public" size="64">
+	</table>
+	<table name="bind_list" attribute="dynamic" element="public" size="32">
+	</table>
+	<table name="info" attribute="dynamic" element="private">
+		<section name="cap_host_num">
+		</section>
+	</table>
+</moduler>
+<moduler name="wireless" lightweight="true">
+	<config name="/tmp/etc/config/wireless.json"></config>
+	<template name="/conf/template/wireless.json"></template>
+	<table name="wifi-web" attribute="config" element="private">
+		<section name="wlan_host_2g">
+		</section>
+		<section name="wlan_host_5g">
+		</section>
+		<section name="wlan_wps_2g">
+		</section>
+		<section name="wlan_wps_5g">
+		</section>
+		<section name="wlan_wds_2g">
+		</section>
+		<section name="wlan_wds_5g">
+		</section>
+		<section name="wlan_bs">
+		</section>
+		<section name="wlan_host_bh_2g">
+		</section>
+		<section name="wlan_host_bh_5g">
+		</section>
+	</table>
+	<table name="wlan_sta_list_2g" attribute="dynamic" notcheck="false" element="public" size="32">
+	</table>
+	<table name="wlan_sta_list_5g" attribute="dynamic" notcheck="false" element="public" size="32">
+	</table>
+	<table name="wlan_sta_list_guest_2g" attribute="dynamic" notcheck="false" element="public" size="32">
+	</table>
+
+	<table name="wlan_status_2g" attribute="dynamic" element="private">
+		<section name="wlan_status_2g">
+		</section>
+	</table>
+	<table name="wlan_status_5g" attribute="dynamic" element="private">
+		<section name="wlan_status_5g">
+		</section>
+	</table>
+	<table name="dfs_wait_time" attribute="dynamic" element="private">
+		<section name="dfs_wait_time">
+		</section>
+	</table>
+	<table name="wlan_scan_2g" attribute="dynamic" element="public" size="64">
+	</table>
+	<table name="wlan_scan_5g" attribute="dynamic" element="public" size="64">
+	</table>
+	<table name="wlan_scan_2g_status" attribute="dynamic" element="private">
+		<section name="wlan_scan_2g_status">
+		</section>
+	</table>
+	<table name="wlan_scan_5g_status" attribute="dynamic" element="private">
+		<section name="wlan_scan_5g_status">
+		</section>
+	</table>
+	<table name="wlan_wds_2g_status" attribute="dynamic" element="private">
+		<section name="wlan_wds_2g_status">
+		</section>
+	</table>
+	<table name="wlan_wds_5g_status" attribute="dynamic" element="private">
+		<section name="wlan_wds_5g_status">
+		</section>
+	</table>
+	<table name="wlan_wds_2g_lanip" attribute="dynamic" element="private">
+		<section name="wlan_wds_2g_lanip">
+		</section>
+	</table>
+	<table name="wlan_wds_5g_lanip" attribute="dynamic" element="private">
+		<section name="wlan_wds_5g_lanip">
+		</section>
+	</table>
+	<table name="wlan_wds_2g_dhcps" attribute="dynamic" element="private">
+		<section name="wlan_wds_2g_dhcps">
+		</section>
+	</table>
+	<table name="wlan_wds_5g_dhcps" attribute="dynamic" element="private">
+		<section name="wlan_wds_5g_dhcps">
+		</section>
+	</table>
+	<table name="wlan_wds_2g_dhcpc" attribute="dynamic" element="private">
+		<section name="wlan_wds_2g_dhcpc">
+		</section>
+	</table>
+	<table name="wlan_wds_5g_dhcpc" attribute="dynamic" element="private">
+		<section name="wlan_wds_5g_dhcpc">
+		</section>
+	</table>
+	<table name="wds_cfg_status_2g" attribute="dynamic" element="private">
+		<section name="wds_cfg_status_2g">
+		</section>
+	</table>
+	<table name="wds_cfg_status_5g" attribute="dynamic" element="private">
+		<section name="wds_cfg_status_5g">
+		</section>
+	</table>
+	<table name="tmp_basic_cfg_2g" attribute="dynamic" element="private">
+		<section name="tmp_basic_cfg_2g">
+		</section>
+	</table>
+	<table name="tmp_host_cfg_2g" attribute="dynamic" element="private">
+		<section name="tmp_wps_cfg_2g">
+		</section>
+		<section name="tmp_bh_cfg_2g">
+		</section>
+	</table>
+	<table name="tmp_wds_cfg_2g" attribute="dynamic" element="private">
+		<section name="tmp_wds_cfg_2g">
+		</section>
+	</table>
+	<table name="tmp_mssid_cfg_list_2g" attribute="dynamic" notcheck="false" element="public" size="3">
+	</table>
+	<table name="tmp_basic_cfg_5g" attribute="dynamic" element="private">
+		<section name="tmp_basic_cfg_5g">
+		</section>
+	</table>
+	<table name="tmp_host_cfg_5g" attribute="dynamic" element="private">
+		<section name="tmp_wps_cfg_5g">
+		</section>
+	</table>
+	<table name="tmp_wds_cfg_5g" attribute="dynamic" element="private">
+		<section name="tmp_wds_cfg_5g">
+		</section>
+	</table>
+	<table name="tmp_mssid_cfg_list_5g" attribute="dynamic" notcheck="false" element="public" size="3">
+	</table>
+</moduler>
+<moduler name="cloud_config">
+	<config name="/tmp/etc/config/cloud_config.json"></config>
+	<template name="/conf/template/cloud_config.json"></template>
+	<table name="router_post" attribute="config" element="private">
+		<section name="bind">
+		</section>
+		<section name="bind_info_sync">
+		</section>
+		<section name="connect_option">
+		</section>
+		<section name="login">
+		</section>
+		<section name="register">
+		</section>
+		<section name="reset_cloud_pwd">
+		</section>
+		<section name="modify_account_pwd">
+		</section>
+		<section name="get_reg_verify_code">
+		</section>
+		<section name="get_reset_pwd_verify_code">
+		</section>
+		<section name="check_reg_verify_code">
+		</section>
+		<section name="check_reset_pwd_verify_code">
+		</section>
+	</table>
+	<table name="cloud_push" attribute="config" element="private">
+		<section name="new_firmware">
+		</section>
+		<section name="new_plug_in">
+		</section>
+		<section name="new_pure_message">
+		</section>
+		<section name="device_legality">
+		</section>
+	</table>
+	<table name="push_list" attribute="config" element="public" size="64">
+		<option name="mac"></option>
+		<option name="count"></option>
+	</table>
+	<table name="cloud_reply" attribute="config" element="private">
+		<section name="device_status">
+		</section>
+		<section name="upgrade_info">
+		</section>
+	</table>
+	<table name="cloud_device" attribute="config" element="private">
+		<section name="info">
+		</section>
+		<section name="bind_tip">
+		</section>
+	<section name="brand_mac">
+		</section>
+	</table>
+</moduler>
+<moduler name="plugin_config">
+	<config name="/tmp/etc/config/plugin_config.json"></config>
+	<template name="/conf/template/plugin_config.json"></template>
+	<table name="plugin_profile" attribute="dynamic" element="private">
+		<section name="plugin">
+		</section>
+	</table>
+	<table name="plugin_info" attribute="config" element="public" size="64">
+		<option name="name"></option>
+		<option name="version"></option>
+		<option name="size"></option>
+		<option name="author"></option>
+		<option name="tag"></option>
+		<option name="description"></option>
+		<option name="app_description"></option>
+		<option name="update_Log"></option>
+		<option name="icon_url"></option>
+		<option name="app_icon_url"></option>
+		<option name="local_app_icon_url"></option>
+		<option name="webzip_url"></option>
+		<option name="local_webzip_url"></option>
+		<option name="data_url"></option>
+		<option name="release_time"></option>
+		<option name="components"></option>
+		<option name="property"></option>
+		<option name="can_update"></option>
+		<option name="uri"></option>
+	</table>
+</moduler>
+<moduler name="cloud_status">
+	<config name="/tmp/etc/config/cloud_status.json"></config>
+	<template name="/conf/template/cloud_status.json"></template>
+	<table name="router_request" attribute="dynamic" element="private">
+		<section name="check_fw_ver">
+		</section>
+		<section name="download_fw">
+		</section>
+		<section name="get_account_stat">
+		</section>
+		<section name="reset_account_pwd">
+		</section>
+		<section name="bind">
+		</section>
+		<section name="resend_email">
+		</section>
+		<section name="unbind">
+		</section>
+		<section name="register">
+		</section>
+		<section name="login">
+		</section>
+		<section name="modify_account_pwd">
+		</section>
+		<section name="get_reg_verify_code">
+		</section>
+		<section name="get_reset_pwd_verify_code">
+		</section>
+		<section name="check_reg_verify_code">
+		</section>
+		<section name="check_reset_pwd_verify_code">
+		</section>
+		<section name="notify_event">
+		</section>
+		<section name="push_plugin_list">
+		</section>
+		<section name="get_can_update_plugins">
+		</section>
+		<section name="get_not_installed_plugins">
+		</section>
+		<section name="check_plugin_update">
+		</section>
+		<section name="get_plugin_info">
+		</section>
+		<section name="get_plugins">
+		</section>
+
+	</table>
+	<table name="cloud_client" attribute="dynamic" element="private">
+		<section name="client_info">
+		</section>
+		<section name="reg_veri_code_timer">
+		</section>
+		<section name="reset_veri_code_timer">
+		</section>
+	</table>
+</moduler>
+<moduler name="mapd" lightweight="true">
+	<config name="/tmp/etc/config/mapd.json"></config>
+	<table name="business" attribute="config" element="private">
+		<section name="autoconf">
+		</section>
+		<section name="role_selection">
+		</section>
+		<section name="mesh_group">
+		</section>
+	</table>
+	<table name="pairing" attribute="dynamic" element="private">
+		<section name="ctxt">
+		</section>
+	</table>
+	<table name="channel_sync" attribute="dynamic" element="private">
+		<section name="root_channel">
+		</section>
+	</table>
+	<table name="bh_optimize" attribute="dynamic" element="private">
+		<section name="fronthaul_switch">
+		</section>
+	</table>
+	<table name="topology_db" attribute="config" element="public" size="16">
+		<option name="mac"></option>
+		<option name="name"></option>
+		<option name="phy_num"></option>
+		<option name="power_pos"></option>
+		<option name="svlan"></option>
+		<option name="port"></option>
+		<option name="type"></option>
+		<option name="speed"></option>
+		<option name="sfp_cap"></option>
+		<option name="sub_func"></option>
+	</table>
+	<table name="wlan_sta_list" attribute="dynamic" element="private">
+		<section name="wlan_sta_list_len">
+		</section>
+		<section name="wlan_sta_list_2g">
+		</section>
+		<section name="wlan_sta_list_5g">
+		</section>
+		<section name="wlan_sta_list_guest">
+		</section>
+	</table>
+</moduler>
+<moduler name="led">
+	<config name="/tmp/etc/config/led.json"></config>
+	<table name="global" attribute="config" element="private">
+		<section name="config">
+		</section>
+	</table>
+</moduler>
+<moduler name="function">
+	<config name="/tmp/etc/config/new_module_spec.json"></config>
+	<table name="module_spec" attribute="dynamic" element="private">
+		<section name="module_spec">
+		</section>
+	</table>
+	<table name="new_module_spec" attribute="dynamic" element="private">
+		<section name="new_module_spec">
+		</section>
+	</table>
+</moduler>
+<moduler name="mesh">
+	<config name="/tmp/etc/config/mesh.json"></config>
+	<table name="config" attribute="config" element="private">
+		<section name="config">
+		</section>
+	</table>
+</moduler>
+<moduler name="appManage">
+</moduler>
+<moduler name="gpio_ctrl">
+</moduler>
+<moduler name="led_ctrl">
+</moduler>
+<moduler name="hyfi">
+	<config name="/tmp/etc/config/hyfi.json"></config>
+	<table name="info" attribute="dynamic" element="private">
+		<section name="upgrade_ext_status">
+		</section>
+		<section name="start_get_ext_fw_ver_status">
+		</section>
+		<section name="scan_ext_status">
+		</section>
+	</table>
+	<table name="check_fw_version_all_status" attribute="dynamic" element="public" size="8">
+	</table>
+	<table name="upgrade_dev_status" attribute="dynamic" element="public" size="8">
+	</table>
+	 <table name="connected_ext" attribute="dynamic" element="public" size="16">
+	 </table>
+	 <table name="scanned_ext" attribute="dynamic" element="public" size="16">
+	 </table>
+	 <table name="connected_ext_rate" attribute="dynamic" element="public" size="16">
+	 </table>
+</moduler>
+<moduler name="aps">
+</moduler>
+<moduler name="wds">
+	<config name="/tmp/etc/config/wds.json"></config>
+	<template name="/conf/template/wds.json"></template>
+	<table name="wds" attribute="dynamic" element="private">
+		<section name="enabled">
+		</section>
+	</table>
+</moduler>
+<moduler name="sfpService">
+</moduler>
+
+<moduler name="port_manage">
+	<config name="/tmp/etc/config/port_manage.json"></config>
+	<table name="dev_info" attribute="dynamic" element="public">
+	</table>
+	<table name="sfp_speed" attribute="config" element="public" size="16">
+		<option name="device"></option>
+		<option name="speed_list"></option>
+	</table>
+	<table name="mwan" attribute="config" element="public">
+		<option name="enable"></option>
+		<option name="wan_phy"></option>
+	</table>
+	<table name="iptv" attribute="config" element="public">
+		<option name="enable"></option>
+		<option name="uplink_phy"></option>
+		<option name="downlink_phy"></option>
+		<option name="downlink_dev"></option>
+	</table>
+	<table name="lag" attribute="config" element="private">
+		<section name="lag"></section>
+	</table>
+	<table name="game" attribute="config" element="private">
+		<section name="game"></section>
+	</table>
+</moduler>
+
+<moduler name="iptv_manage">
+	<config name="/tmp/etc/config/iptv_manage.json"></config>
+	<template name="/conf/template/iptv_manage.json"></template>
+	<table name="iptv_entry" attribute="config" element="public" size="16">
+		<option name="wan_index"></option>
+		<option name="link_mode"></option>
+		<option name="work_mode"></option>
+		<option name="vlan_id"></option>
+	</table>
+</moduler>
+
+<moduler name="linkAggregation">
+</moduler>
+</root>

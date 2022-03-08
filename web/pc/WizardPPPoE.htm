@@ -1,0 +1,47 @@
+
+
+<ul class="wzdConTitleUl">
+	<p class="wzdConTitle">{%label.netSet%}</p>
+</ul>
+<div class="internetStateCon">
+    <img src="../web-static/images/routerWzd.png">
+    <div class="lineCon">
+        <span class="dot"></span><span class="line"></span><span class="dot"></span><i class="connect"></i><i class="disConnect"></i>
+        <label>{%label.pppoe%}</label>
+    </div>
+    <img src="../web-static/images/internetWzd.png">
+</div>
+<p class="tipsP">{%label.wzdPPPoETip%}</p>
+<div id="wanPortSelDiv" class="disNone">
+	<ul class="gridLine gridLineA wzdGridLineA wanSel">
+		<label class="wzdDesLblA">{%label.wanPortSel%}</label>
+		<li class="textConA textCon textConWzd">
+			<span id="wanPortSel" class="select">
+				<span class="value wzdValueA"></span>
+				<i class="arrow arrowWzd"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="inputUl wanSelTips">
+		<li class="inputLi"><label></label><span>此时<span id="wanPortSelected"></span>作为LAN1口</span></li>
+	</ul>
+</div>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.netAccount%}</label><input id="pppoeAccount" maxLength="118" /></li>
+</ul>
+<ul class="inputUl">
+	<li class="inputLi"><label>{%label.netPwd%}</label><input id="pppoePasswd" maxLength="118" type="text" /></li>
+</ul>
+<ul><li class="wzdSubLi"><input id="sub" type="button" value="{%btn.nextStep%}" /></li></ul>
+<div class="dividingLineCon">
+	<span class="dividingLine"></span><span class="title">或者</span><span class="dividingLine"></span>
+</div>
+<div class="menuCon">
+	<a href="javascript:wzdNetWorkModeChange(WAN_TYPE_DHCP)">{%label.dhcp%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_STATIC)">{%label.staticIp%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)" class="disNone" id="wzdAp">{%label.wiredRepeater%} ></a>
+</div>
+<script type="text/javascript">function init(){function c(){showWzdConfirm(label.pppoeAccPwdNullTip,function(){var a=id("pppoeAccount"),b=id("pppoePasswd");0==a.value?a.focus():b.focus()},function(){loadPage("WizardWirelessCfg.htm","wizardCon");saveNetworkCfg(uciProto.optValue.proto.pppoe,function(a){$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})})},"重新填写","确认为空")}wzdNavSet(1);wzdConSet({height:"550px"});id("sub").onclick=function(){var a=id("pppoeAccount").value,b=id("pppoePasswd").value;0==a.length||
+0==b.length?showCover(c):(loadPage("WizardWirelessCfg.htm","wizardCon"),saveNetworkCfg(uciProto.optValue.proto.pppoe,function(a){$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})}))};id("pppoeAccount").focus();!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");gSysModeSupport&&$("#wzdAp").removeClass("disNone");showNetworkCfg(uciProto.optValue.proto.pppoe);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),
+wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)))}init();
+</script><style type="text/css">p.tipsP{font-size:12px;color:#FFF;margin-left:347px;margin-bottom:16px}</style>

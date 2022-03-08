@@ -1,0 +1,2 @@
+/etc/modules.d/30-rtl8367sc
+/lib/modules/4.4.60/rtl8367sc_gsw.ko

@@ -1,0 +1,84 @@
+{
+	"/firewall/lan_manage/lan_manage" : {
+		"enable_all" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"mac1" : {
+			"type" : "mac"
+		},
+		"mac2" : {
+			"type" : "mac"
+		},
+		"mac3" : {
+			"type" : "mac"
+		},
+		"mac4" : {
+			"type" : "mac"
+		}
+	},
+	"/firewall/wan_manage/wan_manage" : {
+		"src_ip" : {
+			"type" : "ip"
+		},
+		"mode" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/firewall/dmz/dmz" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dest_ip" : {
+			"type" : "ip"
+		},
+		"wan_port" : {
+			"type" : "intStr32",
+			"default": 0
+		}
+	},
+	"/firewall/redirect" : {
+		"proto" : {
+			"type" : "enum:255:all,1:tcp,2:udp"
+		},
+		"dest_port" : {
+			"type" : "i16"
+		},
+		"dest_ip" : {
+			"type" : "ip"
+		},
+		"src_dport_start" : {
+			"type" : "i16"
+		},
+		"src_dport_end" : {
+			"type" : "i16"
+		},
+		"wan_port" : {
+			"type" : "intStr32",
+			"default": 0
+		}
+	},
+	"/firewall/redirect/*" : {
+		"proto" : {
+			"type" : "enum:255:all,1:tcp,2:udp"
+		},
+		"dest_port" : {
+			"type" : "i16"
+		},
+		"dest_ip" : {
+			"type" : "ip"
+		},
+		"src_dport_start" : {
+			"type" : "i16"
+		},
+		"src_dport_end" : {
+			"type" : "i16"
+		},
+		"wan_port" : {
+			"type" : "intStr32",
+			"default": 0
+		}
+	}
+}

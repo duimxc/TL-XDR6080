@@ -1,0 +1,19 @@
+{
+	"current_plugin_num": 9,
+	"default_show_order": "SLDAEEFC57E50CD5AA,SLA91F36EFB24ACBAA,SL5DCFA6E57F1EA1AA,SL2A74401A684269AA,SL079A52457FC0E2AA,SL39CE2C7B9AA7DAAA,SL1223CAC7A33C96AA,SLD23F046806151EAA,SL11D86A8759C047AA",
+	"default_show_order_name" : [
+		"multiband_wds",
+		"wired_extender",
+		"guest_network",
+		"wlan_access",
+		"time_switch",
+		"wlanPower",
+		"ip_mac_bind",
+		"lanManage",
+		"wlanIsolate",
+		"virtualServer",
+		"ddns",
+		"dmz",
+		"reboot_timer"
+	]
+}

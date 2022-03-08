@@ -1,0 +1,13 @@
+
+
+<div class="textCenter">
+	<img class="configGif disNone" src="../web-static/images/wzdDetecting.gif" />
+	<p class="configTip disNone">{%label.phWDSConfigTip%}</p>
+	<img class="detected" src="../web-static/images/wzdWarn.png" />
+	<p class="detectTip"></p>
+</div>
+<div class="phFunc">
+    <label id="pre" class="phTwoBtn"></label>
+    <label id="next" class="phTwoBtn" style="margin-left:20px;">{%btn.nextStep%}</label>
+</div><script type="text/javascript">function init(){0<gWDSPwdErrList.length?($("#pre").text("重新输入"),$("#pre").click(function(){loadPage("PhoneWlanWDSCfgSecond.htm","phCon")})):($("#pre").text("重试"),$("#pre").click(function(){gWDSPwdErrList=[];failRetry=!0;loadPage("PhoneWlanWDSCfgSecond.htm","phCon")}));$(".detectTip").text(gWDSPartlyFailStr);$("#next").click(function(){$(".disNone").show();$(".detected").hide();$(".detectTip").hide();$(".phFunc").hide();closeFailedBand()})}init();
+</script><style type="text/css">img.configGif{height:30px;margin:120px auto 40px;width:30px}p.configTip{color:#fff;font-size:15px;text-align:center}p.detectTip{color:#fff;font-size:15px;text-align:center;margin-bottom:20px}div.textCenter{margin-top:120px;padding:0 36px;text-align:center}img.detected{height:80px;margin:20px auto 20px;width:83px}</style>

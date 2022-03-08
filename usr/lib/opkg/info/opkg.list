@@ -1,0 +1,3 @@
+/bin/opkg
+/etc/config/opkg
+/etc/opkg.conf

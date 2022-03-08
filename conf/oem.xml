@@ -1,0 +1,33 @@
+<root>
+<oem name="oem_info">
+	<device name="xdr5480mtv1">
+		<element name="fullName">TP-LINK Wireless Router TL-XDR5480易展Turbo版</element>
+		<element name="facturer">TP-LINK</element>
+		<element name="modelName">TL-XDR5480易展Turbo版</element>
+		<element name="deviceInfo">XDR5480易展Turbo版V1 Wireless Router</element>
+		<element name="modelVer">1.0</element>
+		<element name="domainEnable">true</element>
+		<element name="domainName">tplogin.cn</element>
+		<element name="prodId">0x5480A021</element>
+		<element name="languId">CN</element>
+		<element name="oemId">0x00000000</element>
+		<element name="cloudSefDomain">n-deventry.tplinkcloud.com.cn</element>
+		<element name="cloudSefPort">60443</element>
+		<element name="cloudSrvDomain">n-devs-sgw.tplinkcloud.com.cn</element>
+		<element name="cloudSrvPort">50443</element>
+		<element name="cloudSrvTLD">*.tplinkcloud.com.cn</element>
+		<element name="cloudBrandMacURL">http://download.tplinkcloud.com.cn/brand_mac/</element>
+		<element name="cloudCAFilePath">/conf/tp-link-root-CA.pem</element>
+		<element name="cloudCAFileSize">2048</element>
+		<element name="deviceType">1</element>
+		<element name="rebootTime">45</element>
+		<element name="resetTime">50</element>
+		<element name="upgradeTime">125</element>
+		<element name="powerMode">1</element>
+		<element name="etherPortLayout">4-3-3-3-3</element>
+		<element name="wanPortIndexList">0-1-2-3-4</element>
+		<element name="wanPortRateList">auto_1000F-auto_100F_100H_10F_10H-auto_100F_100H_10F_10H-auto_100F_100H_10F_10H-auto_100F_100H_10F_10H</element>
+		<element name="wanPortRateDescList">1000M/2500M自动协商_1000M全双工-10M/100M/1000M自动协商_100M全双工_100M半双工_10M全双工_10M半双工-10M/100M/1000M自动协商_100M全双工_100M半双工_10M全双工_10M半双工-10M/100M/1000M自动协商_100M全双工_100M半双工_10M全双工_10M半双工-10M/100M/1000M自动协商_100M全双工_100M半双工_10M全双工_10M半双工</element>
+	</device>
+</oem>
+</root>

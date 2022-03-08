@@ -1,0 +1,9 @@
+Package: kernel
+Version: 4.4.60-1-fe83b1a93c83d35c742e660320cc2840
+Depends: libc, libssp
+Source: package/kernel
+Section: sys
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 105
+Description:  Virtual kernel package

@@ -1,0 +1,38 @@
+
+
+<div class="cloudAccountLogo">
+	<label class="proName" id="productName">{%label.productName%}</label>
+</div>
+<div class="cloudManageCon">
+	<div id="cloudMgtDetial" class="cloudMgtDetial">
+		<p class="title">
+			<span class="title">TP-LINK ID</span>
+		</p>
+		<input id="skip" class="skipBtn" type="button" value="{%btn.skip%}" />
+		<ul>
+			<li><input id="createTPLINKID" class="subBtn tpLinkIdBtn" type="button" value="{%btn.bindAccountRegist%}" /></li>
+			<li><input id="useTPLINKID" class="subBtn tpLinkIdBtn" type="button" value="{%btn.bindAccountExist%}" /></li>
+		</ul>
+		<p class="TPIDQuestion">{%label.cloudTPIDNoteTitle%}</p>
+		<p class="TPIDAnswer">{%label.cloudTPIDNoteF%}</p>
+		<ul class="tpNote">
+			<li>{%label.cloudTPIDNoteS%}</li>
+			<li>{%label.cloudTPIDNoteT%}</li>
+			<li>{%label.cloudTPIDNoteFo%}</li>
+			<li>{%label.cloudTPIDNoteFi%}</li>
+			<li>{%label.cloudTPIDNoteSi%}</li>
+		</ul>
+	</div>
+	<div class="cloudMgtFoot">
+		<ul class="footConCloud">
+			<li id="softVersionCloud" class="softVersion">{%label.softVersion%}{%label.colon%}</li>
+			<li class="netAddrTel"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}400-8863-400</label></li>
+		</ul>
+	</div>
+	<img src="../web-static/images/cloudF.png" class="cloudBRBgF" />
+	<img src="../web-static/images/cloudS.png" class="cloudBRBgS" />
+	<img src="../web-static/images/cloudS.png" class="cloudBRBgT" />
+</div><script type="text/javascript">function init(){function k(){hideCloudPage();loadBasic()}function l(){showCloudPage("CloudRegistCfg.htm")}function m(){n(label.TPLINKIDConfig1+"<br/>"+label.TPLINKIDConfig2,l,k,btn.noSkip,btn.skip)}function n(c,e,f,g,h){var b,a,d=document.createElement("div");d.className="confirmCon";document.body.appendChild(d);a=document.createElement("div");a.className="confirm";d.appendChild(a);b=document.createElement("i");b.className="confirmLogo";a.appendChild(b);b=document.createElement("p");b.className="confirmQuestion";
+b.innerHTML=c;a.appendChild(b);c=document.createElement("div");c.className="confirmFuncCon";a.appendChild(c);a=document.createElement("input");a.className="subBtn subBtnL";a.value=void 0!=g?g:btn.btnY;a.type="button";a.onclick=function(){hideCover(function(){"undefined"!=typeof e&&e();document.body.removeChild(d)})};c.appendChild(a);a=document.createElement("input");a.className="subBtn subBtnR";a.value=void 0!=h?h:btn.btnN;a.type="button";a.onclick=function(){hideCover(function(){"undefined"!=typeof f&&
+f();document.body.removeChild(d)})};c.appendChild(a)}var p=id("createTPLINKID"),q=id("useTPLINKID"),r=id("skip");id("productName").innerHTML=label.productName+proName;cloudPageSetNodes(!0);p.onclick=function(){showCloudPage("CloudRegistCfg.htm")};q.onclick=function(){showCloudPage("CloudBindCfg.htm")};r.onclick=function(){showCover(m)};id("softVersionCloud").innerHTML+=gCloudAccountBR.softVersion.split(" ")[0]}init();
+</script><style type="text/css">body{background:#5e85c0!important;fontSize:12px;height:100%}input.tpLinkIdBtn{font-size:14px!important;height:35px;margin-left:335px;width:188px}#createTPLINKID{margin-bottom:25px}input.skipBtn{background:#335c9c;border-radius:3px;border:0;color:#fff;cursor:pointer;width:60px;height:25px;position:absolute;top:0;right:15px}ul{list-style:none}ul.tpNote{padding-left:296px;margin-top:15px}p.title{margin-bottom:40px}p.TPIDQuestion{color:#fff;font-size:14px;font-weight:bold;height:24px;line-height:24px;padding-left:360px;margin-top:35px}p.TPIDAnswer{font-size:14px;height:24px;line-height:24px;color:#fff;padding-left:296px}ul.tpNote li{font-size:12px;height:22px;line-height:22px;color:#fff}div.confirm p{text-align:left;padding-left:58px;line-height:24px;font-weight:bold}input.subBtnL,input.subBtnR{font-weight:bold}div.confirmFuncCon{margin-top:20px}div.confirm{width:716px;height:300px}label.proName{right:16px;font-size:12px;color:#fff;margin-top:18px;margin-left:20px;text-align:left;position:absolute}</style>

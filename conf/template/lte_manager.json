@@ -1,0 +1,42 @@
+{
+	"/lte_manager/info_data/info_data" : {
+		"con_reboot" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		},
+		"data_switch" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "on"
+		},
+		"apn_enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		},
+		"debuger" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "on"
+		}
+	},
+	"/lte_manager/apn/apn" : {
+		"apn" : {
+			"type" : "strtrunc",
+			"length" : 256,
+			"default" : ""
+		},
+		"username" : {
+			"type" : "strtrunc",
+			"length" : 128,
+			"default" : ""
+		},
+		"password" : {
+			"type" : "strtrunc",
+			"length" : 128,
+			"default" : ""
+		},
+		"authentication" : {
+			"type" : "intStr32",
+			"length" : 4,
+			"default" : 3
+		}
+	}
+}

@@ -1,0 +1,63 @@
+{
+	"/dhcpd/dhcpd/udhcpd" : {
+		"auto" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"pool_start" : {
+			"type" : "ip",
+			"default" : "192.168.1.100"
+		},
+		"pool_end" : {
+			"type" : "ip",
+			"default" : "192.168.1.199"
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 7200
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		}
+	},
+	"/dhcpd/dhcp_clients/*" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"mac" : {
+			"type" : "mac"
+		},
+		"state" : {
+			"type" : "c32"
+		},
+		"ip" : {
+			"type" : "ip"
+		},
+		"expires" : {
+			"type" : "uintStr32"
+		}
+	},
+	"/dhcpd/dhcp_clients" : {
+		"dhcp_clients" : {
+			"type" : "array",
+			"index_format" : "dhcp_clients_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/dhcpd/dhcp_clients/*",
+			"length" : 253
+		}
+	}
+}

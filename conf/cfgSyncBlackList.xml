@@ -1,0 +1,228 @@
+<root>
+<moduler name="network">
+	<table name="interface" element="private">
+		<section name="lan">
+			<option name="ipaddr"></option>
+			<option name="netmask"></option>
+			<option name="fac_ipaddr"></option>
+			<option name="fac_netmask"></option>
+			<option name="ip_mode"></option>
+			<option name="macaddr"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="uhttpd">
+	<table name="webPwd" element="private">
+		<section name="webPwd">
+			<option name="fac_password"></option>
+		</section>
+	</table>
+	<table name="uhttpd" element="private">
+		<section name="main">
+			<option name="listen_http_lan"></option>
+			<option name="listen_http_wan"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="protocol">
+	<table name="proto" element="private">
+		<section name="dhcp">
+			<option name="hostname"></option>
+		</section>
+		<section name="last_dial">
+			<option name="session_id"></option>
+			<option name="dial_mode"></option>
+			<option name="nc_times"></option>
+			<option name="ac_mac"></option>
+		</section>
+	</table>
+	<table name="proto_2" element="private">
+		<section name="dhcp_2">
+			<option name="hostname"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="wireless">
+	<table name="wifi-web" element="private">
+		<section name="wlan_host_2g">
+			<option name="turboon"></option>
+			<option name="seccheck"></option>
+		</section>
+		<section name="wlan_host_5g">
+			<option name="turboon"></option>
+			<option name="seccheck"></option>
+		</section>
+		<section name="wlan_wds_2g">
+			<option name="enable"></option>
+			<option name="ssid"></option>
+			<option name="bssid"></option>
+			<option name="encryption"></option>
+			<option name="key"></option>
+			<option name="address_form"></option>
+			<option name="ssid_gb2312"></option>
+			<option name="in_wizard"></option>
+		</section>
+		<section name="wlan_wds_5g">
+			<option name="enable"></option>
+			<option name="ssid"></option>
+			<option name="bssid"></option>
+			<option name="encryption"></option>
+			<option name="key"></option>
+			<option name="address_form"></option>
+			<option name="ssid_gb2312"></option>
+			<option name="in_wizard"></option>
+		</section>
+		<section name="wlan_host_bh_2g">
+			<option name="enable"></option>
+			<option name="ssid"></option>
+			<option name="encryption"></option>
+			<option name="key"></option>
+		</section>
+		<section name="wlan_host_bh_5g">
+			<option name="enable"></option>
+			<option name="ssid"></option>
+			<option name="encryption"></option>
+			<option name="key"></option>
+		</section>
+		<section name="wlan_wps_2g">
+			<option name="enable"></option>
+			<option name="usrpin"></option>
+			<option name="configured"></option>
+			<option name="islocked"></option>
+		</section>
+		<section name="wlan_wps_5g">
+			<option name="enable"></option>
+			<option name="usrpin"></option>
+			<option name="configured"></option>
+			<option name="islocked"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="cloud_config">
+	<table name="router_post" element="private">
+		<section name="bind">
+			<option name="username"></option>
+			<option name="password"></option>
+			<option name="resetFlag"></option>
+		</section>
+		<section name="bind_info_sync">
+			<option name="bind_status"></option>
+		</section>
+		<section name="connect_option">
+			<option name="heartBeatInterval"></option>
+			<option name="connectInterval"></option>
+		</section>
+		<section name="login">
+			<option name="username"></option>
+			<option name="password"></option>
+		</section>
+		<section name="register">
+			<option name="username"></option>
+			<option name="password"></option>
+			<option name="verify_code"></option>
+			<option name="account_type"></option>
+		</section>
+		<section name="reset_cloud_pwd">
+			<option name="username"></option>
+			<option name="password"></option>
+			<option name="verify_code"></option>
+			<option name="account_type"></option>
+		</section>
+		<section name="modify_account_pwd">
+			<option name="username"></option>
+			<option name="old_pwd"></option>
+			<option name="new_pwd"></option>
+		</section>
+		<section name="get_reg_verify_code">
+			<option name="username"></option>
+			<option name="account_type"></option>
+		</section>
+		<section name="get_reset_pwd_verify_code">
+			<option name="username"></option>
+			<option name="account_type"></option>
+		</section>
+		<section name="check_reg_verify_code">
+			<option name="username"></option>
+			<option name="verify_code"></option>
+		</section>
+		<section name="check_reset_pwd_verify_code">
+			<option name="username"></option>
+			<option name="verify_code"></option>
+		</section>
+	</table>
+	<table name="cloud_push" element="private">
+		<section name="new_firmware">
+			<option name="fw_new_notify"></option>
+			<option name="fw_update_type"></option>
+			<option name="not_show"></option>
+			<option name="display_type"></option>
+			<option name="retained_message_bar"></option>
+			<option name="notify_time"></option>
+		</section>
+		<section name="new_plug_in">
+		</section>
+		<section name="new_pure_message">
+		</section>
+		<section name="device_legality">
+			<option name="illegal"></option>
+			<option name="illegal_type"></option>
+		</section>
+	</table>
+	<table name="push_list" element="public">
+		<option name="mac"></option>
+		<option name="count"></option>
+	</table>
+	<table name="cloud_reply" element="private">
+		<section name="device_status">
+			<option name="bind_status"></option>
+			<option name="login_status"></option>
+			<option name="account_status"></option>
+		</section>
+		<section name="upgrade_info">
+			<option name="type"></option>
+			<option name="version"></option>
+			<option name="release_date"></option>
+			<option name="download_url"></option>
+			<option name="location"></option>
+			<option name="release_log"></option>
+			<option name="release_log_url"></option>
+		</section>
+	</table>
+	<table name="cloud_device" element="private">
+		<section name="info">
+			<option name="alias"></option>
+		</section>
+		<section name="bind_tip">
+			<option name="not_show"></option>
+		</section>
+		<section name="brand_mac">
+			<option name="renew_time"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="mapd">
+	<table name="business" element="private">
+		<section name="role_selection">
+			<option name="role"></option>
+			<option name="paired"></option>
+		</section>
+		<section name="autoconf">
+			<option name="config_ver"></option>
+			<option name="token"></option>
+		</section>
+	</table>
+</moduler>
+
+<moduler name="ddns">
+	<table name="tpddns" element="private">
+		<section name="tpddns">
+			<option name="is_used"></option>
+		</section>
+	</table>
+</moduler>
+</root>

@@ -1,0 +1,9 @@
+Package: qca-cfg80211tool
+Version: 1.0
+Depends: libc, libssp, libnl, libpthread, libroxml, iw, kmod-qca-wifi
+Source: tp_package/sys_packages/qca_util/qca_framework/qca-cfg80211tool
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 25246
+Description:  QCA cfg80211 utils

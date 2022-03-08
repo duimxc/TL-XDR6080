@@ -1,0 +1,74 @@
+
+
+<h1 class="phoneTitle">{%label.netSet%}</h1>
+<div class="textCenter">
+	<img class="detected disNone" src="../web-static/images/connect_success.png" />
+	<img class="notDetected" src="../web-static/images/connect_fail.png" />
+</div>
+<div id="phWanPortSelDiv" class="disNone">
+	<ul class="phInputUl wanPortSel">
+		<li class="phInputLi">
+			<label for="wanPortSel" class="wanPortSel">{%label.wanPortSel%}</label>
+			<i class="clapboard"></i>
+			<span id="wanPortSel" class="phSelect">
+				<span class="value wanPortSel"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="phInputUl wanPortSelTips">
+		<li class="wanPortSelTips">
+			<label>{%label.netAccount%}</label>
+			<span class="wanPortSelTips">此时<span id="wanPortSelected"></span>作为LAN1口</span>
+		</li>
+	</ul>
+</div>
+<!-- <ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="netModeSel">{%label.netMode%}</label>
+		<i class="clapboard"></i>
+		<span id="netModeSel" class="phSelect">
+			<span class="value">{%label.pppoe%}</span>
+			<i class="arrow"></i>
+		</span>
+	</li>
+</ul> -->
+<ul class="phInputUl">
+	<p class="detectTip">{%label.yourNetType%}{%label.pppoe%}</p>
+	<p class="detectTip" style="margin-bottom:8px;">{%label.netSetPwdTip%}</p>
+	<li class="phInputLi">
+		<label for="pppoeAccount">{%label.netAccount%}</label>
+		<i class="clapboard"></i>
+		<input id="pppoeAccount" maxlength="118" />
+	</li>
+</ul>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="pppoePasswd">{%label.netPwd%}</label>
+		<i class="clapboard"></i>
+		<input id="pppoePasswd" maxlength="118" type="password" />
+		<i id="togglePwdShow" class="pwdShowOff"></i>
+	</li>
+</ul>
+<div class="phFunc">
+	<label id="sub" class="phOneBtn">{%btn.nextStep%}</label>
+</div>
+<div id="phWanCover">
+	<div class="phAlertCon">
+		<img class="errWarn" src="../web-static/images/redWarn.png"></img>
+		<p>{%label.pppoeAccPwdNullTip%}</p>
+		<label id="notEncrypt" class="notEncrypt">{%btn.btnN%}</label><label id="encrypt" class="encrypt">{%btn.btnY%}</label>
+	</div>
+</div>
+<div id="phWanLoadingCover">
+	<div class="phLoadingCon">
+		<img class="loading" src="../web-static/images/loadingRouteSet.gif"></img>
+		<p>{%label.switchWanPortAndWait%}</p>
+	</div>
+</div>
+<p class="chooseOther"><a href="javascript:void(0)">{%label.selectNetType%}</a></p>
+<div id="selectNetTypeCon"></div>
+<script type="text/javascript">function init(){var a=id("phWanCover");(function(){id("notEncrypt").onclick=function(){hideCover(function(){a.style.visibility="hidden";a.style.top="-9999px"});loadPage("WizardWirelessCfg.htm","phCon");saveNetworkCfg(uciProto.optValue.proto.pppoe)};id("encrypt").onclick=function(){hideCover(function(){a.style.visibility="hidden";a.style.top="-9999px"});id("pppoeAccount").focus()}})();id("sub").onclick=function(){var b=id("pppoeAccount").value,c=id("pppoePasswd").value;0==b.length||0==c.length?showCover(function(){a.style.visibility=
+"visible";a.style.top="150px"}):saveNetworkCfg(uciProto.optValue.proto.pppoe,function(){loadPage("WizardWirelessCfg.htm","phCon");$.action({network:{change_wan_status:{proto:"pppoe",operate:"connect"}}})})};adaptCNABrowserInput("pppoeAccount");$("#togglePwdShow").click(function(){$("#togglePwdShow").toggleClass("pwdShowOff pwdShowOn");id("pppoePasswd").type="pwdShowOff"==$("#togglePwdShow").attr("class")?"password":"text"});showNetworkCfg(uciProto.optValue.proto.pppoe);gSupportWanPortSwap&&!gWanPortDetectSupport&&
+$("#phWanPortSelDiv").removeClass("disNone");loadPage("PhoneSelectNetworkType.htm","selectNetTypeCon");$(".chooseOther a").click(function(a){showCover();$(".selectNetType").show()});bWzdWanTypeDetected&&($(".notDetected").hide(),$(".detected").show())}init();
+</script><style type="text/css">div.phoneCon{padding-bottom:114px}#phWanCover,#phWanLoadingCover{position:absolute;top:-9999px;visibility:hidden;width:100%;z-index:1011}div.phAlertCon,div.phLoadingCon{background:#fff;margin:0 auto;text-align:center;width:300px}img.errWarn{height:85px;margin:25px auto;width:85px}div.phAlertCon p{color:#3c4e43;font-size:16px;margin-bottom:30px}div.phAlertCon label{border:medium none;display:inline-block;font-size:16px;line-height:35px;height:35px;padding:0;width:50%}label.notEncrypt{background:#d9d9d9}label.encrypt{background:#feeb1a}img.loading{height:85px;width:85px;margin:25px auto}div.phLoadingCon p{color:#3c4e43;font-size:16px;padding-bottom:50px;line-height:16px;height:16px}li.phInputLi label.wanPortSel{width:91px}li.phInputLi span.phSelect span.wanPortSel{width:118px}li.phInputLi input{box-sizing:border-box}li.wanPortSelTips{height:20px;line-height:20px}li.wanPortSelTips label{text-align:right;display:inline-block;vertical-align:middle;height:20px;line-height:20px;width:105px}li.wanPortSelTips span.wanPortSelTips{height:20px;line-height:20px;width:118px;color:#FFF;font-size:14px}ul.wanPortSel{margin-bottom:10px}ul.wanPortSelTips{margin-bottom:16px}p.chooseOther{position:absolute;bottom:72px;width:100%;text-align:center}p a{color:#feeb1a;font-size:14px}p.detectTip{color:#fff;font-size:14px;font-weight:bold;text-align:left}div.textCenter{text-align:center}img.detected{margin:20px auto 20px}li.phErrTip i.error{background:url(../web-static/images/error@2x.png) no-repeat;width:16px;height:16px;top:0;background-size:cover}li.phErrTip span.errDes{line-height:16px}</style>

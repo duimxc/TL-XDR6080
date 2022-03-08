@@ -1,0 +1,51 @@
+
+
+<div class="wizardContent">
+	<div class="wizardLogo">
+		<i class="logoBand"></i>
+		<label class="proName" id="pName">{%label.productName%}</label>
+	</div>
+	<div id="wzdIdx" class="wzdIdx">
+		<input id="skipWzd" type="button" class="skipWzd" value="{%label.skipWzd%}" />
+		<ul class="wzdNav">
+			<li class="select" id="chgPwd">
+				<p>{%label.wzdChgPwd%}</p>
+				<i class="edgeItem"></i><span></span><i class="showRight"></i>
+			</li>
+			<li>
+				<p id="netCfgTitle">{%label.wzdNetCfg%}</p>
+				<i class="showLeft"></i><span></span><i class="showRight"></i>
+			</li>
+			<li>
+				<p id="wirelessCfgTitle">{%label.wzdWirelessCfg%}</p>
+				<i class="showLeft"></i><span></span><i class="edgeItem"></i>
+			</li>
+		</ul>
+	</div>
+	<div id="wizardCon" class="wizardCon"></div>
+	<div id="wizardFoot" class="wizardFoot">
+		<ul class="wzdFootCon">
+			<li id="softVersionWzd" class="showLeft">{%label.softVersion%}{%label.colon%}</li>
+			<li class="showRight"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}400-8863-400</label></li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">var wzOptions=[{str:label.pppoe,value:WAN_TYPE_PPPOE},{str:label.staticIp,value:WAN_TYPE_STATIC},{str:label.dhcp,value:WAN_TYPE_DHCP}],gNetworkCfg={},gLanIP,gOldLanIP,gLanMask,gIsLanIpChanged=!1,gPbcEnable=0,gSysMode=0,gLanIPMode,gWifiCfgToSave={},gIsWifiDevice=!1,bWzdWanTypeDetected=!1;gIsWifiCfgBsChged=gIsWifiCfg5G4Chged=gIsWifiCfg5GChged=gIsWifiCfg2GChged=gIsWifiCfgChged=!1;var gWanPortSelCfg,gWanPortSelDescCfg;gNetworkCfg[uciProto.optName.type]=uciProto.optValue.proto.pppoe;
+gNetworkCfg[uciProto.optValue.proto.pppoe]={};gNetworkCfg[uciProto.optValue.proto.pppoe][uciProto.optName.pppoeUsr]="";gNetworkCfg[uciProto.optValue.proto.pppoe][uciProto.optName.pppoePwd]="";gNetworkCfg[uciProto.optValue.proto.staticIp]={};gNetworkCfg[uciProto.optValue.proto.staticIp][uciProto.optName.ip]="";gNetworkCfg[uciProto.optValue.proto.staticIp][uciProto.optName.netmask]="";gNetworkCfg[uciProto.optValue.proto.staticIp][uciProto.optName.gateway]="";
+gNetworkCfg[uciProto.optValue.proto.staticIp][uciProto.optName.priDns]="";gNetworkCfg[uciProto.optValue.proto.staticIp][uciProto.optName.sndDns]="";gNetworkCfg[uciProto.optValue.proto.dynIp]={};var keyMap={};keyMap[uciProto.optValue.proto.pppoe]=[{id:"pppoeAccount",uciKey:uciProto.optName.pppoeUsr},{id:"pppoePasswd",uciKey:uciProto.optName.pppoePwd}];
+keyMap[uciProto.optValue.proto.staticIp]=[{id:"ipAddrIn",uciKey:uciProto.optName.ip},{id:"netMaskIn",uciKey:uciProto.optName.netmask},{id:"gatewayIn",uciKey:uciProto.optName.gateway},{id:"dns0In",uciKey:uciProto.optName.priDns},{id:"dns1In",uciKey:uciProto.optName.sndDns}];keyMap[uciProto.optValue.proto.dynIp]=[];function getWanPortTipsText(a){var b="";$.each(wanPortDescList,function(d,c){a!=c&&(b=""==b?d:"、"+d)});return b}
+function showNetworkCfg(a){for(var b=0;b<keyMap[a].length;b++){var d=keyMap[a][b].uciKey;$("#"+keyMap[a][b].id).val(gNetworkCfg[a][d])}}
+function saveNetworkCfg(a,b){var d={},c={},g={},e={};gNetworkCfg[uciProto.optName.type]=a;d[uciProto.fileName]=c;c[uciProto.secName.wan]=e;e[uciProto.optName.type]=a;e=uciProto.secName.pppoe;switch(a){case uciProto.optValue.proto.staticIp:e=uciProto.secName.sta;break;case uciProto.optValue.proto.dynIp:e=uciProto.secName.dhcp;break;default:e=uciProto.secName.pppoe}c[e]=g;for(c=0;c<keyMap[a].length;c++)e=keyMap[a][c].uciKey,gNetworkCfg[a][e]=id(keyMap[a][c].id).value,g[e]=gNetworkCfg[a][e];gSysModeSupport&&
+(d.system={sys_mode:{mode:uciSystem.optValue.sysMode.routerMode}},gSysMode=uciSystem.optValue.sysMode.routerMode);$.modify(d,b)}
+function wzdWanPortChange(a){if(a!=gWanPortSelCfg){var b={},d={};b[uciProto.fileName]={};b[uciProto.fileName][uciProto.secName.wan]=d;d[uciProto.optName.port]=a;showLoading(label.switchWanPortAndWait,null,void 0,!1);$.modify(b,function(c){c[ERR_CODE]==ENONE?(gWanPortSelCfg=a,c=c.wait_time||0,c=parseInt(c),0==c?(closeLoading(),loadPage("WizardNetwork.htm","wizardCon")):$.setTimeout(function(){closeLoading();loadPage("WizardNetwork.htm","wizardCon")},1E3*c)):(closeLoading(),id("wanPortSel").changeSel(gWanPortSelCfg),
+$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)),showAlert(errStr.systemErr))})}}
+function wzdNetWorkModeChange(a){switch(a){case WAN_TYPE_STATIC:case uciProto.optValue.proto.staticIp:gNetworkCfg[uciProto.optName.type]=uciProto.optValue.proto.staticIp;loadPage("WizardStaticIp.htm","wizardCon");break;case WAN_TYPE_DHCP:case uciProto.optValue.proto.dynIp:gNetworkCfg[uciProto.optName.type]=uciProto.optValue.proto.dynIp;loadPage("WizardDynamicIp.htm","wizardCon");break;case LINK_TYPE_WIRED_REPEATER:loadPage("WizardWiredRepeater.htm","wizardCon");break;case LINK_TYPE_WIRELESS_REPEATER:loadPage("WizardWirelessRepeater.htm",
+"wizardCon");break;default:gNetworkCfg[uciProto.optName.type]=uciProto.optValue.proto.pppoe,loadPage("WizardPPPoE.htm","wizardCon")}}function wzdConSet(a){setStyle(id("wizardCon"),a)}function wzdNavSet(a){for(var b=$("ul.wzdNav li"),d=0;d<b.length;d++)b[d].className=d==a?"select":""}function disSubBtn(a,b,d){a="object"==typeof a?a:id(a);var c=a.className;a.disabled!=b&&(a.disabled=b?!0:!1,a.className=b?c.replace("","subBtnDis"):c.replace("subBtnDis",""),a.value=void 0!=d?d:a.value)}
+function showWzdConfirm(a,b,d,c,g){var e,f,h=document.createElement("div");h.className="confirmCon";document.body.appendChild(h);f=document.createElement("div");f.className="confirm";h.appendChild(f);e=document.createElement("i");e.className="confirmLogo";f.appendChild(e);e=document.createElement("p");e.className="confirmQuestion";e.innerHTML=a;f.appendChild(e);a=document.createElement("div");a.className="confirmFuncCon";f.appendChild(a);f=document.createElement("input");f.className="subBtn subBtnL";
+f.value=void 0!=c?c:btn.btnY;f.type="button";f.onclick=function(){hideCover(function(){"undefined"!=typeof b&&b();document.body.removeChild(h)})};a.appendChild(f);f=document.createElement("input");f.className="subBtn subBtnR";f.value=void 0!=g?g:btn.btnN;f.type="button";f.onclick=function(){hideCover(function(){"undefined"!=typeof d&&d();document.body.removeChild(h)})};a.appendChild(f)}
+function wzdSelectInit(a,b,d,c,g){selectInit(a,b,d,c,g,{className:"wzdSelOptsUl",colorN:"#FFFFFF",colorC:"#FFEA55",fontColorN:"#3C3E43",fontColorC:"#3C3E43",valueColor:"#FFFFFF",valueDisColor:"#9EBE1D"})}function wzdDone(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.secName.sys]={};a[uciSystem.fileName][uciSystem.secName.sys][uciSystem.optName.isFactory]=uciSystem.optValue.isFactory.no;$.modify(a)}
+function init(){function a(a){if(ENONE==a[ERR_CODE]){var b=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info],d=b[uciDeviceInfo.optName.swVer].split(" ")[0];gNetworkCfg[uciProto.optName.type]=a[c][g][uciProto.optName.type];gNetworkCfg[uciProto.optValue.proto.pppoe]=a[c][f];gNetworkCfg[uciProto.optValue.proto.staticIp]=a[c][e];gNetworkCfg[uciProto.optValue.proto.dynIp]=a[c][h];gNetworkCfg.lanIp=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];gOldLanIP=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];
+gLanIPMode=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ipMode];gLanIP=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip];gSupportWanPortSwap&&(gWanPortSelCfg=a[c][g][uciProto.optName.port]);id("softVersionWzd").innerHTML+=d;gCloudAccountBR.softVersion=b[uciDeviceInfo.optName.swVer]}}function b(){var b={};b[c]={};b[c][KEY_NAME]=[g,e,f,h];b[uciDeviceInfo.fileName]={};b[uciDeviceInfo.fileName][KEY_NAME]=uciDeviceInfo.secName.info;b[uciNetwork.fileName]={};b[uciNetwork.fileName][KEY_NAME]=
+uciNetwork.secName.lan;$.query(b,a)}function d(){$.query({mesh:{name:"config"}},function(a){ENONE==a[ERR_CODE]&&(gPbcEnable=a.mesh.config.pbc_enable)})}var c=uciProto.fileName,g=uciProto.secName.wan,e=uciProto.secName.sta,f=uciProto.secName.pppoe,h=uciProto.secName.dhcp;id("pName").innerHTML=label.productName+proName;$("#skipWzd").css("display","inline-block");try{b(),gMeshSupport&&d()}catch(k){}$("#skipWzd").bind("click",function(){wzdDone();"NO"==gBeInCNA?loadBasic(NET_STATE_INDEX):loadPage("WizardIPadSuccess.htm",
+"wizardCon")});loadPage("WizardNetwork.htm","wizardCon")}init();
+</script><style type="text/css">body{background-color:#248ab3}label.proName{font-size:12px;color:#fff;top:20px;right:10px;position:absolute}ul.wanSel{margin-bottom:0!important}ul.wanSelTips{margin-top:10px;margin-bottom:0;height:14px;line-height:14px}ul.wanSelTips li{height:14px;line-height:14px}ul.wanSelTips li span{font-size:14px;color:#FFF}div.internetStateCon{text-align:center;margin-bottom:40px}div.internetStateCon div.lineCon{display:inline-block;height:64px;vertical-align:bottom;position:relative;margin:0 6px}div.internetStateCon div.lineCon span.dot{background-color:#FFF;width:4px;height:4px;display:inline-block;border-radius:50%;vertical-align:middle;margin-top:12px}div.internetStateCon div.lineCon span.line{height:1px;width:70px;display:inline-block;background-color:#fff;vertical-align:middle;margin-top:12px}div.internetStateCon div.lineCon label{display:block;font-size:12px;color:#FFF;margin-top:10px}div.internetStateCon div.lineCon i.connect{background:url(../web-static/images/netConnect.png) no-repeat;height:20px;width:20px;left:29px;position:absolute;top:6px;display:none}div.internetStateCon div.lineCon i.disConnect{background:url(../web-static/images/netDisconnect.png) no-repeat;height:20px;width:20px;left:29px;position:absolute;top:6px;display:none}div.tipsCon{color:#FFF;font-size:13px;margin-bottom:40px}div.dividingLineCon{text-align:center;margin-top:24px}div.dividingLineCon span.dividingLine{width:222px;display:inline-block;border-bottom:1px solid #248ab3;vertical-align:middle}div.dividingLineCon span.title{font-size:12px;letter-spacing:.14px;color:#0d6a90;margin:0 11px}div.menuCon{text-align:center;margin-top:24px;font-size:12px}div.menuCon a{color:#0d6a90;cursor:pointer;margin-right:24px}</style>

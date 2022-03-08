@@ -1,0 +1,108 @@
+{
+	 "/test/base/int8" : {
+		"attr1" : {
+			"type" : "i8",
+			"default" : 123
+		}
+	},
+	 "/test/base/int16" : {
+		"attr1" : {
+			"type" : "i16",
+			"default" : 12345
+		}
+	},
+	"/test/base/int32" : {
+		"attr1" : {
+			"type" : "i32",
+			"default" : 12345678
+		}
+	},
+	"/test/base/int64" : {
+		"attr1" : {
+			"type" : "i64",
+			"default" : 0
+		}
+	},
+	 "/test/base/string" : {
+		"attr1" : {
+			"type" : "string",
+			"default" :  "abc",
+			"length" : 10
+		}
+	},
+	"/test/base/object" : {
+		"attr1" : {
+			"type" : "object",
+			"sub_type_name" : "/test/base/int8"
+		},
+		"attr2" : {
+			"type" : "object",
+			"sub_type_name" : "/test/base/int16"
+		},
+		"attr3" : {
+			"type" : "object",
+			"sub_type_name" : "/test/base/int32"
+		},
+		"attr4" : {
+			"type" : "object",
+			"sub_type_name" : "/test/base/int64"
+		},
+		"attr5" : {
+			"type" : "object",
+			"sub_type_name" : "/test/base/string"
+		}
+	},
+	"/test/array/int" : {
+		"attr1" : {
+			"type" : "array",
+			"index_format" : "base_%d",
+			"sub_type" : "i32",
+			"default" : 123,
+			"length" : 10
+		}
+	},
+	"/test/array/string" : {
+		"attr1" : {
+			"type" : "array",
+			"index_format" : "str_%d",
+			"sub_type" : "string:10",
+			"default" : "abc",
+			"length" : 10
+		}
+	},
+	"/test/array/string_np" : {
+		"attr1" : {
+			"type" : "array",
+			"sub_type" : "string:10",
+			"default" : "abc",
+			"length" : 10
+		}
+	},
+	"/test/array/object" : {
+		"attr1" : {
+			"type" : "array",
+			"index_format" : "obj_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/test/array/sub",
+			"length" : 10
+		}
+	},
+	"/test/array/object_np" : {
+		"attr1" : {
+			"type" : "array:object:/test/array/sub",
+			"sub_type" : "object",
+			"sub_type_name" : "/test/array/sub",
+			"length" : 10
+		}
+	},
+	 "/test/array/sub" : {
+		"attr1" : {
+			"type" : "i32",
+			"default" : 123
+		},
+		"attr2" : {
+			"type" : "i8",
+			"default" : 123
+		}
+	}
+}

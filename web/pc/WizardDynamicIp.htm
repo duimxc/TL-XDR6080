@@ -1,0 +1,40 @@
+
+
+<ul class="wzdConTitleUl">
+	<p class="wzdConTitle">{%label.netSet%}</p>
+</ul>
+<div class="internetStateCon">
+    <img src="../web-static/images/routerWzd.png">
+    <div class="lineCon">
+        <span class="dot"></span><span class="line"></span><span class="dot"></span><i class="connect"></i><i class="disConnect"></i>
+        <label>{%label.dhcp%}</label>
+    </div>
+    <img src="../web-static/images/internetWzd.png">
+</div>
+<p class="tipsP disNone" id="wizardBridgeWanIpWarn">设备处于桥模式，已恢复自动获取IP，且不允许更改连接方式。</p>
+<div id="wanPortSelDiv" class="disNone">
+	<ul class="gridLine gridLineA wzdGridLineA wanSel">
+		<label class="wzdDesLblA">{%label.wanPortSel%}</label>
+		<li class="textConA textCon textConWzd">
+			<span id="wanPortSel" class="select">
+				<span class="value wzdValueA"></span>
+				<i class="arrow arrowWzd"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="inputUl wanSelTips">
+		<li class="inputLi"><label></label><span>此时<span id="wanPortSelected"></span>作为LAN1口</span></li>
+	</ul>
+</div>
+<ul><li class="wzdSubLi"><input id="sub" type="button" value="{%btn.nextStep%}" /></li></ul>
+<div class="dividingLineCon">
+	<span class="dividingLine"></span><span class="title">或者</span><span class="dividingLine"></span>
+</div>
+<div class="menuCon">
+	<a href="javascript:wzdNetWorkModeChange(WAN_TYPE_PPPOE)">{%label.pppoe%} ></a>
+    <a href="javascript:wzdNetWorkModeChange(WAN_TYPE_STATIC)">{%label.staticIp%} ></a>
+    <a id="wzdAp"  class="disNone" href="javascript:wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER)">{%label.wiredRepeater%} ></a>
+</div>
+<script type="text/javascript">function init(){wzdNavSet(1);wzdConSet({height:"480px"});if(gModeSwitchSupport){var a={};a[uciCustomNetwork.fileName]={};a[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(a,function(a){1==parseInt(a.custom_network.bridge_status.enable)&&($("div.menuCon").addClass("disNone"),$("div.dividingLineCon").addClass("disNone"),$("#wizardBridgeWanIpWarn").removeClass("disNone"))})}id("sub").onclick=function(){saveNetworkCfg(uciProto.optValue.proto.dynIp,function(){loadPage("WizardWirelessCfg.htm",
+"wizardCon")})};!0==bWzdWanTypeDetected?$("i.connect").css("display","block"):$("i.disConnect").css("display","block");showNetworkCfg(uciProto.optValue.proto.dynIp);gSupportWanPortSwap&&!gWanPortDetectSupport&&($("#wanPortSelDiv").removeClass("disNone"),wzdSelectInit("wanPortSel",wanPortDisplayList,gWanPortSelCfg,wzdWanPortChange),$("#wanPortSelected").html(getWanPortTipsText(gWanPortSelCfg)));gSysModeSupport&&$("#wzdAp").removeClass("disNone")}init();
+</script><style type="text/css">p.tipsP{text-align:center;color:#FFF;font-size:14px;margin-bottom:10px}</style>

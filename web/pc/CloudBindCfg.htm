@@ -1,0 +1,48 @@
+
+
+<div class="cloudAccountLogo">
+	<label class="proName" id="productName">{%label.productName%}</label>
+</div>
+<div class="cloudManageCon">
+	<div id="cloudMgtDetial" class="cloudMgtDetial">
+		<p class="title">
+			<span class="title">{%label.cloudAccountUsed%}</span>
+		</p>
+		<input id="return" class="returnBtn" value="{%btn.backWzd%}>" type="button" />
+		<ul class="gridLine gridLineD mpPhoneRgt40">
+			<label class="desLblB" for="cloudAccount">{%label.tpLinkID%}</label>
+			<li class="textConE textCon"><input id="cloudAccount" class="textC text imeModeN" maxLength="64" /></li>
+			<li id="cloudAccountNote" class="note">
+				<i class="tip"></i>
+				<span class="note"></span>
+			</li>
+		</ul>
+		<p class="inputTip">{%label.cloudBingNameTip%}</p>
+		<ul class="gridLine gridLineD">
+			<label class="desLblB" for="cloudPwd">{%label.password%}</label>
+			<li class="textConE textCon"><input id="cloudPwd" class="textC text imeModeN" type="password" maxLength="32" /></li>
+			<li id="cloudPwdNote" class="note">
+				<i class="tip"></i>
+				<span class="note"></span>
+			</li>
+		</ul>
+		<p class="inputTip"><a id="fegtPwdLink" href="javascript:void(0);">{%label.loginPwdLost%}</a></p>
+		<input id="cloudBindBtn" type="button" value="{%btn.ok%}" class="subBtn cloudSub" />
+	</div>
+	<div class="cloudMgtFoot">
+		<ul class="footConCloud">
+			<li id="softVersionCloud" class="softVersion">{%label.softVersion%}{%label.colon%}</li>
+			<li class="netAddrTel"><a href="http://www.tp-link.com.cn" target="_blank">{%label.officalAddr%}</a><label>{%label.surpportTel%}400-8863-400</label></li>
+		</ul>
+	</div>
+	<img src="../web-static/images/cloudF.png" class="cloudBRBgF" />
+	<img src="../web-static/images/cloudS.png" class="cloudBRBgS" />
+	<img src="../web-static/images/cloudS.png" class="cloudBRBgT" />
+</div><script type="text/javascript">function gCloudAccountBindErrHandle(a,c){var b="";switch(a){case ENONE:return gCloudAccountBR.success=!0,gCloudAccountBR.noteF=label.cloudAccountBindSuccess,!0;case EINDEVICEALREADYBOUND:case EINVACCOUNTBINDED:return gCloudAccountBR.success=!1,gCloudAccountBR.noteF=label.cloudAccountBindFailAndCallSupport,gCloudAccountBR.noteS="",!0;case EINVDEVICEIDNOTEXIST:case EINVERRORDEVICEIDFORMATERROR:b=appendErrCode(label.cloudDeviceInfoExpt,a);break;case EINVACCOUNTNOTEXIST:b=appendErrCode(errStr.invCloudAccountNotExist,
+a);break;case EINVPASSWORDFMT:case EINVACCOUNTPWDFMT:b=appendErrCode(errStr.pwdInvalid,a);break;case EINVACCOUNTPWDERR:b=appendErrCode(errStr.invCloudAccoundPwdErr,a);break;case EINVACCOUNTPHONENUMFMT:case EINVMAILFMT:case EINVMAILLEN:case EINVACCOUNTEMAILFMT:case EINVCLOUDUSRCOUNTFORMAT:b=appendErrCode(errStr.invCloudAccountFmtErr,a);break;case EINVACCOUNTLOCKED:b=appendErrCode(errStr.invCloudAccountLocked,a);break;default:b=cloudErrHandle(a),b=!1==b.result?b.tip:appendErrCode(errStr.invRequestFail,
+a)}gCloudAccountBR.success=!1;showAlert(b,c);return!1}function gCloudAccountBRHd(a,c,b){showLoading(label.cloudAccoundBindWaiting,b,void 0,!1);cloudAccountBind(gCloudAccountBR.account,gCloudAccountBR.pwd,function(b){closeLoading();!0==gCloudAccountBindErrHandle(parseInt(b))&&"function"==typeof a&&a()},function(){gCloudAccountBR.success=!1;gCloudAccountBR.noteF=label.cloudAccountBindFail;gCloudAccountBR.noteS=label.cloudServerNoRespCheckNetwork;"function"==typeof c&&c()})}
+function init(){function a(){var a=b.value;if(0==a.length)return showNoteB("cloudAccountNote",label.cloudAccountNull),!1;if(!0==checkNum(a)){if(!1==checkPhoneNum(a))return showNoteB("cloudAccountNote",errStr.invCloudAccountFmtErr,"twoLine"),!1}else if(!1==checkEmail(a))return showNoteB("cloudAccountNote",errStr.invCloudAccountFmtErr,"twoLine"),!1;closeNote("cloudAccountNote");gCloudAccountBR.account=a;return!0}function c(){var a=d.value;if(32<a.length||6>a.length)return showNoteB("cloudPwdNote",errStr.pwdLenErrTip,
+"twoLine"),!1;closeNote("cloudPwdNote");if(/^[\x21-\x7e]+$/.test(a))closeNote("cloudPwdNote");else return showNoteB("cloudPwdNote",errStr.pwdCharValid),!1;gCloudAccountBR.pwd=a;return!0}var b=id("cloudAccount"),d=id("cloudPwd"),e=id("return");id("productName").innerHTML=label.productName+proName;b.value=gCloudColObj.account;cloudPageSetNodes(!0);id("fegtPwdLink").onclick=function(){cloudSetBackHd(function(){gCloudColObj.account=b.value;showCloudPage("CloudBindCfg.htm")});showCloudPage("CloudForgPwd.htm")};
+id("cloudBindBtn").onclick=function(){!0==$.local&&(gCloudAccountBR.success=!1,gCloudAccountBR.noteF=label.cloudAccountBindFail,gCloudAccountBR.noteS=label.cloudServerNoRespCheckNetwork,loadPage("CloudBindRegistResult.htm","cloudMgtDetial",void 0,{bClearPageTickArray:!1}));!0==a()&&!0==c()&&gCloudAccountBRHd(function(){loadPage("CloudBindRegistResult.htm","cloudMgtDetial",void 0,{bClearPageTickArray:!1})},function(){loadPage("CloudBindRegistResult.htm","cloudMgtDetial",void 0,{bClearPageTickArray:!1})},
+cloudAccountQueryStop)};e.onclick=function(){cloudGoBackBR({binded:!1})};e.value=!0==gCloudAccountBR.bFWzd?"{%btn.skip%}>":"{%btn.backWzd%}>";b.onblur=a;d.onblur=c;id("softVersionCloud").innerHTML+=gCloudAccountBR.softVersion.split(" ")[0]}init();
+</script><style type="text/css">body{background:#5e85c0!important;fontSize:12px;height:100%}p.inputTip a{color:#fff}input.returnBtn{background:#335c9c;border-radius:3px;border:0;color:#fff;cursor:pointer;width:60px;height:25px;position:absolute;top:0;right:15px}label.proName{right:16px;font-size:12px;color:#fff;margin-top:18px;margin-left:20px;text-align:left;position:absolute}</style>

@@ -1,0 +1,13 @@
+{
+	"/wan_port_detect/config/config" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+
+		"fix_wan_port" : {
+			"type" : "intStr32",
+			"default" : -1
+		}
+	}
+}

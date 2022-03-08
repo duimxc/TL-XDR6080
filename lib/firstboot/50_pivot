@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2010 Vertical Communications
+
+with_fo_pivot() {
+	FS_FILEPATH_LOCK=/var/run/rootfs_filepath.lock
+
+    # switch back to squashfs (temporarily)
+    # and park the ramdisk ontop of /tmp/root
+    # touch a file for luci, when overlay
+    # switch taking place, delay web requests
+    touch /tmp/switchoverlay
+	lock $FS_FILEPATH_LOCK
+    pivot /rom /mnt
+    mount -o move /mnt /tmp/root
+
+    # /overlay is the overlay
+    # /rom is the readonly
+    mkdir -p /tmp/overlay/root /tmp/overlay/work
+    fopivot /tmp/overlay/root /tmp/overlay/work /rom 1
+	lock -u $FS_FILEPATH_LOCK
+    rm -f /tmp/switchoverlay
+    echo "0" > /tmp/jffs2_ready
+}
+
+boot_hook_add switch2jffs with_fo_pivot

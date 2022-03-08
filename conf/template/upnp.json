@@ -1,0 +1,50 @@
+{
+	"/upnpd/upnpd/config" : {
+		"enable_upnp" : {
+			"type" : "intStr32",
+			"default" : 1
+		}
+	},
+	"/upnpd/upnp_lease/*" : {
+		"ext_port" : {
+			"type" : "intStr16"
+		},
+		"inner_port" : {
+			"type" : "intStr16"
+		},
+		"protocol" : {
+			"type" : "intStr16"
+		},
+		"enable" : {
+			"type" : "intStr16"
+		},
+		"client" : {
+			"type" : "intStr32"
+		},
+		"desc" : {
+			"type" : "string",
+			"length" : 32
+		},
+		"remote_host" : {
+			"type" : "c32"
+		},
+		"lease_duration" : {
+			"type" : "c32"
+		},
+		"lease_timer" : {
+			"type" : "c32"
+		}
+	},
+	"/upnpd/upnp_lease" : {
+		"num" : {
+			"type" : "c32"
+		},
+		"upnp_lease" : {
+			"type" : "array",
+			"index_format" : "lease_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/upnpd/upnp_lease/*",
+			"length" : 64
+		}
+	}
+}

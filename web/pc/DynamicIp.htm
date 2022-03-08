@@ -1,0 +1,174 @@
+
+
+<div id="hcCo" class="hcCo hcCoT">
+	<div class="hsHelp"></div>
+	<div class="title titleT">
+		<label class="title">{%label.basicSet%}</label>
+		<i class="helpBtn" helpStr="dynamicIpHelp"></i>
+	</div>
+	<div class="block">
+		<div id="wanPortSelDiv" class="disNone">
+			<ul class="gridLine gridLineA wanSel">
+				<label class="desLblA">{%label.wanPortSel%}</label>
+				<li class="textConA textCon">
+					<span id="wanPortSel" class="select">
+						<span class="value hsValueA"></span>
+						<i class="arrow"></i>
+					</span>
+				</li>
+			</ul>
+			<ul class="gridLine gridLineA wanSelTips">
+				<label class="desLblA"></label><span>此时<span id="wanPortSelected"></span>作为LAN1口</span>
+			</ul>
+		</div>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.netMode%}</label>
+			<li class="textConA textCon">
+				<span id="wanSel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+			</li>
+			<label id="bridgeWanIpWarn" class="noteLbl"></label>
+		</ul>
+		<ul class="gridLine gridLineA mpPhoneRgt15">
+			<label class="desLblA">{%label.ipAddr%}</label>
+			<label id="ip" class="noteLbl">0.0.0.0</label>
+		</ul>
+		<ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.mask%}</label>
+			<label id="mask" class="noteLbl">0.0.0.0</label>
+		</ul>
+		<ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.gateway%}</label>
+			<label id="gateway" class="noteLbl">0.0.0.0</label>
+		</ul>
+		<ul class="gridLine gridLineA mpPhoneRgt10">
+			<label class="desLblA">{%label.dns%}</label>
+			<label id="dns" class="noteLbl">0.0.0.0 , 0.0.0.0</label>
+		</ul>
+		<div class="blockFuncA">
+			<input id="connect" type="button" value="{%btn.renew%}" class="btnA subBtn" />
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+		<ul id="wanStatus" class="gridLine gridLineA gridStatus">
+			<i></i>
+			<label id="wanStatusLbl" class="noteLbl"></label>
+			<a id="pppoeSolution" href="javascript:void(0)">{%label.lookUpSolution%}</a>
+		</ul>
+	</div>
+	<div id="wanSetDiv" class="disNone">
+		<div class="title titleT">
+			<label class="title">{%menuStr.wanSet%}</label>
+		</div>
+		<div class="block">
+			<p class="tips">{%label.wanSetTips%}</p>
+			<div class="wanSetCon">
+				<div class="wanSetTitle">{%label.wanSet%}</div>
+				<div class="radioBtnCon">
+					<div>
+						<input id="wanSetAuto" type="radio" class="switchRadio" name="wanSetRadio"/><label for="wanSetAuto" class="radioLbl">{%label.wanSetAuto%}</label>
+						<p class="des">{%label.wanSetAutoTips%}</p>
+					</div>
+					<div>
+						<input id="wanSetFixed" type="radio" class="switchRadio" name="wanSetRadio"/><label for="wanSetFixed" class="radioLbl">{%label.wanSetFixed%}</label>
+						<p id="wanSetFixedTip" class="des">{%label.wanSetFixedTips%}</p>
+					</div>
+				</div>
+				<div class="sampleImgCon">
+					<img id="sampleImg" usemap="#wanPortMap">
+					<map name="wanPortMap" id="wanPortMap"></map>
+				</div>
+				<div class="wanPortTopWrapper">
+					<div class="wanPortWrapper">
+						<p id="selectWanPort">{%label.selectWan%}</p>
+						<div class="wanDisplayContainer"></div>
+					</div>
+				</div>
+			</div>
+			<div class="blockFuncA">
+				<input id="wanSetBtn" type="button" value="{%btn.save%}" class="btnA subBtn" />
+			</div>
+		</div>
+	</div>
+	<div class="title titleT">
+		<label class="title">{%label.highSet%}</label>
+		<i class="helpBtn" helpStr="dynamicIpAdvHelp"></i>
+	</div>
+	<div class="block">
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.mtu%}</label>
+			<li class="textConB textCon"><input id="mtu" class="textB text hoverBd" maxLength="4" /></li>
+			<label class="noteLbl">{%label.mtuComment%}</label>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.dns0%}</label>
+			<li class="textConA textCon"><input id="dns0" class="textA text hoverBd" maxLength="15" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.dns1%}</label>
+			<li class="textConA textCon"><input id="dns1" class="textA text hoverBd" maxLength="15" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.hostName%}</label>
+			<li class="textConA textCon"><input id="name" class="textA text hoverBd" maxLength="63" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA" id="wanRateSelUl">
+			<label class="desLblA">{%label.wanRateSet%}</label>
+			<li class="textConA textCon">
+				<span id="wanRateSel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+			</li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA">{%label.wanMac%}</label>
+			<li class="textConA textCon">
+				<span id="wanMacSel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+			</li>
+			<label id="elinkWarn" class="noteLbl"></label>
+		</ul>
+		<ul id="macCloneUl" class="gridLine gridLineA">
+			<li class="textConAL textCon"><input id="wanMac" class="textA text hoverBd" maxLength="17" /><i class="tip"></i></li>
+			<li class="textConAL macCloneLi"></li>
+		</ul>
+		<div class="blockFuncA">
+			<input id="highSetSave" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+	</div>
+</div><script type="text/javascript">function hiddenSaveButton(){$("#highSetSave").css("display","none");$("#save").css("display","none");$("#connect").css("display","none")}
+function init(){function m(h,b){var a="";switch(h){case ENONE:return!1;case EINVMTU:a=errStr.stcMtuErr;break;case EINVFDNSVR:a=errStr.primDnsErr;break;case EINVSDNSVR:a=errStr.seDnsErr;break;case EHOSTNAME:a=errStr.hostNameErr;break;case ENOLINK:a=errStr.wanLinkDown;break;case ECONFLICTFDNS:a=errStr.ipAddrLanFDNSConflict;break;case ECONFLICTSDNS:a=errStr.ipAddrLanSDNSConflict;break;case ECONFLICTLANMAC:a=errStr.lanWanMacConflict;break;case ECONFLICTWANMAC:a=errStr.mulWanMacConflict;break;case ECONFLICTWANGATEWAY:a=
+errStr.wanIpGateConflict;break;case ECONFLICTIPWANDNS:a=errStr.wanIpDnsConflict;break;case ECONFLICTGATEWAYWANIP:a=errStr.gateIpConflict;break;case ECONFLICTDNSWANIP:a=errStr.dnsIpConflict;break;default:a=errStr.invRequestFail}showAlert(a,b);return!0}function K(a){return""==a||"0.0.0.0"==a?(id("dns0").value="0.0.0.0",ENONE):x==a?EINVFDNSVR:ENONE!=checkIp(a)?EINVFDNSVR:ENONE}function L(a){return""==a||"0.0.0.0"==a?(id("dns1").value="0.0.0.0",ENONE):x==a?EINVSDNSVR:ENONE!=checkIp(a)?EINVSDNSVR:ENONE}
+function M(a){var b=a[s],c=b[n],b=b[t],d;gWanPortDetectSupport&&(d=a[uciWanPortDetect.fileName][uciWanPortDetect.secName.config]);if(gSupportWanPortSwap){gWanPortDetectSupport?-1==d[uciWanPortDetect.optName.fixWanPort]?(k=wanPortIndexList[0],wanPortSelTmp=wanPortIndexList[0]):(k=d[uciWanPortDetect.optName.fixWanPort],wanPortSelTmp=d[uciWanPortDetect.optName.fixWanPort]):(k=c[uciProto.optName.port],selectInit("wanPortSel",wanPortDisplayList,k,wanPortSelectChange),wanPortSelectChange(k));var c=c[v]?
+c[v]:"auto",e;if(dualWanOpen){var f=currentSelectPos[currentSelectedWan-1];e=initDynamicPortRate(f,devicePowerPos);c=B(e,c);selectInit("wanRateSel",e,c);currentSelectHardType[f]?$("#wanRateSelUl").hide():$("#wanRateSelUl").show()}else e=initDynamicPortRate(k,devicePowerPos),c=B(e,c),selectInit("wanRateSel",e,c),currentSelectHardType[k]?$("#wanRateSelUl").hide():$("#wanRateSelUl").show()}else-1!=d[uciWanPortDetect.optName.fixWanPort]?(k=d[uciWanPortDetect.optName.fixWanPort],wanPortSelTmp=d[uciWanPortDetect.optName.fixWanPort]):
+wanPortSelTmp=k=-1,selectInit("wanRateSel",rateOptions,getWanRateOption(c[v]));gWanPortDetectSupport&&!dualWanOpen&&("1"==d[uciWanPortDetect.optName.enable]?id("wanSetAuto").click():id("wanSetFixed").click());id("name").value=b[C]||"";id("dns0").value=b[D]||"";id("dns1").value=b[E]||"";id("mtu").value=b[F];setMacInfo(a);G(a);x=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip]}function B(a,b){for(var c=!1,d=0;d<a.length;d++)a[d].value==b&&(c=!0);c||(b="auto");return b}function y(){var a=
+{};a[s]={};a[s][KEY_NAME]=[n,t];a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=dualWanOpen&&1!=currentSelectedWan?[uciNetwork.dynData.wanStatus+"_"+currentSelectedWan,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan]:[uciNetwork.dynData.wanStatus,uciNetwork.dynData.ifaceMac,uciNetwork.secName.lan];gWanPortDetectSupport&&(a[uciWanPortDetect.fileName]={},a[uciWanPortDetect.fileName][KEY_NAME]=uciWanPortDetect.secName.config);$.query(a,M)}function G(a){var b=null,b=dualWanOpen&&1!=currentSelectedWan?
+a[uciNetwork.fileName][uciNetwork.dynData.wanStatus+"_"+currentSelectedWan]:a[uciNetwork.fileName][uciNetwork.dynData.wanStatus];if(b.proto!=uciProto.optValue.proto.dynIp)clearTimeout(z);else switch(parseInt(b.link_status)){case LINK_DOWN:id("ip").innerHTML="0.0.0.0";id("mask").innerHTML="0.0.0.0";id("gateway").innerHTML="0.0.0.0";id("dns").innerHTML="0.0.0.0 , 0.0.0.0";disableBtn("connect",!1);a=b[uciNetwork.optName.code];0==parseInt(b[uciNetwork.optName.phyStatus])&&(a=LINK_CODE_PHYDOWN);if(LINK_CODE_MANUAL!=
+a&&LINK_CODE_NORMAL!=a&&LINK_CODE_INET_ERR!=a){hsStatSet("error",linkStatus[LINK_DOWN]+label.lBrackets+linkCode[a]+label.rBrackets);break}hsStatSet("error",linkStatus[LINK_DOWN]);break;case LINK_UP:id("ip").innerHTML=b.ipaddr||"0.0.0.0";id("gateway").innerHTML=b.gateway||"0.0.0.0";id("mask").innerHTML=b.netmask||"0.0.0.0";a=b.pri_dns||"0.0.0.0";b=b.snd_dns||"0.0.0.0";"0.0.0.0"==a&&"0.0.0.0"==b?id("dns").innerHTML=" "+label.dnsException:id("dns").innerHTML=a+" , "+b;disableBtn("connect",!1);hsStatSet("correct",
+linkStatus[LINK_UP]);break;case LINKING_DOWN:hsStatSet("link",linkStatus[LINKING_DOWN]);id("ip").innerHTML="0.0.0.0";id("mask").innerHTML="0.0.0.0";id("gateway").innerHTML="0.0.0.0";id("dns").innerHTML="0.0.0.0 , 0.0.0.0";disableBtn("connect",!1);break;case LINKING_UP:hsStatSet("link",linkStatus[LINKING_UP]),a=b[uciNetwork.optName.code],LINK_CODE_IP_CONFLICT==a&&hsStatSet("link",linkStatus[LINKING_UP]+label.lBrackets+linkCode[a]+label.rBrackets),id("ip").innerHTML="0.0.0.0",id("mask").innerHTML="0.0.0.0",
+id("gateway").innerHTML="0.0.0.0",id("dns").innerHTML="0.0.0.0 , 0.0.0.0",disableBtn("connect",!1)}}function u(){var a={};a[uciNetwork.fileName]={};a[uciNetwork.fileName][KEY_NAME]=dualWanOpen&&1!=currentSelectedWan?[uciNetwork.dynData.wanStatus+"_"+currentSelectedWan]:[uciNetwork.dynData.wanStatus];clearTimeout(z);$.query(a,function(b){G(b);z=$.setTimeout(u,2E3)})}function w(){var a={},b={},c={};a[s]=b;b[n]=c;c[N]=uciProto.optValue.proto.dynIp;if(gSysModeSupport)switch(a.system={sys_mode:{mode:uciSystem.optValue.sysMode.routerMode}},
+gBandNum){case BAND_1:a.wireless={wlan_wds_2g:{enable:"0"}};break;case BAND_2:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g:{enable:"0"}};break;case BAND_3:a.wireless={wlan_wds_2g:{enable:"0"},wlan_wds_5g_1:{enable:"0"},wlan_wds_5g_4:{enable:"0"}}}setLoadingId("save");hsLoading(!0);$.modify(a,function(b){hsLoading(!1);!1==m(b[ERR_CODE])&&(disableBtn("connect",!1),curSysMode=uciSystem.optValue.sysMode.routerMode)});u()}function O(){var h={},b={};h[uciWanPortDetect.fileName]={};h[uciWanPortDetect.fileName][uciWanPortDetect.secName.config]=
+b;b[uciWanPortDetect.optName.enable]=id("wanSetAuto").checked?uciWanPortDetect.optValue.enable.on:uciWanPortDetect.optValue.enable.off;if(!id("wanSetAuto").checked&&(gSupportWanPortSwap||gSupportPortManage)){for(var c=-1,d=0;d<a.length;d++)if("active"==a[d].state){c=d;break}wanPortSelTmp=c;-1!=c&&(b[uciWanPortDetect.optName.fixWanPort]=c);var e=id("wanRateSel").value;checkIfWanRateShouldChange(wanPortSelTmp,e)&&(e="auto",h[uciProto.fileName]={},h[uciProto.fileName][uciProto.secName.wan]={},h[uciProto.fileName][uciProto.secName.wan][uciProto.optName.rate]=
+"auto")}setLoadingId("wanSetBtn");hsLoading(!0);$.modify(h,function(b){b[ERR_CODE]==ENONE?(hsLoading(!1),!id("wanSetAuto").checked&&gSupportWanPortSwap&&(k=wanPortSelTmp,b=initDynamicPortRate(wanPortSelTmp,devicePowerPos),id("wanRateSel").resetOptions(b,e)),y()):showAlert(errStr.invRequestFailTrylater)})}function P(h){switch(h.state){case "active":for(var b=0;b<a.length;b++)"active"==a[b].state&&b!=h.index&&(a[b].state="normal");l.refresh()}}function Q(h){switch(h.state){case "normal":a[h.index].name=
+"LAN";l.refresh();break;case "active":for(var b=0;b<a.length;b++)"active"==a[b].state&&b!=h.index&&(a[b].state="normal",a[b].name="LAN");a[h.index].name="WAN";l.refresh()}}function p(a){var b=ethLayoutList.split("-"),c="";switch(b.slice(0,b.length)[a]){case "1":c="10M";break;case "2":c="100M";break;case "3":c="GE";break;case "4":c="2.5GE";break;case "5":c="10GE"}return c}function H(h){$.query({port_manage:{table:"dev_info"}},function(b){b=b.port_manage.dev_info;for(var c=!1,d=0;d<b.length;d++)if(1==
+b[d].cap){q=b[d].power_pos;I=b[d][uciPortConfig.dynOptName.powerIdx];g=b[d].phy_num;a=Array(g);for(var e=0;e<g;e++)a[e]={};for(e=0;e<b[d].phy_info.length;e++){var f=e,r="left"==q?f:g-f-1;switch(b[d].phy_info[e].role.slice(0,3).toUpperCase()){case "LAN":a[f].name="LAN";a[f].state="normal";a[f].rate=p(r);a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase();break;case "WAN":c=!0;a[f].name="WAN";a[f].state="active";a[f].rate=p(r);a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase();break;case "GAM":a[f].name=
+label.gamePort;a[f].state="disable";a[f].rate=p(r);a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase();break;case "UPL":a[f].name=label.iptvUp;a[f].state="disable";a[f].rate=p(r);a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase();break;case "DOW":a[f].name=label.iptvDown;a[f].state="disable";a[f].rate=p(r);a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase();break;case "LAG":a[f].name=label.lagPort,a[f].state="disable",a[f].rate=p(r),a[f].isSfp="SFP"==b[d].phy_info[e].type.toUpperCase()}}}if(-1!=
+k&&!c&&!h)if(b=a,c=k,"disable"==b[c].state){c=-1;for(d=0;d<b.length;d++)if("normal"==b[d].state){c=d;break}-1==c?showAlert("固定WAN口设置失效且当前无可定义端口，请在端口自定义中关闭相关端口定义"):(b[c].name="WAN",b[c].state="active")}else b[c].name="WAN",b[c].state="active";if(h)for(d=0;d<a.length;d++)if("WAN"==a[d].name||"LAN"==a[d].name)a[d].name="WAN/LAN",a[d].state="active";l=new PortConfig;b={element:$(".wanDisplayContainer")[0],type:"display",port:a,powerPos:q,powerIdx:I,displayClickable:!1==h,callback:Q};l.init(b)})}function J(h){var b=
+ethLayoutList.split("-"),c;c=b.slice(0,b.length);g=b.length;q="undefined"!=typeof devicePowerPos?devicePowerPos:"left";a=Array(g);for(b=0;b<g;b++)a[b]={};for(b=0;b<c.length;b++)if("left"==q)switch(c[b]){case "1":a[b].name="10M";a[b].state="disable";a[b].rate="10M";break;case "2":a[b].name="100M";a[b].state="disable";a[b].rate="100M";break;case "3":a[b].name="GE";a[b].state="disable";a[b].rate="GE";break;case "4":a[b].name="2.5GE";a[b].state="disable";a[b].rate="2.5GE";break;case "5":a[b].name="10GE",
+a[b].state="disable",a[b].rate="10GE"}else switch(c[b]){case "1":a[g-b-1].name="10M";a[g-b-1].state="disable";a[g-b-1].rate="10M";break;case "2":a[g-b-1].name="100M";a[g-b-1].state="disable";a[g-b-1].rate="100M";break;case "3":a[g-b-1].name="GE";a[g-b-1].state="disable";a[g-b-1].rate="GE";break;case "4":a[g-b-1].name="2.5GE";a[g-b-1].state="disable";a[g-b-1].rate="2.5GE";break;case "5":a[g-b-1].name="10GE",a[g-b-1].state="disable",a[g-b-1].rate="10GE"}for(b=0;b<wanPortIndexList.length;b++)a[wanPortIndexList[b]].state=
+"normal";-1!=k&&(a[k].state="active");if(h)for(b=0;b<a.length;b++)"disable"!=a[b].state&&(a[b].state="active");l=new PortConfig;h={element:$(".wanDisplayContainer")[0],type:"display",port:a,powerPos:q,powerIdx:"undefined"!==typeof POWER_IDX?POWER_IDX:0,displayClickable:!1==h,callback:P};l.init(h)}var s=uciProto.fileName,n=uciProto.secName.wan,t=uciProto.secName.dhcp,R=uciProto.optName.dnsMode,D=uciProto.optName.priDns,E=uciProto.optName.sndDns,F=uciProto.optName.mtu,C=uciProto.optName.hostName,v=
+uciProto.optName.speed,N=uciProto.optName.type,S=uciProto.optName.macaddr,T=uciProto.optValue.dnsMode.dynamic,U=uciProto.optValue.dnsMode.manual,z,x,k,l,a,q,I,g;dualWanOpen&&1!=currentSelectedWan&&(n+="_"+currentSelectedWan,t+="_"+currentSelectedWan);if(gModeSwitchSupport){var A={};A[uciCustomNetwork.fileName]={};A[uciCustomNetwork.fileName][KEY_NAME]=[uciCustomNetwork.dynData.bridgestatus];$.query(A,function(a){1==parseInt(a.custom_network.bridge_status.enable)?(document.getElementById("bridgeWanIpWarn").style.width=
+"177px",document.getElementById("bridgeWanIpWarn").style.lineHeight="15px",document.getElementById("bridgeWanIpWarn").style.marginLeft="10px",document.getElementById("bridgeWanIpWarn").innerHTML="设备处于桥模式，已恢复自动获取IP，且不允许更改连接方式。",document.getElementById("wanSel").children[0].innerHTML="自动获得IP地址"):selectInit("wanSel",wanOptions,LINK_TYPE_DHCP,wanSelectChange)})}else selectInit("wanSel",wanOptions,LINK_TYPE_DHCP,wanSelectChange);gSupportWanPortSwap&&!gWanPortDetectSupport&&$("#wanPortSelDiv").removeClass("disNone");
+disableBtn("connect",!0);id("highSetSave").onclick=function(){var a={},b={},c={},d={};a[s]=b;b[n]=d;b[t]=c;var b=id("mtu").value,e=id("dns0").value,f=id("dns1").value,g=id("name").value,k=id("wanMac"),l=k.value;m(checkMtu(b,1500,576),"mtu")||m(K(e),"dns0")||m(L(f),"dns1")||m(!0==/[^0-9a-z_\-\u00b7\u4E00-\u9FFFF\s]/gi.test(g)||63<getCNStrLen(g)?EHOSTNAME:ENONE,"name")||wanMacErrHandle(checkMac(l),k)||(b=hideLeadingZeros(b),id("mtu").value=b,e=id("dns0").value,e=hideLeadingZeros(e),id("dns0").value=
+e,f=id("dns1").value,f=hideLeadingZeros(f),id("dns1").value=f,c[R]=0!=e.length&&"0.0.0.0"!=e||0!=f.length&&"0.0.0.0"!=f?U:T,c[D]=e,c[E]=f,c[F]=b,c[C]=g,$("#wanRateSelUl").is(":hidden")||(d[v]=id("wanRateSel").value),d[S]=l,setLoadingId("highSetSave"),hsLoading(!0),$.modify(a,function(a){hsLoading(!1,a[ERR_CODE]);if(a[ERR_CODE]==ENONE)y();else return m(a[ERR_CODE])}),u())};id("connect").onclick=function(){wanCheckWDS(function(){var a=null,a=dualWanOpen&&1!=currentSelectedWan?{network:{change_wan_status:{proto:"dhcp_"+
+currentSelectedWan,operate:"renew"}}}:{network:{change_wan_status:{proto:"dhcp",operate:"renew"}}};setLoadingId("connect");hsLoading(!0);disableBtn("connect",!0);hsStatSet("link",linkStatus[LINKING_UP]);$.action(a,function(a){hsLoading(!1,a[ERR_CODE]);u()})})};id("save").onclick=function(){function a(){if(!gSupportWanPortSwap||gWanPortDetectSupport)w();else{var b=id("wanPortSel").value;if(b==k)w();else{var c={},d={};c[uciProto.fileName]={};c[uciProto.fileName][uciProto.secName.wan]=d;d[uciProto.optName.port]=
+b;var e=id("wanRateSel").value;checkIfWanRateShouldChange(b,e)&&(e=d[uciProto.optName.rate]="auto");showLoading(label.switchWanPortAndWait,null,void 0,!1);$.modify(c,function(a){if(a[ERR_CODE]==ENONE){k=b;a=a.wait_time||0;a=parseInt(a);var c=initDynamicPortRate(b,devicePowerPos);id("wanRateSel").resetOptions(c,e);0==a?(closeLoading(),w()):$.setTimeout(function(){closeLoading();w()},1E3*a)}else closeLoading(),id("wanPortSel").changeSel(k),wanPortSelectChange(k),showAlert(errStr.systemErr)})}}}gSysModeSupport?
+curSysMode!=uciSystem.optValue.sysMode.routerMode?changeSysModeAlert("switch",uciSystem.optValue.sysMode.routerMode,function(){a()}):a():wanCheckWDS(a)};u();gWanPortDetectSupport&&!dualWanOpen&&($("#wanSetDiv").removeClass("disNone"),id("wanSetFixedTip").innerHTML=label.wanSetFixedSelTip,$('input[name="wanSetRadio"]').on("click",function(){if("wanSetAuto"==this.id)$("#selectWanPort").hide(),gSupportPortManage?($(".sampleImgCon").hide(),H(!0),$(".wanDisplayContainer").show()):gSupportWanPortSwap?($(".sampleImgCon").hide(),
+J(!0),$(".wanDisplayContainer").show()):(id("wanSetFixedTip").innerHTML=label.wanSetFixedTips,$(".sampleImgCon").show(),id("sampleImg").src="../web-static/images/wanSetAuto.png",id("sampleImg").useMap="",$(".wanDisplayContainer").hide(),$("#selectWanPort").hide()),$("#wanRateSel span")[0].innerHTML=label.dupAuto,id("wanRateSel").disable(!0),$("#wanRateSelUl").show();else{id("wanRateSel").disable(!1);if(gSupportPortManage)$(".sampleImgCon").hide(),H(!1),$(".wanDisplayContainer").show(),$("#selectWanPort").show();
+else if(gSupportWanPortSwap)$(".sampleImgCon").hide(),J(!1),$(".wanDisplayContainer").show(),$("#selectWanPort").show();else{$(".sampleImgCon").show();id("sampleImg").src="../web-static/images/wanSetFixed.png";id("sampleImg").useMap="";var a=id("wanRateSel").value;id("wanRateSel").resetOptions(rateOptions,a);$(".wanDisplayContainer").hide();$("#selectWanPort").hide();id("wanSetFixedTip").innerHTML=label.wanSetFixedTips;return}var a=id("wanRateSel").value,b=initDynamicPortRate(k,devicePowerPos);id("wanRateSel").resetOptions(b,
+a)}}),id("wanSetBtn").onclick=O);y()}init();
+</script><style type="text/css">li.macCloneLi{color:#fff;font-size:12px;line-height:20px!important}#wanStatus i{display:inline-block;height:13px;width:13px;vertical-align:middle;line-height:0}div.block p.tips{font-size:12px;color:#fff;letter-spacing:0;line-height:12px;text-align:left}div.block div.wanSetCon{margin-top:40px;color:#fff;text-align:left}div.wanSetTitle,div.radioBtnCon{display:inline-block}div.wanSetTitle{font-size:14px;color:#fff;letter-spacing:-0.43px;text-align:right;margin-left:100px;margin-right:14px;vertical-align:top}div.radioBtnCon label.radioLbl{font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle;margin-left:4px}div.radioBtnCon p.des{font-size:12px;color:#fff;letter-spacing:0;line-height:12px;margin:8px 17px 25px}div.sampleImgCon{margin-top:15px;text-align:center}.hcCoT{width:680px}.titleT{width:637.8px}ul.wanSel{margin-bottom:0!important}ul.wanSelTips{margin-top:10px;margin-bottom:0;height:14px;line-height:14px}ul.wanSelTips label{height:14px;line-height:14px}ul.wanSelTips span{font-size:14px;color:#FFF}.wanPortWrapper{text-align:left;display:inline-block}.wanPortTopWrapper{text-align:center}#selectWanPort{padding-bottom:8px;font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle}#wanSetDiv .blockFuncA{padding-right:150px}</style>

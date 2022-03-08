@@ -1,0 +1,22 @@
+{
+	"/mwan_load_balance/band_width/band_width" : {
+		"mwan_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		},
+		"wan1_band_width" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"wan2_band_width" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/mwan_load_balance/basic/basic" : {
+		"balance_mode" : {
+			"type" : "enum: 0:topspeed_mode, 1:compat_mode, 2:dns_balance",
+			"default" : "topspeed_mode"
+		}
+	}
+}

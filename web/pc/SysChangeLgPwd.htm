@@ -1,0 +1,130 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="hsHelp"></div>
+	<div class="title disNone" id="normalUserT">
+		<label class="title">{%menuStr.changeLgPwd%}</label>
+	</div>
+	<div class="block disNone" id="normalUserC">
+		<ul class="gridLine gridLineA disNone" id="oldUsrRow">
+			<label class="desLblA" for="oldUsr">{%label.chgOrUsr%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldUsr" class="textA text hoverBd" type="text" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="oldPwd">{%label.chgOrPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldPwd" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA disNone" id="newUsrRow">
+			<label class="desLblA" for="newUsr">{%label.chgNewUsr%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newUsr" class="textA text hoverBd" type="text" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwd">{%label.chgNewPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwd" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+			<li id="lgPwdNote" class="note">
+				<i class="warn" id="pwdDepI"></i>
+				<div class="noteCon noteConRouteSet" id="pwdStrengthNoteCon">
+					<p class="twoLine pwdDepC">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDep">{%label.weak%}</label></p>
+					<div class="pwdDepL"><label id="chgPwdDep"></label></div>
+				</div>
+				<div class="noteCon noteConRouteSet" id="pwdNoteCon">
+					<p id="pwdNoteLine"></p>
+				</div>
+			</li>
+		</ul>
+		<p class="pwdLenNote" id="pwdLenNote">{%label.chgPwdChar8%}</p>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwdC">{%label.chgConNewPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwdC" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<div class="blockFuncA">
+			<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+	</div>
+	<!-- 移动维护账号修改 -->
+	<div class="title disNone" id="adminUserT1">
+		<label class="title">{%menuStr.changeAdUsrPwd%}</label>
+		<i class="helpBtn" helpStr="cmccAdminHelp"></i>
+	</div>
+	<div class="block disNone" id="adminUserC1">
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="oldUsrAdmin">{%label.chgOrUsr%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldUsrAdmin" class="textA text hoverBd" type="text" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="oldPwdAdmin">{%label.chgOrPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldPwdAdmin" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwdAdmin">{%label.chgNewPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwdAdmin" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+			<li id="lgPwdNoteAdmin" class="note">
+				<i class="warn" id="pwdDepIAdmin"></i>
+				<div class="noteCon noteConRouteSet" id="pwdStrengthNoteConAdmin">
+					<p class="twoLine pwdDepC">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDepAdmin">{%label.weak%}</label></p>
+					<div class="pwdDepL"><label id="chgPwdDepAdmin"></label></div>
+				</div>
+				<div class="noteCon noteConRouteSet" id="pwdNoteConAdmin">
+					<p id="pwdNoteLineAdmin"></p>
+				</div>
+			</li>
+		</ul>
+		<p class="pwdLenNote" id="pwdLenNoteAdmin">{%label.chgPwdChar8%}</p>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwdCAdmin">{%label.chgConNewPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwdCAdmin" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<div class="blockFuncA">
+			<input id="saveAdmin" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+	</div>
+	<!-- 普通账号修改 -->
+	<div class="title disNone" id="adminUserT2">
+		<label class="title">{%menuStr.changeNorUsrPwd%}</label>
+	</div>
+	<div class="block disNone" id="adminUserC2">
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="oldUsrCommon">{%label.chgAdminUsr%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldUsrCommon" class="textA text hoverBd" type="text" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="oldPwdCommon">{%label.chgAdminPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="oldPwdCommon" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newUsrCommon">{%label.chgNewCommonUsr%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newUsrCommon" class="textA text hoverBd" type="text" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwdCommon">{%label.chgNewCommonPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwdCommon" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+			<li id="lgPwdNoteCommon" class="note">
+				<i class="warn" id="pwdDepICommon"></i>
+				<div class="noteCon noteConRouteSet" id="pwdStrengthNoteConCommon">
+					<p class="twoLine pwdDepC">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDepCommon">{%label.weak%}</label></p>
+					<div class="pwdDepL"><label id="chgPwdDepCommon"></label></div>
+				</div>
+				<div class="noteCon noteConRouteSet" id="pwdNoteConCommon">
+					<p id="pwdNoteLineCommon"></p>
+				</div>
+			</li>
+		</ul>
+		<p class="pwdLenNote" id="pwdLenNoteCommon">{%label.chgPwdChar8%}</p>
+		<ul class="gridLine gridLineA">
+			<label class="desLblA" for="newPwdCCommon">{%label.chgConNewPwd%}{%label.colon%}</label>
+			<li class="textConA textCon"><input id="newPwdCCommon" class="textA text hoverBd" type="password" maxLength="32" /><i class="tip"></i></li>
+		</ul>
+		<div class="blockFuncA">
+			<input id="saveCommon" type="button" value="{%btn.save%}" class="btnA subBtn" />
+		</div>
+	</div>
+</div><script type="text/javascript">function init(){function d(b,c){var a="";switch(parseInt(b)){case ENONE:return!1;case EINVLGUSRLEN:a=errStr.lgUsrLenInvalid;break;case EINLGUSRVALOLDSAME:a=errStr.usrNewOldSameErr;break;case EINLGUSRVALCHAR:a=errStr.usrCharValid;break;case EINVLGPWDLEN:a=8==PWD_MIN_LEN?errStr.lgPwdLenInvalid8:errStr.lgPwdLenInvalid;break;case EINLGVALCHAR:a=errStr.pwdInvalid;break;case ECHPWDDIF:a=errStr.pswNotMatch;break;case EINLGVALOLDSAME:a=errStr.pswNewOldSameErr;break;case EINVUSR:case EINVKEY:a=gUsernameSupport?
+errStr.usrPwdError:errStr.pwdError;break;case ECMCCUSRERROR:a=errStr.cmccUsrPwdError;break;case EINVNEWUSR:a=errStr.cmccUsrError;break;default:a=errStr.invRequestFail}showAlert(a,c);return!0}function q(b){return/^[\x21-\x7e]+$/.test(b)}function l(b){var c=24,a="",d="warn",g=$("#newPwd"+b).val(),e=g.length,r="visible",f=!0,s=id("lgPwdNote"+b),l=id("pwdDep"+b),p=id("chgPwdDep"+b),k=id("pwdDepI"+b),h,m=h=0,n=0;h=/\d/g.test(g)?1:0;m=/[a-zA-Z]/g.test(g)?1:0;n=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(g)?
+1:0;h=h+n+m;$("#pwdStrengthNoteCon"+b).toggle(showPwdStrength);$("#pwdNoteCon"+b).toggle(!showPwdStrength);showPwdStrength?(r=6<=e&&32>=e&&q(g)?"visible":"hidden",1==h?10>=e?a=label.weak:(a=label.media,c*=2):2==h?10>=e?(a=label.media,c*=2):(a=label.strong,c*=3,d="correct"):3==h&&(a=label.strong,c*=3,d="correct"),s.style.visibility=r,l.innerHTML=a,p.style.width=c+"px",k.className=d):(q(g)||0==e?0<=e&&e<PWD_MIN_LEN||e>PWD_MAX_LEN?(d="error",a=errStr.lgPwdLenTooShort,f=!1):3!=h?(d="error",a=errStr.pwdCharTypeNotEnough,
+f=!1):(d="correct",a="",f=!0):(d="error",a=errStr.pwdCharInValid,f=!1),s.style.visibility=r,k.className=d,$("#pwdNoteLine"+b).text(a));return f}var m=id("save"),n=id("saveAdmin"),t=id("saveCommon");id("oldPwd");var u=id("newPwd"),v=id("newPwdAdmin"),w=id("newPwdCommon");id("newPwdC");var p=gUsernameSupport&&gMultiAccountSupport&&"cmccadmin"==$.getLgUsr();if(USER_GROUP_REMOTE==$.authRltObj.group)disableBtn(m,!0),p&&(disableBtn(n,!0),disableBtn(t,!0));else{var k=function(b){var c=id("oldPwd"+b).value,
+a=id("newPwd"+b).value,k=id("newPwdC"+b).value;if(gUsernameSupport)var g=id("oldUsr"+b).value,e="Admin"==b?"cmccadmin":id("newUsr"+b).value;if(gUsernameSupport){if(0==e.length||32<e.length)return d(EINVLGUSRLEN,"newUsr"+b);if(!1==q(e))return d(EINLGUSRVALCHAR,"newUsr"+b);if(gMultiAccountSupport&&"Admin"!=b&&"cmccadmin"==e)return d(EINVNEWUSR,"newUsr"+b)}if(0==a.length||a.length<PWD_MIN_LEN||32<a.length)return d(EINVLGPWDLEN,"newPwd"+b);if(!1==q(a))return d(EINLGVALCHAR,"newPwd"+b);if(a!=k)return d(ECHPWDDIF,
+"newPwd"+b);!1!=l(b)&&(setLoadingId("save"+b),hsLoading(!0),gCloudAccountBR.pwdLen=a.length,gUsernameSupport||""!=b?gUsernameSupport&&""==b||"Admin"==b?$.changeUsrPwd(g,e,c,a,function(a){var f="newPwd"+b;a==EPWDERROR?f="oldPwd"+b:a==EINVLGUSRLEN||a==EINVUSR?f="oldUsr"+b:a==EINLGUSRVALOLDSAME||a==EINLGUSRVALCHAR||a==EINVUSR||a==EINVKEY?f="newUsr"+b:a==ECHPWDDIF&&(f="newPwdC"+b);d(a,f);hsLoading(!1)}):"Common"==b&&$.checkUsrPwd(g,$.orgAuthPwd(c),function(c){c==ENONE?($.authRltObj.bHandLg=!0,$.changeOthersUsrPwd("",
+e,"",a,function(a){var c="newPwd"+b;a==EPWDERROR?c="oldPwd"+b:a==EINVLGUSRLEN||a==EINVUSR?c="oldUsr"+b:a==EINLGUSRVALOLDSAME||a==EINLGUSRVALCHAR||a==EINVUSR||a==EINVKEY?c="newUsr"+b:a==ECHPWDDIF&&(c="newPwdC"+b);d(a,c);hsLoading(!1)})):(d(ECMCCUSRERROR,"oldPwd"+b),hsLoading(!1))}):$.changePwd(c,a,function(a){var b="newPwd";a==EPWDERROR&&(b="oldPwd");d(a,b);hsLoading(!1)}))};u.onkeyup=function(){l("")};m.onclick=function(){k("")};p&&(v.onkeyup=function(){l("Admin")},w.onkeyup=function(){l("Common")},
+n.onclick=function(){k("Admin")},t.onclick=function(){k("Common")})}p?($("#pwdLenNote").toggle(!1),$("#pwdLenNoteAdmin").toggle(!0),$("#pwdLenNoteCommon").toggle(!0),$("#adminUserT1").removeClass("disNone"),$("#adminUserC1").removeClass("disNone"),$("#adminUserT2").removeClass("disNone"),$("#adminUserC2").removeClass("disNone")):(gUsernameSupport?($("#pwdLenNote").toggle(!0),$("#pwdLenNoteAdmin").toggle(!1),$("#pwdLenNoteCommon").toggle(!1),$("#normalUserT .title").text(menuStr.changeLgUsrPwd),$("#oldUsrRow").removeClass("disNone"),
+$("#newUsrRow").removeClass("disNone")):($("#pwdLenNote").toggle(!1),$("#pwdLenNoteAdmin").toggle(!1),$("#pwdLenNoteCommon").toggle(!1)),$("#normalUserT").removeClass("disNone"),$("#normalUserC").removeClass("disNone"))}init();
+</script><style type="text/css">p.pwdLenNote{margin:10px 0 25px 260px;color:#fff;font-size:12px;text-align:left}</style>

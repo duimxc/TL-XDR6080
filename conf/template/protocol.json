@@ -1,0 +1,1288 @@
+{
+	"/protocol/wan_num/wan_num" : {
+		"wan_num" : {
+			"type" : "intStr32",
+			"default" : 1
+		}
+	},
+	"/protocol/interface/wan" : {
+		"wan_rate" : {
+			"type" : "enum:0:auto,1:10F,2:10H,3:100F,4:100H,5:1000F,6:1000H",
+			"default" : "auto"
+		},
+		"wan_type" : {
+			"type" : "enum:0:dhcp,1:static,2:pppoe",
+			"default" : "dhcp"
+		},
+		"fac_macaddr" : {
+			"type" : "mac"
+		},
+		"macaddr" : {
+			"type" : "mac"
+		}
+	},
+	"/protocol/proto/static" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto/dhcp" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		},
+		"enable_broadcast" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dns_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		}
+	},
+	"/protocol/proto/pppoe" : {
+		"server" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"access" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:static",
+			"default" : "dynamic"
+		},
+		"specific_ip" : {
+			"type" : "ip"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1480
+		},
+		"conn_mode" : {
+			"type" : "enum:0:demand,1:auto,2:timed,3:manual",
+			"default" : "auto"
+		},
+		"dial_mode" : {
+			"type" : "enum:100:auto,0:normal,1:special1,2:special2,3:special3,4:special4,5:special5,6:special6,7:special7",
+			"default" : "auto"
+		},
+		"demand_idle" : {
+			"type" : "intStr32",
+			"default" : 600
+		},
+		"manual_idle" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto/ipv6_info" : {
+		"enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		}
+	},
+	"/protocol/proto/staticv6" : {
+		"ip6addr" : {
+			"type" : "ipv6"
+		},
+		"ip6gw" : {
+			"type" : "ipv6"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto/dhcpcv6" : {
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		}
+	},
+	"/protocol/proto/pppoev6" : {
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"sharev4" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		},
+		"specific_ip" : {
+			"type" : "ipv6"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"unit_id" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto/dhcpsv6" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"start_ip" : {
+			"type" : "intStr32",
+			"default" : 4096
+		},
+		"end_ip" : {
+			"type" : "intStr32",
+			"default" : 8192
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 86400
+		}
+	},
+	"/protocol/proto/rdnss" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/proto/slaac" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/interface/wanv6" : {
+		"wan_type" : {
+			"type" : "enum:0:dhcpcv6,1:staticv6,2:pppoev6,3:bridgev6",
+			"default" : "dhcpcv6"
+		}
+	},
+	"/protocol/interface/lanv6" : {
+		"proto" : {
+			"type" : "enum:0:dhcpsv6,1:slaac,2:rdnss",
+			"default" : "dhcpsv6"
+		}
+	},
+
+	"/protocol/interface_2/wan_2" : {
+		"wan_rate" : {
+			"type" : "enum:0:auto,1:10F,2:100H,3:100F,4:100H,5:1000F,6:1000H",
+			"default" : "auto"
+		},
+		"wan_type" : {
+			"type" : "enum:0:dhcp,1:static,2:pppoe",
+			"default" : "dhcp"
+		},
+		"fac_macaddr" : {
+			"type" : "mac"
+		},
+		"macaddr" : {
+			"type" : "mac"
+		}
+	},
+	"/protocol/proto_2/static_2" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_2/dhcp_2" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		},
+		"enable_broadcast" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dns_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		}
+	},
+	"/protocol/proto_2/pppoe_2" : {
+		"server" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"access" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:static",
+			"default" : "dynamic"
+		},
+		"specific_ip" : {
+			"type" : "ip"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1480
+		},
+		"conn_mode" : {
+			"type" : "enum:0:demand,1:auto,2:timed,3:manual",
+			"default" : "auto"
+		},
+		"dial_mode" : {
+			"type" : "enum:100:auto,0:normal,1:special1,2:special2,3:special3,4:special4,5:special5,6:special6,7:special7",
+			"default" : "auto"
+		},
+		"demand_idle" : {
+			"type" : "intStr32",
+			"default" : 600
+		},
+		"manual_idle" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_2/ipv6_info_2" : {
+		"enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		}
+	},
+	"/protocol/proto_2/staticv6_2" : {
+		"ip6addr" : {
+			"type" : "ipv6"
+		},
+		"ip6gw" : {
+			"type" : "ipv6"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_2/dhcpcv6_2" : {
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		}
+	},
+	"/protocol/proto_2/pppoev6_2" : {
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"sharev4" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		},
+		"specific_ip" : {
+			"type" : "ipv6"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"unit_id" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_2/dhcpsv6_2" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"start_ip" : {
+			"type" : "intStr32",
+			"default" : 4096
+		},
+		"end_ip" : {
+			"type" : "intStr32",
+			"default" : 8192
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 86400
+		}
+	},
+	"/protocol/proto_2/rdnss_2" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/proto_2/slaac_2" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/interface_2/wanv6_2" : {
+		"wan_type" : {
+			"type" : "enum:0:dhcpcv6,1:staticv6,2:pppoev6,3:bridgev6",
+			"default" : "dhcpcv6"
+		}
+	},
+	"/protocol/interface_2/lanv6_2" : {
+		"proto" : {
+			"type" : "enum:0:dhcpsv6,1:slaac,2:rdnss",
+			"default" : "dhcpsv6"
+		}
+	},
+
+	"/protocol/interface_3/wan_3" : {
+		"wan_rate" : {
+			"type" : "enum:0:auto,1:10F,2:100H,3:100F,4:100H,5:1000F,6:1000H",
+			"default" : "auto"
+		},
+		"wan_type" : {
+			"type" : "enum:0:dhcp,1:static,2:pppoe",
+			"default" : "dhcp"
+		},
+		"fac_macaddr" : {
+			"type" : "mac"
+		},
+		"macaddr" : {
+			"type" : "mac"
+		}
+	},
+	"/protocol/proto_3/static_3" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_3/dhcp_3" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		},
+		"enable_broadcast" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dns_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		}
+	},
+	"/protocol/proto_3/pppoe_3" : {
+		"server" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"access" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:static",
+			"default" : "dynamic"
+		},
+		"specific_ip" : {
+			"type" : "ip"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1480
+		},
+		"conn_mode" : {
+			"type" : "enum:0:demand,1:auto,2:timed,3:manual",
+			"default" : "auto"
+		},
+		"dial_mode" : {
+			"type" : "enum:100:auto,0:normal,1:special1,2:special2,3:special3,4:special4,5:special5,6:special6,7:special7",
+			"default" : "auto"
+		},
+		"demand_idle" : {
+			"type" : "intStr32",
+			"default" : 600
+		},
+		"manual_idle" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_3/ipv6_info_3" : {
+		"enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		}
+	},
+	"/protocol/proto_3/staticv6_3" : {
+		"ip6addr" : {
+			"type" : "ipv6"
+		},
+		"ip6gw" : {
+			"type" : "ipv6"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_3/dhcpcv6_3" : {
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		}
+	},
+	"/protocol/proto_3/pppoev6_3" : {
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"sharev4" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		},
+		"specific_ip" : {
+			"type" : "ipv6"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"unit_id" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_3/dhcpsv6_3" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"start_ip" : {
+			"type" : "intStr32",
+			"default" : 4096
+		},
+		"end_ip" : {
+			"type" : "intStr32",
+			"default" : 8192
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 86400
+		}
+	},
+	"/protocol/proto_3/rdnss_3" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/proto_3/slaac_3" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/interface_3/wanv6_3" : {
+		"wan_type" : {
+			"type" : "enum:0:dhcpcv6,1:staticv6,2:pppoev6,3:bridgev6",
+			"default" : "dhcpcv6"
+		}
+	},
+	"/protocol/interface_3/lanv6_3" : {
+		"proto" : {
+			"type" : "enum:0:dhcpsv6,1:slaac,2:rdnss",
+			"default" : "dhcpsv6"
+		}
+	},
+
+	"/protocol/interface_4/wan_4" : {
+		"wan_rate" : {
+			"type" : "enum:0:auto,1:10F,2:100H,3:100F,4:100H,5:1000F,6:1000H",
+			"default" : "auto"
+		},
+		"wan_type" : {
+			"type" : "enum:0:dhcp,1:static,2:pppoe",
+			"default" : "dhcp"
+		},
+		"fac_macaddr" : {
+			"type" : "mac"
+		},
+		"macaddr" : {
+			"type" : "mac"
+		}
+	},
+	"/protocol/proto_4/static_4" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_4/dhcp_4" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		},
+		"enable_broadcast" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dns_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		}
+	},
+	"/protocol/proto_4/pppoe_4" : {
+		"server" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"access" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:static",
+			"default" : "dynamic"
+		},
+		"specific_ip" : {
+			"type" : "ip"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1480
+		},
+		"conn_mode" : {
+			"type" : "enum:0:demand,1:auto,2:timed,3:manual",
+			"default" : "auto"
+		},
+		"dial_mode" : {
+			"type" : "enum:100:auto,0:normal,1:special1,2:special2,3:special3,4:special4,5:special5,6:special6,7:special7",
+			"default" : "auto"
+		},
+		"demand_idle" : {
+			"type" : "intStr32",
+			"default" : 600
+		},
+		"manual_idle" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_4/ipv6_info_4" : {
+		"enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		}
+	},
+	"/protocol/proto_4/staticv6_4" : {
+		"ip6addr" : {
+			"type" : "ipv6"
+		},
+		"ip6gw" : {
+			"type" : "ipv6"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_4/dhcpcv6_4" : {
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		}
+	},
+	"/protocol/proto_4/pppoev6_4" : {
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"sharev4" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		},
+		"specific_ip" : {
+			"type" : "ipv6"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"unit_id" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_4/dhcpsv6_4" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"start_ip" : {
+			"type" : "intStr32",
+			"default" : 4096
+		},
+		"end_ip" : {
+			"type" : "intStr32",
+			"default" : 8192
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 86400
+		}
+	},
+	"/protocol/proto_4/rdnss_4" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/proto_4/slaac_4" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/interface_4/wanv6_4" : {
+		"wan_type" : {
+			"type" : "enum:0:dhcpcv6,1:staticv6,2:pppoev6,3:bridgev6",
+			"default" : "dhcpcv6"
+		}
+	},
+	"/protocol/interface_4/lanv6_4" : {
+		"proto" : {
+			"type" : "enum:0:dhcpsv6,1:slaac,2:rdnss",
+			"default" : "dhcpsv6"
+		}
+	},
+
+	"/protocol/interface_5/wan_5" : {
+		"wan_rate" : {
+			"type" : "enum:0:auto,1:10F,2:100H,3:100F,4:100H,5:1000F,6:1000H",
+			"default" : "auto"
+		},
+		"wan_type" : {
+			"type" : "enum:0:dhcp,1:static,2:pppoe",
+			"default" : "dhcp"
+		},
+		"fac_macaddr" : {
+			"type" : "mac"
+		},
+		"macaddr" : {
+			"type" : "mac"
+		}
+	},
+	"/protocol/proto_5/static_5" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"gateway" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"pri_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"snd_dns" : {
+			"type" : "ip",
+			"default" : "0.0.0.0"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_5/dhcp_5" : {
+		"hostname" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		},
+		"enable_broadcast" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"dns_mode" : {
+			"type" : "enum:0:manual,1:dynamic",
+			"default" : "dynamic"
+		}
+	},
+	"/protocol/proto_5/pppoe_5" : {
+		"server" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"access" : {
+			"type" : "string",
+			"length" : 132
+		},
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:static",
+			"default" : "dynamic"
+		},
+		"specific_ip" : {
+			"type" : "ip"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1480
+		},
+		"conn_mode" : {
+			"type" : "enum:0:demand,1:auto,2:timed,3:manual",
+			"default" : "auto"
+		},
+		"dial_mode" : {
+			"type" : "enum:100:auto,0:normal,1:special1,2:special2,3:special3,4:special4,5:special5,6:special6,7:special7",
+			"default" : "auto"
+		},
+		"demand_idle" : {
+			"type" : "intStr32",
+			"default" : 600
+		},
+		"manual_idle" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_5/ipv6_info_5" : {
+		"enable" : {
+			"type" : "enum:0:off,1:on",
+			"default" : "off"
+		}
+	},
+	"/protocol/proto_5/staticv6_5" : {
+		"ip6addr" : {
+			"type" : "ipv6"
+		},
+		"ip6gw" : {
+			"type" : "ipv6"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"mtu" : {
+			"type" : "intStr32",
+			"default" : 1500
+		}
+	},
+	"/protocol/proto_5/dhcpcv6_5" : {
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		}
+	},
+	"/protocol/proto_5/pppoev6_5" : {
+		"username" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 120
+		},
+		"sharev4" : {
+			"type" : "intStr32",
+			"default" : 1
+		},
+		"ip_config" : {
+			"type" : "enum:0:auto,1:dhcpv6,2:slaac",
+			"default" : "auto"
+		},
+		"specific_ip" : {
+			"type" : "ipv6"
+		},
+		"dns_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"pri_dns" : {
+			"type" : "ipv6"
+		},
+		"snd_dns" : {
+			"type" : "ipv6"
+		},
+		"pd_mode" : {
+			"type" : "enum:0:prefix,1:non temp",
+			"default" : "prefix"
+		},
+		"unit_id" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/protocol/proto_5/dhcpsv6_5" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"start_ip" : {
+			"type" : "intStr32",
+			"default" : 4096
+		},
+		"end_ip" : {
+			"type" : "intStr32",
+			"default" : 8192
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		},
+		"lease_time" : {
+			"type" : "intStr32",
+			"default" : 86400
+		}
+	},
+	"/protocol/proto_5/rdnss_5" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/proto_5/slaac_5" : {
+		"prefix" : {
+			"type" : "ipv6"
+		},
+		"prefixlen" : {
+			"type" : "intStr32",
+			"default" : 64
+		}
+	},
+	"/protocol/interface_5/wanv6_5" : {
+		"wan_type" : {
+			"type" : "enum:0:dhcpcv6,1:staticv6,2:pppoev6,3:bridgev6",
+			"default" : "dhcpcv6"
+		}
+	},
+	"/protocol/interface_5/lanv6_5" : {
+		"proto" : {
+			"type" : "enum:0:dhcpsv6,1:slaac,2:rdnss",
+			"default" : "dhcpsv6"
+		}
+	}
+
+}

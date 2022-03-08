@@ -1,0 +1,8 @@
+Package: libsecurity
+Version: 1
+Depends: libc, libssp
+Source: tp_package/lib/libsecurity
+Section: libs
+Architecture: ipq
+Installed-Size: 19054
+Description:  C library for DES && MD5 && RSA

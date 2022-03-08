@@ -1,0 +1,8 @@
+Package: liblzma
+Version: 1
+Depends: libc, libssp
+Source: tp_package/lib/liblzma
+Section: libs
+Architecture: ipq
+Installed-Size: 20364
+Description:  C library for LZMA

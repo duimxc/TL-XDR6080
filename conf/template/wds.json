@@ -1,0 +1,8 @@
+{
+	"/wds/wds/enabled" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	}
+}

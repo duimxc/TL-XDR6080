@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+boot() {
+	[ -d /tmp/root ] && [ ! -e /var/run/.jffs_switch_stamp ] && {
+		lock /tmp/.switch2jffs
+		firstboot switch2jffs
+		# mark switch2jffs done, in case switch2jffs exec twice during one boot
+		touch /var/run/.jffs_switch_stamp
+		lock -u /tmp/.switch2jffs
+	}
+
+	# process user commands
+	[ -f /etc/rc.local ] && {
+		sh /etc/rc.local
+	}
+}

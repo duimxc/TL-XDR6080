@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=99
+USB_CTRL_GPIO=
+start() {
+	[ -e /proc/mt7621/esw_cnt ] && {
+		port6_drop_packets=$(cat /proc/mt7621/esw_cnt |grep "Rx Drop Packet"|awk -F: '{print $2}'| awk '{print $7}')
+		if [ "$port6_drop_packets" -ne 0 ];then
+			echo "enter failsafe, recovery ethernet" > /dev/console
+			ifconfig eth0 down
+			sleep 1
+			ifconfig eth0 up
+		fi
+	}
+
+	[ -n "$USB_CTRL_GPIO" ] && {
+		if [ -e /sys/class/gpio/export ];then
+			echo "$USB_CTRL_GPIO" > /sys/class/gpio/export
+			if [ "$?" -eq 0 ];then
+				echo out > /sys/class/gpio/gpio$USB_CTRL_GPIO/direction
+				echo 0 > /sys/class/gpio/gpio$USB_CTRL_GPIO/value
+				sleep 1
+				echo 1 > /sys/class/gpio/gpio$USB_CTRL_GPIO/value
+				echo "$USB_CTRL_GPIO" > /sys/class/gpio/unexport
+			fi
+		fi
+	}
+}

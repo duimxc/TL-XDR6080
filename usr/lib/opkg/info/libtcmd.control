@@ -1,0 +1,9 @@
+Package: libtcmd
+Version: 1
+Depends: libc, libssp, libpthread, libnl
+Source: tp_package/sys_packages/qca_util/qca_ftm/libtcmd
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 4745
+Description:  QCA libtcmd utils

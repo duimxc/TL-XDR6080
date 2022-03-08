@@ -1,0 +1,13 @@
+
+<div class="title">
+	<label class="title">{%label.cloudAccountManage%}</label>
+</div>
+<div id="cloudCon">
+	<p class="cloudP cloudTip" id="cAccount">{%label.cloudAccountBindTip%}</p>
+	<div class="blockFuncC">
+		<input id="unbind" type="button" value="{%btn.unbind%}" class="btnB subBtn" />
+		<input id="chgPwd" type="button" value="{%label.cloudChgPwd%}" class="btnB subBtn" />
+	</div>
+</div><script type="text/javascript">function init(){function c(c){!0==c&&(showLoading(label.unbinding,void 0,void 0,!1),cloudAccountUnind(function(a){closeLoading();a:{var b="";switch(parseInt(a)){case ENONE:showAlert(label.cloudUnbindSuccess);a=!0;break a;case EINVHOSTID:b=label.cloudUnbindFail+label.cloudServerNoRespCheckNetwork;break;case EINDEVICEALREADYUNBOUND:b=label.cloudUnbindFail+label.cloudAccountReadyUnbind;break;default:a=cloudErrHandle(a),b=!1==a.result?a.tip:errStr.invRequestFail}showAlert(b,void 0);a=!1}a&&(basicCloudSet(!1),
+loadPage("CloudAccountFirst.htm","hcCo"))}))}id("cAccount").innerHTML+=cloudAccount;id("unbind").onclick=function(){showConfirm(label.cloudUnbindConfirm,c)};id("chgPwd").onclick=function(){loadPage("CloudAccountThird.htm","hcCo")}}init();
+</script>

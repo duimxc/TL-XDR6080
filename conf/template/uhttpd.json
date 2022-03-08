@@ -1,0 +1,24 @@
+{
+	"/uhttpd/uhttpd/main" : {
+		"listen_http_lan" : {
+			"type" : "intStr16",
+			"default" : 80
+		},
+		"listen_http_wan" : {
+			"type" : "intStr16",
+			"default" : 8888
+		}
+	},
+	"/uhttpd/webPwd/webPwd" : {
+		"password" : {
+			"type" : "string",
+			"length" : 36,
+			"default" : "WaQ7xbhc9TefbwK"
+		},
+		"fac_password" : {
+			"type" : "string",
+			"length" : 36,
+			"default" : "WaQ7xbhc9TefbwK"
+		}
+	}
+}

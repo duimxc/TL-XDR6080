@@ -1,0 +1,8 @@
+Package: base-files
+Version: 117-d9badf34f8381a9ff8212235a1e4518ee35e3ec7
+Depends: libc, libssp
+Source: tp_package/base-files
+Section: base
+Architecture: ipq
+Installed-Size: 35198
+Description:  This package contains a base filesystem and system scripts for OpenWrt.

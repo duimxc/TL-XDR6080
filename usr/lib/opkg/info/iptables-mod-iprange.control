@@ -1,0 +1,12 @@
+Package: iptables-mod-iprange
+Version: 1.4.10-4
+Depends: libc, libssp, iptables, kmod-ipt-iprange
+Source: tp_package/u_packages/iptables
+Section: net
+Architecture: ipq
+Installed-Size: 161
+Description:  iptables extensions for matching ip ranges.
+ 
+ Matches:
+ - iprange
+ 

@@ -1,0 +1,78 @@
+
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.netMode%}</label>
+		<li class="textConA textCon">
+			<span id="wanSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.ipv6Addr%}</label>
+		<li class="textConA textCon"><input id="ip" class="textA text hoverBd" maxLength="71" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.ipv6PrefixLen%}</label>
+		<li class="textConA textCon "><input class="textA text hoverBd disable" disabled="disabled" maxLength="71" value="64"/><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.gateway%}</label>
+		<li class="textConA textCon"><input id="gateway" class="textA text hoverBd" maxLength="71" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.dns0%}</label>
+		<li class="textConA textCon"><input id="pri_dns" class="textA text hoverBd" maxLength="71" /><i class="tip"></i></li>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.dns1%}</label>
+		<li class="textConA textCon"><input id="snd_dns" class="textA text hoverBd" maxLength="71" /><i class="tip"></i></li>
+		<label class="noteLbl">{%label.optional%}</label>
+	</ul>
+	<div class="blockFuncA">
+		<input id="save" type="button" value="{%btn.save%}" class="btnA subBtn" />
+	</div>
+	<ul id="wanStatus" class="gridLine gridLineA gridStatus">
+		<i></i>
+		<label id="wanStatusLbl" class="noteLbl"></label>
+	</ul>
+</div>
+<div class="title">
+	<label class="title">{%label.highSet%}</label>
+	<i class="helpBtn" helpStr="staticIpv6AdvHelp"></i>
+</div>
+<div class="block">
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.mtu%}</label>
+		<li class="textConB textCon"><input id="mtu" class="textB text hoverBd" maxLength="4" /></li>
+		<label class="noteLbl">{%label.mtuComment%}</label>
+	</ul>
+	<ul class="gridLine gridLineA">
+		<label class="desLblA">{%label.wanMac%}</label>
+		<li class="textConA textCon">
+			<span id="wanMacSel" class="select">
+				<span class="value hsValueA"></span>
+				<i class="arrow"></i>
+			</span>
+		</li>
+	</ul>
+	<ul id="macCloneUl" class="gridLine gridLineA">
+		<li class="textConAL textCon"><input id="wanMac" class="textA text hoverBd" maxLength="17" /><i class="tip"></i></li>
+		<li class="textConAL macCloneLi"></li>
+	</ul>
+	<div class="blockFuncA">
+		<input id="saveHighSet" type="button" value="{%btn.save%}" class="btnA subBtn" />
+	</div>
+</div>
+<script type="text/javascript">function init(d){function h(b,c){var a="";switch(b){case ENONE:return!1;case EIPV6INVIP:a=errStr.ipv6AddrErr;break;case EIPV6INVIPFMT:a=errStr.ipv6AddrFmtErr;break;case EIPV6INVGROUPIP:a=errStr.ipv6AddrGroupErr;break;case EIPV6LOOP:a=errStr.ipv6AddrLoopErr;break;case EIPV6INVGTW:a=errStr.gatewayErr;break;case EIPV66TO4ADDR:a=errStr.ipv6Addr6To4Err;break;case EINVMTU:a=errStr.stcMtuErr;break;case EIPV6INVFDNSVR:a=errStr.primDnsErr;break;case EIPV6INVSDNSVR:a=errStr.seDnsErr;break;case EIPV6LINKLOCAL:a=
+errStr.ipv6LinkLoaclErr;break;case ECONFLICTLANMAC:a=errStr.lanWanMacConflict;break;case ECONFLICTWANMAC:a=errStr.mulWanMacConflict;break;default:a=errStr.invRequestFail}showAlert(a,c);return!0}function w(b){wanCheckWDS(function(){var c={},a={},e={},d={};c[k]=a;1==b||"undefined"==typeof b?(a[WAN_NAME]=d,a[STATIC_NAME]=e):(a[WAN_NAME+"_"+b]=d,a[STATIC_NAME+"_"+b]=e);var a=id("ip").value,f=id("gateway").value,g=id("pri_dns").value,l=id("snd_dns").value;h(checkIPv6(a),"ip")||h(checkGatewayV6(f),"gateway")||
+h(checkPriDnsV6(g),"pri_dns")||h(checkSeDnsV6(l),"snd_dns")||(a=a.replace(/：/g,":"),$("#ip").val(a),f=f.replace(/：/g,":"),$("#gateway").val(f),g=g.replace(/：/g,":"),$("#pri_dns").val(g),l=l.replace(/：/g,":"),$("#snd_dns").val(l),e[n]=a,e[p]=f,e[q]=g,e[r]=l,d[x]=STATIC_NAME,setLoadingId("save"),hsLoading(!0),$.modify(c,function(a){m=STATIC_NAME;hsLoading(!1);setTimeout(function(){lanPrefixChange(!1);preDelgOnFlag=!1},2E3);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(b)},0);return h(a[ERR_CODE])}))})}
+function y(b){wanCheckWDS(function(){var c={},a={},e={},d={};c[k]=a;1==b||"undefined"==typeof b?(a[s]=d,a[STATIC_NAME]=e):(a[s+"_"+b]=d,a[STATIC_NAME+"_"+b]=e);var a=id("mtu").value,f=id("wanMac"),g=f.value;h(checkMtu(a),"mtu")||wanMacErrHandle(checkMac(g),f)||(a=hideLeadingZeros(a),id("mtu").value=a,e[t]=a,d[z]=g,setLoadingId("saveHighSet"),hsLoading(!0),$.modify(c,function(a){hsLoading(!1);u(b);return h(a[ERR_CODE])}),updateTimerHandle=$.setTimeout(function(){refreshWanStatus(b)},2E3))})}function v(b,
+c){var a;a=1==c||"undefined"==typeof c?b[uciNetwork.fileName][WAN_STATUS_NAME]:b[uciNetwork.fileName][WAN_STATUS_NAME+"_"+c];if(a.proto!=STATIC_NAME)clearTimeout(updateTimerHandle);else switch(parseInt(a.link_status)){case LINK_DOWN:a=a[uciNetwork.optName.code];if(LINK_CODE_MANUAL!=a&&LINK_CODE_NORMAL!=a&&LINK_CODE_INET_ERR!=a){hsStatSet("error",linkStatus[LINK_DOWN]+label.lBrackets+linkCode[a]+label.rBrackets);break}hsStatSet("error",linkStatus[LINK_DOWN]);break;case LINK_UP:hsStatSet("correct",
+linkStatus[LINK_UP]);break;default:hsStatSet("link",linkStatus[status.status])}}function u(b){var c={};c[k]={};1==b||"undefined"==typeof b?(c[k][KEY_NAME]=[WAN_NAME,STATIC_NAME,"wan"],c[uciNetwork.fileName]={},c[uciNetwork.fileName][KEY_NAME]=[WAN_STATUS_NAME,uciNetwork.dynData.ifaceMac]):(c[k][KEY_NAME]=[WAN_NAME+"_"+b,STATIC_NAME+"_"+b,"wan_"+b],c[uciNetwork.fileName]={},c[uciNetwork.fileName][KEY_NAME]=[WAN_STATUS_NAME+"_"+b,uciNetwork.dynData.ifaceMac]);$.query(c,function(a){var c=a[k];1==b||
+"undefined"==typeof b?(c=c[STATIC_NAME],m=a[uciNetwork.fileName][WAN_STATUS_NAME].proto):(c=c[STATIC_NAME+"_"+b],m=a[uciNetwork.fileName][WAN_STATUS_NAME+"_"+b].proto);$("#ip").val(c[n]);$("#gateway").val(c[p]);$("#pri_dns").val(c[q]);$("#snd_dns").val(c[r]);$("#mtu").val(c[t]);setMacInfo(a,b);m==STATIC_NAME&&lanPrefixChange(!1);2<=b&&"undefined"!=typeof b?(disableBtn("PreDelgOn",!0),disableBtn("PreDelgOff",!0)):(disableBtn("PreDelgOn",!1),disableBtn("PreDelgOff",!1));v(a,b)})}var k="protocol",s=
+"wan",x=uciProto.optName.type,n="ip6addr",p="ip6gw",q="pri_dns",r="snd_dns",t=uciProto.optName.mtu,z=uciProto.optName.macaddr,m;refreshWanStatus=function(b){var c={};c[uciNetwork.fileName]={};c[uciNetwork.fileName][KEY_NAME]=1==b||"undefined"==typeof b?[WAN_STATUS_NAME]:[WAN_STATUS_NAME+"_"+b];updateTimerHandle&&clearTimeout(updateTimerHandle);$.query(c,function(a){v(a,b);updateTimerHandle=$.setTimeout(function(){refreshWanStatus(b)},2E3)})};if("undefined"==typeof d)selectInit("wanSel",wanOptions,
+LINK_TYPE_STATIC_IP,wanSelectChange);else{var A=wanOptions.slice(0,wanOptions.length-1);selectInit("wanSel",A,LINK_TYPE_STATIC_IP,wanSelectChange)}u(d);refreshWanStatus(d);refreshLanStatus(d);id("save").onclick=function(){w(d)};id("saveHighSet").onclick=function(){y(d)};curSysMode!=uciSystem.optValue.sysMode.routerMode&&(id("wanSel").disable(!0),disableInput("ip",!0),disableInput("mtu",!0),disableInput("wanMac",!0),disableInput("gateway",!0),disableInput("pri_dns",!0),disableInput("snd_dns",!0),disableBtn("save",
+!0),disableBtn("saveHighSet",!0))}function initWanPortSel(){if($("#dualWanIpv6Wrapper").is(":hidden"))init();else{var d=$("#dualWanIpv6Wrapper").find("label.selected").index()+1;init(d)}}initWanPortSel();
+</script><style type="text/css">li.macCloneLi{color:#fff;font-size:12px;line-height:20px!important}</style>

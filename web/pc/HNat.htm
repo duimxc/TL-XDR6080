@@ -1,0 +1,21 @@
+
+
+<div id="hcCo" class="hcCo">
+    <div class="title">
+        <label class="title">{%menuStr.hnat%}</label>
+    </div>
+    <div class="block">
+        <p class="hnatDisabledTip disNone">{%label.hnatDisabledTip%}</p>
+        <ul class="gridLine gridLineA">
+            <label class="desLblA">{%menuStr.hnat%}</label>
+            <input id="hnatOn" name="hnatSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="hnatOn">{%label.openStr%}</label>
+            <input id="hnatOff" name="hnatSwitch" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="hnatOff">{%label.closeStr%}</label>
+        </ul>
+
+        <div id="hnatNote">
+            <p>{%label.hnatNote1%}</p>
+            <p>{%label.hnatNote2%}</p>
+        </div>
+    </div>
+</div><script type="text/javascript">function init(){function a(){var h="hnatOn"==this.id?e:g,c={},a={};c[b]={};a[f]=h;c[b][d]=a;$.modify(c,function(){})}var e="1",g="0",b="hnat",d="main",f="enable";id("hnatOn").onclick=a;id("hnatOff").onclick=a;(function(){var a={};a[b]={};a[b][KEY_NAME]=[d];$.query(a,function(a){a=a[b][d][f]==e;id("hnatOn").checked=a;id("hnatOff").checked=!a})})()}init();
+</script><style type="text/css">#hnatNote{word-break:break-all;word-wrap:break-word;width:510px;margin:30px auto;color:#fff;font-size:14px;text-align:left}.hnatDisabledTip{color:#fff;font-size:12px;text-align:left;margin:32px 24px}</style>

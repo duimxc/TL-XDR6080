@@ -1,0 +1,131 @@
+{
+	"/network/interface/lan" : {
+		"ipaddr" : {
+			"type" : "ip",
+			"default" : "192.168.1.1"
+		},
+		"netmask" : {
+			"type" : "ip",
+			"default" : "255.255.255.0"
+		},
+		"ip_mode" : {
+			"type" : "enum:0:dynamic,1:manual",
+			"default" : "dynamic"
+		},
+		"fac_ipaddr" : {
+			"type" : "ip",
+			"default" : "192.168.1.1"
+		},
+		"fac_netmask" : {
+			"type" : "ip",
+			"default" : "255.255.255.0"
+		},
+		"macaddr" : {
+			"type" : "mac",
+			"default" : "00-00-00-00-00-00"
+		}
+	},
+	"/network/config/massive_sta_capacity" : {
+		"enable" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/network/user_route/*" : {
+		"target" : {
+			"type" : "ip"
+		},
+		"netmask" : {
+			"type" : "ip"
+		},
+		"gateway" : {
+			"type" : "ip"
+		},
+		"enable" : {
+			"type" : "c32",
+			"default" : 1
+		}
+	},
+	"/network/dyn_route/*" : {
+		"target" : {
+			"type" : "ip"
+		},
+		"netmask" : {
+			"type" : "ip"
+		},
+		"gateway" : {
+			"type" : "ip"
+		}
+	},
+	"/network/dyn_route" : {
+		"dyn_routes" : {
+			"type" : "array",
+			"index_format" : "dyn_routes_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/network/dyn_route/*",
+			"length" : 32
+		}
+	},
+	"/network/sys_route/*" : {
+		"target" : {
+			"type" : "ip"
+		},
+		"netmask" : {
+			"type" : "ip"
+		},
+		"gateway" : {
+			"type" : "ip"
+		},
+		"interface" : {
+			"type" : "enum:1:WAN,1:LAN/WLAN"
+		}
+	},
+	"/network/sys_route" : {
+		"sys_routes" : {
+			"type" : "array",
+			"index_format" : "sys_routes_%d",
+			"sub_type" : "object",
+			"sub_type_name" : "/network/sys_route/*",
+			"length" : 64
+		}
+	},
+	"/network/wan_status/wan_status" : {
+		"ipaddr" : {
+			"type" : "ip"
+		},
+		"netmask" : {
+			"type" : "ip"
+		},
+		"gateway" : {
+			"type" : "ip"
+		},
+		"pri_dns" : {
+			"type" : "ip"
+		},
+		"snd_dns" : {
+			"type" : "ip"
+		},
+		"link_status" : {
+			"type" : "i32"
+		},
+		"error_code" : {
+			"type" : "i32"
+		},
+		"proto" : {
+			"type" : "string",
+			"length" : 20
+		},
+		"up_time" : {
+			"type" : "i32"
+		},
+		"up_speed" : {
+			"type" : "i32"
+		},
+		"down_speed" : {
+			"type" : "i32"
+		},
+		"phy_status" : {
+			"type" : "i32"
+		}
+	}
+}

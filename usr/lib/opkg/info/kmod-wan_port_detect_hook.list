@@ -1,0 +1,2 @@
+/etc/modules.d/99-wan_port_detect_hook
+/lib/modules/4.4.60/wan_port_detect_hook.ko

@@ -1,0 +1,26 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="hsHelp"></div>
+	<div class="title" style="margin-bottom: 20px;">
+		<label class="title">{%btn.reboot%}</label>
+	</div>
+	<input id="rebootAll" type="button" value="{%btn.rebootAll%}" class="btnA subBtn" />
+	<div class="block SysRebootBlock">
+		<table id="rebootTbl" class="dataGrid"></table>
+	</div>
+	<div class="title">
+		<label class="title">{%menuStr.restore%}</label>
+	</div>
+	<div class="block">
+		<table id="resetTbl" class="dataGrid"></table>
+	</div>
+</div>
+<script type="text/javascript">function init(){function k(){$.action({system:{reboot:null}},function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,void 0,function(){lanDetecting(function(){window.location.reload()})},!0,statusStr.rebootTip))})}function l(a){var b={};b[uciPlc.fileName]={};b[uciPlc.fileName][uciPlc.actionName.rebootExt]={};b[uciPlc.fileName][uciPlc.actionName.rebootExt][uciPlc.optName.mac]=d._ops.data[a].mac;$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*
+a,statusStr.rebootingChildRt,function(){closeProgBar()},!0,statusStr.rebootChildRtTip)):showAlert(statusStr.rebootRouterFail)})}function m(){$.action({system:{reset:null}},function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,label.reseting,function(){$.setLgPwd("");$.changeDomain(g);lanDetecting(function(){window.location.href=-1==location.href.toString().indexOf(h)?"http://"+g:"http://"+h})},!0,statusStr.resetTip))})}function n(a){var b={};b[uciPlc.fileName]={};b[uciPlc.fileName][uciPlc.actionName.resetExt]=
+{};b[uciPlc.fileName][uciPlc.actionName.resetExt][uciPlc.optName.mac]=f._ops.data[a].mac;$.action(b,function(a){ENONE==a[ERR_CODE]?(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,label.resetingChildRt,function(){closeProgBar()},!0,statusStr.resetChildRtTip)):showAlert(statusStr.resetRouterFail)})}function p(a){var b=d._ops.data[a];showConfirm(label.rebootConfirm,function(c){!0==c&&(b.is_cap?k():l(a))})}function q(a){var b=d._ops.data[a];showConfirm(label.resetConfirm,function(c){!0==c&&(b.is_cap?
+m():n(a))})}function r(){var a={};a[uciProto.fileName]={};a[uciProto.fileName][KEY_NAME]=uciProto.secName.dhcp;a[uciPlc.fileName]={};a[uciPlc.fileName][KEY_TABLE]=uciPlc.secType.connectedExt;$.query(a,function(a){if(ENONE==a[ERR_CODE]){var c={};c.name=a[uciProto.fileName][uciProto.secName.dhcp][uciProto.optName.hostName];c.is_cap=!0;a=formatTableData(a[uciPlc.fileName][uciPlc.secType.connectedExt]);c=[c];c=a.concat(c);d.setDataSource(c);d.refresh();f.setDataSource(c);f.refresh()}})}var d=new DataGrid,
+f=new DataGrid,e,g="",h;id("rebootAll").onclick=function(){var a={hyfi:{reboot_all:null}};showConfirm("重启预计需要几分钟。重启过程中，所有设备和路由器会断开连接。",function(b){!0==b&&$.action(a,function(a){ENONE==a[ERR_CODE]&&(a=parseInt(a.wait_time,10)||30,showProgBar(1E3*a,void 0,function(){lanDetecting(function(){window.location.reload()})},!0,statusStr.rebootTip))})},"重启")};(function(){e={};e[uciNetwork.fileName]={};e[uciNetwork.fileName][KEY_NAME]=uciNetwork.secName.lan;e[uciDeviceInfo.fileName]={};e[uciDeviceInfo.fileName][KEY_NAME]=
+uciDeviceInfo.secName.info;$.query(e,function(a){ENONE==a[ERR_CODE]&&(g=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.facIp],h=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info][uciDeviceInfo.optName.domainName])});d.init({id:"rebootTbl",data:[],edit:!1,hasSelBox:!1,head:[{field:label.equipName,width:33},{field:label.operation,width:33}],list:[{edit:!1,name:"name",type:"str"},{value:btn.reboot,type:"btn",click:p,className:"subBtn tblBtn"}]});f.init({id:"resetTbl",data:[],edit:!1,
+hasSelBox:!1,head:[{field:label.equipName,width:33},{field:label.operation,width:33}],list:[{edit:!1,name:"name",type:"str"},{value:btn.reset,type:"btn",click:q,className:"subBtn tblBtn"}]});r()})()}init();
+</script><style type="text/css">table.dataGrid td{height:39px;border:1px solid #1e96d4}.tblBtn{height:25px;margin:auto 3px}div.SysRebootBlock{color:#fff;margin-top:14px;margin-bottom:60px;text-align:left}input.btnA{margin-left:0;padding:5px 0}</style>

@@ -1,0 +1,41 @@
+
+
+<div id="hcCo" class="hcCo">
+	<div class="hsHelp"></div>
+	<div class="title">
+		<label class="title">{%label.backup%}</label>
+	</div>
+	<div class="block bakNRstrBlock">
+		<p>{%label.backupTip%}</p>
+		<p class="bakNRstr">
+			<input id="sysBackup" type="button" value="{%btn.backup%}" class="btnA subBtn" />
+		</p>
+	</div>
+	<div class="title">
+		<label class="title">{%btn.upConfig%}</label>
+	</div>
+	<div class="block bakNRstrBlock">
+		<p>{%label.restoreTip%}</p>
+		<form enctype="multipart/form-data" id="upFileForm" method="post" target="restoreIf">
+			<div class="fileDiv">
+				<input type="text" id="textfield" class="fileTxt" readonly="true" />
+				<input type="button" value="{%btn.browse%}" class="subBtn fileBrowse" />
+				<input type="file" class="file" name="filename" id="fileName" />
+				<iframe id="restoreIf" name="restoreIf"></iframe>
+			</div>
+		</form>
+		<p class="bakNRstr">
+			<input id="sysRestore" type="button" value="{%btn.upConfig%}" class="btnA subBtn" />
+		</p>
+		<p class="restoreDesTi">{%label.caution%}{%label.colon%}<span></span></p>
+		<ul class="restoreNotice">
+			<li class="restoreNoticeT">{%label.restoreNotice1%}</li>
+			<li class="restoreNoticeB">{%label.restoreNotice2%}{%label.restoreNotice3%}</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">function init(){function k(){var a=g.value;return""==a?(showAlert(label.upConfigWarn),!1):-1==a.search(/\.bin$/)?(showAlert(errStr.fileFmttErr),!1):!0}function l(a){if(a==ENONE){var b,c;a={};!0!=e&&(clearTimeout(d),d=null,closeLoading(),a[uciNetwork.fileName]={},a[uciDeviceInfo.fileName]={},a[uciNetwork.fileName][KEY_NAME]=[uciNetwork.secName.lan],a[uciDeviceInfo.fileName][KEY_NAME]=[uciDeviceInfo.secName.info],$.query(a,function(a){a=a||{};a[ERR_CODE]==ENONE&&(c=a[uciNetwork.fileName][uciNetwork.secName.lan][uciNetwork.optName.ip],
+b=a[uciDeviceInfo.fileName][uciDeviceInfo.secName.info][uciDeviceInfo.optName.domainName])},!1),null==c?showAlert(errorStr.reqDataIsNull):(a={system:{reboot:null}},$.action(a,function(a){a=1E3*parseInt(a.wait_time,10)||REBOOT_SECONDS;showProgBar(a,void 0,function(){$.changeDomain(c);lanDetecting(function(){window.location.href=-1==location.href.toString().indexOf(b)?"http://"+c:"http://"+b})},!0,statusStr.rebootOk,statusStr.rebootTip)})))}else a==EFILETOOBIG?showAlert(errStr.fileSizeErr):showAlert(errStr.bakNRestoreFail)}
+function h(){closeLoading();closeProgBar();e=!0;clearTimeout(d);id("restoreIf").onload=null;showAlert(errStr.restoreFail)}var e=!1,d=null,f=document.forms[0],g=id("fileName");(function(){var a=id("sysRestore"),b=id("sysBackup");g.onchange=function(){var a=this.value,a=a.substring(a.lastIndexOf("\\")+1);id("textfield").value=a};USER_GROUP_REMOTE==$.authRltObj.group?(disableBtn(a,!0),disableBtn(b,!0)):(a.onclick=function(){k()&&showConfirm(label.upConfig,function(a){!0==a&&(a={},a[uciSystem.fileName]=
+{},a[uciSystem.fileName][uciSystem.actionName.uploadConf]=null,$("#restoreIf").one("load",function(){iFrmOnload("restoreIf",l)}),showLoading(label.bakUploadingTip,void 0,void 0,!1),d=$.setTimeout(h,25E3),$.action(a,function(a){ENONE==a[ERR_CODE]?(f.action=$.orgURL(a.url),f.submit(),f.reset(),e=!1):h()}))})},b.onclick=function(){var a={};a[uciSystem.fileName]={};a[uciSystem.fileName][uciSystem.actionName.downloadConf]=null;$.action(a,function(a){location.href=$.orgURL(a.url)},!0)})})()}init();
+</script><style type="text/css">div.bakNRstrBlock{color:#fff;font-size:12px;margin-bottom:60px;padding:10px 0 0 43px;text-align:left}#restoreIf{top:-9999px;position:absolute;visibility:hidden}div.fileDiv{width:320px;height:31px;margin-top:10px;overflow:hidden;position:relative;vertical-align:middle}input.file{font-size:110px;top:-5px;right:-5px;opacity:0;filter:alpha(opacity:0);cursor:pointer;position:absolute;vertical-align:top}input.fileTxt{width:226px;height:30px;line-height:30px;color:#fff;font-size:12px;border:0;border-radius:3px;padding:0 2px 0 4px;vertical-align:middle;background:#2ba2d8}input.fileBrowse{padding:3px 18px;*padding:2px 12px 0;margin-left:5px;vertical-align:middle}p.bakNRstr{margin-top:30px}#sysBackup{margin-left:0!important}#sysRestore{margin-left:0!important}p.restoreDesTi{margin-top:30px}ul.restoreNotice{color:#fff;list-style:none}li.restoreNoticeT{line-height:20px;padding-top:10px;width:520px}li.restoreNoticeB{line-height:20px;padding-top:20px;width:510px}</style>

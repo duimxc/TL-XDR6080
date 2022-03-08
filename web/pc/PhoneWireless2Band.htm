@@ -1,0 +1,83 @@
+
+
+<h1 class="phoneTitle">{%label.wifiSet%}</h1>
+<ul class="phInputUl wifiUniteUl disNone" id="wifiUnite">
+	<li class="phWULi">
+		<label class="wifiUniteLbl">{%label.wifiUnite%}</label>
+		<img id="switchOff" src="../web-static/images/switchOff.png" />
+	</li>
+	<p class="bsHelpInfo">{%label.bsHelp%}</p>
+</ul>
+<p class="phSetTitle">{%label.wifiSet2G%}</p>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessName2G">{%label.wirelessName%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessName2G" maxlength="32" />
+	</li>
+	<li id="wlanSsidErrTip" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes"></span>
+	</li>
+</ul>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessPwd2G">{%label.wirelessPwd%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessPwd2G" maxlength="63" type="password" placeholder="{%label.phWifiPwdTip%}" />
+	</li>
+	<li id="wlanPwdNoteLess" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanWzdPwdLenValid%}</span>
+	</li>
+	<li id="wlanPwdNoteInvalidChar" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanPwdInvalid%}</span>
+	</li>
+	<li id="wlanPwdNote" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%label.chgPwdDep%}{%label.colon%}<span id="pwdDep2G"></span></span>
+		<span class="pwdDepCon"><span id="chgPwdDep2G" class="chgPwdDep"></span></span>
+	</li>
+</ul>
+
+<p class="phSetTitle">{%label.wifiSet5G%}</p>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessName5G">{%label.wirelessName%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessName5G" maxlength="32" />
+	</li>
+	<li id="wlanSsidErrTip5G" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes"></span>
+	</li>
+</ul>
+<ul class="phInputUl">
+	<li class="phInputLi">
+		<label for="wzdWirelessPwd5G">{%label.wirelessPwd%}</label>
+		<i class="clapboard"></i>
+		<input id="wzdWirelessPwd5G" maxlength="63" type="password" placeholder="{%label.phWifiPwdTip%}" />
+	</li>
+	<li id="wlanPwdNoteLess5G" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanWzdPwdLenValid%}</span>
+	</li>
+	<li id="wlanPwdNoteInvalidChar5G" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%errStr.wlanPwdInvalid%}</span>
+	</li>
+	<li id="wlanPwdNote5G" class="phErrTip disNone">
+		<i class="error"></i><span class="errDes">{%label.chgPwdDep%}{%label.colon%}<span id="pwdDep5G"></span></span>
+		<span class="pwdDepCon"><span id="chgPwdDep5G" class="chgPwdDep"></span></span>
+	</li>
+</ul>
+
+<div class="phFunc">
+	<label id="pre" class="phTwoBtn phTwoBtnL">{%btn.preStep%}</label><label id="sub" class="phTwoBtn">{%btn.ok%}</label>
+</div>
+<script type="text/javascript">function init(){function t(){var a=id("wlanSsidErrTip"),g=$("#wlanSsidErrTip span.errDes")[0],b=n.value;if(0==b.length)return g.innerHTML=errStr.wlanSsidErr,a.style.display="block",!1;if(!0==/^ +$/gi.test(b))return g.innerHTML=errStr.wlanSsidBlank,a.style.display="block",!1;if(!checkWifiName(b,32,1))return g.innerHTML=errStr.wlanSsidLenErr,a.style.display="block",!1;a.style.display="none";return!0}function x(a){var g=!1,b=!1,c=!1,g=/\d/g.test(a),b=/[a-zA-Z]/g.test(a),c=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(a);
+return g&&c&&b}function u(){var a=id("wlanSsidErrTip5G"),g=$("#wlanSsidErrTip5G span.errDes")[0],b=p.value;if(0==b.length)return g.innerHTML=errStr.wlanSsidErr,a.style.display="block",!1;if(!0==/^ +$/gi.test(b))return g.innerHTML=errStr.wlanSsidBlank,a.style.display="block",!1;if(!checkWifiName(b,32,1))return g.innerHTML=errStr.wlanSsidLenErr,a.style.display="block",!1;a.style.display="none";return!0}function v(){var a=n.value,g=e.value,w=p.value,c=f.value,y=uciWireless.optValue.bsEnable.disable;
+gIsWifiCfgChged=(gIsWifiCfgChged=a!=h[q]||g!=h[d])||w!=k[q]||c!=k[d];gWifiCfgToSave={};gWifiCfgToSave[b]={};gSupportBS&&z[A]!=y&&(gIsWifiCfgChged=!0,gWifiCfgToSave[b][r]={},gWifiCfgToSave[b][r][A]=y);if(g11AxSupport.wlan2g||g11AxSupport.wlan5g||gIsWifiCfgChged)gWifiCfgToSave[b][l]={},gWifiCfgToSave[b][l][q]=a,gWifiCfgToSave[b][m]={},gWifiCfgToSave[b][m][q]=w,0<g.length?(gWifiCfgToSave[b][l][s]=uciWireless.dynOptValue.encryption.on,gWifiCfgToSave[b][l][d]=g):gWifiCfgToSave[b][l][s]=uciWireless.dynOptValue.encryption.off,
+0<c.length?(gWifiCfgToSave[b][m][s]=uciWireless.dynOptValue.encryption.on,gWifiCfgToSave[b][m][d]=c):gWifiCfgToSave[b][m][s]=uciWireless.dynOptValue.encryption.off;g11AxSupport.wlan2g||g11AxSupport.wlan5g?loadPage("PhoneWirelessAx.htm","phCon"):loadPage("PhoneEnd2Band.htm","phCon")}function B(){var a=checkWlanPwd(e.value);switch(a){case EINVWLANPWD:id("wlanPwdNoteInvalidChar").style.display="block";return;case EINVPSKLEN:id("wlanPwdNoteLess").style.display="block";return}a=checkWlanPwd(f.value);switch(a){case EINVWLANPWD:id("wlanPwdNoteInvalidChar5G").style.display=
+"block";return;case EINVPSKLEN:id("wlanPwdNoteLess5G").style.display="block";return}0==e.value.length||0==f.value.length?showPhConfirm(label.confirmNoWirelessPwd,function(a){a?(a=f.value,0==e.value.length?e.focus():0==a.length&&f.focus()):v()},btn.toPwd,btn.unPwd):n.value==p.value&&e.value!=f.value?showPhConfirm(label.confirmSameSsidTitle,function(a){a?(a=f.value,0==e.value.length?e.focus():0==a.length&&f.focus()):v()},btn.rewrite,btn.ignore):v()}function C(a){h=a[b][l];k=a[b][m];z=a[b][r]||{};h[d]=
+h[d]?h[d]:"";k[d]=k[d]?k[d]:"";n.value=h[q];e.value=h[d];p.value=k[q];f.value=k[d]}var b=uciWireless.fileName,l=uciWireless.dynData.host_2g,m=uciWireless.dynData.host_5g,r=uciWireless.secName.wlanBS,q=uciWireless.dynOptName.ssid,s=uciWireless.dynOptName.encryption,d=uciWireless.dynOptName.key,A=uciWireless.optName.bsEnable,n=id("wzdWirelessName2G"),e=id("wzdWirelessPwd2G"),p=id("wzdWirelessName5G"),f=id("wzdWirelessPwd5G"),h={},k={},z={};id("pre").onclick=function(){gSysModeSupport&&uciSystem.optValue.sysMode.apMode==
+gSysMode?wzdNetWorkModeChange(LINK_TYPE_WIRED_REPEATER):wzdNetWorkModeChange(gNetworkCfg[uciProto.optName.type])};id("sub").onclick=function(){t()&&u()&&B()};n.onblur=t;n.onkeyup=t;e.onblur=function(){var a=checkWlanPwd(e.value);if(EINVWLANPWD==a||EINVPSKLEN==a)return!1;id("wlanPwdNoteLess").style.display="none";id("wlanPwdNoteInvalidChar").style.display="none";return!0};e.onkeyup=function(){var a=30,b="",f="none",c="none",c=e.value,d=c.length,h=checkWlanPwd(e.value);if(EINVWLANPWD==h)return id("wlanPwdNoteInvalidChar").style.display=
+"block",id("wlanPwdNoteLess").style.display="none",id("wlanPwdNote").style.display="none",!1;0<=d&&8>d?(f="block",c="none"):(/^\d+$/.test(c)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(c)||/^[a-zA-Z]+$/.test(c)?12>=d?b=label.weak:(b=label.media,a*=2):!0==x(c)?(b=label.strong,a*=3):12>=d?(b=label.media,a*=2):(b=label.strong,a*=3),c="block");id("wlanPwdNoteInvalidChar").style.display="none";id("wlanPwdNote").style.display=c;id("wlanPwdNoteLess").style.display=f;id("pwdDep2G").innerHTML=b;id("chgPwdDep2G").style.width=
+a+"px"};p.onblur=u;p.onkeyup=u;f.onblur=function(){var a=checkWlanPwd(f.value);if(EINVWLANPWD==a||EINVPSKLEN==a)return!1;id("wlanPwdNoteLess5G").style.display="none";id("wlanPwdNoteInvalidChar5G").style.display="none";return!0};f.onkeyup=function(){var a=30,b="",d="none",c="none",c=f.value,e=c.length,h=checkWlanPwd(f.value);if(EINVWLANPWD==h)return id("wlanPwdNoteInvalidChar5G").style.display="block",id("wlanPwdNoteLess5G").style.display="none",id("wlanPwdNote5G").style.display="none",!1;0<=e&&8>
+e?(d="block",c="none"):(/^\d+$/.test(c)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(c)||/^[a-zA-Z]+$/.test(c)?12>=e?b=label.weak:(b=label.media,a*=2):!0==x(c)?(b=label.strong,a*=3):12>=e?(b=label.media,a*=2):(b=label.strong,a*=3),c="block");id("wlanPwdNoteInvalidChar5G").style.display="none";id("wlanPwdNote5G").style.display=c;id("wlanPwdNoteLess5G").style.display=d;id("pwdDep5G").innerHTML=b;id("chgPwdDep5G").style.width=a+"px"};adaptCNABrowserInput("wzdWirelessName2G");adaptCNABrowserInput("wzdWirelessName5G");
+(function(){var a={};a[b]={};a[b][KEY_NAME]=[l,m];gSupportBS&&a[b][KEY_NAME].push(r);$.query(a,C)})();gSupportBS&&($("#wifiUnite").removeClass("disNone"),$("#switchOff").click(function(){changeBSPage(gBSHandler.ON)}))}init();
+</script><style type="text/css">p.phSetTitle{margin:30px auto 10px;width:280px;font-size:14px;color:#fff}p.bsHelpInfo{font-size:11px;color:#FFF;width:283px;margin:6px auto 30px}label.wifiUniteLbl{font-size:15px;color:#fff;line-height:40px}ul.phInputUl img{height:46px;width:61px;float:right}li.phWULi{height:40px;line-height:40px}ul.wifiUniteUl{border-bottom:1px #3e94b7 solid;margin-top:-20px}</style>

@@ -1,0 +1,3 @@
+/lib/libc.so
+/lib/ld-musl-arm.so.1
+/usr/bin/ldd

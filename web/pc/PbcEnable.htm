@@ -1,0 +1,22 @@
+
+
+<div id="hcCo" class="hcCo">
+    <div class="title">
+        <label class="title">{%menuStr.pbcEnable%}</label>
+    </div>
+    <div class="block pbcEnableStatusBlk">
+        <label>{%menuStr.pbcEnable%}</label>
+        <div id="switchCon" class="switchCon switchConNetState">
+            <i class="switchBg"></i>
+            <i class="switchBall"></i>
+        </div>
+        <span id="pbcEnableState"></span>
+        <p class="mt30">本设备带有易展按键，可与其他带有易展按键的TP-LINK无线路由器实现“一键互联”。</p>
+        <p>与本设备互联的其他路由器会获取到本设备的所有配置参数。</p>
+        <p class="mt22">注意：</p>
+        <p>1、 如果您在公共场所使用本设备，为保证信息安全，请不要开启易展按键；</p>
+        <p>2、易展按键未开启时，您可以通过APP或Web管理页手动与其他路由器互联。</p>
+    </div>
+</div><script type="text/javascript">function init(){function l(b){if(d)d=!1,e.innerHTML=b==c?f:g;else{var a={},h={};a[uciMesh.fileName]={};a[uciMesh.fileName][uciMesh.secName.config]=h;h[uciMesh.optName.pbcEnable]=b==c?k:m;$.modify(a,function(a){ENONE!=a[ERR_CODE]?showAlert(errorStr.saveFail):e.innerHTML=b==c?f:g})}}var d=!0,c=1,f=statusStr.opened,g=statusStr.closed,k=uciMesh.optValue.enable.on,m=uciMesh.optValue.enable.off,e=id("pbcEnableState");(function(){var b={};b[uciMesh.fileName]={};b[uciMesh.fileName][KEY_NAME]=uciMesh.secName.config;
+$.query(b,function(a){ENONE==a[ERR_CODE]&&new Switch("switchCon",a[uciMesh.fileName][uciMesh.secName.config][uciMesh.optName.pbcEnable]==k?c:0,l)})})()}init();
+</script><style type="text/css">div.pbcEnableStatusBlk{text-align:left}div.pbcEnableStatusBlk label{font-size:14px;color:#fff;letter-spacing:-0.43px;vertical-align:middle}div.pbcEnableStatusBlk span{font-size:12px;color:#fff;letter-spacing:-0.37px;vertical-align:middle}div.pbcEnableStatusBlk p{font-size:12px;color:#fff;letter-spacing:0;line-height:12px;margin-top:10px}div.pbcEnableStatusBlk p.mt30{margin-top:30px}div.pbcEnableStatusBlk p.mt22{margin-top:22px}</style>

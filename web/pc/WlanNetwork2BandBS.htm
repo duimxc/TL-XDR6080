@@ -1,0 +1,385 @@
+
+
+<div id="hcCo" class="hcCo">
+    <div id="wifiSwitchDiv" class="disNone">
+        <div class="title">
+            <label class="title">{%label.wifiSwitch%}</label>
+            <i class="helpBtn" helpstr="wlanSwitch"></i>
+        </div>
+        <div class="block">
+			<div id="wifiSwitchUnity" class="disNone">
+				<ul class="gridLine gridLineA">
+					<label class="desLblA desLblWU" style="width: 268px">{%label.wifiSwitch%}</label>
+					<input id="wifiSwitchOnAll" name="wifiSwitchAll" class="switchRadio" type="radio" /><label class="noteLbl" for="wifiSwitchOnAll">{%label.openStr%}</label>
+					<input id="wifiSwitchOffAll" name="wifiSwitchAll" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wifiSwitchOffAll">{%label.closeStr%}</label>
+				</ul>
+				<p class="help_tip disNone" id="wifiSwitchOffTip">{%label.wifiSwitchOffTip%}</p>
+			</div>
+			<div id="wifiSwitchSplit" class="disNone">
+				<ul class="gridLine gridLineA">
+					<label class="desLblA">{%label.wifiSwitchAll2g%}</label>
+					<input id="wifiSwitchOnAll2g" name="wifiSwitchAll2g" class="switchRadio" type="radio" /><label class="noteLbl" for="wifiSwitchOnAll2g">{%label.openStr%}</label>
+					<input id="wifiSwitchOffAll2g" name="wifiSwitchAll2g" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wifiSwitchOffAll2g">{%label.closeStr%}</label>
+				</ul>
+				<ul class="gridLine gridLineA">
+					<label class="desLblA">{%label.wifiSwitchAll5g%}</label>
+					<input id="wifiSwitchOnAll5g" name="wifiSwitchAll5g" class="switchRadio" type="radio" /><label class="noteLbl" for="wifiSwitchOnAll5g">{%label.openStr%}</label>
+					<input id="wifiSwitchOffAll5g" name="wifiSwitchAll5g" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wifiSwitchOffAll5g">{%label.closeStr%}</label>
+				</ul>
+			</div>
+            <div class="blockFuncA">
+                <input id="saveAll" type="button" value="{%btn.save%}" class="btnA subBtn" />
+            </div>
+        </div>
+    </div>
+    <div class="title">
+        <label class="title">{%label.wifiSet%}</label>
+        <i class="helpBtn" helpStr="wlanNetworkBasic"></i>
+    </div>
+    <div class="block">
+        <ul class="gridLine gridLineA">
+            <label class="desLblA desLblWU">{%label.wifiUnite%}</label>
+            <input id="wifiUniteOn" name="wifiUnite" class="switchRadio" type="radio" /><label class="noteLbl" for="wifiUniteOn">{%label.openStr%}</label>
+            <input id="wifiUniteOff" name="wifiUnite" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wifiUniteOff">{%label.closeStr%}</label>
+        </ul>
+        <p class="help_tip" id="bsTip">{%label.bsHelp%}</p>
+        <ul class="gridLine gridLineA gridLineBS">
+            <label class="desLblA">{%label.wlanEnabled%}</label>
+            <input id="wifiSwitchOn" name="wifiSwitch" class="switchRadio" type="radio" /><label class="noteLbl" for="wifiSwitchOn">{%label.openStr%}</label>
+            <input id="wifiSwitchOff" name="wifiSwitch" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wifiSwitchOff">{%label.closeStr%}</label>
+        </ul>
+        <ul class="gridLine gridLineA gridLineA2">
+            <label class="desLblA" for="ssid">{%label.wirelessName%}</label>
+            <li class="textConA textCon"><input id="ssid" class="textA text hoverBd" maxLength="32" /><i class="tip"></i></li>
+            <input id="ssidBrd" class="checkbox wlanBroadCase" type="checkbox" />
+            <label class="noteLbl" for="ssidBrd">{%label.wirelessSsidBrd%}</label>
+        </ul>
+        <ul id="pwdLine" class="gridLine gridLineA">
+            <label class="desLblA" for="wlanPwd">{%label.wirelessPwd%}</label>
+            <li class="textConA textCon"><input id="wlanPwd" class="textA text hoverBd imeModeN" maxLength="63" /><i class="tip"></i></li>
+            <li id="pwdDepNote2G" class="note">
+                <i id="pwdDepI" class="warn"></i>
+                <div class="noteCon noteConRouteSet">
+                    <p class="pwdDepC twoLine">{%label.chgPwdDep%}{%label.colon%}<label id="pwdDep2G">{%label.weak%}</label></p>
+                    <div class="pwdDepL"><label id="chgPwdDep2G"></label></div>
+                </div>
+            </li>
+        </ul>
+		<div id="authDiv" class="disNone">
+			<ul class="gridLine gridLineA">
+				<label class="desLblA" for="auth">{%label.wirelessAuth%}</label>
+				<li class="textConA textCon">
+				<span id="auth" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+                </li>
+			</ul>
+			<ul class="gridLine gridLineA gridLineTips" id="authTips">
+				<span>
+					<div class="warnCon">
+						<img src="../web-static/images/routerBg.png" />
+					</div>
+					{%label.authCompatibilityTips%}
+				</span>
+			</ul>
+        </div>
+        <div id="cipherDiv" class="disNone">
+            <ul class="gridLine gridLineA">
+                <label class="desLblA" for="cipher">{%label.wirelessCipher%}</label>
+                <li class="textConA textCon">
+				<span id="cipher" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+                </li>
+            </ul>
+        </div>
+        <div class="blockFuncA">
+            <input id="saveBasic" type="button" value="{%btn.save%}" class="btnA subBtn" />
+        </div>
+    </div>
+    <div class="title">
+        <label class="title">{%label.wifiAdvanceSet2G%}</label>
+        <i class="helpBtn" id="wlanHelp"></i>
+    </div>
+    <div class="block">
+        <ul class="gridLine gridLineA">
+            <label class="desLblA" for="wirelessChannel">{%label.wirelessChannel%}</label>
+            <li class="textConA textCon">
+				<span id="channel" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>
+        <ul class="gridLine gridLineA">
+            <label class="desLblA" for="wirelessMode">{%label.wirelessMode%}</label>
+            <li class="textConA textCon">
+				<span id="wlanMode" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>
+		<ul class="gridLine gridLineA gridLineTips" id="wlanModeAxTips2G">
+			<span>
+				<div class="warnCon">
+					<img src="../web-static/images/routerBg.png" />
+				</div>
+				{%label.wifi802AxSelectedTips%}
+			</span>
+		</ul>
+        <ul class="gridLine gridLineA">
+            <label class="desLblA" for="wirelessWide">{%label.wirelessWidth%}</label>
+            <li class="textConA textCon">
+				<span id="wlanWidth" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>
+		<div id="TWTSel">
+		  <ul class="gridLine gridLineA gridLineB2">
+			  <label class="desLblA">{%label.wirelessTWT%}</label>
+			  <input id="TWTSwitchOn" name="TWTSwitch" class="switchRadio" type="radio">
+		  	<label class="noteLbl" for="TWTSwitchOn">{%label.openStr%}</label>
+			  <input id="TWTSwitchOff" name="TWTSwitch" class="switchRadio switchRadioR" type="radio">
+			  <label class="noteLbl" for="TWTSwitchOff">{%label.closeStr%}</label>
+		  </ul>
+		  <div id="TWTCompatibilityTip2g" class="display">
+			  <li id="compatibilityNote2g" class="note">
+				  <i id="compatibilityLogo2g" class="warn"></i>
+				  <span id="compatibilityText2g" class="warnText">{%label.TWTCompatibilityTip%}</span>
+			  </li>
+		  </div>
+		</div>
+		<ul class="gridLine gridLineA gridLineB2" id="MUMimoSel">
+			<label class="desLblA">{%label.wirelessMUMimo%}</label>
+			<input id="MUMimoSwitchOn" name="MUMimoSwitch" class="switchRadio" type="radio">
+			<label class="noteLbl" for="MUMimoSwitchOn">{%label.openStr%}</label>
+			<input id="MUMimoSwitchOff" name="MUMimoSwitch" class="switchRadio switchRadioR" type="radio">
+			<label class="noteLbl" for="MUMimoSwitchOff">{%label.closeStr%}</label>
+		</ul>
+		<ul class="gridLine gridLineA gridLineB2" id="OFDMASel">
+			<label class="desLblA">{%label.wirelessOFDMA%}</label>
+			<input id="OFDMASwitchOn" name="OFDMASwitch" class="switchRadio" type="radio">
+			<label class="noteLbl" for="OFDMASwitchOn">{%label.openStr%}</label>
+			<input id="OFDMASwitchOff" name="OFDMASwitch" class="switchRadio switchRadioR" type="radio">
+			<label class="noteLbl" for="OFDMASwitchOff">{%label.closeStr%}</label>
+		</ul>
+        <div class="blockFuncA">
+            <input id="saveAdvanced2g" type="button" value="{%btn.save%}" class="btnA subBtn" />
+        </div>
+    </div>
+    <div class="title">
+        <label class="title">{%label.wifiAdvanceSet5G%}</label>
+        <i class="helpBtn" id="wlanHelp5G"></i>
+    </div>
+    <div class="block">
+        <ul class="gridLine gridLineA">
+            <label class="desLblA">{%label.wirelessChannel%}</label>
+            <li class="textConA textCon">
+				<span id="channel5g" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+		</ul>
+		<ul class="gridLine gridLineA gridLineTips" id="channel5gTips">
+			<span>
+				<div class="warnCon">
+					<img src="../web-static/images/routerBg.png" />
+				</div>
+				{%label.band2CompatibilityTips2%}
+			</span>
+		</ul>
+        <ul class="gridLine gridLineA">
+            <label class="desLblA">{%label.wirelessMode%}</label>
+            <li class="textConA textCon">
+				<span id="wlanMode5g" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>
+		<ul class="gridLine gridLineA gridLineTips" id="wlanModeAxTips5G">
+			<span>
+				<div class="warnCon">
+					<img src="../web-static/images/routerBg.png" />
+				</div>
+				{%label.wifi802AxSelectedTips%}
+			</span>
+		</ul>
+        <ul class="gridLine gridLineA">
+            <label class="desLblA">{%label.wirelessWidth%}</label>
+            <li class="textConA textCon">
+				<span id="wlanWidth5g" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>
+        <!-- <ul id="muMimoCon" class="gridLine gridLineA disNone">
+            <label class="desLblA">{%label.wirelessMUMimo%}</label>
+            <li class="textConA textCon">
+				<span id="wlanMuMimo5g" class="select">
+					<span class="value hsValueA"></span>
+					<i class="arrow"></i>
+				</span>
+            </li>
+        </ul>-->
+		<div id="TWTSel5g">
+		  <ul class="gridLine gridLineA gridLineB2">
+			  <label class="desLblA">{%label.wirelessTWT%}</label>
+			  <input id="TWTSwitchOn5g" name="TWTSwitch5g" class="switchRadio" type="radio">
+			  <label class="noteLbl" for="TWTSwitchOn5g">{%label.openStr%}</label>
+			  <input id="TWTSwitchOff5g" name="TWTSwitch5g" class="switchRadio switchRadioR" type="radio">
+			  <label class="noteLbl" for="TWTSwitchOff5g">{%label.closeStr%}</label>
+		  </ul>
+		  <div id="TWTCompatibilityTip5g" class="display">
+			  <li id="compatibilityNote5g" class="note">
+				  <i id="compatibilityLogo5g" class="warn"></i>
+				  <span id="compatibilityText5g" class="warnText">{%label.TWTCompatibilityTip%}</span>
+			  </li>
+		  </div>
+		</div>
+		<ul class="gridLine gridLineA gridLineB2" id="MUMimoSel5g">
+			<label class="desLblA">{%label.wirelessMUMimo%}</label>
+			<input id="MUMimoSwitchOn5g" name="MUMimoSwitch5g" class="switchRadio" type="radio">
+			<label class="noteLbl" for="MUMimoSwitchOn5g">{%label.openStr%}</label>
+			<input id="MUMimoSwitchOff5g" name="MUMimoSwitch5g" class="switchRadio switchRadioR" type="radio">
+			<label class="noteLbl" for="MUMimoSwitchOff5g">{%label.closeStr%}</label>
+		</ul>
+		<ul class="gridLine gridLineA gridLineB2" id="OFDMASel5g">
+			<label class="desLblA">{%label.wirelessOFDMA%}</label>
+			<input id="OFDMASwitchOn5g" name="OFDMASwitch5g" class="switchRadio" type="radio">
+			<label class="noteLbl" for="OFDMASwitchOn5g">{%label.openStr%}</label>
+			<input id="OFDMASwitchOff5g" name="OFDMASwitch5g" class="switchRadio switchRadioR" type="radio">
+			<label class="noteLbl" for="OFDMASwitchOff5g">{%label.closeStr%}</label>
+		</ul>
+        <div class="blockFuncA">
+            <input id="saveAdvanced5g" type="button" value="{%btn.save%}" class="btnA subBtn" />
+        </div>
+    </div>
+	<div id="multiSSIDDiv" class="disNone">
+		<div class="title">
+			<label class="title">{%label.multiSSID%}</label>
+			<i class="helpBtn" helpstr="multiSSIDHelp"></i>
+		</div>
+		<div class="block">
+			<table id="SSIDTable" class="dataGrid"></table>
+		</div>
+	</div>
+	<div id="wpsDiv" class="disNone">
+		<div class="title" style="margin: 30px 0 0 0">
+			<label class="title">{%label.wpsSet%}</label>
+			<i class="helpBtn" helpstr="wpsHelp"></i>
+		</div>
+		<div class="block">
+			<ul class="gridLine gridLineA">
+				<label class="desLblA desLblWU">{%label.wpsRouterPinCode%}</label>
+				<input id="wpsRouterPinOn" name="wpsRouterPin" class="switchRadio" type="radio" /><label class="noteLbl" for="wpsRouterPinOn">{%label.openStr%}</label>
+				<input id="wpsRouterPinOff" name="wpsRouterPin" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wpsRouterPinOff">{%label.closeStr%}</label>
+			</ul>
+			<ul style="display: block;" class="gridLine gridLineA" id="wpsRouterPinCodeUl">
+				<input id="genVendorPin" type="button" class="btnA subBtn" value="{%label.wpsGenPinCode%}" style="margin-left:205px; margin-right:20px">
+				<li  style="width:90px" class="textConA textCon">
+					<input id="wpsRouterPinCode" style="width:90px" class="textA text hoverBd" maxlength="8">
+					<i class="tip"></i>
+				</li>
+			</ul>
+			<div class="blockFuncA">
+				<input id="saveWpsRouterPin" type="button" value="{%btn.save%}" class="btnA subBtn" />
+			</div>
+			<ul class="gridLine gridLineA">
+				<label class="desLblA desLblWU">{%label.wpsMethod%}</label>
+				<input id="wpsMethodButton" name="wpsMethod" class="switchRadio" type="radio" /><label class="noteLbl" for="wpsMethodButton">{%label.wpsMethodButton%}</label>
+				<input id="wpsMethodPin" name="wpsMethod" class="switchRadio switchRadioR" type="radio" /><label class="noteLbl" for="wpsMethodPin">{%label.wpsMethodPin%}</label>
+			</ul>
+			<ul id="wpsMethodPinUl" class="gridLine gridLineA">
+				<label class="desLblA" for="wpsTerminalPinCode">{%label.wpsMethodPinNote%}</label>
+				<li class="textConA textCon">
+					<input id="wpsTerminalPinCode" class="textA text hoverBd" maxLength="8" />
+					<i class="tip"></i>
+				</li>
+			</ul>
+			<div class="blockFuncA">
+				<input id="wpsConnect" type="button" value="{%btn.connect%}" class="btnA subBtn" />
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">function init(){function v(a){disableInput("wifiUniteOn",a);disableInput("wifiUniteOff",a);disableInput("wifiSwitchOn",a);disableInput("wifiSwitchOff",a);disableInput("ssid",a);disableInput("wlanPwd",a);id("ssidBrd").disabled=a;(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&id("auth").disable(a);(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&id("cipher").disable(a);!a&&(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&(uciWireless.dynOptValue.mode.m_11n!=$("#wlanMode").val()&&uciWireless.dynOptValue.auth.psk2_sae3!=
+$("#auth").val()&&uciWireless.dynOptValue.auth.sae3!=$("#auth").val()||id("cipher").disable(!0));disableBtn("saveBasic",a);id("saveBasic").onclick=a?null:Q}function G(a){id("channel").disable(a);id("wlanMode").disable(a);id("wlanWidth").disable(a);disableInput("TWTSwitchOn",a);disableInput("TWTSwitchOff",a);disableInput("MUMimoSwitchOn",a);disableInput("MUMimoSwitchOff",a);disableInput("OFDMASwitchOn",a);disableInput("OFDMASwitchOff",a);a||((gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&uciWireless.dynOptValue.mode.m_11n==
+$("#wlanMode").val()&&id("cipher").disable(!0),uciWireless.dynOptValue.mode.m_11bg!=$("#wlanMode").val()&&uciWireless.dynOptValue.mode.m_11b!=$("#wlanMode").val()&&uciWireless.dynOptValue.mode.m_11g!=$("#wlanMode").val()||id("wlanWidth").disable(!0));disableBtn("saveAdvanced2g",a);id("saveAdvanced2g").onclick=a?null:M}function H(a){id("channel5g").disable(a);id("wlanMode5g").disable(a);id("wlanWidth5g").disable(a);disableInput("TWTSwitchOn5g",a);disableInput("TWTSwitchOff5g",a);disableInput("OFDMASwitchOn5g",
+a);disableInput("OFDMASwitchOff5g",a);r&&(disableInput("MUMimoSwitchOn5g",a),disableInput("MUMimoSwitchOff5g",a));a||165==parseInt(id("channel5g").value)&&id("wlanWidth5g").disable(!0);disableBtn("saveAdvanced5g",a);id("saveAdvanced5g").onclick=a?null:M}function w(a){disableInput("wpsRouterPinOn",a);disableInput("wpsRouterPinOff",a);disableBtn("genVendorPin",a);id("genVendorPin").onclick=a?null:ba;disableBtn("saveWpsRouterPin",a);id("saveWpsRouterPin").onclick=a?null:ca;disableInput("wpsMethodButton",
+a);disableInput("wpsMethodPin",a);disableInput("wpsTerminalPinCode",a);disableBtn("wpsConnect",a);id("wpsConnect").onclick=a?null:da}function ea(a){for(var c=[],b=a.length,e=0;e<b;e++)c[e]="auto"==a[e]?{str:label.wirelessAuto,value:"0"}:{str:a[e],value:a[e]};return c}function fa(a){var c=[];if(void 0==a)c=xa;else for(var b=0;b<a.length;++b){var e=a[b];c[b]={str:ya[e],value:e}}return c}function p(a,c){var b="";switch(a){case ENONE:return!1;case EINVSSIDLEN:b=errStr.wlanSsidLenErr;break;case EINVSSIDBLANK:b=
+errStr.wlanSsidBlank;break;case EINVPSKLEN:b=errStr.wlanPwdLenValid;break;case EWLANPWDBLANK:b=errStr.wlanPwdNull;break;case EINVSSIDEMPTY:b=errStr.wlanSsidErr;break;case EINVWLANPWD:b=errStr.wlanPwdInvalid;break;case ESYSBUSY:b=errStr.invRequestFailTrylater;break;case EINVCHNAMODEBAND:b=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn;break;default:b=errStr.invRequestFail}showAlert(b,c);return!0}function ga(a){var c=parseInt(id("wlanMode5g").value),b=!1;if(gWlanHost5gSupport160MBandWidth){if(149<=
+a&&149>I||149>a&&149<=I)b=!0;b&&c!=uciWireless.dynOptValue.mode.m_11an&&(c=parseInt(g.value),149<=a?g.resetOptions(ha,uciWireless.dynOptValue.bandwidth.bw80):g.resetOptions(ia,uciWireless.dynOptValue.bandwidth.auto),0==c&&149<=a?g.changeSel(uciWireless.dynOptValue.bandwidth.bw80):g.changeSel(c))}165==parseInt(a)?(g.changeSel(uciWireless.dynOptValue.bandwidth.bw20),g.disable(!0)):g.disable(!1);gMeshSupport&&52<=a&&64>=a?id("channel5gTips").style.display="block":id("channel5gTips").style.display="none";
+I=a}function ja(a){uciWireless.dynOptValue.mode.m_11b==a||uciWireless.dynOptValue.mode.m_11g==a||uciWireless.dynOptValue.mode.m_11bg==a?(x.changeSel(uciWireless.dynOptValue.bandwidth.bw20),x.disable(!0)):(x.changeSel(uciWireless.dynOptValue.bandwidth.auto),x.disable(!1));if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)!(gAuthSupport||gAuthSupport2g||gAuthSupport5g)||uciWireless.dynOptValue.auth.psk2_sae3!=$("#auth").val()&&uciWireless.dynOptValue.auth.psk2_sae3!=$("#auth").val()?uciWireless.dynOptValue.mode.m_11n==
+a?(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0)):(id("cipher").changeSel(y[uciWireless.dynOptName.cipher]),id("cipher").disable(!1)):(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0));g11AxSupport.wlan2g&&($("#wlanModeAxTips2G").css("display",uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"),$("#TWTSel").css("display",z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"),$("#MUMimoSel").css("display",A&&uciWireless.dynOptValue.mode.m_11bgn_ax==
+a?"block":"none"),$("#OFDMASel").css("display",B&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none"))}function ka(a){var c;uciWireless.dynOptValue.mode.m_11an==a?(g.resetOptions(R,uciWireless.dynOptValue.bandwidth.auto),$("#MUMimoSel5g").css("display","none")):(S?g.resetOptions(la,uciWireless.dynOptValue.bandwidth.auto):gWlanHost5gSupport160MBandWidth?g.resetOptions(ia,uciWireless.dynOptValue.bandwidth.auto):g.resetOptions(za,uciWireless.dynOptValue.bandwidth.auto),$("#MUMimoSel5g").css("display",
+r?"block":"none"));c=parseInt(id("channel5g").value);void 0==id("channel5g").value&&(c=parseInt(I));gWlanHost5gSupport160MBandWidth&&uciWireless.dynOptValue.mode.m_11an!=a&&149<=c&&g.resetOptions(ha,uciWireless.dynOptValue.bandwidth.bw80);165==c?(g.changeSel(uciWireless.dynOptValue.bandwidth.bw20),g.disable(!0)):(gWlanHost5gSupport160MBandWidth?(c=uciWireless.dynOptValue.mode.m_11an!=a&&149<=c?uciWireless.dynOptValue.bandwidth.bw80:uciWireless.dynOptValue.bandwidth.auto,g.changeSel(c)):g.changeSel(uciWireless.dynOptValue.bandwidth.auto),
+g.disable(!1));g11AxSupport.wlan5g&&($("#wlanModeAxTips5G").css("display",uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"),$("#OFDMASel5g").css("display",C&&uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"),$("#TWTSel5g").css("display",D&&uciWireless.dynOptValue.mode.m_11ac_ax==a?"block":"none"))}function Aa(a){a==uciWireless.dynOptValue.auth.psk2_sae3?id("authTips").style.display="block":id("authTips").style.display="none";if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)uciWireless.dynOptValue.auth.psk2_sae3==
+a||uciWireless.dynOptValue.auth.sae3==a||uciWireless.dynOptValue.mode.m_11n==$("#wlanMode").val()?(id("cipher").changeSel(uciWireless.dynOptValue.cipher.aes),id("cipher").disable(!0)):(id("cipher").changeSel(m[uciWireless.dynOptName.cipher]),id("cipher").disable(!1))}function ma(a,c,b){for(var e in b)if(void 0!=c[b[e]]&&a[b[e]]!=c[b[e]])return!0;return!1}function Ba(a,c){var b=[uciWireless.dynOptName.ssid,uciWireless.dynOptName.key,uciWireless.dynOptName.ssidbrd,uciWireless.dynOptName.encryption,
+uciWireless.optName.bsEnable,uciWireless.optName.wifiEnable];(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&b.push(uciWireless.dynOptName.auth);(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&b.push(uciWireless.dynOptName.cipher);return ma(a,c,b)}function na(a,c,b){var e=[uciWireless.dynOptName.channel,uciWireless.dynOptName.mode,uciWireless.dynOptName.bandwidth],d=$("#wlanMode").val(),h=$("#wlanMode5g").val();("2g"==b&&z&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&D&&uciWireless.dynOptValue.mode.m_11ac_ax==
+h)&&e.push(uciWireless.dynOptName.twt);("2g"==b&&B&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&C&&uciWireless.dynOptValue.mode.m_11ac_ax==h)&&e.push(uciWireless.dynOptName.ofdma);("2g"==b&&A&&uciWireless.dynOptValue.mode.m_11bgn_ax==d||"5g"==b&&r&&(uciWireless.dynOptValue.mode.m_11ac_ax==h||uciWireless.dynOptValue.mode.m_11ac==h))&&e.push(uciWireless.dynOptName.muMIMO);return ma(a,c,e)}function Ca(a,c){var b=[uciWireless.dynOptName.enable];gWifiSwitchSplit&&(b.push(uciWireless.dynOptName.enable_2g),
+b.push(uciWireless.dynOptName.enable_5g));for(var e in b)if(a[b[e]]!=c[b[e]])return!0;return!1}function T(a){var c={};c[uciWireless.fileName]={};c[uciWireless.fileName][KEY_NAME]=[U,V];$.query(c,function(b){ENONE==b[ERR_CODE]?a(b[uciWireless.fileName]):p(b[ERR_CODE])})}function Da(){var a={};gWifiSwitchSplit?(id("wifiSwitchOnAll2g").checked?(a[uciWireless.dynOptName.enable_2g]="on",a[uciWireless.dynOptName.enable]="on"):a[uciWireless.dynOptName.enable_2g]="off",id("wifiSwitchOnAll5g").checked?(a[uciWireless.dynOptName.enable_5g]=
+"on",a[uciWireless.dynOptName.enable]="on"):a[uciWireless.dynOptName.enable_5g]="off"):id("wifiSwitchOnAll").checked?a[uciWireless.dynOptName.enable]="on":a[uciWireless.dynOptName.enable]="off";return a}function Ea(){var a=uciWireless.dynOptName.ssid,c=uciWireless.dynOptName.key,b=uciWireless.dynOptName.ssidbrd,e=uciWireless.dynOptName.encryption,d=uciWireless.dynOptName.auth,h=uciWireless.dynOptName.cipher,l={},f={};f[uciWireless.optName.wifiEnable]=id("wifiSwitchOn");f[a]=$("#ssid");f[c]=$("#wlanPwd");
+f[b]=id("ssidBrd");f[e]=$("#wlanPwd");if(gAuthSupport||gAuthSupport2g||gAuthSupport5g)f[d]=$("#auth");if(gCipherSupport||gCipherSupport2g||gCipherSupport5g)f[h]=$("#cipher");var g=uciFunction.optName.wlanBS,E={},s;for(s in f){var k=f[s];switch(s){case uciWireless.optName.wifiEnable:E[s]=!0==k.checked?1:0;break;case a:case c:case d:case h:E[s]=k.val();break;case b:E[s]=k.checked?uciWireless.dynOptValue.ssidbrd.on:uciWireless.dynOptValue.ssidbrd.off;break;case e:""==k.val()?E[s]=0:E[s]=1}}l[g]=E;l[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable]=
+ENABLE;return l}function Fa(a){var c=uciWireless.dynOptName.channel,b=uciWireless.dynOptName.mode,e=uciWireless.dynOptName.bandwidth,d=uciWireless.dynOptName.muMIMO,h=uciWireless.dynOptName.twt,l=uciWireless.dynOptName.ofdma,f={};"saveAdvanced2g"==a?(f[n]={},f[n][c]=parseInt($("#channel").val()),f[n][b]=parseInt($("#wlanMode").val()),f[n][e]=parseInt($("#wlanWidth").val()),a=$("#wlanMode").val(),z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a&&(f[n][h]=!0==$("#TWTSwitchOn")[0].checked?1:0),B&&uciWireless.dynOptValue.mode.m_11bgn_ax==
+a&&(f[n][l]=!0==$("#OFDMASwitchOn")[0].checked?1:0),A&&uciWireless.dynOptValue.mode.m_11bgn_ax==a&&(f[n][d]=!0==$("#MUMimoSwitchOn")[0].checked?1:0)):(f[k]={},f[k][c]=parseInt($("#channel5g").val()),f[k][b]=parseInt($("#wlanMode5g").val()),f[k][e]=parseInt($("#wlanWidth5g").val()),a=$("#wlanMode5g").val(),D&&uciWireless.dynOptValue.mode.m_11ac_ax==a&&(f[k][h]=!0==$("#TWTSwitchOn5g")[0].checked?1:0),C&&uciWireless.dynOptValue.mode.m_11ac_ax==a&&(f[k][l]=!0==$("#OFDMASwitchOn5g")[0].checked?1:0),!r||
+uciWireless.dynOptValue.mode.m_11ac_ax!=a&&uciWireless.dynOptValue.mode.m_11ac!=a||(f[k][d]=!0==$("#MUMimoSwitchOn5g")[0].checked?1:0));return f}function F(a){var c={};c[uciWireless.fileName]=a;hsLoading(!0);$.modify(c,function(a){var c=0;ENONE==a[ERR_CODE]?(a.dfs_wait_time&&0!=a.dfs_wait_time?showDFSPopUpWindow(function(){J(K)},parseInt(a.dfs_wait_time)):J(K),c=APPLY_WIRELESS_SECONDS):p(a[ERR_CODE]);$.setTimeout(function(){hsLoading(!1);disableBtn("saveBasic",!1);disableBtn("saveAdvanced2g",!1);
+disableBtn("saveAdvanced5g",!1)},c)})}function oa(a,c){var b={},e="";if(gWifiSwitchSupport&&gWifiSwitchUseWireless)e="wireless";else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)e="custom_wireless";b[e]={};b[e][c]=a;setLoadingId("saveAll");disableBtn("saveBasic",!0);disableBtn("saveAdvanced2g",!0);disableBtn("saveAdvanced5g",!0);hsLoading(!0);$.modify(b,function(a){var b=0;ENONE==a[ERR_CODE]?(a.dfs_wait_time&&0!=a.dfs_wait_time?showDFSPopUpWindow(function(){J(K)},parseInt(a.dfs_wait_time)):
+J(K),b=APPLY_WIRELESS_SECONDS):p(a[ERR_CODE]);if(gWifiSwitchSplit){a=id("wifiSwitchOnAll2g").checked;var c=id("wifiSwitchOnAll5g").checked;G(!a);H(!c);a||c?(v(!1),gPinWpsSupport&&w(!1)):(v(!0),gPinWpsSupport&&w(!0))}else id("wifiSwitchOnAll").checked?(G(!1),H(!1),id("wifiSwitchOffTip").style.display="none",v(!1),gPinWpsSupport&&w(!1)):(G(!0),H(!0),v(!0),id("wifiSwitchOffTip").style.display="block",gPinWpsSupport&&w(!0));$.setTimeout(function(){hsLoading(!1);disableBtn("saveBasic",!1);disableBtn("saveAdvanced2g",
+!1);disableBtn("saveAdvanced5g",!1)},b)})}function N(a){a==n?!0==$("#TWTSwitchOn")[0].checked?(id("TWTCompatibilityTip2g").style.display="block",id("compatibilityNote2g").style.visibility="visible"):(id("TWTCompatibilityTip2g").style.display="none",id("compatibilityNote2g").style.visibility="hidden"):a==k&&(!0==$("#TWTSwitchOn5g")[0].checked?(id("TWTCompatibilityTip5g").style.display="block",id("compatibilityNote5g").style.visibility="visible"):(id("TWTCompatibilityTip5g").style.display="none",id("compatibilityNote5g").style.visibility=
+"hidden"))}function Q(){var a=id("ssid");if(!p(checkSsid(a.value),a)&&(a=replaceUnicodeBlank(O),!p(checkWlanPwd(a),O))){var c=Ea(),b=c[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable];Ba(y,c[uciFunction.optName.wlanBS])&&T(function(a){0!=b||y[uciWireless.optName.wifiEnable]==b||uciWireless.dynOptValue.enable.on!=a[U][uciWireless.dynOptName.enable]&&uciWireless.dynOptValue.enable.on!=a[V][uciWireless.dynOptName.enable]?pa(c):showConfirm(gSysModeSupport?label.wirelessSwitchTipForWDS1:label.wirelessSwitchTipForWDS,
+function(a){!0==a?pa(c):id("wifiSwitchOn").checked=!0})})}}function M(){function a(){T(function(a){var d;if(d="saveAdvanced2g"==c.id)d=m[uciWireless.dynOptName.bandwidth]!=parseInt($("#wlanWidth").val())||m[uciWireless.dynOptName.mode]!=parseInt($("#wlanMode").val())||m[uciWireless.dynOptName.channel]!=parseInt($("#channel").val())?!0:!1,d=d&&uciWireless.dynOptValue.enable.on==a[U][uciWireless.dynOptName.enable];if(d)a=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn,
+showAlert(a),Ga.resetOptions(W,m[uciWireless.dynOptName.channel]),x.resetOptions(qa,m[uciWireless.dynOptName.bandwidth]),Ha.resetOptions(X,m[uciWireless.dynOptName.mode]),x.disable(!1);else{if(d="saveAdvanced5g"==c.id)d=q[uciWireless.dynOptName.bandwidth]!=parseInt($("#wlanWidth5g").val())||q[uciWireless.dynOptName.mode]!=parseInt($("#wlanMode5g").val())||q[uciWireless.dynOptName.channel]!=parseInt($("#channel5g").val())?!0:!1,d=d&&uciWireless.dynOptValue.enable.on==a[V][uciWireless.dynOptName.enable];
+d?(a=gSysModeSupport?errStr.wlanInvOptionsWithWDSOn1:errStr.wlanInvOptionsWithWDSOn,showAlert(a),Ia.resetOptions(Y,q[uciWireless.dynOptName.channel]),g.resetOptions(R,q[uciWireless.dynOptName.bandwidth]),ra.resetOptions(Z),g.disable(!1),ra.changeSel(q[uciWireless.dynOptName.mode])):(a=b,d=c.id,setLoadingId(d),"saveAdvanced2g"==d?disableBtn("saveAdvanced5g",!0):disableBtn("saveAdvanced2g",!0),disableBtn("saveBasic",!0),a[uciFunction.optName.wlanBS]||(a[uciFunction.optName.wlanBS]={}),a[uciFunction.optName.wlanBS][uciWireless.optName.bsEnable]=
+id("wifiUniteOn").checked?ENABLE:DISABLE,F(a))}})}var c=this,b=Fa(c.id);"saveAdvanced2g"==c.id&&!na(m,b[n],"2g")||"saveAdvanced5g"==c.id&&!na(q,b[k],"5g")||(!0==$("#TWTSwitchOn")[0].checked?(id("TWTCompatibilityTip2g").style.display="block",id("compatibilityNote2g").style.visibility="visible"):(id("TWTCompatibilityTip2g").style.display="none",id("compatibilityNote2g").style.visibility="hidden"),!0==$("#TWTSwitchOn5g")[0].checked?(id("TWTCompatibilityTip5g").style.display="block",id("compatibilityNote5g").style.visibility=
+"visible"):(id("TWTCompatibilityTip5g").style.display="none",id("compatibilityNote5g").style.visibility="hidden"),"saveAdvanced5g"==c.id?gMeshSupport&&q.channel!=b[k].channel&&52<=b[k].channel&&64>=b[k].channel?showConfirm(label.band2CompatibilityTips1,function(b){b&&(uciWireless.dynOptValue.bandwidth.bw20==parseInt($("#wlanWidth5g").val())?showConfirm(label.bw20Tips,function(b){!0==b&&a()}):a())}):uciWireless.dynOptValue.bandwidth.bw20==parseInt($("#wlanWidth5g").val())?showConfirm(label.bw20Tips,
+function(b){!0==b&&a()}):a():("saveAdvanced2g"==c.id&&$("#wlanMode").val()==uciWireless.dynOptValue.mode.m_11n&&(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&(b[n][uciWireless.dynOptName.cipher]=uciWireless.dynOptValue.cipher.aes,y[uciWireless.dynOptName.cipher]==uciWireless.dynOptValue.cipher.tkip&&(b[uciFunction.optName.wlanBS]={},b[uciFunction.optName.wlanBS][uciWireless.dynOptName.cipher]=uciWireless.dynOptValue.cipher.aes)),a()))}function Ja(a){var c=!1,b=!1;y[uciWireless.optName.wifiEnable]!=
+a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]&&a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]==DISABLE&&(c=!0);c?$.query({hosts_info:{table:"host_info"}},function(c){c=formatTableData(c.hosts_info.host_info);for(var d=c.length,h=0;h<d;h++){var l=c[h];if(l.is_cur_host==Ka){l.type==La?b=!0:(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a));break}}b&&showConfirm(label.wirelessSwitchTip,function(b){!0==b?(setLoadingId("saveBasic"),
+disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a)):id("wifiSwitchOn").checked=!0})}):(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a))}function pa(a){var c;0==a[uciFunction.optName.wlanBS][uciWireless.optName.wifiEnable]?gWifiSwitchSupport||gCustomWifiSwitchSupport?(c=sa?"关闭该网络后，仅能通过网线连接进入路由器管理页。请确认是否仍要关闭？":label.closeHostPassive,showConfirm(c,function(b){!0==b?(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",
+!0),F(a)):id("wifiSwitchOn").checked=!0})):Ja(a):(setLoadingId("saveBasic"),disableBtn("saveAdvanced2g",!0),disableBtn("saveAdvanced5g",!0),F(a))}function ba(){var a={};a[uciCustomWireless.fileName]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin]=null;$.action(a,function(a){ENONE==a[ERR_CODE]&&$("#wpsRouterPinCode").val(a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsGeneratePin][uciCustomWireless.optName.vendorPin])})}function ca(){var a=id("wpsRouterPinOn").checked?
+"on":"off",c=$("#wpsRouterPinCode").val();if(!id("wpsRouterPinOn").checked||!p(checkPin(c),id("genVendorPin")))if(a!=oldWpsConfig[uciCustomWireless.optName.pinEnable]||c!=oldWpsConfig[uciCustomWireless.optName.pinCode]){var b={};b[uciCustomWireless.fileName]={};b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig]={};b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable]=a;b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode]=
+c;setLoadingId("saveWpsRouterPin");hsLoading(!0);$.modify(b,function(a){ENONE==a[ERR_CODE]?oldWpsConfig=b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig]:p(a[ERR_CODE],id("saveWpsRouterPin"));$.setTimeout(function(){hsLoading(!1)},1)})}}function da(){var a={};a[uciCustomWireless.fileName]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink]={};a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.linkType]=id("wpsMethodButton").checked?
+uciCustomWireless.optValue.linkType.button:uciCustomWireless.optValue.linkType.pin;a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.band]="all";if(id("wpsMethodPin").checked){var c=$("#wpsTerminalPinCode").val();if(p(checkPin(c),id("wpsTerminalPinCode")))return;a[uciCustomWireless.fileName][uciCustomWireless.actionName.wpsLink][uciCustomWireless.optName.terminalPinCode]=c}setLoadingId("wpsConnect");hsLoading(!0);$.action(a,function(a){hsLoading(!1);ENONE!=
+a[ERR_CODE]&&p(a[ERR_CODE],id("wpsConnect"))})}function Ma(a){var c={};c[uciCustomWireless.fileName]={};c[uciCustomWireless.fileName][KEY_NAME]=uciCustomWireless.secName.wpsConfig;$.query(c,function(b){ENONE==b[ERR_CODE]&&(oldWpsConfig=b[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig],a&&a(b))},!0)}function J(a){var c={};c[uciWireless.fileName]={};c[uciWireless.fileName][KEY_NAME]=[uciWireless.dynData.host_2g,uciWireless.dynData.wds_2g,uciWireless.dynData.host_5g,uciWireless.dynData.wds_5g,
+uciFunction.optName.wlanBS];c[uciFunction.fileName]={};c[uciFunction.fileName][KEY_NAME]=[uciFunction.secName.newModuleSpec];if(gWifiSwitchSupport&&gWifiSwitchUseWireless)c[uciWireless.fileName][KEY_NAME].push(uciWireless.dynData.wifi_switch);else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)c[uciCustomWireless.fileName]={},c[uciCustomWireless.fileName][KEY_NAME]=[uciCustomWireless.dynData.wifi_switch];$.query(c,function(b){if(gWifiSwitchSupport&&gWifiSwitchUseWireless)aa=
+b[uciWireless.fileName][uciWireless.dynData.wifi_switch];else if(gCustomWifiSwitchSupport||gWifiSwitchSupport&&!gWifiSwitchUseWireless)aa=b[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch];m=b[uciWireless.fileName][uciWireless.dynData.host_2g];q=b[uciWireless.fileName][uciWireless.dynData.host_5g];y=b[uciWireless.fileName][uciFunction.optName.wlanBS];gMultiSSIDSupport&&Na(b);a&&a(b)},!0)}function u(a,c){id(a).style.display=c?"block":"none"}function Oa(a){var c=a[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinEnable];
+a=a[uciCustomWireless.fileName][uciCustomWireless.secName.wpsConfig][uciCustomWireless.optName.pinCode];disableInput("wpsRouterPinCode",!0);id("wpsRouterPinOn").checked="on"==c?!0:!1;id("wpsRouterPinOff").checked="off"==c?!0:!1;id("wpsRouterPinOn").checked?u("wpsRouterPinCodeUl",!0):id("wpsRouterPinOff").checked&&u("wpsRouterPinCodeUl",!1);$("#wpsRouterPinCode").val(a);id("wpsMethodButton").checked=!0;id("wpsMethodButton").checked?u("wpsMethodPinUl",!1):id("wpsMethodPin").checked&&u("wpsMethodPinUl",
+!0)}function K(a){function c(a,b){for(var c=0;c<a.length;c++)if(a[c]===b)return!0;return!1}var b=a[uciFunction.fileName][uciFunction.secName.newModuleSpec],e=b[uciFunction.optName.wlanServiceAttr2g]||"0",d=b[uciFunction.optName.wlanServiceAttr5g]||"0";z=c(e,"twt");D=c(d,"twt");B=c(e,"ofdma");C=c(d,"ofdma");A=1==parseInt(b.wireless2g_vhtmubfer||"0",10);e=a[uciWireless.fileName][uciFunction.optName.wlanBS];d=parseInt(e[uciWireless.optName.wifiEnable]);id("wifiSwitchOn").checked=d;id("wifiSwitchOff").checked=
+!d;$("#ssid").val(e[uciWireless.dynOptName.ssid]);$("#wlanPwd").val(e[uciWireless.dynOptName.key]);id("ssidBrd").checked=parseInt(e[uciWireless.dynOptName.ssidbrd])==uciWireless.dynOptValue.ssidbrd.on;(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&selectInit("cipher",Pa,e[uciWireless.dynOptName.cipher]);if(gAuthSupport||gAuthSupport2g||gAuthSupport5g){for(var d=fa(b[uciFunction.optName.supportWlanAuthType2g]),h=fa(b[uciFunction.optName.supportWlanAuthType5g]),l=0;l<d.length;l++)for(var f=0;f<
+h.length;f++)h[f].str!==d[l].str&&h[f].value!==d[l].value||h.splice(f,1);d=d.concat(h);h=$("#auth span.value");h=parseInt(h.css("width"));selectInit("auth",d,e[uciWireless.dynOptName.auth],Aa,h);id("auth").changeSel(e[uciWireless.dynOptName.auth])}e=a[uciWireless.fileName][uciWireless.dynData.host_2g];d=parseInt(e[uciWireless.dynOptName.twt]);h=parseInt(e[uciWireless.dynOptName.ofdma]);l=parseInt(e[uciWireless.dynOptName.muMIMO]);id("TWTSwitchOn").checked=d;id("TWTSwitchOff").checked=!d;id("OFDMASwitchOn").checked=
+h;id("OFDMASwitchOff").checked=!h;id("MUMimoSwitchOn").checked=l;id("MUMimoSwitchOff").checked=!l;W=ea(b[uciFunction.optName.channel2g]||label.wlanChannels);selectInit("wlanWidth",qa,e[uciWireless.dynOptName.bandwidth]);selectInit("wlanMode",X,e[uciWireless.dynOptName.mode],ja);ja(e[uciWireless.dynOptName.mode]);x.changeSel(e[uciWireless.dynOptName.bandwidth]);selectInit("channel",W,e[uciWireless.dynOptName.channel]);if(e=b[uciFunction.optName.bandWidth5g])for(d=0;d<e.length;d++)if(Qa==decodeURIComponent(e[d])){S=
+!0;break}d=b.wireless5g_vhtmubfer||"0";r=1==parseInt(d,10);e=a[uciWireless.fileName][uciWireless.dynData.host_5g];d=parseInt(e[uciWireless.dynOptName.twt]);h=parseInt(e[uciWireless.dynOptName.ofdma]);l=parseInt(e[uciWireless.dynOptName.muMIMO]);id("TWTSwitchOn5g").checked=d;id("TWTSwitchOff5g").checked=!d;id("OFDMASwitchOn5g").checked=h;id("OFDMASwitchOff5g").checked=!h;id("MUMimoSwitchOn5g").checked=l;id("MUMimoSwitchOff5g").checked=!l;Y=ea(b[uciFunction.optName.channel5g]||label.wlanChannels5g);
+I=e[uciWireless.dynOptName.channel];tmpBandWidthOpt5g=S?la:R;selectInit("wlanWidth5g",tmpBandWidthOpt5g,e[uciWireless.dynOptName.bandwidth],void 0,20);d=b.wireless5g_vhtmubfer||"0";r=1==parseInt(d,10);b=id("wlanHelp");d="wlanNetworkHelpAdvanced";z&&(d+=" wlanTWTHelp");A&&(d+=" wlanMUMIMOHelp");B&&(d+=" wlanOFDMAHelp");helpBind(b,d);b=id("wlanHelp5G");d="wlanNetworkHelpAdvanced";D&&(d+=" wlanTWTHelp");r&&(d+=" wlanMUMIMOHelp");C&&(d+=" wlanOFDMAHelp");helpBind(b,d);selectInit("wlanMode5g",Z,e[uciWireless.dynOptName.mode],
+ka);ka(e[uciWireless.dynOptName.mode]);selectInit("channel5g",Y,e[uciWireless.dynOptName.channel],ga);ga(e[uciWireless.dynOptName.channel]);g.changeSel(e[uciWireless.dynOptName.bandwidth]);if(gWifiSwitchSupport||gCustomWifiSwitchSupport)gWifiSwitchUseWireless?(b=a[uciWireless.fileName][uciWireless.dynData.wifi_switch],d="on"==b[uciWireless.dynOptName.enable]):(b=a[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch],d="on"==b[uciCustomWireless.dynOptName.enable]),gWifiSwitchSplit?(a=
+d&&"on"==b[uciCustomWireless.dynOptName.enable_2g],b=d&&"on"==b[uciCustomWireless.dynOptName.enable_5g],id("wifiSwitchOnAll2g").checked=a,id("wifiSwitchOnAll5g").checked=b,id("wifiSwitchOffAll2g").checked=!a,id("wifiSwitchOffAll5g").checked=!b,G(!a),H(!b),a||b?(v(!1),gPinWpsSupport&&w(!1)):(v(!0),gPinWpsSupport&&w(!0))):(id("wifiSwitchOnAll").checked=d,id("wifiSwitchOffAll").checked=!d,id("wifiSwitchOffTip").style.display=d?"none":"block",id("wifiSwitchOffAll").checked&&(G(!0),H(!0),v(!0),gPinWpsSupport&&
+w(!0)));(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&uciWireless.dynOptValue.mode.m_11n==e[uciWireless.dynOptName.mode]&&id("cipher").disable(!0);id("TWTCompatibilityTip2g").style.display=id("TWTSwitchOn").checked?"block":"none";id("compatibilityNote2g").style.visibility=id("TWTSwitchOn").checked?"visible":"hidden";id("TWTCompatibilityTip5g").style.display=id("TWTSwitchOn5g").checked?"block":"none";id("compatibilityNote5g").style.visibility=id("TWTSwitchOn5g").checked?"visible":"hidden";
+a=parseInt(id("wlanMode").value);e=parseInt(id("wlanMode5g").value);id("TWTSel").style.display=z&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("MUMimoSel").style.display=A&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("OFDMASel").style.display=B&&uciWireless.dynOptValue.mode.m_11bgn_ax==a?"block":"none";id("OFDMASel5g").style.display=C&&uciWireless.dynOptValue.mode.m_11ac_ax==e?"block":"none";id("TWTSel5g").style.display=D&&uciWireless.dynOptValue.mode.m_11ac_ax==e?
+"block":"none";id("MUMimoSel5g").style.display=!r||uciWireless.dynOptValue.mode.m_11ac_ax!=e&&uciWireless.dynOptValue.mode.m_11ac!=e?"none":"block"}function Ra(a){ta?(ta=!1,P=new DataGrid,P.init({id:"SSIDTable",data:a,hasSelBox:!1,edit:!1,head:[{field:label.multiSSIDIndex,width:90},{field:label.wirelessName,width:160},{field:label.wirelessPwd,width:118},{field:label.multiSSIDBand,width:90},{field:label.multiSSIDStatus,width:90},{field:label.multiSSIDSetUp,width:90}],list:[{edit:!1,name:"multiSSIDIndex",
+type:"str"},{edit:!1,name:"wirelessName",type:"str"},{edit:!1,name:"wirelessPwd",type:"str"},{edit:!1,name:"multiSSIDBand",type:"str"},{edit:!1,name:"multiSSIDStatus",type:"str"},{edit:!1,name:"multiSSIDSetUp",type:"str",className:"setUp"}]})):(P.setDataSource(a),P.refresh());var c=$(".setUp");c.attr("title","");var b="../web-static/images/multi_ssid_host_2g.png ../web-static/images/multi_ssid_guest_2g.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_host_5g.png ../web-static/images/multi_ssid_guest_5g.png ../web-static/images/multi_ssid_cmcc.png ../web-static/images/multi_ssid_cmcc.png".split(" ");
+gElinkSupport&&(b[2]=b[3]=b[6]=b[7]="../web-static/images/multi_ssid_ctcc.png");for(var e=0;e<a.length;e++)(function(a){var e=new Image;e.src=b[a];e.onload=function(){var b=e.width-82;c.eq(a).mouseover(function(a){var c=0;if(document.body.scrollHeight>(window.innerHeight||document.documentElement.clientHeight)){var d=document.createElement("div");d.style.cssText="width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;";document.body.appendChild(d);c=(d.offsetWidth-d.clientWidth)/
+2;document.body.removeChild(d)}var d=(((t=document.documentElement)||(t=document.body.parentNode))&&"number"==typeof t.scrollLeft?t:document.body).scrollLeft,g=(((t=document.documentElement)||(t=document.body.parentNode))&&"number"==typeof t.scrollTop?t:document.body).scrollTop,k=$('<div class="showTips"></div>').append(e);$("body").append(k);a=(a.srcElement||a.target).getBoundingClientRect();$(".showTips").css({position:"absolute",top:a.top+26+g+"px",left:a.left-b+d-c+"px",zIndex:1001})});c.eq(a).mouseleave(function(){$(".showTips").remove()})}})(e)}
+function Na(a){var c={};c[uciMultiSsid.fileName]={};c[uciMultiSsid.fileName][KEY_NAME]=[uciMultiSsid.secName.wlan_multi_ssid_2g_1,uciMultiSsid.secName.wlan_multi_ssid_2g_2,uciMultiSsid.secName.wlan_multi_ssid_5g_1,uciMultiSsid.secName.wlan_multi_ssid_5g_2];c[uciGuestNet.fileName]={};c[uciGuestNet.fileName][KEY_NAME]=[uciGuestNet.secName.wireless2G,uciGuestNet.secName.wireless5G];$.query(c,function(b){var c=a[uciCustomWireless.fileName][uciCustomWireless.dynData.wifi_switch],d="on"==c[uciCustomWireless.dynOptName.enable],
+h=d&&"on"==c[uciCustomWireless.dynOptName.enable_2g],c=d&&"on"==c[uciCustomWireless.dynOptName.enable_5g],l=[],f={},d=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_2],f=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_5g_1],g=b[uciGuestNet.fileName][uciGuestNet.secName.wireless5G],k=a[uciWireless.fileName][uciWireless.dynData.host_5g],n=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_2],p=b[uciMultiSsid.fileName][uciMultiSsid.secName.wlan_multi_ssid_2g_1];
+b=b[uciGuestNet.fileName][uciGuestNet.secName.wireless2G];var m=a[uciWireless.fileName][uciWireless.dynData.host_2g];if(gSupportBS&&void 0!=a[uciWireless.fileName][uciWireless.secName.wlanBS]&&a[uciWireless.fileName][uciWireless.secName.wlanBS][uciWireless.optName.bsEnable]==uciWireless.optValue.bsEnable.enable){for(key in a[uciWireless.fileName][uciWireless.secName.wlanBS])m[key]=a[uciWireless.fileName][uciWireless.secName.wlanBS][key],k[key]=a[uciWireless.fileName][uciWireless.secName.wlanBS][key];
+m[uciWireless.optName.enable]=m[uciWireless.optName.wifiEnable];k[uciWireless.optName.enable]=k[uciWireless.optName.wifiEnable]}b=[[d,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[f,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[g,uciGuestNet.optName.encrypt,uciGuestNet.optName.key],[k,uciWireless.optName.keyType,uciWireless.optName.key],[n,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[p,uciMultiSsid.optName.encryption,uciMultiSsid.optName.key],[b,uciGuestNet.optName.encrypt,
+uciGuestNet.optName.key],[m,uciWireless.optName.keyType,uciWireless.optName.key]];for(g=0;g<b.length;g++)f={},k=b[g],f.multiSSIDIndex="SSID-"+(8-g),f.wirelessName=k[0].ssid,f.wirelessPwd=0==parseInt(k[0][k[1]])?"无加密":k[0][k[2]],f.multiSSIDBand=4>g?"5GHz":"2.4GHz",d=4>g?c:h,f.multiSSIDStatus=d&&(parseInt(k[0].enable)||"on"==k[0].enable)?"开启":"关闭",f.multiSSIDSetUp="设置方法",l[g]=f;Ra(l)})}var La=uciHostsInfo.optValue.linkType.hostWireless,Ka=1,x=id("wlanWidth"),g=id("wlanWidth5g"),Ga=id("channel"),Ia=
+id("channel5g"),Ha=id("wlanMode"),ra=id("wlanMode5g"),n=uciWireless.dynData.host_2g,U=uciWireless.dynData.wds_2g,k=uciWireless.dynData.host_5g,V=uciWireless.dynData.wds_5g,S=!1,Qa="80MHz+80MHz",A=!1,r=!1,z=!1,D=!1,B=!1,C=!1,O=id("wlanPwd"),ta=!0,P,y={},m={},aa={},q={},I,sa=!1,W=[],Y=[],qa=[{str:label.wirelessAuto40M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20}],xa=[{str:label.wpaPskSel,value:uciWireless.dynOptValue.auth.psk},{str:label.wpa2PskSel,
+value:uciWireless.dynOptValue.auth.psk2},{str:label.wirelessPsk,value:uciWireless.dynOptValue.auth.pskMixed}],Pa=[{str:label.aes,value:uciWireless.dynOptValue.cipher.aes},{str:label.tkip,value:uciWireless.dynOptValue.cipher.tkip}],X;X=g11AxSupport.wlan2g?[{str:label.hwmode11bgn_ax,value:uciWireless.dynOptValue.mode.m_11bgn_ax},{str:label.hwmode11bgn,value:uciWireless.dynOptValue.mode.m_11bgn},{str:label.hwmode11bg,value:uciWireless.dynOptValue.mode.m_11bg},{str:label.hwmode11n,value:uciWireless.dynOptValue.mode.m_11n},
+{str:label.hwmode11g,value:uciWireless.dynOptValue.mode.m_11g},{str:label.hwmode11b,value:uciWireless.dynOptValue.mode.m_11b}]:[{str:label.hwmode11bgn,value:uciWireless.dynOptValue.mode.m_11bgn},{str:label.hwmode11bg,value:uciWireless.dynOptValue.mode.m_11bg},{str:label.hwmode11n,value:uciWireless.dynOptValue.mode.m_11n},{str:label.hwmode11g,value:uciWireless.dynOptValue.mode.m_11g},{str:label.hwmode11b,value:uciWireless.dynOptValue.mode.m_11b}];var R=[{str:label.wirelessAuto40M,value:uciWireless.dynOptValue.bandwidth.auto},
+{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20}],za=[{str:label.wirelessAuto80M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40}],la=[{str:label.wirelessAuto,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80Add80,
+value:uciWireless.dynOptValue.bandwidth.bw80Add80}],ia=[{str:label.wirelessAuto160M,value:uciWireless.dynOptValue.bandwidth.auto},{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80,value:uciWireless.dynOptValue.bandwidth.bw80}],ha=[{str:label.chanbw20,value:uciWireless.dynOptValue.bandwidth.bw20},{str:label.chanbw40,value:uciWireless.dynOptValue.bandwidth.bw40},{str:label.chanbw80,value:uciWireless.dynOptValue.bandwidth.bw80}],
+ya=[label.wirelessPsk,label.wpaPskSel,label.wpa2PskSel,label.wirelessWpa2PskWpa3Sae,label.wirelessWpa3Sae],Z;Z=g11AxSupport.wlan5g?[{str:label.hwmode11ac_ax,value:uciWireless.dynOptValue.mode.m_11ac_ax},{str:label.hwmode11ac,value:uciWireless.dynOptValue.mode.m_11ac},{str:label.hwmode11an,value:uciWireless.dynOptValue.mode.m_11an}]:[{str:label.hwmode11ac,value:uciWireless.dynOptValue.mode.m_11ac},{str:label.hwmode11an,value:uciWireless.dynOptValue.mode.m_11an}];var L=uciGuestNet.fileName,ua=uciGuestNet.secName.wireless2G,
+va=uciGuestNet.secName.wireless5G,wa=uciGuestNet.optName.enable;gMultiSSIDSupport&&(gElinkSupport&&($("#multiSSIDHelp .ispName").text(label.chinaTelecom),$("#multiSSIDHelp .ispPlatformName").text(label.chinaTelecomPlatform)),$("#multiSSIDDiv").removeClass("disNone"));gPinWpsSupport&&($("#wpsDiv").removeClass("disNone"),Ma(Oa));if(gWifiSwitchSupport||gCustomWifiSwitchSupport)$("#wifiSwitchDiv").removeClass("disNone"),gWifiSwitchSplit?$("#wifiSwitchSplit").removeClass("disNone"):$("#wifiSwitchUnity").removeClass("disNone");
+(gAuthSupport||gAuthSupport2g||gAuthSupport5g)&&$("#authDiv").removeClass("disNone");(gCipherSupport||gCipherSupport2g||gCipherSupport5g)&&$("#cipherDiv").removeClass("disNone");J(K);O.onkeyup=function(){var a=24,c="",b;b=replaceUnicodeBlank(O);var e=b.length,d="visible",h="warn";if(0<=e&&8>e)d="hidden";else if(/^\d+$/.test(b)||/^[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]+$/.test(b)||/^[a-zA-Z]+$/.test(b))12>=e?c=label.weak:(c=label.media,a*=2);else{var g=c=!1,f=!1,c=/\d/g.test(b),g=/[a-zA-Z]/g.test(b),
+f=/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e\s]/g.test(b);!0==(c&&f&&g)?(c=label.strong,h="correct",a*=3):12>=e?(c=label.media,a*=2):(c=label.strong,h="correct",a*=3)}id("pwdDepNote2G").style.visibility=d;id("pwdDep2G").innerHTML=c;id("chgPwdDep2G").style.width=a+"px";id("pwdDepI").className=h};id("TWTSwitchOn").onclick=function(){N(n)};id("TWTSwitchOff").onclick=function(){N(n)};id("TWTSwitchOn5g").onclick=function(){N(k)};id("TWTSwitchOff5g").onclick=function(){N(k)};$("#saveBasic").click(function(){if(gWifiSwitchSupport||
+gCustomWifiSwitchSupport){var a={};a[L]={};a[L][KEY_NAME]=[ua];gGuest5GSupport&&a[L][KEY_NAME].push(va);$.query(a,function(a){ENONE==a[ERR_CODE]&&(sa=1==a[L][ua][wa]?!0:gGuest5GSupport&&1==a[L][va][wa]?!0:!1);Q()})}else Q()});$("#saveAdvanced2g").click(M);$("#saveAdvanced5g").click(M);$("#saveAll").click(function(){function a(){var a=!1;(a=gWifiSwitchSplit?"off"==c[uciWireless.dynOptName.enable_2g]||"off"==c[uciWireless.dynOptName.enable_5g]:"off"==c[uciWireless.dynOptName.enable])?showConfirm(label.closeDirect,
+function(a){!0==a?oa(c,uciCustomWireless.dynData.wifi_switch):(id("wifiSwitchOnAll").checked=!0,id("wifiSwitchOffAll").checked=!1)}):oa(c,uciWireless.dynData.wifi_switch)}var c=Da();Ca(aa,c)&&T(a)});$("#genVendorPin").click(ba);$("#saveWpsRouterPin").click(ca);$("#wpsConnect").click(da);$("#wpsRouterPinOn").click(function(){u("wpsRouterPinCodeUl",!0)});$("#wpsRouterPinOff").click(function(){u("wpsRouterPinCodeUl",!1)});$("#wpsMethodButton").click(function(){u("wpsMethodPinUl",!1)});$("#wpsMethodPin").click(function(){u("wpsMethodPinUl",
+!0)});$('input[name="wifiUnite"]').on("click",function(){bsSelectChange("wifiUniteOn"==this.id?ENABLE:DISABLE)});id("wifiUniteOn").checked=!0;id("wifiUniteOff").checked=!1}init();
+</script><style type="text/css">#compatibilityNote2g,#compatibilityNote5g{visibility:visible}input.wlanBroadCase{margin-left:12px}input.wlanSecEnable{margin-left:12px}label.desLblWU{width:296px;font-size:16px;font-weight:bold}ul.gridLineBS{margin-top:50px}ul.gridLineTips{margin-top:8px!important;height:auto;display:none}ul.gridLineTips span{width:225px;margin-left:261px;color:#fff;line-height:18px;font-size:12px;display:block}li{list-style:none;text-align:left}div.display{margin-top:10px;margin-left:260px}span.warnText{color:#fff;font-size:12px;width:210px}ul.gridLineB2{margin-top:10px}div.warnCon{width:16px;height:16px;overflow:hidden;display:inline-block;vertical-align:top}div.warnCon img{margin-top:-187px;margin-left:-467px}</style>

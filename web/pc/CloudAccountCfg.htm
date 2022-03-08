@@ -1,0 +1,5 @@
+
+
+<div id="hcCo" class="hcCo"></div><script type="text/javascript">var uciFile=uciCloudConfig.fileName,data={},cloudAccount;data[uciFile]={};data[uciFile][KEY_NAME]=[uciCloudConfig.secName.deviceStatus,uciCloudConfig.secName.bind];
+$.query(data,function(a){if(!0==$.local)loadPage("CloudAccountFirst.htm","hcCo");else if(ENONE==a[ERR_CODE]){var b=a[uciFile][uciCloudConfig.secName.deviceStatus][uciCloudConfig.optName.bindStatus];cloudAccount=a[uciFile][uciCloudConfig.secName.bind][uciCloudConfig.optName.username];b==uciCloudConfig.optValue.bindStatusBind?loadPage("CloudAccountSecond.htm","hcCo"):loadPage("CloudAccountFirst.htm","hcCo")}else loadPage("CloudAccountFirst.htm","hcCo")});
+</script><style type="text/css">#cloudCon{margin:0 auto;width:560px}p.cloudP{color:#fff;line-height:20px;font-size:13px}p.cloudTip{margin-top:18px}input.btnB{margin-right:15px;padding:3px 15px}</style>

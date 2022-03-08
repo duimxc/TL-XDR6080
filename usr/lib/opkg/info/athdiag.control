@@ -1,0 +1,8 @@
+Package: athdiag
+Version: 1
+Depends: libc, libssp
+Source: tp_package/sys_packages/qca_util/qca_framework/qca-athdiag
+Section: QCA
+Architecture: ipq
+Installed-Size: 4366
+Description:  athdiag command support for ath10k

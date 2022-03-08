@@ -1,0 +1,267 @@
+{
+	"/cloud_config/router_post/bind" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"resetFlag" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/bind_info_sync" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"bind_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/connect_option" : {
+		"heartBeatInterval" : {
+			"type" : "intStr32",
+			"default" : 235
+		},
+		"connectInterval" : {
+			"type" : "intStr32",
+			"default" : 259200
+		}
+	},
+	"/cloud_config/router_post/login" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 33
+		}
+	},
+	"/cloud_config/router_post/register" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"verify_code" : {
+			"type" : "string",
+			"length" : 7
+		},
+		"account_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/reset_cloud_pwd" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"password" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"verify_code" : {
+			"type" : "string",
+			"length" : 7
+		},
+		"account_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/modify_account_pwd" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"old_pwd" : {
+			"type" : "string",
+			"length" : 33
+		},
+		"new_pwd" : {
+			"type" : "string",
+			"length" : 33
+		}
+	},
+	"/cloud_config/router_post/get_reg_verify_code" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"account_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/get_reset_pwd_verify_code" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"account_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/router_post/check_reg_verify_code" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"verify_code" : {
+			"type" : "string",
+			"length" : 7
+		}
+	},
+	"/cloud_config/router_post/check_reset_pwd_verify_code" : {
+		"username" : {
+			"type" : "string",
+			"length" : 64
+		},
+		"verify_code" : {
+			"type" : "string",
+			"length" : 7
+		}
+	},
+
+
+	"/cloud_config/cloud_push/new_firmware" : {
+		"fw_new_notify" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"fw_update_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"display_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"retained_message_bar" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"content" : {
+			"type" : "string",
+			"length" : 1024
+		},
+		"msg_id" : {
+			"type" : "string",
+			"length" : 12
+		},
+		"not_show" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"notify_time" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/cloud_push/device_legality" : {
+		"illegal" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"illegal_type" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+
+
+	"/cloud_config/push_list/*" : {
+		"count" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"push_tick" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"mac" : {
+			"type" : "mac"
+		}
+	},
+
+
+	"/cloud_config/cloud_reply/device_status" : {
+		"bind_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"login_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"account_status" : {
+			"type" : "intStr32",
+			"default" : 0
+		}
+	},
+	"/cloud_config/cloud_reply/upgrade_info" : {
+		"type" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"version" : {
+			"type" : "string",
+			"length" : 65
+		},
+		"release_date" : {
+			"type" : "string",
+			"length" : 11
+		},
+		"download_url" : {
+			"type" : "string",
+			"length" : 513
+		},
+		"location" : {
+			"type" : "intStr32",
+			"default" : 0
+		},
+		"release_log" : {
+			"type" : "string",
+			"length" : 1024
+		},
+		"release_log_url" : {
+			"type" : "string",
+			"length" : 513
+		}
+	},
+
+
+	"/cloud_config/cloud_device/info" : {
+		"alias" : {
+			"type" : "string",
+			"length" : 64
+		}
+	},
+	"/cloud_config/cloud_device/bind_tip" : {
+		"not_show" : {
+			"type" : "intStr8",
+			"default" : 0
+		}
+	},
+	"/cloud_config/cloud_device/brand_mac" : {
+		"renew_time" : {
+			"type" : "string",
+			"length" : 11
+		}
+	}
+}

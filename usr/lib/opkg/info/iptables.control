@@ -1,0 +1,31 @@
+Package: iptables
+Version: 1.4.10-4
+Depends: libc, libssp, kmod-ipt-core, libip4tc, libxtables
+Source: tp_package/u_packages/iptables
+Section: net
+Architecture: ipq
+Installed-Size: 68825
+Description:  IPv4 firewall administration tool.
+ 
+ Matches:
+ - icmp
+ - tcp
+ - udp
+ - comment
+ - limit
+ - mac
+ - multiport
+ - multiurl
+ 
+ Targets:
+ - ACCEPT
+ - DROP
+ - REJECT
+ - LOG
+ - TCPMSS
+ - packet_capture
+ 
+ Tables:
+ - filter
+ - mangle
+ 
